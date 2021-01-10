@@ -178,8 +178,8 @@ class FollowRequestFirestore implements FollowRequestRepository {
   } 
 
   final String appId;
-  final CollectionReference FollowRequestCollection;
+  FollowRequestFirestore(this.FollowRequestCollection, this.appId);
 
-  FollowRequestFirestore(this.appId) : FollowRequestCollection = Firestore.instance.collection('followrequest');
+  final CollectionReference FollowRequestCollection;
 }
 

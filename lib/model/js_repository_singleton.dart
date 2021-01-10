@@ -43,7 +43,7 @@ class JsRepositorySingleton extends AbstractRepositorySingleton {
     var _inviteDashboardRepository = HashMap<String, InviteDashboardRepository>();
 
     FollowingRepository followingRepository(String appId) {
-      if (_followingRepository[appId] == null) _followingRepository[appId] = FollowingCache(FollowingJsFirestore(appId));
+      if (_followingRepository[appId] == null) _followingRepository[appId] = FollowingCache(FollowingJsFirestore(appRepository().getSubCollection(appId, 'following'), appId));
       return _followingRepository[appId];
     }
     FollowingDashboardRepository followingDashboardRepository(String appId) {
@@ -51,7 +51,7 @@ class JsRepositorySingleton extends AbstractRepositorySingleton {
       return _followingDashboardRepository[appId];
     }
     FollowRequestRepository followRequestRepository(String appId) {
-      if (_followRequestRepository[appId] == null) _followRequestRepository[appId] = FollowRequestCache(FollowRequestJsFirestore(appId));
+      if (_followRequestRepository[appId] == null) _followRequestRepository[appId] = FollowRequestCache(FollowRequestJsFirestore(appRepository().getSubCollection(appId, 'followrequest'), appId));
       return _followRequestRepository[appId];
     }
     FollowRequestsDashboardRepository followRequestsDashboardRepository(String appId) {

@@ -178,8 +178,8 @@ class FollowingFirestore implements FollowingRepository {
   } 
 
   final String appId;
-  final CollectionReference FollowingCollection;
+  FollowingFirestore(this.FollowingCollection, this.appId);
 
-  FollowingFirestore(this.appId) : FollowingCollection = Firestore.instance.collection('following');
+  final CollectionReference FollowingCollection;
 }
 

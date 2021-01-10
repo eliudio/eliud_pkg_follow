@@ -190,11 +190,12 @@ class FollowingJsFirestore implements FollowingRepository {
   String timeStampToString(dynamic timeStamp) {
     return firestoreTimeStampToString(timeStamp);
   } 
-  CollectionReference getCollection() => firestore().collection('following-$appId');
-
   final String appId;
-  
-  FollowingJsFirestore(this.appId) : followingCollection = firestore().collection('following-$appId');
+  FollowingJsFirestore(this.followingCollection, this.appId);
 
+  // In flutterweb, it seems we require to re-retrieve the collection. If not then subscribing / listening to it a second time fails.
+  // CollectionReference getCollection() => followingCollection;
+  CollectionReference getCollection() => appRepository().getSubCollection(appId, 'following');
   final CollectionReference followingCollection;
 }
+

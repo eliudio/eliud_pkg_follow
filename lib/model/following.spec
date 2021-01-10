@@ -15,7 +15,8 @@
     "generateList": true,
     "generateDropDownButton": true,
     "generateInternalComponent": true,
-    "generateEmbeddedComponent": false
+    "generateEmbeddedComponent": false,
+    "isDocumentCollection": true
   },
   "fields": [
     {
