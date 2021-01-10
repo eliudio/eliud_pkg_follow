@@ -1,0 +1,62 @@
+/*
+       _ _           _ 
+      | (_)         | |
+   ___| |_ _   _  __| |
+  / _ \ | | | | |/ _` |
+ |  __/ | | |_| | (_| |
+  \___|_|_|\__,_|\__,_|
+                       
+ 
+ following_dashboard_repository.dart
+                       
+ This code is generated. This is read only. Don't touch!
+
+*/
+
+import 'package:eliud_pkg_follow/model/following_dashboard_repository.dart';
+
+
+import 'package:eliud_core/model/repository_export.dart';
+import 'package:eliud_core/model/abstract_repository_singleton.dart';
+import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
+import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
+import 'package:eliud_pkg_follow/model/repository_export.dart';
+import 'package:eliud_core/model/model_export.dart';
+import '../tools/bespoke_models.dart';
+import 'package:eliud_pkg_follow/model/model_export.dart';
+import 'package:eliud_core/model/entity_export.dart';
+import '../tools/bespoke_entities.dart';
+import 'package:eliud_pkg_follow/model/entity_export.dart';
+
+
+import 'dart:async';
+import 'package:eliud_core/tools/query/query_tools.dart';
+import 'package:eliud_core/tools/common_tools.dart';
+
+typedef FollowingDashboardModelTrigger(List<FollowingDashboardModel> list);
+typedef FollowingDashboardChanged(FollowingDashboardModel value);
+
+abstract class FollowingDashboardRepository {
+  Future<FollowingDashboardModel> add(FollowingDashboardModel value);
+  Future<void> delete(FollowingDashboardModel value);
+  Future<FollowingDashboardModel> get(String id, { Function(Exception) onError });
+  Future<FollowingDashboardModel> update(FollowingDashboardModel value);
+
+  Stream<List<FollowingDashboardModel>> values({String currentMember, String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery });
+  Stream<List<FollowingDashboardModel>> valuesWithDetails({String currentMember, String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery });
+  Future<List<FollowingDashboardModel>> valuesList({String currentMember, String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery });
+  Future<List<FollowingDashboardModel>> valuesListWithDetails({String currentMember, String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery });
+
+  StreamSubscription<List<FollowingDashboardModel>> listen(FollowingDashboardModelTrigger trigger, {String currentMember, String orderBy, bool descending, Object startAfter, int limit, int privilegeLevel, EliudQuery eliudQuery });
+  StreamSubscription<List<FollowingDashboardModel>> listenWithDetails(FollowingDashboardModelTrigger trigger, {String currentMember, String orderBy, bool descending, Object startAfter, int limit, int privilegeLevel, EliudQuery eliudQuery });
+  StreamSubscription<FollowingDashboardModel> listenTo(String documentId, FollowingDashboardChanged changed);
+  void flush();
+  
+  String timeStampToString(dynamic timeStamp);
+
+  dynamic getSubCollection(String documentId, String name);
+
+  Future<void> deleteAll();
+}
+
+

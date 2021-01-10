@@ -1,0 +1,41 @@
+/*
+       _ _           _ 
+      | (_)         | |
+   ___| |_ _   _  __| |
+  / _ \ | | | | |/ _` |
+ |  __/ | | |_| | (_| |
+  \___|_|_|\__,_|\__,_|
+                       
+ 
+ following_dashboard_list_state.dart
+                       
+ This code is generated. This is read only. Don't touch!
+
+*/
+
+import 'package:equatable/equatable.dart';
+import 'package:eliud_pkg_follow/model/following_dashboard_model.dart';
+
+abstract class FollowingDashboardListState extends Equatable {
+  const FollowingDashboardListState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class FollowingDashboardListLoading extends FollowingDashboardListState {}
+
+class FollowingDashboardListLoaded extends FollowingDashboardListState {
+  final List<FollowingDashboardModel> values;
+
+  const FollowingDashboardListLoaded({this.values = const []});
+
+  @override
+  List<Object> get props => [ values ];
+
+  @override
+  String toString() => 'FollowingDashboardListLoaded { values: $values }';
+}
+
+class FollowingDashboardNotLoaded extends FollowingDashboardListState {}
+
