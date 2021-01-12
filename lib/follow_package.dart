@@ -12,6 +12,8 @@ import 'package:eliud_core/package/package_with_subscription.dart';
 import 'model/component_registry.dart';
 import 'model/follow_request_model.dart';
 import 'package:eliud_pkg_workflow/tools/task/task_model.dart';
+import 'model/abstract_repository_singleton.dart';
+import 'model/repository_singleton.dart';
 
 abstract class FollowPackage extends PackageWithSubscription {
   static final String CONDITION_MEMBER_HAS_OPEN_REQUESTS = 'Has Open Follow Requests';
@@ -59,5 +61,7 @@ abstract class FollowPackage extends PackageWithSubscription {
  @override
   void init() {
     ComponentRegistry().init();
+
+    AbstractRepositorySingleton.singleton = RepositorySingleton();
   }
 }
