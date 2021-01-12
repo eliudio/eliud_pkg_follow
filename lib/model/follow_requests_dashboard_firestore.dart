@@ -70,7 +70,12 @@ class FollowRequestsDashboardFirestore implements FollowRequestsDashboardReposit
 
   StreamSubscription<List<FollowRequestsDashboardModel>> listen(FollowRequestsDashboardModelTrigger trigger, {String currentMember, String orderBy, bool descending, Object startAfter, int limit, int privilegeLevel, EliudQuery eliudQuery}) {
     Stream<List<FollowRequestsDashboardModel>> stream;
-    stream = getQuery(FollowRequestsDashboardCollection, currentMember: currentMember, orderBy: orderBy,  descending: descending,  startAfter: startAfter,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId).snapshots().map((data) {
+//    stream = getQuery(FollowRequestsDashboardCollection, currentMember: currentMember, orderBy: orderBy,  descending: descending,  startAfter: startAfter,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId).snapshots().map((data) {
+//    The above line is replaced by the below line. The reason is because the same collection can not be subscribed to twice
+//    The reason we're subscribing twice to the same list, is because the close on bloc isn't called. This needs to be fixed.
+//    See https://github.com/felangel/bloc/issues/2073.
+//    In the meantime:
+      stream = getQuery(appRepository().getSubCollection(appId, 'followRequestsDashboard'), currentMember: currentMember, orderBy: orderBy,  descending: descending,  startAfter: startAfter,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId).snapshots().map((data) {
       Iterable<FollowRequestsDashboardModel> followRequestsDashboards  = data.docs.map((doc) {
         FollowRequestsDashboardModel value = _populateDoc(doc);
         return value;
@@ -84,7 +89,9 @@ class FollowRequestsDashboardFirestore implements FollowRequestsDashboardReposit
 
   StreamSubscription<List<FollowRequestsDashboardModel>> listenWithDetails(FollowRequestsDashboardModelTrigger trigger, {String currentMember, String orderBy, bool descending, Object startAfter, int limit, int privilegeLevel, EliudQuery eliudQuery}) {
     Stream<List<FollowRequestsDashboardModel>> stream;
-    stream = getQuery(FollowRequestsDashboardCollection, currentMember: currentMember, orderBy: orderBy,  descending: descending,  startAfter: startAfter,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId).snapshots()
+//  stream = getQuery(FollowRequestsDashboardCollection, currentMember: currentMember, orderBy: orderBy,  descending: descending,  startAfter: startAfter,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId).snapshots()
+//  see comment listen(...) above
+    stream = getQuery(appRepository().getSubCollection(appId, 'followRequestsDashboard'), currentMember: currentMember, orderBy: orderBy,  descending: descending,  startAfter: startAfter,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId).snapshots()
         .asyncMap((data) async {
       return await Future.wait(data.docs.map((doc) =>  _populateDocPlus(doc)).toList());
     });
