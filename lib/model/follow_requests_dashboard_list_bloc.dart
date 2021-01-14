@@ -43,9 +43,9 @@ class FollowRequestsDashboardListBloc extends Bloc<FollowRequestsDashboardListEv
     _followRequestsDashboardsListSubscription = _followRequestsDashboardRepository.listen((list) => add(FollowRequestsDashboardListUpdated(value: list)), orderBy: orderBy, descending: descending, eliudQuery: eliudQuery, );
   }
 
-  Stream<FollowRequestsDashboardListState> _mapLoadFollowRequestsDashboardListWithDetailsToState() async* {
+  Stream<FollowRequestsDashboardListState> _mapLoadFollowRequestsDashboardListWithDetailsToState({ String orderBy, bool descending }) async* {
     _followRequestsDashboardsListSubscription?.cancel();
-    _followRequestsDashboardsListSubscription = _followRequestsDashboardRepository.listenWithDetails((list) => add(FollowRequestsDashboardListUpdated(value: list)), );
+    _followRequestsDashboardsListSubscription = _followRequestsDashboardRepository.listenWithDetails((list) => add(FollowRequestsDashboardListUpdated(value: list)), orderBy: orderBy, descending: descending, eliudQuery: eliudQuery, );
   }
 
   Stream<FollowRequestsDashboardListState> _mapAddFollowRequestsDashboardListToState(AddFollowRequestsDashboardList event) async* {

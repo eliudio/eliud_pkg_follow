@@ -43,9 +43,9 @@ class InviteDashboardListBloc extends Bloc<InviteDashboardListEvent, InviteDashb
     _inviteDashboardsListSubscription = _inviteDashboardRepository.listen((list) => add(InviteDashboardListUpdated(value: list)), orderBy: orderBy, descending: descending, eliudQuery: eliudQuery, );
   }
 
-  Stream<InviteDashboardListState> _mapLoadInviteDashboardListWithDetailsToState() async* {
+  Stream<InviteDashboardListState> _mapLoadInviteDashboardListWithDetailsToState({ String orderBy, bool descending }) async* {
     _inviteDashboardsListSubscription?.cancel();
-    _inviteDashboardsListSubscription = _inviteDashboardRepository.listenWithDetails((list) => add(InviteDashboardListUpdated(value: list)), );
+    _inviteDashboardsListSubscription = _inviteDashboardRepository.listenWithDetails((list) => add(InviteDashboardListUpdated(value: list)), orderBy: orderBy, descending: descending, eliudQuery: eliudQuery, );
   }
 
   Stream<InviteDashboardListState> _mapAddInviteDashboardListToState(AddInviteDashboardList event) async* {
