@@ -72,7 +72,8 @@ class InviteDashboard extends AbstractInviteDashboardComponent {
     }
   }
 
-  Widget widgetProvider(String appId, MemberPublicInfoModel value, MemberModel member) {
+  Widget widgetProvider(
+      String appId, MemberPublicInfoModel value, MemberModel member) {
     return InviteDashboardItem(appId: appId, value: value, member: member);
   }
 
@@ -115,26 +116,58 @@ class InviteDashboardItem extends StatelessWidget {
   }
 
   Future<void> openOptions(BuildContext context, Widget profilePhoto) async {
-    DialogStatefulWidgetHelper.openIt(
-        context,
-        YesNoDialog(
-          title: "Invite",
-          message: "Request to join this person?",
-          yesFunction: () => _invite(context),
-          noFunction: () {},
-          yesButtonLabel: 'Yes',
-          noButtonLabel: 'No',
-        ));
+    if (value.documentID != member.documentID) {
+      String key = FollowerHelper.getKey(value.documentID, member.documentID);
+      var following = await followingRepository(appId: appId).get(key);
+      if (following == null) {
+        var followRequest =
+            await followRequestRepository(appId: appId).get(key);
+        if (followRequest == null) {
+          DialogStatefulWidgetHelper.openIt(
+              context,
+              YesNoDialog(
+                title: "Invite",
+                message: "Request to follow this person?",
+                yesFunction: () => _invite(context),
+                noFunction: () {},
+                yesButtonLabel: 'Yes',
+                noButtonLabel: 'No',
+              ));
+        } else {
+          DialogStatefulWidgetHelper.openIt(
+              context,
+              MessageDialog(
+                  title: 'Error',
+                  message: 'You have already requested to follow this person',
+                  yesFunction: () => Navigator.of(context).pop()));
+        }
+      } else {
+        DialogStatefulWidgetHelper.openIt(
+            context,
+            MessageDialog(
+                title: 'Error',
+                message: 'You are already following this person',
+                yesFunction: () => Navigator.of(context).pop()));
+      }
+    } else {
+      DialogStatefulWidgetHelper.openIt(
+          context,
+          MessageDialog(
+              title: 'Error',
+              message: 'This is you. No point following yourself.',
+              yesFunction: () => Navigator.of(context).pop()));
+    }
   }
 
   Future<void> _invite(BuildContext context) async {
     Navigator.pop(context);
-    var follower = await memberPublicInfoRepository(appId: appId)
-        .get(member.documentID);
+    var follower =
+        await memberPublicInfoRepository(appId: appId).get(member.documentID);
     await followRequestRepository(appId: appId).add(FollowRequestModel(
-        documentID: FollowerHelper.getKey(member.documentID, value.documentID),
+        documentID: FollowerHelper.getKey(value.documentID, member.documentID),
         appId: appId,
         followed: value,
-        follower: follower));
+        follower: follower,
+        status: FollowRequestStatus.FollowRequestPending));
   }
 }

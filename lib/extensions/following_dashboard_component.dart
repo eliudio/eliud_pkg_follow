@@ -55,7 +55,7 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
           eliudQuery: getQuery(dashboardModel, member),
           followingRepository:
               followingRepository(appId: AccessBloc.appId(context)),
-        )..add(LoadFollowingList()),
+        )..add(LoadFollowingListWithDetails()),
         child: FollowingListWidget(
             readOnly: true,
             widgetProvider: (value) => widgetProvider(appId, value),

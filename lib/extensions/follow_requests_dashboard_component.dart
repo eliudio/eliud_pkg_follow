@@ -37,8 +37,10 @@ class FollowRequestsDashboardComponentConstructorDefault
   }
 }
 
-class FollowRequestsDashboardComponent extends AbstractFollowRequestsDashboardComponent {
-  FollowRequestsDashboardComponent({String id}) : super(followRequestsDashboardID: id);
+class FollowRequestsDashboardComponent
+    extends AbstractFollowRequestsDashboardComponent {
+  FollowRequestsDashboardComponent({String id})
+      : super(followRequestsDashboardID: id);
 
   @override
   Widget alertWidget({title = String, content = String}) {
@@ -57,8 +59,8 @@ class FollowRequestsDashboardComponent extends AbstractFollowRequestsDashboardCo
           eliudQuery: FollowPackage.getOpenFollowRequestsQuery(
               state.app.documentID, state.getMember().documentID),
           followRequestRepository:
-          followRequestRepository(appId: AccessBloc.appId(context)),
-        )..add(LoadFollowRequestList()),
+              followRequestRepository(appId: AccessBloc.appId(context)),
+        )..add(LoadFollowRequestListWithDetails()),
         child: FollowRequestListWidget(
             readOnly: true,
             widgetProvider: (value) => widgetProvider(appId, value),
@@ -74,7 +76,8 @@ class FollowRequestsDashboardComponent extends AbstractFollowRequestsDashboardCo
   }
 
   @override
-  FollowRequestsDashboardRepository getFollowRequestsDashboardRepository(BuildContext context) {
+  FollowRequestsDashboardRepository getFollowRequestsDashboardRepository(
+      BuildContext context) {
     return followRequestsDashboardRepository(appId: AccessBloc.appId(context));
   }
 }
@@ -120,7 +123,9 @@ class FollowRequestsDashboardItem extends StatelessWidget {
         context,
         YesNoDialog(
           title: 'Follow invitation',
-          message: 'This member ' + value.follower.name + ' would like to follow you? Do you accept or reject?',
+          message: 'This member ' +
+              value.follower.name +
+              ' would like to follow you? Do you accept or reject?',
           yesFunction: () => _accept(context),
           noFunction: () => _reject(context),
           yesButtonLabel: 'Accept',
@@ -133,14 +138,14 @@ class FollowRequestsDashboardItem extends StatelessWidget {
     value.status = FollowRequestStatus.FollowRequestAccepted;
     await followRequestRepository(appId: appId).update(value);
 
-    followingRepository(appId: appId).add(FollowingModel(
-        documentID: FollowerHelper.getKey(value.follower.documentID, value.followed.documentID),
+    await followingRepository(appId: appId).add(FollowingModel(
+        documentID: FollowerHelper.getKey(
+            value.followed.documentID, value.follower.documentID),
         appId: appId,
         followed: value.followed,
-        follower: value.follower
-    ));
+        follower: value.follower));
   }
-
+  
   Future<void> _reject(BuildContext context) async {
     Navigator.pop(context);
     value.status = FollowRequestStatus.FollowRequestDenied;

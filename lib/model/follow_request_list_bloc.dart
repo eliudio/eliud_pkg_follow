@@ -40,7 +40,7 @@ class FollowRequestListBloc extends Bloc<FollowRequestListEvent, FollowRequestLi
 
   Stream<FollowRequestListState> _mapLoadFollowRequestListToState({ String orderBy, bool descending }) async* {
     _followRequestsListSubscription?.cancel();
-    _followRequestsListSubscription = _followRequestRepository.listen((list) => add(FollowRequestListUpdated(value: list)), orderBy: orderBy, descending: descending, eliudQuery: eliudQuery, );
+    _followRequestsListSubscription = _followRequestRepository.listenWithDetails((list) => add(FollowRequestListUpdated(value: list)), orderBy: orderBy, descending: descending, eliudQuery: eliudQuery, );
   }
 
   Stream<FollowRequestListState> _mapLoadFollowRequestListWithDetailsToState() async* {

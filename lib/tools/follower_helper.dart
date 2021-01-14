@@ -1,5 +1,5 @@
 class FollowerHelper {
-  static String getKey(String followerId, String followedId) {
+  static String getKey(String followedId, String followerId) {
     return followedId + '-' + followerId;
   }
 }
