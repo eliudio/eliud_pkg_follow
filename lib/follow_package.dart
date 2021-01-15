@@ -17,7 +17,7 @@ import 'model/repository_singleton.dart';
 
 abstract class FollowPackage extends PackageWithSubscription {
   static final String CONDITION_MEMBER_HAS_OPEN_REQUESTS = 'Has Open Follow Requests';
-  bool previousState = null;
+  bool stateCONDITION_MEMBER_HAS_OPEN_REQUESTS = null;
 
   static EliudQuery getOpenFollowRequestsQuery(String appId, String assigneeId) {
     return EliudQuery(
@@ -35,8 +35,8 @@ abstract class FollowPackage extends PackageWithSubscription {
       // If we have a different set of assignments, i.e. it has assignments were before it didn't or vice versa,
       // then we must inform the AccessBloc, so that it can refresh the state
       bool currentState = list.length > 0;
-      if (currentState != previousState) {
-        previousState = currentState;
+      if (currentState != stateCONDITION_MEMBER_HAS_OPEN_REQUESTS) {
+        stateCONDITION_MEMBER_HAS_OPEN_REQUESTS = currentState;
         accessBloc.add(MemberUpdated(currentMember));
       }
     }, eliudQuery: getOpenFollowRequestsQuery(appId, currentMember.documentID));
@@ -46,9 +46,13 @@ abstract class FollowPackage extends PackageWithSubscription {
   @override
   Future<bool> isConditionOk(String pluginCondition, AppModel app, MemberModel member, bool isOwner, bool isBlocked, PrivilegeLevel privilegeLevel) async {
     if (pluginCondition == CONDITION_MEMBER_HAS_OPEN_REQUESTS) {
+      if (stateCONDITION_MEMBER_HAS_OPEN_REQUESTS == null) return false;
+      return stateCONDITION_MEMBER_HAS_OPEN_REQUESTS;
+/*
       if (member == null) return false;
       var values = await followRequestRepository(appId: app.documentID).valuesList(eliudQuery: getOpenFollowRequestsQuery(app.documentID, member.documentID));
       return values != null && values.length > 0;
+*/
     }
     return null;
   }
