@@ -29,17 +29,30 @@ abstract class FollowPackage extends PackageWithSubscription {
     );
   }
 
+  void _setState(bool newState, {MemberModel currentMember}) {
+    if (newState != stateCONDITION_MEMBER_HAS_OPEN_REQUESTS) {
+      stateCONDITION_MEMBER_HAS_OPEN_REQUESTS = newState;
+      accessBloc.add(MemberUpdated(currentMember));
+    }
+  }
+
   void resubscribe(AppModel app, MemberModel currentMember) {
     String appId = app.documentID;
-    subscription = followRequestRepository(appId: appId).listen((list) {
-      // If we have a different set of assignments, i.e. it has assignments were before it didn't or vice versa,
-      // then we must inform the AccessBloc, so that it can refresh the state
-      bool currentState = list.length > 0;
-      if (currentState != stateCONDITION_MEMBER_HAS_OPEN_REQUESTS) {
-        stateCONDITION_MEMBER_HAS_OPEN_REQUESTS = currentState;
-        accessBloc.add(MemberUpdated(currentMember));
-      }
-    }, eliudQuery: getOpenFollowRequestsQuery(appId, currentMember.documentID));
+    if (currentMember != null) {
+      subscription = followRequestRepository(appId: appId).listen((list) {
+        // If we have a different set of assignments, i.e. it has assignments were before it didn't or vice versa,
+        // then we must inform the AccessBloc, so that it can refresh the state
+        _setState(list.length > 0, currentMember: currentMember);
+      }, eliudQuery: getOpenFollowRequestsQuery(
+          appId, currentMember.documentID));
+    } else {
+      _setState(false);
+    }
+  }
+
+  void unsubscribe() {
+    super.unsubscribe();
+    _setState(false);
   }
 
 

@@ -149,8 +149,8 @@ class FollowingDashboardItem extends StatelessWidget {
             await followingRepository(appId: appId).delete(value);
           },
           noFunction: () {},
-          yesButtonLabel: 'Accept',
-          noButtonLabel: 'Reject',
+          yesButtonLabel: 'Yes',
+          noButtonLabel: 'No',
         ));
   }
 }
