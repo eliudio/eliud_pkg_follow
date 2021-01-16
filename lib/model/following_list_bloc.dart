@@ -40,12 +40,12 @@ class FollowingListBloc extends Bloc<FollowingListEvent, FollowingListState> {
 
   Stream<FollowingListState> _mapLoadFollowingListToState({ String orderBy, bool descending }) async* {
     _followingsListSubscription?.cancel();
-    _followingsListSubscription = _followingRepository.listen((list) => add(FollowingListUpdated(value: list)), orderBy: orderBy, descending: descending, eliudQuery: eliudQuery, );
+    _followingsListSubscription = _followingRepository.listen((list) => add(FollowingListUpdated(value: list)), orderBy: orderBy, descending: descending, eliudQuery: eliudQuery,);
   }
 
   Stream<FollowingListState> _mapLoadFollowingListWithDetailsToState({ String orderBy, bool descending }) async* {
     _followingsListSubscription?.cancel();
-    _followingsListSubscription = _followingRepository.listenWithDetails((list) => add(FollowingListUpdated(value: list)), orderBy: orderBy, descending: descending, eliudQuery: eliudQuery, );
+    _followingsListSubscription = _followingRepository.listenWithDetails((list) => add(FollowingListUpdated(value: list)), orderBy: orderBy, descending: descending, eliudQuery: eliudQuery,);
   }
 
   Stream<FollowingListState> _mapAddFollowingListToState(AddFollowingList event) async* {
