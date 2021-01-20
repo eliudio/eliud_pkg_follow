@@ -20,32 +20,48 @@ import 'package:meta/meta.dart';
 import 'package:eliud_pkg_follow/model/following_repository.dart';
 import 'package:eliud_pkg_follow/model/following_list_event.dart';
 import 'package:eliud_pkg_follow/model/following_list_state.dart';
-import 'package:eliud_core/core/access/bloc/access_bloc.dart';
-import 'package:eliud_core/core/access/bloc/access_event.dart';
 import 'package:eliud_core/tools/query/query_tools.dart';
-import 'package:eliud_core/core/access/bloc/access_state.dart';
 
+
+const _followingLimit = 5;
 
 class FollowingListBloc extends Bloc<FollowingListEvent, FollowingListState> {
   final FollowingRepository _followingRepository;
   StreamSubscription _followingsListSubscription;
-  final AccessBloc accessBloc;
   final EliudQuery eliudQuery;
+  int pages = 1;
+  final bool paged;
+  final String orderBy;
+  final bool descending;
+  final bool detailed;
 
-
-  FollowingListBloc(this.accessBloc,{ this.eliudQuery, @required FollowingRepository followingRepository })
+  FollowingListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, @required FollowingRepository followingRepository})
       : assert(followingRepository != null),
-      _followingRepository = followingRepository,
-      super(FollowingListLoading());
+        _followingRepository = followingRepository,
+        super(FollowingListLoading());
 
-  Stream<FollowingListState> _mapLoadFollowingListToState({ String orderBy, bool descending }) async* {
+  Stream<FollowingListState> _mapLoadFollowingListToState() async* {
+    int amountNow =  (state is FollowingListLoaded) ? (state as FollowingListLoaded).values.length : 0;
     _followingsListSubscription?.cancel();
-    _followingsListSubscription = _followingRepository.listen((list) => add(FollowingListUpdated(value: list)), orderBy: orderBy, descending: descending, eliudQuery: eliudQuery,);
+    _followingsListSubscription = _followingRepository.listen(
+          (list) => add(FollowingListUpdated(value: list, mightHaveMore: amountNow != list.length)),
+      orderBy: orderBy,
+      descending: descending,
+      eliudQuery: eliudQuery,
+      limit: ((paged != null) && (paged)) ? pages * _followingLimit : null
+    );
   }
 
-  Stream<FollowingListState> _mapLoadFollowingListWithDetailsToState({ String orderBy, bool descending }) async* {
+  Stream<FollowingListState> _mapLoadFollowingListWithDetailsToState() async* {
+    int amountNow =  (state is FollowingListLoaded) ? (state as FollowingListLoaded).values.length : 0;
     _followingsListSubscription?.cancel();
-    _followingsListSubscription = _followingRepository.listenWithDetails((list) => add(FollowingListUpdated(value: list)), orderBy: orderBy, descending: descending, eliudQuery: eliudQuery,);
+    _followingsListSubscription = _followingRepository.listenWithDetails(
+            (list) => add(FollowingListUpdated(value: list, mightHaveMore: amountNow != list.length)),
+        orderBy: orderBy,
+        descending: descending,
+        eliudQuery: eliudQuery,
+        limit: ((paged != null) && (paged)) ? pages * _followingLimit : null
+    );
   }
 
   Stream<FollowingListState> _mapAddFollowingListToState(AddFollowingList event) async* {
@@ -60,17 +76,22 @@ class FollowingListBloc extends Bloc<FollowingListEvent, FollowingListState> {
     _followingRepository.delete(event.value);
   }
 
-  Stream<FollowingListState> _mapFollowingListUpdatedToState(FollowingListUpdated event) async* {
-    yield FollowingListLoaded(values: event.value);
+  Stream<FollowingListState> _mapFollowingListUpdatedToState(
+      FollowingListUpdated event) async* {
+    yield FollowingListLoaded(values: event.value, mightHaveMore: event.mightHaveMore);
   }
-
 
   @override
   Stream<FollowingListState> mapEventToState(FollowingListEvent event) async* {
-    final currentState = state;
     if (event is LoadFollowingList) {
-      yield* _mapLoadFollowingListToState(orderBy: event.orderBy, descending: event.descending);
-    } if (event is LoadFollowingListWithDetails) {
+      if ((detailed == null) || (!detailed)) {
+        yield* _mapLoadFollowingListToState();
+      } else {
+        yield* _mapLoadFollowingListWithDetailsToState();
+      }
+    }
+    if (event is NewPage) {
+      pages = pages + 1; // it doesn't matter so much if we increase pages beyond the end
       yield* _mapLoadFollowingListWithDetailsToState();
     } else if (event is AddFollowingList) {
       yield* _mapAddFollowingListToState(event);
@@ -88,7 +109,6 @@ class FollowingListBloc extends Bloc<FollowingListEvent, FollowingListState> {
     _followingsListSubscription?.cancel();
     return super.close();
   }
-
 }
 
 

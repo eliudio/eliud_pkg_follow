@@ -22,18 +22,9 @@ abstract class FollowingListEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadFollowingList extends FollowingListEvent {
-  final String orderBy;
-  final bool descending;
+class LoadFollowingList extends FollowingListEvent {}
 
-  LoadFollowingList({this.orderBy, this.descending});
-
-  @override
-  List<Object> get props => [orderBy, descending];
-
-}
-
-class LoadFollowingListWithDetails extends FollowingListEvent {}
+class NewPage extends FollowingListEvent {}
 
 class AddFollowingList extends FollowingListEvent {
   final FollowingModel value;
@@ -73,13 +64,14 @@ class DeleteFollowingList extends FollowingListEvent {
 
 class FollowingListUpdated extends FollowingListEvent {
   final List<FollowingModel> value;
+  final bool mightHaveMore;
 
-  const FollowingListUpdated({ this.value });
-
-  @override
-  List<Object> get props => [ value ];
+  const FollowingListUpdated({ this.value, this.mightHaveMore });
 
   @override
-  String toString() => 'FollowingListUpdated{ value: $value }';
+  List<Object> get props => [ value, mightHaveMore ];
+
+  @override
+  String toString() => 'FollowingListUpdated{ value: $value, mightHaveMore: $mightHaveMore }';
 }
 

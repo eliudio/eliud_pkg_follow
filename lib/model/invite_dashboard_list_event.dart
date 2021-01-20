@@ -22,18 +22,9 @@ abstract class InviteDashboardListEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadInviteDashboardList extends InviteDashboardListEvent {
-  final String orderBy;
-  final bool descending;
+class LoadInviteDashboardList extends InviteDashboardListEvent {}
 
-  LoadInviteDashboardList({this.orderBy, this.descending});
-
-  @override
-  List<Object> get props => [orderBy, descending];
-
-}
-
-class LoadInviteDashboardListWithDetails extends InviteDashboardListEvent {}
+class NewPage extends InviteDashboardListEvent {}
 
 class AddInviteDashboardList extends InviteDashboardListEvent {
   final InviteDashboardModel value;
@@ -73,13 +64,14 @@ class DeleteInviteDashboardList extends InviteDashboardListEvent {
 
 class InviteDashboardListUpdated extends InviteDashboardListEvent {
   final List<InviteDashboardModel> value;
+  final bool mightHaveMore;
 
-  const InviteDashboardListUpdated({ this.value });
-
-  @override
-  List<Object> get props => [ value ];
+  const InviteDashboardListUpdated({ this.value, this.mightHaveMore });
 
   @override
-  String toString() => 'InviteDashboardListUpdated{ value: $value }';
+  List<Object> get props => [ value, mightHaveMore ];
+
+  @override
+  String toString() => 'InviteDashboardListUpdated{ value: $value, mightHaveMore: $mightHaveMore }';
 }
 

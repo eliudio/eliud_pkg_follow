@@ -20,32 +20,48 @@ import 'package:meta/meta.dart';
 import 'package:eliud_pkg_follow/model/following_dashboard_repository.dart';
 import 'package:eliud_pkg_follow/model/following_dashboard_list_event.dart';
 import 'package:eliud_pkg_follow/model/following_dashboard_list_state.dart';
-import 'package:eliud_core/core/access/bloc/access_bloc.dart';
-import 'package:eliud_core/core/access/bloc/access_event.dart';
 import 'package:eliud_core/tools/query/query_tools.dart';
-import 'package:eliud_core/core/access/bloc/access_state.dart';
 
+
+const _followingDashboardLimit = 5;
 
 class FollowingDashboardListBloc extends Bloc<FollowingDashboardListEvent, FollowingDashboardListState> {
   final FollowingDashboardRepository _followingDashboardRepository;
   StreamSubscription _followingDashboardsListSubscription;
-  final AccessBloc accessBloc;
   final EliudQuery eliudQuery;
+  int pages = 1;
+  final bool paged;
+  final String orderBy;
+  final bool descending;
+  final bool detailed;
 
-
-  FollowingDashboardListBloc(this.accessBloc,{ this.eliudQuery, @required FollowingDashboardRepository followingDashboardRepository })
+  FollowingDashboardListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, @required FollowingDashboardRepository followingDashboardRepository})
       : assert(followingDashboardRepository != null),
-      _followingDashboardRepository = followingDashboardRepository,
-      super(FollowingDashboardListLoading());
+        _followingDashboardRepository = followingDashboardRepository,
+        super(FollowingDashboardListLoading());
 
-  Stream<FollowingDashboardListState> _mapLoadFollowingDashboardListToState({ String orderBy, bool descending }) async* {
+  Stream<FollowingDashboardListState> _mapLoadFollowingDashboardListToState() async* {
+    int amountNow =  (state is FollowingDashboardListLoaded) ? (state as FollowingDashboardListLoaded).values.length : 0;
     _followingDashboardsListSubscription?.cancel();
-    _followingDashboardsListSubscription = _followingDashboardRepository.listen((list) => add(FollowingDashboardListUpdated(value: list)), orderBy: orderBy, descending: descending, eliudQuery: eliudQuery,);
+    _followingDashboardsListSubscription = _followingDashboardRepository.listen(
+          (list) => add(FollowingDashboardListUpdated(value: list, mightHaveMore: amountNow != list.length)),
+      orderBy: orderBy,
+      descending: descending,
+      eliudQuery: eliudQuery,
+      limit: ((paged != null) && (paged)) ? pages * _followingDashboardLimit : null
+    );
   }
 
-  Stream<FollowingDashboardListState> _mapLoadFollowingDashboardListWithDetailsToState({ String orderBy, bool descending }) async* {
+  Stream<FollowingDashboardListState> _mapLoadFollowingDashboardListWithDetailsToState() async* {
+    int amountNow =  (state is FollowingDashboardListLoaded) ? (state as FollowingDashboardListLoaded).values.length : 0;
     _followingDashboardsListSubscription?.cancel();
-    _followingDashboardsListSubscription = _followingDashboardRepository.listenWithDetails((list) => add(FollowingDashboardListUpdated(value: list)), orderBy: orderBy, descending: descending, eliudQuery: eliudQuery,);
+    _followingDashboardsListSubscription = _followingDashboardRepository.listenWithDetails(
+            (list) => add(FollowingDashboardListUpdated(value: list, mightHaveMore: amountNow != list.length)),
+        orderBy: orderBy,
+        descending: descending,
+        eliudQuery: eliudQuery,
+        limit: ((paged != null) && (paged)) ? pages * _followingDashboardLimit : null
+    );
   }
 
   Stream<FollowingDashboardListState> _mapAddFollowingDashboardListToState(AddFollowingDashboardList event) async* {
@@ -60,17 +76,22 @@ class FollowingDashboardListBloc extends Bloc<FollowingDashboardListEvent, Follo
     _followingDashboardRepository.delete(event.value);
   }
 
-  Stream<FollowingDashboardListState> _mapFollowingDashboardListUpdatedToState(FollowingDashboardListUpdated event) async* {
-    yield FollowingDashboardListLoaded(values: event.value);
+  Stream<FollowingDashboardListState> _mapFollowingDashboardListUpdatedToState(
+      FollowingDashboardListUpdated event) async* {
+    yield FollowingDashboardListLoaded(values: event.value, mightHaveMore: event.mightHaveMore);
   }
-
 
   @override
   Stream<FollowingDashboardListState> mapEventToState(FollowingDashboardListEvent event) async* {
-    final currentState = state;
     if (event is LoadFollowingDashboardList) {
-      yield* _mapLoadFollowingDashboardListToState(orderBy: event.orderBy, descending: event.descending);
-    } if (event is LoadFollowingDashboardListWithDetails) {
+      if ((detailed == null) || (!detailed)) {
+        yield* _mapLoadFollowingDashboardListToState();
+      } else {
+        yield* _mapLoadFollowingDashboardListWithDetailsToState();
+      }
+    }
+    if (event is NewPage) {
+      pages = pages + 1; // it doesn't matter so much if we increase pages beyond the end
       yield* _mapLoadFollowingDashboardListWithDetailsToState();
     } else if (event is AddFollowingDashboardList) {
       yield* _mapAddFollowingDashboardListToState(event);
@@ -88,7 +109,6 @@ class FollowingDashboardListBloc extends Bloc<FollowingDashboardListEvent, Follo
     _followingDashboardsListSubscription?.cancel();
     return super.close();
   }
-
 }
 
 

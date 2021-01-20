@@ -20,32 +20,48 @@ import 'package:meta/meta.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_repository.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_list_event.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_list_state.dart';
-import 'package:eliud_core/core/access/bloc/access_bloc.dart';
-import 'package:eliud_core/core/access/bloc/access_event.dart';
 import 'package:eliud_core/tools/query/query_tools.dart';
-import 'package:eliud_core/core/access/bloc/access_state.dart';
 
+
+const _inviteDashboardLimit = 5;
 
 class InviteDashboardListBloc extends Bloc<InviteDashboardListEvent, InviteDashboardListState> {
   final InviteDashboardRepository _inviteDashboardRepository;
   StreamSubscription _inviteDashboardsListSubscription;
-  final AccessBloc accessBloc;
   final EliudQuery eliudQuery;
+  int pages = 1;
+  final bool paged;
+  final String orderBy;
+  final bool descending;
+  final bool detailed;
 
-
-  InviteDashboardListBloc(this.accessBloc,{ this.eliudQuery, @required InviteDashboardRepository inviteDashboardRepository })
+  InviteDashboardListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, @required InviteDashboardRepository inviteDashboardRepository})
       : assert(inviteDashboardRepository != null),
-      _inviteDashboardRepository = inviteDashboardRepository,
-      super(InviteDashboardListLoading());
+        _inviteDashboardRepository = inviteDashboardRepository,
+        super(InviteDashboardListLoading());
 
-  Stream<InviteDashboardListState> _mapLoadInviteDashboardListToState({ String orderBy, bool descending }) async* {
+  Stream<InviteDashboardListState> _mapLoadInviteDashboardListToState() async* {
+    int amountNow =  (state is InviteDashboardListLoaded) ? (state as InviteDashboardListLoaded).values.length : 0;
     _inviteDashboardsListSubscription?.cancel();
-    _inviteDashboardsListSubscription = _inviteDashboardRepository.listen((list) => add(InviteDashboardListUpdated(value: list)), orderBy: orderBy, descending: descending, eliudQuery: eliudQuery,);
+    _inviteDashboardsListSubscription = _inviteDashboardRepository.listen(
+          (list) => add(InviteDashboardListUpdated(value: list, mightHaveMore: amountNow != list.length)),
+      orderBy: orderBy,
+      descending: descending,
+      eliudQuery: eliudQuery,
+      limit: ((paged != null) && (paged)) ? pages * _inviteDashboardLimit : null
+    );
   }
 
-  Stream<InviteDashboardListState> _mapLoadInviteDashboardListWithDetailsToState({ String orderBy, bool descending }) async* {
+  Stream<InviteDashboardListState> _mapLoadInviteDashboardListWithDetailsToState() async* {
+    int amountNow =  (state is InviteDashboardListLoaded) ? (state as InviteDashboardListLoaded).values.length : 0;
     _inviteDashboardsListSubscription?.cancel();
-    _inviteDashboardsListSubscription = _inviteDashboardRepository.listenWithDetails((list) => add(InviteDashboardListUpdated(value: list)), orderBy: orderBy, descending: descending, eliudQuery: eliudQuery,);
+    _inviteDashboardsListSubscription = _inviteDashboardRepository.listenWithDetails(
+            (list) => add(InviteDashboardListUpdated(value: list, mightHaveMore: amountNow != list.length)),
+        orderBy: orderBy,
+        descending: descending,
+        eliudQuery: eliudQuery,
+        limit: ((paged != null) && (paged)) ? pages * _inviteDashboardLimit : null
+    );
   }
 
   Stream<InviteDashboardListState> _mapAddInviteDashboardListToState(AddInviteDashboardList event) async* {
@@ -60,17 +76,22 @@ class InviteDashboardListBloc extends Bloc<InviteDashboardListEvent, InviteDashb
     _inviteDashboardRepository.delete(event.value);
   }
 
-  Stream<InviteDashboardListState> _mapInviteDashboardListUpdatedToState(InviteDashboardListUpdated event) async* {
-    yield InviteDashboardListLoaded(values: event.value);
+  Stream<InviteDashboardListState> _mapInviteDashboardListUpdatedToState(
+      InviteDashboardListUpdated event) async* {
+    yield InviteDashboardListLoaded(values: event.value, mightHaveMore: event.mightHaveMore);
   }
-
 
   @override
   Stream<InviteDashboardListState> mapEventToState(InviteDashboardListEvent event) async* {
-    final currentState = state;
     if (event is LoadInviteDashboardList) {
-      yield* _mapLoadInviteDashboardListToState(orderBy: event.orderBy, descending: event.descending);
-    } if (event is LoadInviteDashboardListWithDetails) {
+      if ((detailed == null) || (!detailed)) {
+        yield* _mapLoadInviteDashboardListToState();
+      } else {
+        yield* _mapLoadInviteDashboardListWithDetailsToState();
+      }
+    }
+    if (event is NewPage) {
+      pages = pages + 1; // it doesn't matter so much if we increase pages beyond the end
       yield* _mapLoadInviteDashboardListWithDetailsToState();
     } else if (event is AddInviteDashboardList) {
       yield* _mapAddInviteDashboardListToState(event);
@@ -88,7 +109,6 @@ class InviteDashboardListBloc extends Bloc<InviteDashboardListEvent, InviteDashb
     _inviteDashboardsListSubscription?.cancel();
     return super.close();
   }
-
 }
 
 

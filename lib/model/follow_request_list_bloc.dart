@@ -20,32 +20,48 @@ import 'package:meta/meta.dart';
 import 'package:eliud_pkg_follow/model/follow_request_repository.dart';
 import 'package:eliud_pkg_follow/model/follow_request_list_event.dart';
 import 'package:eliud_pkg_follow/model/follow_request_list_state.dart';
-import 'package:eliud_core/core/access/bloc/access_bloc.dart';
-import 'package:eliud_core/core/access/bloc/access_event.dart';
 import 'package:eliud_core/tools/query/query_tools.dart';
-import 'package:eliud_core/core/access/bloc/access_state.dart';
 
+
+const _followRequestLimit = 5;
 
 class FollowRequestListBloc extends Bloc<FollowRequestListEvent, FollowRequestListState> {
   final FollowRequestRepository _followRequestRepository;
   StreamSubscription _followRequestsListSubscription;
-  final AccessBloc accessBloc;
   final EliudQuery eliudQuery;
+  int pages = 1;
+  final bool paged;
+  final String orderBy;
+  final bool descending;
+  final bool detailed;
 
-
-  FollowRequestListBloc(this.accessBloc,{ this.eliudQuery, @required FollowRequestRepository followRequestRepository })
+  FollowRequestListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, @required FollowRequestRepository followRequestRepository})
       : assert(followRequestRepository != null),
-      _followRequestRepository = followRequestRepository,
-      super(FollowRequestListLoading());
+        _followRequestRepository = followRequestRepository,
+        super(FollowRequestListLoading());
 
-  Stream<FollowRequestListState> _mapLoadFollowRequestListToState({ String orderBy, bool descending }) async* {
+  Stream<FollowRequestListState> _mapLoadFollowRequestListToState() async* {
+    int amountNow =  (state is FollowRequestListLoaded) ? (state as FollowRequestListLoaded).values.length : 0;
     _followRequestsListSubscription?.cancel();
-    _followRequestsListSubscription = _followRequestRepository.listen((list) => add(FollowRequestListUpdated(value: list)), orderBy: orderBy, descending: descending, eliudQuery: eliudQuery,);
+    _followRequestsListSubscription = _followRequestRepository.listen(
+          (list) => add(FollowRequestListUpdated(value: list, mightHaveMore: amountNow != list.length)),
+      orderBy: orderBy,
+      descending: descending,
+      eliudQuery: eliudQuery,
+      limit: ((paged != null) && (paged)) ? pages * _followRequestLimit : null
+    );
   }
 
-  Stream<FollowRequestListState> _mapLoadFollowRequestListWithDetailsToState({ String orderBy, bool descending }) async* {
+  Stream<FollowRequestListState> _mapLoadFollowRequestListWithDetailsToState() async* {
+    int amountNow =  (state is FollowRequestListLoaded) ? (state as FollowRequestListLoaded).values.length : 0;
     _followRequestsListSubscription?.cancel();
-    _followRequestsListSubscription = _followRequestRepository.listenWithDetails((list) => add(FollowRequestListUpdated(value: list)), orderBy: orderBy, descending: descending, eliudQuery: eliudQuery,);
+    _followRequestsListSubscription = _followRequestRepository.listenWithDetails(
+            (list) => add(FollowRequestListUpdated(value: list, mightHaveMore: amountNow != list.length)),
+        orderBy: orderBy,
+        descending: descending,
+        eliudQuery: eliudQuery,
+        limit: ((paged != null) && (paged)) ? pages * _followRequestLimit : null
+    );
   }
 
   Stream<FollowRequestListState> _mapAddFollowRequestListToState(AddFollowRequestList event) async* {
@@ -60,17 +76,22 @@ class FollowRequestListBloc extends Bloc<FollowRequestListEvent, FollowRequestLi
     _followRequestRepository.delete(event.value);
   }
 
-  Stream<FollowRequestListState> _mapFollowRequestListUpdatedToState(FollowRequestListUpdated event) async* {
-    yield FollowRequestListLoaded(values: event.value);
+  Stream<FollowRequestListState> _mapFollowRequestListUpdatedToState(
+      FollowRequestListUpdated event) async* {
+    yield FollowRequestListLoaded(values: event.value, mightHaveMore: event.mightHaveMore);
   }
-
 
   @override
   Stream<FollowRequestListState> mapEventToState(FollowRequestListEvent event) async* {
-    final currentState = state;
     if (event is LoadFollowRequestList) {
-      yield* _mapLoadFollowRequestListToState(orderBy: event.orderBy, descending: event.descending);
-    } if (event is LoadFollowRequestListWithDetails) {
+      if ((detailed == null) || (!detailed)) {
+        yield* _mapLoadFollowRequestListToState();
+      } else {
+        yield* _mapLoadFollowRequestListWithDetailsToState();
+      }
+    }
+    if (event is NewPage) {
+      pages = pages + 1; // it doesn't matter so much if we increase pages beyond the end
       yield* _mapLoadFollowRequestListWithDetailsToState();
     } else if (event is AddFollowRequestList) {
       yield* _mapAddFollowRequestListToState(event);
@@ -88,7 +109,6 @@ class FollowRequestListBloc extends Bloc<FollowRequestListEvent, FollowRequestLi
     _followRequestsListSubscription?.cancel();
     return super.close();
   }
-
 }
 
 

@@ -199,7 +199,6 @@ class ListComponent extends StatelessWidget with HasFab {
       providers: [
         BlocProvider<FollowingListBloc>(
           create: (context) => FollowingListBloc(
-            BlocProvider.of<AccessBloc>(context), 
             followingRepository: followingRepository(appId: AccessBloc.appId(context)),
           )..add(LoadFollowingList()),
         )
@@ -213,7 +212,6 @@ class ListComponent extends StatelessWidget with HasFab {
       providers: [
         BlocProvider<FollowingDashboardListBloc>(
           create: (context) => FollowingDashboardListBloc(
-            BlocProvider.of<AccessBloc>(context), 
             followingDashboardRepository: followingDashboardRepository(appId: AccessBloc.appId(context)),
           )..add(LoadFollowingDashboardList()),
         )
@@ -227,7 +225,6 @@ class ListComponent extends StatelessWidget with HasFab {
       providers: [
         BlocProvider<FollowRequestListBloc>(
           create: (context) => FollowRequestListBloc(
-            BlocProvider.of<AccessBloc>(context), 
             followRequestRepository: followRequestRepository(appId: AccessBloc.appId(context)),
           )..add(LoadFollowRequestList()),
         )
@@ -241,7 +238,6 @@ class ListComponent extends StatelessWidget with HasFab {
       providers: [
         BlocProvider<FollowRequestsDashboardListBloc>(
           create: (context) => FollowRequestsDashboardListBloc(
-            BlocProvider.of<AccessBloc>(context), 
             followRequestsDashboardRepository: followRequestsDashboardRepository(appId: AccessBloc.appId(context)),
           )..add(LoadFollowRequestsDashboardList()),
         )
@@ -255,7 +251,6 @@ class ListComponent extends StatelessWidget with HasFab {
       providers: [
         BlocProvider<InviteDashboardListBloc>(
           create: (context) => InviteDashboardListBloc(
-            BlocProvider.of<AccessBloc>(context), 
             inviteDashboardRepository: inviteDashboardRepository(appId: AccessBloc.appId(context)),
           )..add(LoadInviteDashboardList()),
         )
@@ -294,7 +289,6 @@ class DropdownButtonComponent extends StatelessWidget {
       providers: [
         BlocProvider<FollowingListBloc>(
           create: (context) => FollowingListBloc(
-            BlocProvider.of<AccessBloc>(context), 
             followingRepository: followingRepository(appId: AccessBloc.appId(context)),
           )..add(LoadFollowingList()),
         )
@@ -308,7 +302,6 @@ class DropdownButtonComponent extends StatelessWidget {
       providers: [
         BlocProvider<FollowingDashboardListBloc>(
           create: (context) => FollowingDashboardListBloc(
-            BlocProvider.of<AccessBloc>(context), 
             followingDashboardRepository: followingDashboardRepository(appId: AccessBloc.appId(context)),
           )..add(LoadFollowingDashboardList()),
         )
@@ -322,7 +315,6 @@ class DropdownButtonComponent extends StatelessWidget {
       providers: [
         BlocProvider<FollowRequestListBloc>(
           create: (context) => FollowRequestListBloc(
-            BlocProvider.of<AccessBloc>(context), 
             followRequestRepository: followRequestRepository(appId: AccessBloc.appId(context)),
           )..add(LoadFollowRequestList()),
         )
@@ -336,7 +328,6 @@ class DropdownButtonComponent extends StatelessWidget {
       providers: [
         BlocProvider<FollowRequestsDashboardListBloc>(
           create: (context) => FollowRequestsDashboardListBloc(
-            BlocProvider.of<AccessBloc>(context), 
             followRequestsDashboardRepository: followRequestsDashboardRepository(appId: AccessBloc.appId(context)),
           )..add(LoadFollowRequestsDashboardList()),
         )
@@ -350,7 +341,6 @@ class DropdownButtonComponent extends StatelessWidget {
       providers: [
         BlocProvider<InviteDashboardListBloc>(
           create: (context) => InviteDashboardListBloc(
-            BlocProvider.of<AccessBloc>(context), 
             inviteDashboardRepository: inviteDashboardRepository(appId: AccessBloc.appId(context)),
           )..add(LoadInviteDashboardList()),
         )

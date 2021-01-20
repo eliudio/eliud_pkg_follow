@@ -27,11 +27,12 @@ class InviteDashboardListLoading extends InviteDashboardListState {}
 
 class InviteDashboardListLoaded extends InviteDashboardListState {
   final List<InviteDashboardModel> values;
+  final bool mightHaveMore;
 
-  const InviteDashboardListLoaded({this.values = const []});
+  const InviteDashboardListLoaded({this.mightHaveMore, this.values = const []});
 
   @override
-  List<Object> get props => [ values ];
+  List<Object> get props => [ values, mightHaveMore ];
 
   @override
   String toString() => 'InviteDashboardListLoaded { values: $values }';

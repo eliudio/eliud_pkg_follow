@@ -27,11 +27,12 @@ class FollowingListLoading extends FollowingListState {}
 
 class FollowingListLoaded extends FollowingListState {
   final List<FollowingModel> values;
+  final bool mightHaveMore;
 
-  const FollowingListLoaded({this.values = const []});
+  const FollowingListLoaded({this.mightHaveMore, this.values = const []});
 
   @override
-  List<Object> get props => [ values ];
+  List<Object> get props => [ values, mightHaveMore ];
 
   @override
   String toString() => 'FollowingListLoaded { values: $values }';

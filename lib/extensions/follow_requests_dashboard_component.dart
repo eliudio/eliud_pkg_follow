@@ -55,12 +55,12 @@ class FollowRequestsDashboardComponent
       var appId = state.app.documentID;
       return BlocProvider<FollowRequestListBloc>(
         create: (context) => FollowRequestListBloc(
-          AccessBloc.getBloc(context),
+          detailed: true,
           eliudQuery: FollowPackage.getOpenFollowRequestsQuery(
               state.app.documentID, state.getMember().documentID),
           followRequestRepository:
               followRequestRepository(appId: AccessBloc.appId(context)),
-        )..add(LoadFollowRequestListWithDetails()),
+        )..add(LoadFollowRequestList()),
         child: FollowRequestListWidget(
             readOnly: true,
             widgetProvider: (value) => widgetProvider(appId, value),

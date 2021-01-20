@@ -22,18 +22,9 @@ abstract class FollowingDashboardListEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadFollowingDashboardList extends FollowingDashboardListEvent {
-  final String orderBy;
-  final bool descending;
+class LoadFollowingDashboardList extends FollowingDashboardListEvent {}
 
-  LoadFollowingDashboardList({this.orderBy, this.descending});
-
-  @override
-  List<Object> get props => [orderBy, descending];
-
-}
-
-class LoadFollowingDashboardListWithDetails extends FollowingDashboardListEvent {}
+class NewPage extends FollowingDashboardListEvent {}
 
 class AddFollowingDashboardList extends FollowingDashboardListEvent {
   final FollowingDashboardModel value;
@@ -73,13 +64,14 @@ class DeleteFollowingDashboardList extends FollowingDashboardListEvent {
 
 class FollowingDashboardListUpdated extends FollowingDashboardListEvent {
   final List<FollowingDashboardModel> value;
+  final bool mightHaveMore;
 
-  const FollowingDashboardListUpdated({ this.value });
-
-  @override
-  List<Object> get props => [ value ];
+  const FollowingDashboardListUpdated({ this.value, this.mightHaveMore });
 
   @override
-  String toString() => 'FollowingDashboardListUpdated{ value: $value }';
+  List<Object> get props => [ value, mightHaveMore ];
+
+  @override
+  String toString() => 'FollowingDashboardListUpdated{ value: $value, mightHaveMore: $mightHaveMore }';
 }
 

@@ -57,7 +57,6 @@ class InviteDashboard extends AbstractInviteDashboardComponent {
       var appId = state.app.documentID;
       return BlocProvider<MemberPublicInfoListBloc>(
         create: (context) => MemberPublicInfoListBloc(
-          AccessBloc.getBloc(context),
           eliudQuery: getSubscribedMembers(state.app.documentID),
           memberPublicInfoRepository:
               memberPublicInfoRepository(appId: AccessBloc.appId(context)),

@@ -22,18 +22,9 @@ abstract class FollowRequestListEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadFollowRequestList extends FollowRequestListEvent {
-  final String orderBy;
-  final bool descending;
+class LoadFollowRequestList extends FollowRequestListEvent {}
 
-  LoadFollowRequestList({this.orderBy, this.descending});
-
-  @override
-  List<Object> get props => [orderBy, descending];
-
-}
-
-class LoadFollowRequestListWithDetails extends FollowRequestListEvent {}
+class NewPage extends FollowRequestListEvent {}
 
 class AddFollowRequestList extends FollowRequestListEvent {
   final FollowRequestModel value;
@@ -73,13 +64,14 @@ class DeleteFollowRequestList extends FollowRequestListEvent {
 
 class FollowRequestListUpdated extends FollowRequestListEvent {
   final List<FollowRequestModel> value;
+  final bool mightHaveMore;
 
-  const FollowRequestListUpdated({ this.value });
-
-  @override
-  List<Object> get props => [ value ];
+  const FollowRequestListUpdated({ this.value, this.mightHaveMore });
 
   @override
-  String toString() => 'FollowRequestListUpdated{ value: $value }';
+  List<Object> get props => [ value, mightHaveMore ];
+
+  @override
+  String toString() => 'FollowRequestListUpdated{ value: $value, mightHaveMore: $mightHaveMore }';
 }
 

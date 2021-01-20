@@ -27,11 +27,12 @@ class FollowRequestsDashboardListLoading extends FollowRequestsDashboardListStat
 
 class FollowRequestsDashboardListLoaded extends FollowRequestsDashboardListState {
   final List<FollowRequestsDashboardModel> values;
+  final bool mightHaveMore;
 
-  const FollowRequestsDashboardListLoaded({this.values = const []});
+  const FollowRequestsDashboardListLoaded({this.mightHaveMore, this.values = const []});
 
   @override
-  List<Object> get props => [ values ];
+  List<Object> get props => [ values, mightHaveMore ];
 
   @override
   String toString() => 'FollowRequestsDashboardListLoaded { values: $values }';

@@ -51,11 +51,11 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
       var member = state.getMember();
       return BlocProvider<FollowingListBloc>(
         create: (context) => FollowingListBloc(
-          AccessBloc.getBloc(context),
           eliudQuery: getQuery(dashboardModel, member),
+          detailed: true,
           followingRepository:
               followingRepository(appId: AccessBloc.appId(context)),
-        )..add(LoadFollowingListWithDetails()),
+        )..add(LoadFollowingList()),
         child: FollowingListWidget(
             readOnly: true,
             widgetProvider: (value) => widgetProvider(appId, value),
