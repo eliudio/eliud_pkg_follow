@@ -184,6 +184,12 @@ class FollowRequestFirestore implements FollowRequestRepository {
     return firestoreTimeStampToString(timeStamp);
   } 
 
+  Future<FollowRequestModel> changeValue(String documentId, String fieldName, num changeByThisValue) {
+    var change = FieldValue.increment(changeByThisValue);
+    return FollowRequestCollection.doc(documentId).update({fieldName: change}).then((v) => get(documentId));
+  }
+
+
   final String appId;
   FollowRequestFirestore(this.FollowRequestCollection, this.appId);
 

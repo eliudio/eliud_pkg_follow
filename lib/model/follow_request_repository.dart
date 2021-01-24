@@ -59,6 +59,7 @@ abstract class FollowRequestRepository {
   String timeStampToString(dynamic timeStamp);
 
   dynamic getSubCollection(String documentId, String name);
+  Future<FollowRequestModel> changeValue(String documentId, String fieldName, num changeByThisValue);
 
   Future<void> deleteAll();
 }

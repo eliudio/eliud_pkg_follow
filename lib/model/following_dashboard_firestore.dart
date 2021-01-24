@@ -180,6 +180,12 @@ class FollowingDashboardFirestore implements FollowingDashboardRepository {
     return firestoreTimeStampToString(timeStamp);
   } 
 
+  Future<FollowingDashboardModel> changeValue(String documentId, String fieldName, num changeByThisValue) {
+    var change = FieldValue.increment(changeByThisValue);
+    return FollowingDashboardCollection.doc(documentId).update({fieldName: change}).then((v) => get(documentId));
+  }
+
+
   final String appId;
   FollowingDashboardFirestore(this.FollowingDashboardCollection, this.appId);
 

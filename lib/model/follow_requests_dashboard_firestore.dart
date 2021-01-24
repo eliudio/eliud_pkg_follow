@@ -180,6 +180,12 @@ class FollowRequestsDashboardFirestore implements FollowRequestsDashboardReposit
     return firestoreTimeStampToString(timeStamp);
   } 
 
+  Future<FollowRequestsDashboardModel> changeValue(String documentId, String fieldName, num changeByThisValue) {
+    var change = FieldValue.increment(changeByThisValue);
+    return FollowRequestsDashboardCollection.doc(documentId).update({fieldName: change}).then((v) => get(documentId));
+  }
+
+
   final String appId;
   FollowRequestsDashboardFirestore(this.FollowRequestsDashboardCollection, this.appId);
 

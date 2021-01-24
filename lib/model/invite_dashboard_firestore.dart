@@ -180,6 +180,12 @@ class InviteDashboardFirestore implements InviteDashboardRepository {
     return firestoreTimeStampToString(timeStamp);
   } 
 
+  Future<InviteDashboardModel> changeValue(String documentId, String fieldName, num changeByThisValue) {
+    var change = FieldValue.increment(changeByThisValue);
+    return InviteDashboardCollection.doc(documentId).update({fieldName: change}).then((v) => get(documentId));
+  }
+
+
   final String appId;
   InviteDashboardFirestore(this.InviteDashboardCollection, this.appId);
 

@@ -184,6 +184,12 @@ class FollowingFirestore implements FollowingRepository {
     return firestoreTimeStampToString(timeStamp);
   } 
 
+  Future<FollowingModel> changeValue(String documentId, String fieldName, num changeByThisValue) {
+    var change = FieldValue.increment(changeByThisValue);
+    return FollowingCollection.doc(documentId).update({fieldName: change}).then((v) => get(documentId));
+  }
+
+
   final String appId;
   FollowingFirestore(this.FollowingCollection, this.appId);
 
