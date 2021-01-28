@@ -59,7 +59,7 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
         )..add(LoadFollowingList()),
         child: FollowingListWidget(
             readOnly: true,
-            widgetProvider: (value) => widgetProvider(appId, value),
+            widgetProvider: (value) => widgetProvider(appId, value, dashboardModel),
             listBackground: BackgroundModel(documentID: "`transparent")),
       );
     } else {
@@ -81,8 +81,8 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
     return null;
   }
 
-  Widget widgetProvider(String appId, FollowingModel value) {
-    return FollowingDashboardItem(appId: appId, value: value);
+  Widget widgetProvider(String appId, FollowingModel value, FollowingDashboardModel dashboardModel) {
+    return FollowingDashboardItem(appId: appId, value: value, followingView: dashboardModel.view);
   }
 
   @override
@@ -106,12 +106,15 @@ class FollowingDashboardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+/*
     return FutureBuilder<MemberPublicInfoModel>(
         future: memberPublicInfoRepository(appId: appId)
             .get(value.follower.documentID),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var data = snapshot.data;
+*/
+            var data = followingView == FollowingView.Followers ? value.follower : value.followed;
             return ListTile(
                 onTap: () {
                   openOptions(context);
@@ -124,10 +127,11 @@ class FollowingDashboardItem extends StatelessWidget {
                 title: Text(
                   data.name,
                 ));
-          } else {
+    /*} else {
             return Icon(Icons.person_outline);
+
           }
-        });
+        });*/
   }
 
   void openOptions(BuildContext context) {
