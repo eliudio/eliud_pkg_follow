@@ -15,14 +15,13 @@ import 'package:eliud_pkg_follow/model/follow_requests_dashboard_model.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:eliud_core/platform/platform.dart';
 import 'package:eliud_core/tools/widgets/dialog_helper.dart';
 import 'package:eliud_pkg_follow/model/following_model.dart';
 import 'package:eliud_pkg_follow/tools/follower_helper.dart';
 import 'package:eliud_pkg_membership/model/member_public_info_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:eliud_pkg_membership/model/abstract_repository_singleton.dart';
-
+import 'package:transparent_image/transparent_image.dart';
 import '../follow_package.dart';
 
 /*
@@ -108,8 +107,10 @@ class FollowRequestsDashboardItem extends StatelessWidget {
                 trailing: Container(
                     height: 100,
                     width: 100,
-                    child: AbstractPlatform.platform
-                        .getImageFromURL(url: data.photoURL)),
+                    child: FadeInImage.memoryNetwork(
+                      placeholder: kTransparentImage,
+                      image: data.photoURL,
+                    )),
                 title: Text(
                   data.name,
                 ));

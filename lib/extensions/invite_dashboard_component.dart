@@ -21,8 +21,7 @@ import 'package:eliud_pkg_membership/model/member_public_info_list_event.dart';
 import 'package:eliud_pkg_membership/model/member_public_info_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:eliud_core/platform/platform.dart';
+import 'package:transparent_image/transparent_image.dart';
 import 'package:eliud_core/tools/widgets/dialog_helper.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -100,8 +99,10 @@ class InviteDashboardItem extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget profilePhoto;
     if (value.photoURL != null) {
-      profilePhoto =
-          AbstractPlatform.platform.getImageFromURL(url: value.photoURL);
+      profilePhoto = FadeInImage.memoryNetwork(
+        placeholder: kTransparentImage,
+        image: value.photoURL,
+      );
     }
     profilePhoto ??= Icon(Icons.person_outline);
     return Dismissible(

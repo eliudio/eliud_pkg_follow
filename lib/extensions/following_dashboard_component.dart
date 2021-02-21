@@ -1,4 +1,3 @@
-import 'package:eliud_core/platform/platform.dart';
 import 'package:eliud_core/tools/widgets/dialog_helper.dart';
 import 'package:eliud_core/tools/widgets/yes_no_dialog.dart';
 import 'package:eliud_pkg_follow/model/following_list.dart';
@@ -21,6 +20,7 @@ import 'package:eliud_pkg_follow/model/following_dashboard_repository.dart';
 import 'package:eliud_pkg_follow/model/following_list_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 /*
  * Dashboard of following items, i.e list the entries in 'following', and depending on 'view':
@@ -122,8 +122,10 @@ class FollowingDashboardItem extends StatelessWidget {
                 trailing: Container(
                     height: 100,
                     width: 100,
-                    child: AbstractPlatform.platform
-                        .getImageFromURL(url: data.photoURL)),
+                    child: FadeInImage.memoryNetwork(
+                      placeholder: kTransparentImage,
+                      image: data.photoURL,
+                    )),
                 title: Text(
                   data.name,
                 ));
