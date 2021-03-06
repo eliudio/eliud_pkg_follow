@@ -21,6 +21,7 @@ import '../model/invite_dashboard_repository.dart';
 import 'package:eliud_core/core/access/bloc/user_repository.dart';
 import 'package:eliud_core/tools/common_tools.dart';
 import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
+import 'package:eliud_core/package/package.dart';
 
 FollowingRepository followingRepository({ String appId }) => AbstractRepositorySingleton.singleton.followingRepository(appId);
 FollowingDashboardRepository followingDashboardRepository({ String appId }) => AbstractRepositorySingleton.singleton.followingDashboardRepository(appId);
@@ -29,6 +30,8 @@ FollowRequestsDashboardRepository followRequestsDashboardRepository({ String app
 InviteDashboardRepository inviteDashboardRepository({ String appId }) => AbstractRepositorySingleton.singleton.inviteDashboardRepository(appId);
 
 abstract class AbstractRepositorySingleton {
+  static List<MemberCollectionInfo> collections = [
+  ];
   static AbstractRepositorySingleton singleton;
 
   FollowingRepository followingRepository(String appId);
