@@ -36,18 +36,18 @@ import 'package:eliud_core/tools/random.dart';
 
 
 class FollowRequestsDashboardModel {
-  String documentID;
+  String? documentID;
 
   // This is the identifier of the app to which this belongs
-  String appId;
-  String description;
-  ConditionsSimpleModel conditions;
+  String? appId;
+  String? description;
+  ConditionsSimpleModel? conditions;
 
   FollowRequestsDashboardModel({this.documentID, this.appId, this.description, this.conditions, })  {
     assert(documentID != null);
   }
 
-  FollowRequestsDashboardModel copyWith({String documentID, String appId, String description, ConditionsSimpleModel conditions, }) {
+  FollowRequestsDashboardModel copyWith({String? documentID, String? appId, String? description, ConditionsSimpleModel? conditions, }) {
     return FollowRequestsDashboardModel(documentID: documentID ?? this.documentID, appId: appId ?? this.appId, description: description ?? this.description, conditions: conditions ?? this.conditions, );
   }
 
@@ -69,15 +69,15 @@ class FollowRequestsDashboardModel {
     return 'FollowRequestsDashboardModel{documentID: $documentID, appId: $appId, description: $description, conditions: $conditions}';
   }
 
-  FollowRequestsDashboardEntity toEntity({String appId}) {
+  FollowRequestsDashboardEntity toEntity({String? appId}) {
     return FollowRequestsDashboardEntity(
           appId: (appId != null) ? appId : null, 
           description: (description != null) ? description : null, 
-          conditions: (conditions != null) ? conditions.toEntity(appId: appId) : null, 
+          conditions: (conditions != null) ? conditions!.toEntity(appId: appId) : null, 
     );
   }
 
-  static FollowRequestsDashboardModel fromEntity(String documentID, FollowRequestsDashboardEntity entity) {
+  static FollowRequestsDashboardModel? fromEntity(String documentID, FollowRequestsDashboardEntity? entity) {
     if (entity == null) return null;
     return FollowRequestsDashboardModel(
           documentID: documentID, 
@@ -88,7 +88,7 @@ class FollowRequestsDashboardModel {
     );
   }
 
-  static Future<FollowRequestsDashboardModel> fromEntityPlus(String documentID, FollowRequestsDashboardEntity entity, { String appId}) async {
+  static Future<FollowRequestsDashboardModel?> fromEntityPlus(String documentID, FollowRequestsDashboardEntity? entity, { String? appId}) async {
     if (entity == null) return null;
 
     return FollowRequestsDashboardModel(

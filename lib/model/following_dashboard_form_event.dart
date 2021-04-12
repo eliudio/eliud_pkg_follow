@@ -34,7 +34,7 @@ abstract class FollowingDashboardFormEvent extends Equatable {
   const FollowingDashboardFormEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class InitialiseNewFollowingDashboardFormEvent extends FollowingDashboardFormEvent {
@@ -42,78 +42,78 @@ class InitialiseNewFollowingDashboardFormEvent extends FollowingDashboardFormEve
 
 
 class InitialiseFollowingDashboardFormEvent extends FollowingDashboardFormEvent {
-  final FollowingDashboardModel value;
+  final FollowingDashboardModel? value;
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   InitialiseFollowingDashboardFormEvent({this.value});
 }
 
 class InitialiseFollowingDashboardFormNoLoadEvent extends FollowingDashboardFormEvent {
-  final FollowingDashboardModel value;
+  final FollowingDashboardModel? value;
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   InitialiseFollowingDashboardFormNoLoadEvent({this.value});
 }
 
 class ChangedFollowingDashboardDocumentID extends FollowingDashboardFormEvent {
-  final String value;
+  final String? value;
 
   ChangedFollowingDashboardDocumentID({this.value});
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() => 'ChangedFollowingDashboardDocumentID{ value: $value }';
 }
 
 class ChangedFollowingDashboardAppId extends FollowingDashboardFormEvent {
-  final String value;
+  final String? value;
 
   ChangedFollowingDashboardAppId({this.value});
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() => 'ChangedFollowingDashboardAppId{ value: $value }';
 }
 
 class ChangedFollowingDashboardDescription extends FollowingDashboardFormEvent {
-  final String value;
+  final String? value;
 
   ChangedFollowingDashboardDescription({this.value});
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() => 'ChangedFollowingDashboardDescription{ value: $value }';
 }
 
 class ChangedFollowingDashboardView extends FollowingDashboardFormEvent {
-  final FollowingView value;
+  final FollowingView? value;
 
   ChangedFollowingDashboardView({this.value});
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() => 'ChangedFollowingDashboardView{ value: $value }';
 }
 
 class ChangedFollowingDashboardConditions extends FollowingDashboardFormEvent {
-  final ConditionsSimpleModel value;
+  final ConditionsSimpleModel? value;
 
   ChangedFollowingDashboardConditions({this.value});
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() => 'ChangedFollowingDashboardConditions{ value: $value }';

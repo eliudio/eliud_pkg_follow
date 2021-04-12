@@ -23,7 +23,7 @@ import 'package:eliud_pkg_follow/model/following_dashboard_repository.dart';
 import 'package:flutter/services.dart';
 
 class FollowingDashboardComponentBloc extends Bloc<FollowingDashboardComponentEvent, FollowingDashboardComponentState> {
-  final FollowingDashboardRepository followingDashboardRepository;
+  final FollowingDashboardRepository? followingDashboardRepository;
 
   FollowingDashboardComponentBloc({ this.followingDashboardRepository }): super(FollowingDashboardComponentUninitialized());
   @override
@@ -33,9 +33,9 @@ class FollowingDashboardComponentBloc extends Bloc<FollowingDashboardComponentEv
       try {
         if (currentState is FollowingDashboardComponentUninitialized) {
           bool permissionDenied = false;
-          final model = await followingDashboardRepository.get(event.id, onError: (error) {
+          final model = await followingDashboardRepository!.get(event.id, onError: (error) {
             // Unfortunatly the below is currently the only way we know how to identify if a document is read protected
-            if ((error is PlatformException) &&  (error.message.startsWith("PERMISSION_DENIED"))) {
+            if ((error is PlatformException) &&  (error.message!.startsWith("PERMISSION_DENIED"))) {
               permissionDenied = true;
             }
           });
@@ -45,7 +45,7 @@ class FollowingDashboardComponentBloc extends Bloc<FollowingDashboardComponentEv
             if (model != null) {
               yield FollowingDashboardComponentLoaded(value: model);
             } else {
-              String id = event.id;
+              String? id = event.id;
               yield FollowingDashboardComponentError(
                   message: "FollowingDashboard with id = '$id' not found");
             }

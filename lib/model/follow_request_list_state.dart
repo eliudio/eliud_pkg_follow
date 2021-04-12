@@ -20,19 +20,19 @@ abstract class FollowRequestListState extends Equatable {
   const FollowRequestListState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class FollowRequestListLoading extends FollowRequestListState {}
 
 class FollowRequestListLoaded extends FollowRequestListState {
-  final List<FollowRequestModel> values;
-  final bool mightHaveMore;
+  final List<FollowRequestModel?>? values;
+  final bool? mightHaveMore;
 
   const FollowRequestListLoaded({this.mightHaveMore, this.values = const []});
 
   @override
-  List<Object> get props => [ values, mightHaveMore ];
+  List<Object?> get props => [ values, mightHaveMore ];
 
   @override
   String toString() => 'FollowRequestListLoaded { values: $values }';

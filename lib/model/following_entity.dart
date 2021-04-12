@@ -18,26 +18,25 @@ import 'dart:convert';
 import 'package:eliud_core/tools/common_tools.dart';
 import 'abstract_repository_singleton.dart';
 import 'package:eliud_core/model/entity_export.dart';
-import 'package:eliud_pkg_membership/model/entity_export.dart';
 import '../tools/bespoke_entities.dart';
 import 'package:eliud_pkg_follow/model/entity_export.dart';
 
 class FollowingEntity {
-  final String appId;
-  final String followerId;
-  final String followedId;
+  final String? appId;
+  final String? followerId;
+  final String? followedId;
 
   FollowingEntity({this.appId, this.followerId, this.followedId, });
 
 
-  List<Object> get props => [appId, followerId, followedId, ];
+  List<Object?> get props => [appId, followerId, followedId, ];
 
   @override
   String toString() {
     return 'FollowingEntity{appId: $appId, followerId: $followerId, followedId: $followedId}';
   }
 
-  static FollowingEntity fromMap(Map map) {
+  static FollowingEntity? fromMap(Map? map) {
     if (map == null) return null;
 
     return FollowingEntity(
@@ -47,8 +46,8 @@ class FollowingEntity {
     );
   }
 
-  Map<String, Object> toDocument() {
-    Map<String, Object> theDocument = HashMap();
+  Map<String, Object?> toDocument() {
+    Map<String, Object?> theDocument = HashMap();
     if (appId != null) theDocument["appId"] = appId;
       else theDocument["appId"] = null;
     if (followerId != null) theDocument["followerId"] = followerId;
@@ -58,8 +57,8 @@ class FollowingEntity {
     return theDocument;
   }
 
-  static FollowingEntity fromJsonString(String json) {
-    Map<String, dynamic> generationSpecificationMap = jsonDecode(json);
+  static FollowingEntity? fromJsonString(String json) {
+    Map<String, dynamic>? generationSpecificationMap = jsonDecode(json);
     return fromMap(generationSpecificationMap);
   }
 

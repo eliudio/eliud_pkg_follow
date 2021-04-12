@@ -27,53 +27,59 @@ const _followingDashboardLimit = 5;
 
 class FollowingDashboardListBloc extends Bloc<FollowingDashboardListEvent, FollowingDashboardListState> {
   final FollowingDashboardRepository _followingDashboardRepository;
-  StreamSubscription _followingDashboardsListSubscription;
-  final EliudQuery eliudQuery;
+  StreamSubscription? _followingDashboardsListSubscription;
+  final EliudQuery? eliudQuery;
   int pages = 1;
-  final bool paged;
-  final String orderBy;
-  final bool descending;
-  final bool detailed;
+  final bool? paged;
+  final String? orderBy;
+  final bool? descending;
+  final bool? detailed;
 
-  FollowingDashboardListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, @required FollowingDashboardRepository followingDashboardRepository})
+  FollowingDashboardListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required FollowingDashboardRepository followingDashboardRepository})
       : assert(followingDashboardRepository != null),
         _followingDashboardRepository = followingDashboardRepository,
         super(FollowingDashboardListLoading());
 
   Stream<FollowingDashboardListState> _mapLoadFollowingDashboardListToState() async* {
-    int amountNow =  (state is FollowingDashboardListLoaded) ? (state as FollowingDashboardListLoaded).values.length : 0;
+    int amountNow =  (state is FollowingDashboardListLoaded) ? (state as FollowingDashboardListLoaded).values!.length : 0;
     _followingDashboardsListSubscription?.cancel();
     _followingDashboardsListSubscription = _followingDashboardRepository.listen(
           (list) => add(FollowingDashboardListUpdated(value: list, mightHaveMore: amountNow != list.length)),
       orderBy: orderBy,
       descending: descending,
       eliudQuery: eliudQuery,
-      limit: ((paged != null) && (paged)) ? pages * _followingDashboardLimit : null
+      limit: ((paged != null) && paged!) ? pages * _followingDashboardLimit : null
     );
   }
 
   Stream<FollowingDashboardListState> _mapLoadFollowingDashboardListWithDetailsToState() async* {
-    int amountNow =  (state is FollowingDashboardListLoaded) ? (state as FollowingDashboardListLoaded).values.length : 0;
+    int amountNow =  (state is FollowingDashboardListLoaded) ? (state as FollowingDashboardListLoaded).values!.length : 0;
     _followingDashboardsListSubscription?.cancel();
     _followingDashboardsListSubscription = _followingDashboardRepository.listenWithDetails(
             (list) => add(FollowingDashboardListUpdated(value: list, mightHaveMore: amountNow != list.length)),
         orderBy: orderBy,
         descending: descending,
         eliudQuery: eliudQuery,
-        limit: ((paged != null) && (paged)) ? pages * _followingDashboardLimit : null
+        limit: ((paged != null) && paged!) ? pages * _followingDashboardLimit : null
     );
   }
 
   Stream<FollowingDashboardListState> _mapAddFollowingDashboardListToState(AddFollowingDashboardList event) async* {
-    _followingDashboardRepository.add(event.value);
+    var value = event.value;
+    if (value != null) 
+      _followingDashboardRepository.add(value);
   }
 
   Stream<FollowingDashboardListState> _mapUpdateFollowingDashboardListToState(UpdateFollowingDashboardList event) async* {
-    _followingDashboardRepository.update(event.value);
+    var value = event.value;
+    if (value != null) 
+      _followingDashboardRepository.update(value);
   }
 
   Stream<FollowingDashboardListState> _mapDeleteFollowingDashboardListToState(DeleteFollowingDashboardList event) async* {
-    _followingDashboardRepository.delete(event.value);
+    var value = event.value;
+    if (value != null) 
+      _followingDashboardRepository.delete(value);
   }
 
   Stream<FollowingDashboardListState> _mapFollowingDashboardListUpdatedToState(
@@ -84,7 +90,7 @@ class FollowingDashboardListBloc extends Bloc<FollowingDashboardListEvent, Follo
   @override
   Stream<FollowingDashboardListState> mapEventToState(FollowingDashboardListEvent event) async* {
     if (event is LoadFollowingDashboardList) {
-      if ((detailed == null) || (!detailed)) {
+      if ((detailed == null) || (!detailed!)) {
         yield* _mapLoadFollowingDashboardListToState();
       } else {
         yield* _mapLoadFollowingDashboardListWithDetailsToState();

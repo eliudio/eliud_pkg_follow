@@ -25,7 +25,7 @@ import 'package:eliud_pkg_follow/model/following_dashboard_component_state.dart'
 
 abstract class AbstractFollowingDashboardComponent extends StatelessWidget {
   static String componentName = "followingDashboards";
-  final String followingDashboardID;
+  final String? followingDashboardID;
 
   AbstractFollowingDashboardComponent({this.followingDashboardID});
 
@@ -63,7 +63,7 @@ abstract class AbstractFollowingDashboardComponent extends StatelessWidget {
     });
   }
 
-  Widget yourWidget(BuildContext context, FollowingDashboardModel value);
+  Widget yourWidget(BuildContext context, FollowingDashboardModel? value);
   Widget alertWidget({ title: String, content: String});
   FollowingDashboardRepository getFollowingDashboardRepository(BuildContext context);
 }

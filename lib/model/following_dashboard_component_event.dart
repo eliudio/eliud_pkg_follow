@@ -21,7 +21,7 @@ abstract class FollowingDashboardComponentEvent extends Equatable {
 }
 
 class FetchFollowingDashboardComponent extends FollowingDashboardComponentEvent {
-  final String id;
+  final String? id;
 
   FetchFollowingDashboardComponent({ this.id });
 }

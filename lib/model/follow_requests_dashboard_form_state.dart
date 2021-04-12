@@ -22,13 +22,13 @@ abstract class FollowRequestsDashboardFormState extends Equatable {
   const FollowRequestsDashboardFormState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 // Startup: menu has not been initialised yet and so we should show a "loading indicator" or something
 class FollowRequestsDashboardFormUninitialized extends FollowRequestsDashboardFormState {
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 
   @override
   String toString() {
@@ -38,22 +38,22 @@ class FollowRequestsDashboardFormUninitialized extends FollowRequestsDashboardFo
 
 // FollowRequestsDashboardModel has been initialised and hence FollowRequestsDashboardModel is available
 class FollowRequestsDashboardFormInitialized extends FollowRequestsDashboardFormState {
-  final FollowRequestsDashboardModel value;
+  final FollowRequestsDashboardModel? value;
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   const FollowRequestsDashboardFormInitialized({ this.value });
 }
 
 // Menu has been initialised and hence a menu is available
 abstract class FollowRequestsDashboardFormError extends FollowRequestsDashboardFormInitialized {
-  final String message;
+  final String? message;
 
   @override
-  List<Object> get props => [ message, value ];
+  List<Object?> get props => [ message, value ];
 
-  const FollowRequestsDashboardFormError({this.message, FollowRequestsDashboardModel value }) : super(value: value);
+  const FollowRequestsDashboardFormError({this.message, FollowRequestsDashboardModel? value }) : super(value: value);
 
   @override
   String toString() {
@@ -64,10 +64,10 @@ abstract class FollowRequestsDashboardFormError extends FollowRequestsDashboardF
   }
 }
 class DocumentIDFollowRequestsDashboardFormError extends FollowRequestsDashboardFormError { 
-  const DocumentIDFollowRequestsDashboardFormError({ String message, FollowRequestsDashboardModel value }): super(message: message, value: value);
+  const DocumentIDFollowRequestsDashboardFormError({ String? message, FollowRequestsDashboardModel? value }): super(message: message, value: value);
 
   @override
-  List<Object> get props => [ message, value ];
+  List<Object?> get props => [ message, value ];
 
   @override
   String toString() {
@@ -80,10 +80,10 @@ class DocumentIDFollowRequestsDashboardFormError extends FollowRequestsDashboard
 
 
 class AppIdFollowRequestsDashboardFormError extends FollowRequestsDashboardFormError { 
-  const AppIdFollowRequestsDashboardFormError({ String message, FollowRequestsDashboardModel value }): super(message: message, value: value);
+  const AppIdFollowRequestsDashboardFormError({ String? message, FollowRequestsDashboardModel? value }): super(message: message, value: value);
 
   @override
-  List<Object> get props => [ message, value ];
+  List<Object?> get props => [ message, value ];
 
   @override
   String toString() {
@@ -96,10 +96,10 @@ class AppIdFollowRequestsDashboardFormError extends FollowRequestsDashboardFormE
 
 
 class DescriptionFollowRequestsDashboardFormError extends FollowRequestsDashboardFormError { 
-  const DescriptionFollowRequestsDashboardFormError({ String message, FollowRequestsDashboardModel value }): super(message: message, value: value);
+  const DescriptionFollowRequestsDashboardFormError({ String? message, FollowRequestsDashboardModel? value }): super(message: message, value: value);
 
   @override
-  List<Object> get props => [ message, value ];
+  List<Object?> get props => [ message, value ];
 
   @override
   String toString() {
@@ -112,10 +112,10 @@ class DescriptionFollowRequestsDashboardFormError extends FollowRequestsDashboar
 
 
 class ConditionsFollowRequestsDashboardFormError extends FollowRequestsDashboardFormError { 
-  const ConditionsFollowRequestsDashboardFormError({ String message, FollowRequestsDashboardModel value }): super(message: message, value: value);
+  const ConditionsFollowRequestsDashboardFormError({ String? message, FollowRequestsDashboardModel? value }): super(message: message, value: value);
 
   @override
-  List<Object> get props => [ message, value ];
+  List<Object?> get props => [ message, value ];
 
   @override
   String toString() {
@@ -128,10 +128,10 @@ class ConditionsFollowRequestsDashboardFormError extends FollowRequestsDashboard
 
 
 class FollowRequestsDashboardFormLoaded extends FollowRequestsDashboardFormInitialized { 
-  const FollowRequestsDashboardFormLoaded({ FollowRequestsDashboardModel value }): super(value: value);
+  const FollowRequestsDashboardFormLoaded({ FollowRequestsDashboardModel? value }): super(value: value);
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() {
@@ -143,10 +143,10 @@ class FollowRequestsDashboardFormLoaded extends FollowRequestsDashboardFormIniti
 
 
 class SubmittableFollowRequestsDashboardForm extends FollowRequestsDashboardFormInitialized { 
-  const SubmittableFollowRequestsDashboardForm({ FollowRequestsDashboardModel value }): super(value: value);
+  const SubmittableFollowRequestsDashboardForm({ FollowRequestsDashboardModel? value }): super(value: value);
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() {

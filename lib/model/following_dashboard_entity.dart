@@ -22,22 +22,22 @@ import '../tools/bespoke_entities.dart';
 import 'package:eliud_pkg_follow/model/entity_export.dart';
 
 class FollowingDashboardEntity {
-  final String appId;
-  final String description;
-  final int view;
-  final ConditionsSimpleEntity conditions;
+  final String? appId;
+  final String? description;
+  final int? view;
+  final ConditionsSimpleEntity? conditions;
 
   FollowingDashboardEntity({this.appId, this.description, this.view, this.conditions, });
 
 
-  List<Object> get props => [appId, description, view, conditions, ];
+  List<Object?> get props => [appId, description, view, conditions, ];
 
   @override
   String toString() {
     return 'FollowingDashboardEntity{appId: $appId, description: $description, view: $view, conditions: $conditions}';
   }
 
-  static FollowingDashboardEntity fromMap(Map map) {
+  static FollowingDashboardEntity? fromMap(Map? map) {
     if (map == null) return null;
 
     var conditionsFromMap;
@@ -53,12 +53,12 @@ class FollowingDashboardEntity {
     );
   }
 
-  Map<String, Object> toDocument() {
-    final Map<String, dynamic> conditionsMap = conditions != null 
-        ? conditions.toDocument()
+  Map<String, Object?> toDocument() {
+    final Map<String, dynamic>? conditionsMap = conditions != null 
+        ? conditions!.toDocument()
         : null;
 
-    Map<String, Object> theDocument = HashMap();
+    Map<String, Object?> theDocument = HashMap();
     if (appId != null) theDocument["appId"] = appId;
       else theDocument["appId"] = null;
     if (description != null) theDocument["description"] = description;
@@ -70,8 +70,8 @@ class FollowingDashboardEntity {
     return theDocument;
   }
 
-  static FollowingDashboardEntity fromJsonString(String json) {
-    Map<String, dynamic> generationSpecificationMap = jsonDecode(json);
+  static FollowingDashboardEntity? fromJsonString(String json) {
+    Map<String, dynamic>? generationSpecificationMap = jsonDecode(json);
     return fromMap(generationSpecificationMap);
   }
 

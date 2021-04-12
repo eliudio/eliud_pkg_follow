@@ -20,13 +20,13 @@ abstract class FollowRequestComponentState extends Equatable {
   const FollowRequestComponentState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class FollowRequestComponentUninitialized extends FollowRequestComponentState {}
 
 class FollowRequestComponentError extends FollowRequestComponentState {
-  final String message;
+  final String? message;
   FollowRequestComponentError({ this.message });
 }
 
@@ -35,16 +35,16 @@ class FollowRequestComponentPermissionDenied extends FollowRequestComponentState
 }
 
 class FollowRequestComponentLoaded extends FollowRequestComponentState {
-  final FollowRequestModel value;
+  final FollowRequestModel? value;
 
   const FollowRequestComponentLoaded({ this.value });
 
-  FollowRequestComponentLoaded copyWith({ FollowRequestModel copyThis }) {
+  FollowRequestComponentLoaded copyWith({ FollowRequestModel? copyThis }) {
     return FollowRequestComponentLoaded(value: copyThis ?? this.value);
   }
 
   @override
-  List<Object> get props => [value];
+  List<Object?> get props => [value];
 
   @override
   String toString() => 'FollowRequestComponentLoaded { value: $value }';

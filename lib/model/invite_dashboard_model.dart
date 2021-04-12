@@ -36,18 +36,18 @@ import 'package:eliud_core/tools/random.dart';
 
 
 class InviteDashboardModel {
-  String documentID;
+  String? documentID;
 
   // This is the identifier of the app to which this belongs
-  String appId;
-  String description;
-  ConditionsSimpleModel conditions;
+  String? appId;
+  String? description;
+  ConditionsSimpleModel? conditions;
 
   InviteDashboardModel({this.documentID, this.appId, this.description, this.conditions, })  {
     assert(documentID != null);
   }
 
-  InviteDashboardModel copyWith({String documentID, String appId, String description, ConditionsSimpleModel conditions, }) {
+  InviteDashboardModel copyWith({String? documentID, String? appId, String? description, ConditionsSimpleModel? conditions, }) {
     return InviteDashboardModel(documentID: documentID ?? this.documentID, appId: appId ?? this.appId, description: description ?? this.description, conditions: conditions ?? this.conditions, );
   }
 
@@ -69,15 +69,15 @@ class InviteDashboardModel {
     return 'InviteDashboardModel{documentID: $documentID, appId: $appId, description: $description, conditions: $conditions}';
   }
 
-  InviteDashboardEntity toEntity({String appId}) {
+  InviteDashboardEntity toEntity({String? appId}) {
     return InviteDashboardEntity(
           appId: (appId != null) ? appId : null, 
           description: (description != null) ? description : null, 
-          conditions: (conditions != null) ? conditions.toEntity(appId: appId) : null, 
+          conditions: (conditions != null) ? conditions!.toEntity(appId: appId) : null, 
     );
   }
 
-  static InviteDashboardModel fromEntity(String documentID, InviteDashboardEntity entity) {
+  static InviteDashboardModel? fromEntity(String documentID, InviteDashboardEntity? entity) {
     if (entity == null) return null;
     return InviteDashboardModel(
           documentID: documentID, 
@@ -88,7 +88,7 @@ class InviteDashboardModel {
     );
   }
 
-  static Future<InviteDashboardModel> fromEntityPlus(String documentID, InviteDashboardEntity entity, { String appId}) async {
+  static Future<InviteDashboardModel?> fromEntityPlus(String documentID, InviteDashboardEntity? entity, { String? appId}) async {
     if (entity == null) return null;
 
     return InviteDashboardModel(

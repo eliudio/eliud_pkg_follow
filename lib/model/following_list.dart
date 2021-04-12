@@ -45,50 +45,36 @@ import 'package:eliud_core/model/app_model.dart';
 import 'following_form.dart';
 
 
-typedef FollowingWidgetProvider(FollowingModel value);
+typedef FollowingWidgetProvider(FollowingModel? value);
 
 class FollowingListWidget extends StatefulWidget with HasFab {
-  BackgroundModel listBackground;
-  FollowingWidgetProvider widgetProvider;
-  bool readOnly;
-  String form;
-  FollowingListWidgetState state;
-  bool isEmbedded;
+  BackgroundModel? listBackground;
+  FollowingWidgetProvider? widgetProvider;
+  bool? readOnly;
+  String? form;
+  FollowingListWidgetState? state;
+  bool? isEmbedded;
 
-  FollowingListWidget({ Key key, this.readOnly, this.form, this.widgetProvider, this.isEmbedded, this.listBackground }): super(key: key);
+  FollowingListWidget({ Key? key, this.readOnly, this.form, this.widgetProvider, this.isEmbedded, this.listBackground }): super(key: key);
 
   @override
   FollowingListWidgetState createState() {
     state ??= FollowingListWidgetState();
-    return state;
+    return state!;
   }
 
   @override
-  Widget fab(BuildContext context) {
-    if ((readOnly != null) && readOnly) return null;
+  Widget? fab(BuildContext context) {
+    if ((readOnly != null) && readOnly!) return null;
     state ??= FollowingListWidgetState();
     var accessState = AccessBloc.getState(context);
-    return state.fab(context, accessState);
+    return state!.fab(context, accessState);
   }
 }
 
 class FollowingListWidgetState extends State<FollowingListWidget> {
-  FollowingListBloc bloc;
-
   @override
-  void didChangeDependencies() {
-    bloc = BlocProvider.of<FollowingListBloc>(context);
-    super.didChangeDependencies();
-  }
-
-  @override
-  void dispose () {
-    if (bloc != null) bloc.close();
-    super.dispose();
-  }
-
-  @override
-  Widget fab(BuildContext aContext, AccessState accessState) {
+  Widget? fab(BuildContext aContext, AccessState accessState) {
     if (accessState is AppLoaded) {
       return !accessState.memberIsOwner() 
         ? null
@@ -100,7 +86,7 @@ class FollowingListWidgetState extends State<FollowingListWidget> {
         onPressed: () {
           Navigator.of(context).push(
             pageRouteBuilder(accessState.app, page: BlocProvider.value(
-                value: bloc,
+                value: BlocProvider.of<FollowingListBloc>(context),
                 child: FollowingForm(
                     value: null,
                     formAction: FormAction.AddAction)
@@ -124,15 +110,15 @@ class FollowingListWidgetState extends State<FollowingListWidget> {
           );
         } else if (state is FollowingListLoaded) {
           final values = state.values;
-          if ((widget.isEmbedded != null) && (widget.isEmbedded)) {
-            List<Widget> children = List();
+          if ((widget.isEmbedded != null) && widget.isEmbedded!) {
+            var children = <Widget>[];
             children.add(theList(context, values, accessState));
             children.add(RaisedButton(
                     color: RgbHelper.color(rgbo: accessState.app.formSubmitButtonColor),
                     onPressed: () {
                       Navigator.of(context).push(
                                 pageRouteBuilder(accessState.app, page: BlocProvider.value(
-                                    value: bloc,
+                                    value: BlocProvider.of<FollowingListBloc>(context),
                                     child: FollowingForm(
                                         value: null,
                                         formAction: FormAction.AddAction)
@@ -174,7 +160,7 @@ class FollowingListWidgetState extends State<FollowingListWidget> {
         itemBuilder: (context, index) {
           final value = values[index];
           
-          if (widget.widgetProvider != null) return widget.widgetProvider(value);
+          if (widget.widgetProvider != null) return widget.widgetProvider!(value);
 
           return FollowingListItem(
             value: value,
@@ -210,7 +196,7 @@ class FollowingListWidgetState extends State<FollowingListWidget> {
   }
   
   
-  Widget getForm(value, action) {
+  Widget? getForm(value, action) {
     if (widget.form == null) {
       return FollowingForm(value: value, formAction: action);
     } else {
@@ -226,36 +212,36 @@ class FollowingListItem extends StatelessWidget {
   final DismissDirectionCallback onDismissed;
   final GestureTapCallback onTap;
   final AppModel app;
-  final FollowingModel value;
+  final FollowingModel? value;
 
   FollowingListItem({
-    Key key,
-    @required this.onDismissed,
-    @required this.onTap,
-    @required this.value,
-    @required this.app,
+    Key? key,
+    required this.onDismissed,
+    required this.onTap,
+    required this.value,
+    required this.app,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: Key('__Following_item_${value.documentID}'),
+      key: Key('__Following_item_${value!.documentID}'),
       onDismissed: onDismissed,
       child: ListTile(
         onTap: onTap,
         title: Hero(
-          tag: '${value.documentID}__FollowingheroTag',
+          tag: '${value!.documentID}__FollowingheroTag',
           child: Container(
             width: fullScreenWidth(context),
             child: Center(child: Text(
-              value.documentID,
+              value!.documentID!,
               style: TextStyle(color: RgbHelper.color(rgbo: app.listTextItemColor)),
             )),
           ),
         ),
-        subtitle: (value.follower.name != null) && (value.follower.name.isNotEmpty)
+        subtitle: (value!.follower!.name != null) && (value!.follower!.name!.isNotEmpty)
             ? Center( child: Text(
-          value.follower.name,
+          value!.follower!.name!,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(color: RgbHelper.color(rgbo: app.listTextItemColor)),

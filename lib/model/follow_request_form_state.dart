@@ -22,13 +22,13 @@ abstract class FollowRequestFormState extends Equatable {
   const FollowRequestFormState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 // Startup: menu has not been initialised yet and so we should show a "loading indicator" or something
 class FollowRequestFormUninitialized extends FollowRequestFormState {
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 
   @override
   String toString() {
@@ -38,22 +38,22 @@ class FollowRequestFormUninitialized extends FollowRequestFormState {
 
 // FollowRequestModel has been initialised and hence FollowRequestModel is available
 class FollowRequestFormInitialized extends FollowRequestFormState {
-  final FollowRequestModel value;
+  final FollowRequestModel? value;
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   const FollowRequestFormInitialized({ this.value });
 }
 
 // Menu has been initialised and hence a menu is available
 abstract class FollowRequestFormError extends FollowRequestFormInitialized {
-  final String message;
+  final String? message;
 
   @override
-  List<Object> get props => [ message, value ];
+  List<Object?> get props => [ message, value ];
 
-  const FollowRequestFormError({this.message, FollowRequestModel value }) : super(value: value);
+  const FollowRequestFormError({this.message, FollowRequestModel? value }) : super(value: value);
 
   @override
   String toString() {
@@ -64,10 +64,10 @@ abstract class FollowRequestFormError extends FollowRequestFormInitialized {
   }
 }
 class DocumentIDFollowRequestFormError extends FollowRequestFormError { 
-  const DocumentIDFollowRequestFormError({ String message, FollowRequestModel value }): super(message: message, value: value);
+  const DocumentIDFollowRequestFormError({ String? message, FollowRequestModel? value }): super(message: message, value: value);
 
   @override
-  List<Object> get props => [ message, value ];
+  List<Object?> get props => [ message, value ];
 
   @override
   String toString() {
@@ -80,10 +80,10 @@ class DocumentIDFollowRequestFormError extends FollowRequestFormError {
 
 
 class AppIdFollowRequestFormError extends FollowRequestFormError { 
-  const AppIdFollowRequestFormError({ String message, FollowRequestModel value }): super(message: message, value: value);
+  const AppIdFollowRequestFormError({ String? message, FollowRequestModel? value }): super(message: message, value: value);
 
   @override
-  List<Object> get props => [ message, value ];
+  List<Object?> get props => [ message, value ];
 
   @override
   String toString() {
@@ -96,10 +96,10 @@ class AppIdFollowRequestFormError extends FollowRequestFormError {
 
 
 class FollowerFollowRequestFormError extends FollowRequestFormError { 
-  const FollowerFollowRequestFormError({ String message, FollowRequestModel value }): super(message: message, value: value);
+  const FollowerFollowRequestFormError({ String? message, FollowRequestModel? value }): super(message: message, value: value);
 
   @override
-  List<Object> get props => [ message, value ];
+  List<Object?> get props => [ message, value ];
 
   @override
   String toString() {
@@ -112,10 +112,10 @@ class FollowerFollowRequestFormError extends FollowRequestFormError {
 
 
 class FollowedFollowRequestFormError extends FollowRequestFormError { 
-  const FollowedFollowRequestFormError({ String message, FollowRequestModel value }): super(message: message, value: value);
+  const FollowedFollowRequestFormError({ String? message, FollowRequestModel? value }): super(message: message, value: value);
 
   @override
-  List<Object> get props => [ message, value ];
+  List<Object?> get props => [ message, value ];
 
   @override
   String toString() {
@@ -128,10 +128,10 @@ class FollowedFollowRequestFormError extends FollowRequestFormError {
 
 
 class StatusFollowRequestFormError extends FollowRequestFormError { 
-  const StatusFollowRequestFormError({ String message, FollowRequestModel value }): super(message: message, value: value);
+  const StatusFollowRequestFormError({ String? message, FollowRequestModel? value }): super(message: message, value: value);
 
   @override
-  List<Object> get props => [ message, value ];
+  List<Object?> get props => [ message, value ];
 
   @override
   String toString() {
@@ -144,10 +144,10 @@ class StatusFollowRequestFormError extends FollowRequestFormError {
 
 
 class FollowRequestFormLoaded extends FollowRequestFormInitialized { 
-  const FollowRequestFormLoaded({ FollowRequestModel value }): super(value: value);
+  const FollowRequestFormLoaded({ FollowRequestModel? value }): super(value: value);
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() {
@@ -159,10 +159,10 @@ class FollowRequestFormLoaded extends FollowRequestFormInitialized {
 
 
 class SubmittableFollowRequestForm extends FollowRequestFormInitialized { 
-  const SubmittableFollowRequestForm({ FollowRequestModel value }): super(value: value);
+  const SubmittableFollowRequestForm({ FollowRequestModel? value }): super(value: value);
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() {

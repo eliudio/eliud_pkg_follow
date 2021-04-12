@@ -20,19 +20,19 @@ abstract class InviteDashboardListState extends Equatable {
   const InviteDashboardListState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class InviteDashboardListLoading extends InviteDashboardListState {}
 
 class InviteDashboardListLoaded extends InviteDashboardListState {
-  final List<InviteDashboardModel> values;
-  final bool mightHaveMore;
+  final List<InviteDashboardModel?>? values;
+  final bool? mightHaveMore;
 
   const InviteDashboardListLoaded({this.mightHaveMore, this.values = const []});
 
   @override
-  List<Object> get props => [ values, mightHaveMore ];
+  List<Object?> get props => [ values, mightHaveMore ];
 
   @override
   String toString() => 'InviteDashboardListLoaded { values: $values }';

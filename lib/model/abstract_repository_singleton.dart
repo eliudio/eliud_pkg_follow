@@ -23,23 +23,23 @@ import 'package:eliud_core/tools/common_tools.dart';
 import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
 import 'package:eliud_core/package/package.dart';
 
-FollowingRepository followingRepository({ String appId }) => AbstractRepositorySingleton.singleton.followingRepository(appId);
-FollowingDashboardRepository followingDashboardRepository({ String appId }) => AbstractRepositorySingleton.singleton.followingDashboardRepository(appId);
-FollowRequestRepository followRequestRepository({ String appId }) => AbstractRepositorySingleton.singleton.followRequestRepository(appId);
-FollowRequestsDashboardRepository followRequestsDashboardRepository({ String appId }) => AbstractRepositorySingleton.singleton.followRequestsDashboardRepository(appId);
-InviteDashboardRepository inviteDashboardRepository({ String appId }) => AbstractRepositorySingleton.singleton.inviteDashboardRepository(appId);
+FollowingRepository? followingRepository({ String? appId }) => AbstractRepositorySingleton.singleton.followingRepository(appId);
+FollowingDashboardRepository? followingDashboardRepository({ String? appId }) => AbstractRepositorySingleton.singleton.followingDashboardRepository(appId);
+FollowRequestRepository? followRequestRepository({ String? appId }) => AbstractRepositorySingleton.singleton.followRequestRepository(appId);
+FollowRequestsDashboardRepository? followRequestsDashboardRepository({ String? appId }) => AbstractRepositorySingleton.singleton.followRequestsDashboardRepository(appId);
+InviteDashboardRepository? inviteDashboardRepository({ String? appId }) => AbstractRepositorySingleton.singleton.inviteDashboardRepository(appId);
 
 abstract class AbstractRepositorySingleton {
   static List<MemberCollectionInfo> collections = [
   ];
-  static AbstractRepositorySingleton singleton;
+  static late AbstractRepositorySingleton singleton;
 
-  FollowingRepository followingRepository(String appId);
-  FollowingDashboardRepository followingDashboardRepository(String appId);
-  FollowRequestRepository followRequestRepository(String appId);
-  FollowRequestsDashboardRepository followRequestsDashboardRepository(String appId);
-  InviteDashboardRepository inviteDashboardRepository(String appId);
+  FollowingRepository? followingRepository(String? appId);
+  FollowingDashboardRepository? followingDashboardRepository(String? appId);
+  FollowRequestRepository? followRequestRepository(String? appId);
+  FollowRequestsDashboardRepository? followRequestsDashboardRepository(String? appId);
+  InviteDashboardRepository? inviteDashboardRepository(String? appId);
 
-  void flush(String appId) {
+  void flush(String? appId) {
   }
 }

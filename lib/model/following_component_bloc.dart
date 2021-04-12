@@ -24,7 +24,7 @@ import 'package:flutter/services.dart';
 
 
 class FollowingComponentBloc extends Bloc<FollowingComponentEvent, FollowingComponentState> {
-  final FollowingRepository followingRepository;
+  final FollowingRepository? followingRepository;
 
   FollowingComponentBloc({ this.followingRepository }): super(FollowingComponentUninitialized());
   @override
@@ -34,9 +34,9 @@ class FollowingComponentBloc extends Bloc<FollowingComponentEvent, FollowingComp
       try {
         if (currentState is FollowingComponentUninitialized) {
           bool permissionDenied = false;
-          final model = await followingRepository.get(event.id, onError: (error) {
+          final model = await followingRepository!.get(event.id, onError: (error) {
             // Unfortunatly the below is currently the only way we know how to identify if a document is read protected
-            if ((error is PlatformException) &&  (error.message.startsWith("PERMISSION_DENIED"))) {
+            if ((error is PlatformException) &&  (error.message!.startsWith("PERMISSION_DENIED"))) {
               permissionDenied = true;
             }
           });
@@ -46,7 +46,7 @@ class FollowingComponentBloc extends Bloc<FollowingComponentEvent, FollowingComp
             if (model != null) {
               yield FollowingComponentLoaded(value: model);
             } else {
-              String id = event.id;
+              String? id = event.id;
               yield FollowingComponentError(
                   message: "Following with id = '$id' not found");
             }

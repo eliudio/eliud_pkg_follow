@@ -19,7 +19,7 @@ import 'package:eliud_pkg_follow/model/follow_request_model.dart';
 abstract class FollowRequestListEvent extends Equatable {
   const FollowRequestListEvent();
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class LoadFollowRequestList extends FollowRequestListEvent {}
@@ -27,49 +27,49 @@ class LoadFollowRequestList extends FollowRequestListEvent {}
 class NewPage extends FollowRequestListEvent {}
 
 class AddFollowRequestList extends FollowRequestListEvent {
-  final FollowRequestModel value;
+  final FollowRequestModel? value;
 
   const AddFollowRequestList({ this.value });
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() => 'AddFollowRequestList{ value: $value }';
 }
 
 class UpdateFollowRequestList extends FollowRequestListEvent {
-  final FollowRequestModel value;
+  final FollowRequestModel? value;
 
   const UpdateFollowRequestList({ this.value });
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() => 'UpdateFollowRequestList{ value: $value }';
 }
 
 class DeleteFollowRequestList extends FollowRequestListEvent {
-  final FollowRequestModel value;
+  final FollowRequestModel? value;
 
   const DeleteFollowRequestList({ this.value });
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() => 'DeleteFollowRequestList{ value: $value }';
 }
 
 class FollowRequestListUpdated extends FollowRequestListEvent {
-  final List<FollowRequestModel> value;
-  final bool mightHaveMore;
+  final List<FollowRequestModel?>? value;
+  final bool? mightHaveMore;
 
   const FollowRequestListUpdated({ this.value, this.mightHaveMore });
 
   @override
-  List<Object> get props => [ value, mightHaveMore ];
+  List<Object?> get props => [ value, mightHaveMore ];
 
   @override
   String toString() => 'FollowRequestListUpdated{ value: $value, mightHaveMore: $mightHaveMore }';

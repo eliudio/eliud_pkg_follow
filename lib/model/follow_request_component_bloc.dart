@@ -24,7 +24,7 @@ import 'package:flutter/services.dart';
 
 
 class FollowRequestComponentBloc extends Bloc<FollowRequestComponentEvent, FollowRequestComponentState> {
-  final FollowRequestRepository followRequestRepository;
+  final FollowRequestRepository? followRequestRepository;
 
   FollowRequestComponentBloc({ this.followRequestRepository }): super(FollowRequestComponentUninitialized());
   @override
@@ -34,9 +34,9 @@ class FollowRequestComponentBloc extends Bloc<FollowRequestComponentEvent, Follo
       try {
         if (currentState is FollowRequestComponentUninitialized) {
           bool permissionDenied = false;
-          final model = await followRequestRepository.get(event.id, onError: (error) {
+          final model = await followRequestRepository!.get(event.id, onError: (error) {
             // Unfortunatly the below is currently the only way we know how to identify if a document is read protected
-            if ((error is PlatformException) &&  (error.message.startsWith("PERMISSION_DENIED"))) {
+            if ((error is PlatformException) &&  (error.message!.startsWith("PERMISSION_DENIED"))) {
               permissionDenied = true;
             }
           });
@@ -46,7 +46,7 @@ class FollowRequestComponentBloc extends Bloc<FollowRequestComponentEvent, Follo
             if (model != null) {
               yield FollowRequestComponentLoaded(value: model);
             } else {
-              String id = event.id;
+              String? id = event.id;
               yield FollowRequestComponentError(
                   message: "FollowRequest with id = '$id' not found");
             }

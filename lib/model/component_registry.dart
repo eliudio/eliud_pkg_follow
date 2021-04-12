@@ -28,15 +28,15 @@ import 'package:eliud_pkg_follow/model/internal_component.dart';
 class ComponentRegistry {
 
   void init() {
-    Registry.registry().addInternalComponents('eliud_pkg_follow', ["followings", "followingDashboards", "followRequests", "followRequestsDashboards", "inviteDashboards", ]);
+    Registry.registry()!.addInternalComponents('eliud_pkg_follow', ["followings", "followingDashboards", "followRequests", "followRequestsDashboards", "inviteDashboards", ]);
 
-    Registry.registry().register(componentName: "eliud_pkg_follow_internalWidgets", componentConstructor: ListComponentFactory());
-    Registry.registry().addDropDownSupporter("followingDashboards", DropdownButtonComponentFactory());
-    Registry.registry().register(componentName: "followingDashboards", componentConstructor: FollowingDashboardComponentConstructorDefault());
-    Registry.registry().addDropDownSupporter("followRequestsDashboards", DropdownButtonComponentFactory());
-    Registry.registry().register(componentName: "followRequestsDashboards", componentConstructor: FollowRequestsDashboardComponentConstructorDefault());
-    Registry.registry().addDropDownSupporter("inviteDashboards", DropdownButtonComponentFactory());
-    Registry.registry().register(componentName: "inviteDashboards", componentConstructor: InviteDashboardComponentConstructorDefault());
+    Registry.registry()!.register(componentName: "eliud_pkg_follow_internalWidgets", componentConstructor: ListComponentFactory());
+    Registry.registry()!.addDropDownSupporter("followingDashboards", DropdownButtonComponentFactory());
+    Registry.registry()!.register(componentName: "followingDashboards", componentConstructor: FollowingDashboardComponentConstructorDefault());
+    Registry.registry()!.addDropDownSupporter("followRequestsDashboards", DropdownButtonComponentFactory());
+    Registry.registry()!.register(componentName: "followRequestsDashboards", componentConstructor: FollowRequestsDashboardComponentConstructorDefault());
+    Registry.registry()!.addDropDownSupporter("inviteDashboards", DropdownButtonComponentFactory());
+    Registry.registry()!.register(componentName: "inviteDashboards", componentConstructor: InviteDashboardComponentConstructorDefault());
 
   }
 }

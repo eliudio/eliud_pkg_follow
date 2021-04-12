@@ -42,8 +42,8 @@ import 'package:eliud_pkg_follow/model/invite_dashboard_form_state.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_repository.dart';
 
 class InviteDashboardFormBloc extends Bloc<InviteDashboardFormEvent, InviteDashboardFormState> {
-  final FormAction formAction;
-  final String appId;
+  final FormAction? formAction;
+  final String? appId;
 
   InviteDashboardFormBloc(this.appId, { this.formAction }): super(InviteDashboardFormUninitialized());
   @override
@@ -65,20 +65,20 @@ class InviteDashboardFormBloc extends Bloc<InviteDashboardFormEvent, InviteDashb
 
       if (event is InitialiseInviteDashboardFormEvent) {
         // Need to re-retrieve the document from the repository so that I get all associated types
-        InviteDashboardFormLoaded loaded = InviteDashboardFormLoaded(value: await inviteDashboardRepository(appId: appId).get(event.value.documentID));
+        InviteDashboardFormLoaded loaded = InviteDashboardFormLoaded(value: await inviteDashboardRepository(appId: appId)!.get(event!.value!.documentID));
         yield loaded;
         return;
       } else if (event is InitialiseInviteDashboardFormNoLoadEvent) {
-        InviteDashboardFormLoaded loaded = InviteDashboardFormLoaded(value: event.value);
+        InviteDashboardFormLoaded loaded = InviteDashboardFormLoaded(value: event!.value);
         yield loaded;
         return;
       }
     } else if (currentState is InviteDashboardFormInitialized) {
-      InviteDashboardModel newValue = null;
+      InviteDashboardModel? newValue = null;
       if (event is ChangedInviteDashboardDocumentID) {
-        newValue = currentState.value.copyWith(documentID: event.value);
+        newValue = currentState.value!.copyWith(documentID: event!.value);
         if (formAction == FormAction.AddAction) {
-          yield* _isDocumentIDValid(event.value, newValue).asStream();
+          yield* _isDocumentIDValid(event!.value, newValue).asStream();
         } else {
           yield SubmittableInviteDashboardForm(value: newValue);
         }
@@ -86,19 +86,19 @@ class InviteDashboardFormBloc extends Bloc<InviteDashboardFormEvent, InviteDashb
         return;
       }
       if (event is ChangedInviteDashboardAppId) {
-        newValue = currentState.value.copyWith(appId: event.value);
+        newValue = currentState.value!.copyWith(appId: event!.value);
         yield SubmittableInviteDashboardForm(value: newValue);
 
         return;
       }
       if (event is ChangedInviteDashboardDescription) {
-        newValue = currentState.value.copyWith(description: event.value);
+        newValue = currentState.value!.copyWith(description: event!.value);
         yield SubmittableInviteDashboardForm(value: newValue);
 
         return;
       }
       if (event is ChangedInviteDashboardConditions) {
-        newValue = currentState.value.copyWith(conditions: event.value);
+        newValue = currentState.value!.copyWith(conditions: event!.value);
         yield SubmittableInviteDashboardForm(value: newValue);
 
         return;
@@ -109,10 +109,10 @@ class InviteDashboardFormBloc extends Bloc<InviteDashboardFormEvent, InviteDashb
 
   DocumentIDInviteDashboardFormError error(String message, InviteDashboardModel newValue) => DocumentIDInviteDashboardFormError(message: message, value: newValue);
 
-  Future<InviteDashboardFormState> _isDocumentIDValid(String value, InviteDashboardModel newValue) async {
+  Future<InviteDashboardFormState> _isDocumentIDValid(String? value, InviteDashboardModel newValue) async {
     if (value == null) return Future.value(error("Provide value for documentID", newValue));
     if (value.length == 0) return Future.value(error("Provide value for documentID", newValue));
-    Future<InviteDashboardModel> findDocument = inviteDashboardRepository(appId: appId).get(value);
+    Future<InviteDashboardModel?> findDocument = inviteDashboardRepository(appId: appId)!.get(value);
     return await findDocument.then((documentFound) {
       if (documentFound == null) {
         return SubmittableInviteDashboardForm(value: newValue);

@@ -38,7 +38,7 @@ enum FollowingView {
 }
 
 
-FollowingView toFollowingView(int index) {
+FollowingView toFollowingView(int? index) {
   switch (index) {
     case 0: return FollowingView.Followers;
     case 1: return FollowingView.Following;
@@ -48,19 +48,19 @@ FollowingView toFollowingView(int index) {
 
 
 class FollowingDashboardModel {
-  String documentID;
+  String? documentID;
 
   // This is the identifier of the app to which this belongs
-  String appId;
-  String description;
-  FollowingView view;
-  ConditionsSimpleModel conditions;
+  String? appId;
+  String? description;
+  FollowingView? view;
+  ConditionsSimpleModel? conditions;
 
   FollowingDashboardModel({this.documentID, this.appId, this.description, this.view, this.conditions, })  {
     assert(documentID != null);
   }
 
-  FollowingDashboardModel copyWith({String documentID, String appId, String description, FollowingView view, ConditionsSimpleModel conditions, }) {
+  FollowingDashboardModel copyWith({String? documentID, String? appId, String? description, FollowingView? view, ConditionsSimpleModel? conditions, }) {
     return FollowingDashboardModel(documentID: documentID ?? this.documentID, appId: appId ?? this.appId, description: description ?? this.description, view: view ?? this.view, conditions: conditions ?? this.conditions, );
   }
 
@@ -83,16 +83,16 @@ class FollowingDashboardModel {
     return 'FollowingDashboardModel{documentID: $documentID, appId: $appId, description: $description, view: $view, conditions: $conditions}';
   }
 
-  FollowingDashboardEntity toEntity({String appId}) {
+  FollowingDashboardEntity toEntity({String? appId}) {
     return FollowingDashboardEntity(
           appId: (appId != null) ? appId : null, 
           description: (description != null) ? description : null, 
-          view: (view != null) ? view.index : null, 
-          conditions: (conditions != null) ? conditions.toEntity(appId: appId) : null, 
+          view: (view != null) ? view!.index : null, 
+          conditions: (conditions != null) ? conditions!.toEntity(appId: appId) : null, 
     );
   }
 
-  static FollowingDashboardModel fromEntity(String documentID, FollowingDashboardEntity entity) {
+  static FollowingDashboardModel? fromEntity(String documentID, FollowingDashboardEntity? entity) {
     if (entity == null) return null;
     return FollowingDashboardModel(
           documentID: documentID, 
@@ -104,7 +104,7 @@ class FollowingDashboardModel {
     );
   }
 
-  static Future<FollowingDashboardModel> fromEntityPlus(String documentID, FollowingDashboardEntity entity, { String appId}) async {
+  static Future<FollowingDashboardModel?> fromEntityPlus(String documentID, FollowingDashboardEntity? entity, { String? appId}) async {
     if (entity == null) return null;
 
     return FollowingDashboardModel(

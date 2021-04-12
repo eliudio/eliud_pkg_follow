@@ -21,7 +21,7 @@ abstract class FollowRequestComponentEvent extends Equatable {
 }
 
 class FetchFollowRequestComponent extends FollowRequestComponentEvent {
-  final String id;
+  final String? id;
 
   FetchFollowRequestComponent({ this.id });
 }

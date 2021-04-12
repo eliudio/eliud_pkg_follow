@@ -20,19 +20,19 @@ abstract class FollowingDashboardListState extends Equatable {
   const FollowingDashboardListState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class FollowingDashboardListLoading extends FollowingDashboardListState {}
 
 class FollowingDashboardListLoaded extends FollowingDashboardListState {
-  final List<FollowingDashboardModel> values;
-  final bool mightHaveMore;
+  final List<FollowingDashboardModel?>? values;
+  final bool? mightHaveMore;
 
   const FollowingDashboardListLoaded({this.mightHaveMore, this.values = const []});
 
   @override
-  List<Object> get props => [ values, mightHaveMore ];
+  List<Object?> get props => [ values, mightHaveMore ];
 
   @override
   String toString() => 'FollowingDashboardListLoaded { values: $values }';

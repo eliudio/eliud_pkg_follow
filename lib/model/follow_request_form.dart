@@ -41,20 +41,15 @@ import 'package:eliud_core/tools/etc.dart';
 
 import 'package:eliud_core/model/repository_export.dart';
 import 'package:eliud_core/model/abstract_repository_singleton.dart';
-import 'package:eliud_pkg_membership/model/repository_export.dart';
-import 'package:eliud_pkg_membership/model/abstract_repository_singleton.dart';
 import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/repository_export.dart';
 import 'package:eliud_core/model/embedded_component.dart';
-import 'package:eliud_pkg_membership/model/embedded_component.dart';
 import 'package:eliud_pkg_follow/model/embedded_component.dart';
 import 'package:eliud_core/model/model_export.dart';
-import 'package:eliud_pkg_membership/model/model_export.dart';
 import '../tools/bespoke_models.dart';
 import 'package:eliud_pkg_follow/model/model_export.dart';
 import 'package:eliud_core/model/entity_export.dart';
-import 'package:eliud_pkg_membership/model/entity_export.dart';
 import '../tools/bespoke_entities.dart';
 import 'package:eliud_pkg_follow/model/entity_export.dart';
 
@@ -68,10 +63,10 @@ import 'package:eliud_pkg_follow/model/follow_request_form_state.dart';
 
 class FollowRequestForm extends StatelessWidget {
   FormAction formAction;
-  FollowRequestModel value;
-  ActionModel submitAction;
+  FollowRequestModel? value;
+  ActionModel? submitAction;
 
-  FollowRequestForm({Key key, @required this.formAction, @required this.value, this.submitAction}) : super(key: key);
+  FollowRequestForm({Key? key, required this.formAction, required this.value, this.submitAction}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -99,14 +94,14 @@ class FollowRequestForm extends StatelessWidget {
       return Scaffold(
         appBar: formAction == FormAction.UpdateAction ?
                 AppBar(
-                    title: Text("Update FollowRequest", style: TextStyle(color: RgbHelper.color(rgbo: app.formAppBarTextColor))),
+                    title: Text("Update FollowRequest", style: TextStyle(color: RgbHelper.color(rgbo: app!.formAppBarTextColor))),
                     flexibleSpace: Container(
-                        decoration: BoxDecorationHelper.boxDecoration(accessState, app.formAppBarBackground)),
+                        decoration: BoxDecorationHelper.boxDecoration(accessState, app!.formAppBarBackground)),
                   ) :
                 AppBar(
-                    title: Text("Add FollowRequest", style: TextStyle(color: RgbHelper.color(rgbo: app.formAppBarTextColor))),
+                    title: Text("Add FollowRequest", style: TextStyle(color: RgbHelper.color(rgbo: app!.formAppBarTextColor))),
                     flexibleSpace: Container(
-                        decoration: BoxDecorationHelper.boxDecoration(accessState, app.formAppBarBackground)),
+                        decoration: BoxDecorationHelper.boxDecoration(accessState, app!.formAppBarBackground)),
                 ),
         body: BlocProvider<FollowRequestFormBloc >(
             create: (context) => FollowRequestFormBloc(AccessBloc.appId(context),
@@ -122,8 +117,8 @@ class FollowRequestForm extends StatelessWidget {
 
 
 class MyFollowRequestForm extends StatefulWidget {
-  final FormAction formAction;
-  final ActionModel submitAction;
+  final FormAction? formAction;
+  final ActionModel? submitAction;
 
   MyFollowRequestForm({this.formAction, this.submitAction});
 
@@ -132,14 +127,14 @@ class MyFollowRequestForm extends StatefulWidget {
 
 
 class _MyFollowRequestFormState extends State<MyFollowRequestForm> {
-  final FormAction formAction;
-  FollowRequestFormBloc _myFormBloc;
+  final FormAction? formAction;
+  late FollowRequestFormBloc _myFormBloc;
 
   final TextEditingController _documentIDController = TextEditingController();
   final TextEditingController _appIdController = TextEditingController();
-  String _follower;
-  String _followed;
-  int _statusSelectedRadioTile;
+  String? _follower;
+  String? _followed;
+  int? _statusSelectedRadioTile;
 
 
   _MyFollowRequestFormState(this.formAction);
@@ -163,45 +158,45 @@ class _MyFollowRequestFormState extends State<MyFollowRequestForm> {
       );
 
       if (state is FollowRequestFormLoaded) {
-        if (state.value.documentID != null)
-          _documentIDController.text = state.value.documentID.toString();
+        if (state.value!.documentID != null)
+          _documentIDController.text = state.value!.documentID.toString();
         else
           _documentIDController.text = "";
-        if (state.value.appId != null)
-          _appIdController.text = state.value.appId.toString();
+        if (state.value!.appId != null)
+          _appIdController.text = state.value!.appId.toString();
         else
           _appIdController.text = "";
-        if (state.value.follower != null)
-          _follower= state.value.follower.documentID;
+        if (state.value!.follower != null)
+          _follower= state.value!.follower!.documentID;
         else
           _follower= "";
-        if (state.value.followed != null)
-          _followed= state.value.followed.documentID;
+        if (state.value!.followed != null)
+          _followed= state.value!.followed!.documentID;
         else
           _followed= "";
-        if (state.value.status != null)
-          _statusSelectedRadioTile = state.value.status.index;
+        if (state.value!.status != null)
+          _statusSelectedRadioTile = state.value!.status!.index;
         else
           _statusSelectedRadioTile = 0;
       }
       if (state is FollowRequestFormInitialized) {
-        List<Widget> children = List();
+        List<Widget?> children = [];
          children.add(Container(
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                   child: Text('General',
                       style: TextStyle(
-                          color: RgbHelper.color(rgbo: app.formGroupTitleColor), fontWeight: FontWeight.bold)),
+                          color: RgbHelper.color(rgbo: app!.formGroupTitleColor), fontWeight: FontWeight.bold)),
                 ));
 
         children.add(
 
                 TextFormField(
-                style: TextStyle(color: RgbHelper.color(rgbo: app.formFieldTextColor)),
+                style: TextStyle(color: RgbHelper.color(rgbo: app!.formFieldTextColor)),
                   readOnly: (formAction == FormAction.UpdateAction),
                   controller: _documentIDController,
                   decoration: InputDecoration(
-                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: RgbHelper.color(rgbo: app.formFieldTextColor))),                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: RgbHelper.color(rgbo: app.formFieldFocusColor))),                    icon: Icon(Icons.vpn_key, color: RgbHelper.color(rgbo: app.formFieldHeaderColor)),
+                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: RgbHelper.color(rgbo: app!.formFieldTextColor))),                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: RgbHelper.color(rgbo: app!.formFieldFocusColor))),                    icon: Icon(Icons.vpn_key, color: RgbHelper.color(rgbo: app!.formFieldHeaderColor)),
                     labelText: 'Document ID',
                     hintText: "Member request ID - Member response ID",
                   ),
@@ -227,11 +222,11 @@ class _MyFollowRequestFormState extends State<MyFollowRequestForm> {
 
                 RadioListTile(
                     value: 0,
-                    activeColor: RgbHelper.color(rgbo: app.formFieldTextColor),
+                    activeColor: RgbHelper.color(rgbo: app!.formFieldTextColor),
                     groupValue: _statusSelectedRadioTile,
-                    title: Text("FollowRequestPending", style: TextStyle(color: RgbHelper.color(rgbo: app.formFieldTextColor))),
-                    subtitle: Text("FollowRequestPending", style: TextStyle(color: RgbHelper.color(rgbo: app.formFieldTextColor))),
-                    onChanged: !accessState.memberIsOwner() ? null : (val) {
+                    title: Text("FollowRequestPending", style: TextStyle(color: RgbHelper.color(rgbo: app!.formFieldTextColor))),
+                    subtitle: Text("FollowRequestPending", style: TextStyle(color: RgbHelper.color(rgbo: app!.formFieldTextColor))),
+                    onChanged: !accessState.memberIsOwner() ? null : (dynamic val) {
                       setSelectionStatus(val);
                     },
                 ),
@@ -240,11 +235,11 @@ class _MyFollowRequestFormState extends State<MyFollowRequestForm> {
 
                 RadioListTile(
                     value: 1,
-                    activeColor: RgbHelper.color(rgbo: app.formFieldTextColor),
+                    activeColor: RgbHelper.color(rgbo: app!.formFieldTextColor),
                     groupValue: _statusSelectedRadioTile,
-                    title: Text("FollowRequestAccepted", style: TextStyle(color: RgbHelper.color(rgbo: app.formFieldTextColor))),
-                    subtitle: Text("FollowRequestAccepted", style: TextStyle(color: RgbHelper.color(rgbo: app.formFieldTextColor))),
-                    onChanged: !accessState.memberIsOwner() ? null : (val) {
+                    title: Text("FollowRequestAccepted", style: TextStyle(color: RgbHelper.color(rgbo: app!.formFieldTextColor))),
+                    subtitle: Text("FollowRequestAccepted", style: TextStyle(color: RgbHelper.color(rgbo: app!.formFieldTextColor))),
+                    onChanged: !accessState.memberIsOwner() ? null : (dynamic val) {
                       setSelectionStatus(val);
                     },
                 ),
@@ -253,11 +248,11 @@ class _MyFollowRequestFormState extends State<MyFollowRequestForm> {
 
                 RadioListTile(
                     value: 2,
-                    activeColor: RgbHelper.color(rgbo: app.formFieldTextColor),
+                    activeColor: RgbHelper.color(rgbo: app!.formFieldTextColor),
                     groupValue: _statusSelectedRadioTile,
-                    title: Text("FollowRequestDenied", style: TextStyle(color: RgbHelper.color(rgbo: app.formFieldTextColor))),
-                    subtitle: Text("FollowRequestDenied", style: TextStyle(color: RgbHelper.color(rgbo: app.formFieldTextColor))),
-                    onChanged: !accessState.memberIsOwner() ? null : (val) {
+                    title: Text("FollowRequestDenied", style: TextStyle(color: RgbHelper.color(rgbo: app!.formFieldTextColor))),
+                    subtitle: Text("FollowRequestDenied", style: TextStyle(color: RgbHelper.color(rgbo: app!.formFieldTextColor))),
+                    onChanged: !accessState.memberIsOwner() ? null : (dynamic val) {
                       setSelectionStatus(val);
                     },
                 ),
@@ -265,49 +260,48 @@ class _MyFollowRequestFormState extends State<MyFollowRequestForm> {
 
 
         children.add(Container(height: 20.0));
-        children.add(Divider(height: 1.0, thickness: 1.0, color: RgbHelper.color(rgbo: app.dividerColor)));
+        children.add(Divider(height: 1.0, thickness: 1.0, color: RgbHelper.color(rgbo: app!.dividerColor)));
 
 
         if ((formAction != FormAction.ShowData) && (formAction != FormAction.ShowPreloadedData))
           children.add(RaisedButton(
-                  color: RgbHelper.color(rgbo: app.formSubmitButtonColor),
+                  color: RgbHelper.color(rgbo: app!.formSubmitButtonColor),
                   onPressed: _readOnly(accessState, state) ? null : () {
                     if (state is FollowRequestFormError) {
                       return null;
                     } else {
                       if (formAction == FormAction.UpdateAction) {
                         BlocProvider.of<FollowRequestListBloc>(context).add(
-                          UpdateFollowRequestList(value: state.value.copyWith(
-                              documentID: state.value.documentID, 
-                              appId: state.value.appId, 
-                              follower: state.value.follower, 
-                              followed: state.value.followed, 
-                              status: state.value.status, 
+                          UpdateFollowRequestList(value: state.value!.copyWith(
+                              documentID: state.value!.documentID, 
+                              appId: state.value!.appId, 
+                              follower: state.value!.follower, 
+                              followed: state.value!.followed, 
+                              status: state.value!.status, 
                         )));
                       } else {
                         BlocProvider.of<FollowRequestListBloc>(context).add(
                           AddFollowRequestList(value: FollowRequestModel(
-                              documentID: state.value.documentID, 
-                              appId: state.value.appId, 
-                              follower: state.value.follower, 
-                              followed: state.value.followed, 
-                              status: state.value.status, 
+                              documentID: state.value!.documentID, 
+                              appId: state.value!.appId, 
+                              follower: state.value!.follower, 
+                              followed: state.value!.followed, 
+                              status: state.value!.status, 
                           )));
                       }
                       if (widget.submitAction != null) {
-                        eliudrouter.Router.navigateTo(context, widget.submitAction);
+                        eliudrouter.Router.navigateTo(context, widget.submitAction!);
                       } else {
                         Navigator.pop(context);
                       }
-                      return true;
                     }
                   },
-                  child: Text('Submit', style: TextStyle(color: RgbHelper.color(rgbo: app.formSubmitButtonTextColor))),
+                  child: Text('Submit', style: TextStyle(color: RgbHelper.color(rgbo: app!.formSubmitButtonTextColor))),
                 ));
 
         return Container(
           color: ((formAction == FormAction.ShowData) || (formAction == FormAction.ShowPreloadedData)) ? Colors.transparent : null,
-          decoration: ((formAction == FormAction.ShowData) || (formAction == FormAction.ShowPreloadedData)) ? null : BoxDecorationHelper.boxDecoration(accessState, app.formBackground),
+          decoration: ((formAction == FormAction.ShowData) || (formAction == FormAction.ShowPreloadedData)) ? null : BoxDecorationHelper.boxDecoration(accessState, app!.formBackground),
           padding:
           const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
             child: Form(
@@ -315,7 +309,7 @@ class _MyFollowRequestFormState extends State<MyFollowRequestForm> {
               padding: const EdgeInsets.all(8),
               physics: ((formAction == FormAction.ShowData) || (formAction == FormAction.ShowPreloadedData)) ? NeverScrollableScrollPhysics() : null,
               shrinkWrap: ((formAction == FormAction.ShowData) || (formAction == FormAction.ShowPreloadedData)),
-              children: children
+              children: children as List<Widget>
             ),
           )
         );
@@ -335,7 +329,7 @@ class _MyFollowRequestFormState extends State<MyFollowRequestForm> {
   }
 
 
-  void _onFollowerSelected(String val) {
+  void _onFollowerSelected(String? val) {
     setState(() {
       _follower = val;
     });
@@ -343,7 +337,7 @@ class _MyFollowRequestFormState extends State<MyFollowRequestForm> {
   }
 
 
-  void _onFollowedSelected(String val) {
+  void _onFollowedSelected(String? val) {
     setState(() {
       _followed = val;
     });
@@ -351,7 +345,7 @@ class _MyFollowRequestFormState extends State<MyFollowRequestForm> {
   }
 
 
-  void setSelectionStatus(int val) {
+  void setSelectionStatus(int? val) {
     setState(() {
       _statusSelectedRadioTile = val;
     });

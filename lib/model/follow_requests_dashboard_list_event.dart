@@ -19,7 +19,7 @@ import 'package:eliud_pkg_follow/model/follow_requests_dashboard_model.dart';
 abstract class FollowRequestsDashboardListEvent extends Equatable {
   const FollowRequestsDashboardListEvent();
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class LoadFollowRequestsDashboardList extends FollowRequestsDashboardListEvent {}
@@ -27,49 +27,49 @@ class LoadFollowRequestsDashboardList extends FollowRequestsDashboardListEvent {
 class NewPage extends FollowRequestsDashboardListEvent {}
 
 class AddFollowRequestsDashboardList extends FollowRequestsDashboardListEvent {
-  final FollowRequestsDashboardModel value;
+  final FollowRequestsDashboardModel? value;
 
   const AddFollowRequestsDashboardList({ this.value });
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() => 'AddFollowRequestsDashboardList{ value: $value }';
 }
 
 class UpdateFollowRequestsDashboardList extends FollowRequestsDashboardListEvent {
-  final FollowRequestsDashboardModel value;
+  final FollowRequestsDashboardModel? value;
 
   const UpdateFollowRequestsDashboardList({ this.value });
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() => 'UpdateFollowRequestsDashboardList{ value: $value }';
 }
 
 class DeleteFollowRequestsDashboardList extends FollowRequestsDashboardListEvent {
-  final FollowRequestsDashboardModel value;
+  final FollowRequestsDashboardModel? value;
 
   const DeleteFollowRequestsDashboardList({ this.value });
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() => 'DeleteFollowRequestsDashboardList{ value: $value }';
 }
 
 class FollowRequestsDashboardListUpdated extends FollowRequestsDashboardListEvent {
-  final List<FollowRequestsDashboardModel> value;
-  final bool mightHaveMore;
+  final List<FollowRequestsDashboardModel?>? value;
+  final bool? mightHaveMore;
 
   const FollowRequestsDashboardListUpdated({ this.value, this.mightHaveMore });
 
   @override
-  List<Object> get props => [ value, mightHaveMore ];
+  List<Object?> get props => [ value, mightHaveMore ];
 
   @override
   String toString() => 'FollowRequestsDashboardListUpdated{ value: $value, mightHaveMore: $mightHaveMore }';

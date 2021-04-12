@@ -18,9 +18,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eliud_core/tools/widgets/dialog_helper.dart';
 import 'package:eliud_pkg_follow/model/following_model.dart';
 import 'package:eliud_pkg_follow/tools/follower_helper.dart';
-import 'package:eliud_pkg_membership/model/member_public_info_model.dart';
+import 'package:eliud_core/model/member_public_info_model.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:eliud_pkg_membership/model/abstract_repository_singleton.dart';
+import 'package:eliud_core/model/abstract_repository_singleton.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../follow_package.dart';
 
@@ -32,14 +32,14 @@ import '../follow_package.dart';
  */
 class FollowRequestsDashboardComponentConstructorDefault
     implements ComponentConstructor {
-  Widget createNew({String id, Map<String, Object> parameters}) {
+  Widget createNew({String ?id, Map<String, Object>? parameters}) {
     return FollowRequestsDashboardComponent(id: id);
   }
 }
 
 class FollowRequestsDashboardComponent
     extends AbstractFollowRequestsDashboardComponent {
-  FollowRequestsDashboardComponent({String id})
+  FollowRequestsDashboardComponent({String? id})
       : super(followRequestsDashboardID: id);
 
   @override
@@ -49,7 +49,7 @@ class FollowRequestsDashboardComponent
 
   @override
   Widget yourWidget(
-      BuildContext context, FollowRequestsDashboardModel dashboardModel) {
+      BuildContext context, FollowRequestsDashboardModel? dashboardModel) {
     var state = AccessBloc.getState(context);
     if (state is AppLoaded) {
       var appId = state.app.documentID;
@@ -57,13 +57,13 @@ class FollowRequestsDashboardComponent
         create: (context) => FollowRequestListBloc(
           detailed: true,
           eliudQuery: FollowPackage.getOpenFollowRequestsQuery(
-              state.app.documentID, state.getMember().documentID),
+              state.app.documentID!, state.getMember()!.documentID!),
           followRequestRepository:
-              followRequestRepository(appId: AccessBloc.appId(context)),
+              followRequestRepository(appId: AccessBloc.appId(context))!,
         )..add(LoadFollowRequestList()),
         child: FollowRequestListWidget(
             readOnly: true,
-            widgetProvider: (value) => widgetProvider(appId, value),
+            widgetProvider: (value) => widgetProvider(appId!, value!),
             listBackground: BackgroundModel(documentID: "`transparent")),
       );
     } else {
@@ -78,29 +78,42 @@ class FollowRequestsDashboardComponent
   @override
   FollowRequestsDashboardRepository getFollowRequestsDashboardRepository(
       BuildContext context) {
-    return followRequestsDashboardRepository(appId: AccessBloc.appId(context));
+    return followRequestsDashboardRepository(appId: AccessBloc.appId(context))!;
   }
 }
 
 class FollowRequestsDashboardItem extends StatelessWidget {
-  final FollowRequestModel value;
-  final String appId;
+  final FollowRequestModel? value;
+  final String? appId;
 
   FollowRequestsDashboardItem({
-    Key key,
+    Key? key,
     @required this.value,
     this.appId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<MemberPublicInfoModel>(
-        future: memberPublicInfoRepository(appId: appId)
-            .get(value.follower.documentID),
+    if (value == null) return Text("Value is null");
+    if (value!.follower == null) return Text("Follower is null");
+    var followerId = value!.follower!.documentID!;
+    var theFuture =  memberPublicInfoRepository(appId: appId)!
+        .get(followerId);
+    return FutureBuilder<MemberPublicInfoModel?>(
+        future: theFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var data = snapshot.data;
-            return ListTile(
+            var photo;
+            if (data == null) {
+              photo = Text("No photo provided");
+            } else {
+              photo = FadeInImage.memoryNetwork(
+                placeholder: kTransparentImage,
+                image: data.photoURL!,
+              );
+            }
+          return ListTile(
                 onTap: () {
                   openOptions(context);
                 },
@@ -109,10 +122,10 @@ class FollowRequestsDashboardItem extends StatelessWidget {
                     width: 100,
                     child: FadeInImage.memoryNetwork(
                       placeholder: kTransparentImage,
-                      image: data.photoURL,
+                      image: photo,
                     )),
                 title: Text(
-                  data.name,
+                  data!.name!,
                 ));
           } else {
             return Icon(Icons.person_outline);
@@ -121,12 +134,13 @@ class FollowRequestsDashboardItem extends StatelessWidget {
   }
 
   void openOptions(BuildContext context) {
+    var name = value == null || value!.follower == null || value!.follower!.name == null ? "unkown" : value!.follower!.name;
     DialogStatefulWidgetHelper.openIt(
         context,
         YesNoDialog(
           title: 'Follow invitation',
           message: 'This member ' +
-              value.follower.name +
+              name! +
               ' would like to follow you? Do you accept or reject?',
           yesFunction: () => _accept(context),
           noFunction: () => _reject(context),
@@ -137,20 +151,26 @@ class FollowRequestsDashboardItem extends StatelessWidget {
 
   Future<void> _accept(BuildContext context) async {
     Navigator.pop(context);
-    value.status = FollowRequestStatus.FollowRequestAccepted;
-    await followRequestRepository(appId: appId).update(value);
+    if (value != null) {
+      value!.status = FollowRequestStatus.FollowRequestAccepted;
+      await followRequestRepository(appId: appId)!.update(value!);
 
-    await followingRepository(appId: appId).add(FollowingModel(
-        documentID: FollowerHelper.getKey(
-            value.followed.documentID, value.follower.documentID),
-        appId: appId,
-        followed: value.followed,
-        follower: value.follower));
+      if ((value!.followed != null) && (value!.follower != null)) {
+        await followingRepository(appId: appId)!.add(FollowingModel(
+            documentID: FollowerHelper.getKey(
+                value!.followed!.documentID!, value!.follower!.documentID!),
+            appId: appId,
+            followed: value!.followed!,
+            follower: value!.follower!));
+      }
+    }
   }
   
   Future<void> _reject(BuildContext context) async {
     Navigator.pop(context);
-    value.status = FollowRequestStatus.FollowRequestDenied;
-    await followRequestRepository(appId: appId).update(value);
+    if (value != null) {
+      value!.status = FollowRequestStatus.FollowRequestDenied;
+      await followRequestRepository(appId: appId)!.update(value!);
+    }
   }
 }

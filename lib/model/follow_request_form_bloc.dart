@@ -27,17 +27,13 @@ import 'package:eliud_core/tools/string_validator.dart';
 
 import 'package:eliud_core/model/repository_export.dart';
 import 'package:eliud_core/model/abstract_repository_singleton.dart';
-import 'package:eliud_pkg_membership/model/repository_export.dart';
-import 'package:eliud_pkg_membership/model/abstract_repository_singleton.dart';
 import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/repository_export.dart';
 import 'package:eliud_core/model/model_export.dart';
-import 'package:eliud_pkg_membership/model/model_export.dart';
 import '../tools/bespoke_models.dart';
 import 'package:eliud_pkg_follow/model/model_export.dart';
 import 'package:eliud_core/model/entity_export.dart';
-import 'package:eliud_pkg_membership/model/entity_export.dart';
 import '../tools/bespoke_entities.dart';
 import 'package:eliud_pkg_follow/model/entity_export.dart';
 
@@ -46,8 +42,8 @@ import 'package:eliud_pkg_follow/model/follow_request_form_state.dart';
 import 'package:eliud_pkg_follow/model/follow_request_repository.dart';
 
 class FollowRequestFormBloc extends Bloc<FollowRequestFormEvent, FollowRequestFormState> {
-  final FormAction formAction;
-  final String appId;
+  final FormAction? formAction;
+  final String? appId;
 
   FollowRequestFormBloc(this.appId, { this.formAction }): super(FollowRequestFormUninitialized());
   @override
@@ -68,20 +64,20 @@ class FollowRequestFormBloc extends Bloc<FollowRequestFormEvent, FollowRequestFo
 
       if (event is InitialiseFollowRequestFormEvent) {
         // Need to re-retrieve the document from the repository so that I get all associated types
-        FollowRequestFormLoaded loaded = FollowRequestFormLoaded(value: await followRequestRepository(appId: appId).get(event.value.documentID));
+        FollowRequestFormLoaded loaded = FollowRequestFormLoaded(value: await followRequestRepository(appId: appId)!.get(event!.value!.documentID));
         yield loaded;
         return;
       } else if (event is InitialiseFollowRequestFormNoLoadEvent) {
-        FollowRequestFormLoaded loaded = FollowRequestFormLoaded(value: event.value);
+        FollowRequestFormLoaded loaded = FollowRequestFormLoaded(value: event!.value);
         yield loaded;
         return;
       }
     } else if (currentState is FollowRequestFormInitialized) {
-      FollowRequestModel newValue = null;
+      FollowRequestModel? newValue = null;
       if (event is ChangedFollowRequestDocumentID) {
-        newValue = currentState.value.copyWith(documentID: event.value);
+        newValue = currentState.value!.copyWith(documentID: event!.value);
         if (formAction == FormAction.AddAction) {
-          yield* _isDocumentIDValid(event.value, newValue).asStream();
+          yield* _isDocumentIDValid(event!.value, newValue).asStream();
         } else {
           yield SubmittableFollowRequestForm(value: newValue);
         }
@@ -89,37 +85,37 @@ class FollowRequestFormBloc extends Bloc<FollowRequestFormEvent, FollowRequestFo
         return;
       }
       if (event is ChangedFollowRequestFollower) {
-        if (event.value != null)
-          newValue = currentState.value.copyWith(follower: await memberPublicInfoRepository(appId: appId).get(event.value));
+        if (event!.value != null)
+          newValue = currentState.value!.copyWith(follower: await memberPublicInfoRepository(appId: appId)!.get(event!.value));
         else
           newValue = new FollowRequestModel(
-                                 documentID: currentState.value.documentID,
-                                 appId: currentState.value.appId,
+                                 documentID: currentState.value!.documentID,
+                                 appId: currentState.value!.appId,
                                  follower: null,
-                                 followed: currentState.value.followed,
-                                 status: currentState.value.status,
+                                 followed: currentState.value!.followed,
+                                 status: currentState.value!.status,
           );
         yield SubmittableFollowRequestForm(value: newValue);
 
         return;
       }
       if (event is ChangedFollowRequestFollowed) {
-        if (event.value != null)
-          newValue = currentState.value.copyWith(followed: await memberPublicInfoRepository(appId: appId).get(event.value));
+        if (event!.value != null)
+          newValue = currentState.value!.copyWith(followed: await memberPublicInfoRepository(appId: appId)!.get(event!.value));
         else
           newValue = new FollowRequestModel(
-                                 documentID: currentState.value.documentID,
-                                 appId: currentState.value.appId,
-                                 follower: currentState.value.follower,
+                                 documentID: currentState.value!.documentID,
+                                 appId: currentState.value!.appId,
+                                 follower: currentState.value!.follower,
                                  followed: null,
-                                 status: currentState.value.status,
+                                 status: currentState.value!.status,
           );
         yield SubmittableFollowRequestForm(value: newValue);
 
         return;
       }
       if (event is ChangedFollowRequestStatus) {
-        newValue = currentState.value.copyWith(status: event.value);
+        newValue = currentState.value!.copyWith(status: event!.value);
         yield SubmittableFollowRequestForm(value: newValue);
 
         return;
@@ -130,10 +126,10 @@ class FollowRequestFormBloc extends Bloc<FollowRequestFormEvent, FollowRequestFo
 
   DocumentIDFollowRequestFormError error(String message, FollowRequestModel newValue) => DocumentIDFollowRequestFormError(message: message, value: newValue);
 
-  Future<FollowRequestFormState> _isDocumentIDValid(String value, FollowRequestModel newValue) async {
+  Future<FollowRequestFormState> _isDocumentIDValid(String? value, FollowRequestModel newValue) async {
     if (value == null) return Future.value(error("Provide value for documentID", newValue));
     if (value.length == 0) return Future.value(error("Provide value for documentID", newValue));
-    Future<FollowRequestModel> findDocument = followRequestRepository(appId: appId).get(value);
+    Future<FollowRequestModel?> findDocument = followRequestRepository(appId: appId)!.get(value);
     return await findDocument.then((documentFound) {
       if (documentFound == null) {
         return SubmittableFollowRequestForm(value: newValue);

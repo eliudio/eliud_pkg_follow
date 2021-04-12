@@ -42,8 +42,8 @@ import 'package:eliud_pkg_follow/model/following_dashboard_form_state.dart';
 import 'package:eliud_pkg_follow/model/following_dashboard_repository.dart';
 
 class FollowingDashboardFormBloc extends Bloc<FollowingDashboardFormEvent, FollowingDashboardFormState> {
-  final FormAction formAction;
-  final String appId;
+  final FormAction? formAction;
+  final String? appId;
 
   FollowingDashboardFormBloc(this.appId, { this.formAction }): super(FollowingDashboardFormUninitialized());
   @override
@@ -65,20 +65,20 @@ class FollowingDashboardFormBloc extends Bloc<FollowingDashboardFormEvent, Follo
 
       if (event is InitialiseFollowingDashboardFormEvent) {
         // Need to re-retrieve the document from the repository so that I get all associated types
-        FollowingDashboardFormLoaded loaded = FollowingDashboardFormLoaded(value: await followingDashboardRepository(appId: appId).get(event.value.documentID));
+        FollowingDashboardFormLoaded loaded = FollowingDashboardFormLoaded(value: await followingDashboardRepository(appId: appId)!.get(event!.value!.documentID));
         yield loaded;
         return;
       } else if (event is InitialiseFollowingDashboardFormNoLoadEvent) {
-        FollowingDashboardFormLoaded loaded = FollowingDashboardFormLoaded(value: event.value);
+        FollowingDashboardFormLoaded loaded = FollowingDashboardFormLoaded(value: event!.value);
         yield loaded;
         return;
       }
     } else if (currentState is FollowingDashboardFormInitialized) {
-      FollowingDashboardModel newValue = null;
+      FollowingDashboardModel? newValue = null;
       if (event is ChangedFollowingDashboardDocumentID) {
-        newValue = currentState.value.copyWith(documentID: event.value);
+        newValue = currentState.value!.copyWith(documentID: event!.value);
         if (formAction == FormAction.AddAction) {
-          yield* _isDocumentIDValid(event.value, newValue).asStream();
+          yield* _isDocumentIDValid(event!.value, newValue).asStream();
         } else {
           yield SubmittableFollowingDashboardForm(value: newValue);
         }
@@ -86,25 +86,25 @@ class FollowingDashboardFormBloc extends Bloc<FollowingDashboardFormEvent, Follo
         return;
       }
       if (event is ChangedFollowingDashboardAppId) {
-        newValue = currentState.value.copyWith(appId: event.value);
+        newValue = currentState.value!.copyWith(appId: event!.value);
         yield SubmittableFollowingDashboardForm(value: newValue);
 
         return;
       }
       if (event is ChangedFollowingDashboardDescription) {
-        newValue = currentState.value.copyWith(description: event.value);
+        newValue = currentState.value!.copyWith(description: event!.value);
         yield SubmittableFollowingDashboardForm(value: newValue);
 
         return;
       }
       if (event is ChangedFollowingDashboardView) {
-        newValue = currentState.value.copyWith(view: event.value);
+        newValue = currentState.value!.copyWith(view: event!.value);
         yield SubmittableFollowingDashboardForm(value: newValue);
 
         return;
       }
       if (event is ChangedFollowingDashboardConditions) {
-        newValue = currentState.value.copyWith(conditions: event.value);
+        newValue = currentState.value!.copyWith(conditions: event!.value);
         yield SubmittableFollowingDashboardForm(value: newValue);
 
         return;
@@ -115,10 +115,10 @@ class FollowingDashboardFormBloc extends Bloc<FollowingDashboardFormEvent, Follo
 
   DocumentIDFollowingDashboardFormError error(String message, FollowingDashboardModel newValue) => DocumentIDFollowingDashboardFormError(message: message, value: newValue);
 
-  Future<FollowingDashboardFormState> _isDocumentIDValid(String value, FollowingDashboardModel newValue) async {
+  Future<FollowingDashboardFormState> _isDocumentIDValid(String? value, FollowingDashboardModel newValue) async {
     if (value == null) return Future.value(error("Provide value for documentID", newValue));
     if (value.length == 0) return Future.value(error("Provide value for documentID", newValue));
-    Future<FollowingDashboardModel> findDocument = followingDashboardRepository(appId: appId).get(value);
+    Future<FollowingDashboardModel?> findDocument = followingDashboardRepository(appId: appId)!.get(value);
     return await findDocument.then((documentFound) {
       if (documentFound == null) {
         return SubmittableFollowingDashboardForm(value: newValue);

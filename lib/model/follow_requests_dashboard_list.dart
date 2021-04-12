@@ -45,50 +45,36 @@ import 'package:eliud_core/model/app_model.dart';
 import 'follow_requests_dashboard_form.dart';
 
 
-typedef FollowRequestsDashboardWidgetProvider(FollowRequestsDashboardModel value);
+typedef FollowRequestsDashboardWidgetProvider(FollowRequestsDashboardModel? value);
 
 class FollowRequestsDashboardListWidget extends StatefulWidget with HasFab {
-  BackgroundModel listBackground;
-  FollowRequestsDashboardWidgetProvider widgetProvider;
-  bool readOnly;
-  String form;
-  FollowRequestsDashboardListWidgetState state;
-  bool isEmbedded;
+  BackgroundModel? listBackground;
+  FollowRequestsDashboardWidgetProvider? widgetProvider;
+  bool? readOnly;
+  String? form;
+  FollowRequestsDashboardListWidgetState? state;
+  bool? isEmbedded;
 
-  FollowRequestsDashboardListWidget({ Key key, this.readOnly, this.form, this.widgetProvider, this.isEmbedded, this.listBackground }): super(key: key);
+  FollowRequestsDashboardListWidget({ Key? key, this.readOnly, this.form, this.widgetProvider, this.isEmbedded, this.listBackground }): super(key: key);
 
   @override
   FollowRequestsDashboardListWidgetState createState() {
     state ??= FollowRequestsDashboardListWidgetState();
-    return state;
+    return state!;
   }
 
   @override
-  Widget fab(BuildContext context) {
-    if ((readOnly != null) && readOnly) return null;
+  Widget? fab(BuildContext context) {
+    if ((readOnly != null) && readOnly!) return null;
     state ??= FollowRequestsDashboardListWidgetState();
     var accessState = AccessBloc.getState(context);
-    return state.fab(context, accessState);
+    return state!.fab(context, accessState);
   }
 }
 
 class FollowRequestsDashboardListWidgetState extends State<FollowRequestsDashboardListWidget> {
-  FollowRequestsDashboardListBloc bloc;
-
   @override
-  void didChangeDependencies() {
-    bloc = BlocProvider.of<FollowRequestsDashboardListBloc>(context);
-    super.didChangeDependencies();
-  }
-
-  @override
-  void dispose () {
-    if (bloc != null) bloc.close();
-    super.dispose();
-  }
-
-  @override
-  Widget fab(BuildContext aContext, AccessState accessState) {
+  Widget? fab(BuildContext aContext, AccessState accessState) {
     if (accessState is AppLoaded) {
       return !accessState.memberIsOwner() 
         ? null
@@ -100,7 +86,7 @@ class FollowRequestsDashboardListWidgetState extends State<FollowRequestsDashboa
         onPressed: () {
           Navigator.of(context).push(
             pageRouteBuilder(accessState.app, page: BlocProvider.value(
-                value: bloc,
+                value: BlocProvider.of<FollowRequestsDashboardListBloc>(context),
                 child: FollowRequestsDashboardForm(
                     value: null,
                     formAction: FormAction.AddAction)
@@ -124,15 +110,15 @@ class FollowRequestsDashboardListWidgetState extends State<FollowRequestsDashboa
           );
         } else if (state is FollowRequestsDashboardListLoaded) {
           final values = state.values;
-          if ((widget.isEmbedded != null) && (widget.isEmbedded)) {
-            List<Widget> children = List();
+          if ((widget.isEmbedded != null) && widget.isEmbedded!) {
+            var children = <Widget>[];
             children.add(theList(context, values, accessState));
             children.add(RaisedButton(
                     color: RgbHelper.color(rgbo: accessState.app.formSubmitButtonColor),
                     onPressed: () {
                       Navigator.of(context).push(
                                 pageRouteBuilder(accessState.app, page: BlocProvider.value(
-                                    value: bloc,
+                                    value: BlocProvider.of<FollowRequestsDashboardListBloc>(context),
                                     child: FollowRequestsDashboardForm(
                                         value: null,
                                         formAction: FormAction.AddAction)
@@ -174,7 +160,7 @@ class FollowRequestsDashboardListWidgetState extends State<FollowRequestsDashboa
         itemBuilder: (context, index) {
           final value = values[index];
           
-          if (widget.widgetProvider != null) return widget.widgetProvider(value);
+          if (widget.widgetProvider != null) return widget.widgetProvider!(value);
 
           return FollowRequestsDashboardListItem(
             value: value,
@@ -210,7 +196,7 @@ class FollowRequestsDashboardListWidgetState extends State<FollowRequestsDashboa
   }
   
   
-  Widget getForm(value, action) {
+  Widget? getForm(value, action) {
     if (widget.form == null) {
       return FollowRequestsDashboardForm(value: value, formAction: action);
     } else {
@@ -226,36 +212,36 @@ class FollowRequestsDashboardListItem extends StatelessWidget {
   final DismissDirectionCallback onDismissed;
   final GestureTapCallback onTap;
   final AppModel app;
-  final FollowRequestsDashboardModel value;
+  final FollowRequestsDashboardModel? value;
 
   FollowRequestsDashboardListItem({
-    Key key,
-    @required this.onDismissed,
-    @required this.onTap,
-    @required this.value,
-    @required this.app,
+    Key? key,
+    required this.onDismissed,
+    required this.onTap,
+    required this.value,
+    required this.app,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: Key('__FollowRequestsDashboard_item_${value.documentID}'),
+      key: Key('__FollowRequestsDashboard_item_${value!.documentID}'),
       onDismissed: onDismissed,
       child: ListTile(
         onTap: onTap,
         title: Hero(
-          tag: '${value.documentID}__FollowRequestsDashboardheroTag',
+          tag: '${value!.documentID}__FollowRequestsDashboardheroTag',
           child: Container(
             width: fullScreenWidth(context),
             child: Center(child: Text(
-              value.documentID,
+              value!.documentID!,
               style: TextStyle(color: RgbHelper.color(rgbo: app.listTextItemColor)),
             )),
           ),
         ),
-        subtitle: (value.description != null) && (value.description.isNotEmpty)
+        subtitle: (value!.description != null) && (value!.description!.isNotEmpty)
             ? Center( child: Text(
-          value.description,
+          value!.description!,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(color: RgbHelper.color(rgbo: app.listTextItemColor)),

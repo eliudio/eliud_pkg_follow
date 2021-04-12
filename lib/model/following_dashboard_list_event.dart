@@ -19,7 +19,7 @@ import 'package:eliud_pkg_follow/model/following_dashboard_model.dart';
 abstract class FollowingDashboardListEvent extends Equatable {
   const FollowingDashboardListEvent();
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class LoadFollowingDashboardList extends FollowingDashboardListEvent {}
@@ -27,49 +27,49 @@ class LoadFollowingDashboardList extends FollowingDashboardListEvent {}
 class NewPage extends FollowingDashboardListEvent {}
 
 class AddFollowingDashboardList extends FollowingDashboardListEvent {
-  final FollowingDashboardModel value;
+  final FollowingDashboardModel? value;
 
   const AddFollowingDashboardList({ this.value });
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() => 'AddFollowingDashboardList{ value: $value }';
 }
 
 class UpdateFollowingDashboardList extends FollowingDashboardListEvent {
-  final FollowingDashboardModel value;
+  final FollowingDashboardModel? value;
 
   const UpdateFollowingDashboardList({ this.value });
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() => 'UpdateFollowingDashboardList{ value: $value }';
 }
 
 class DeleteFollowingDashboardList extends FollowingDashboardListEvent {
-  final FollowingDashboardModel value;
+  final FollowingDashboardModel? value;
 
   const DeleteFollowingDashboardList({ this.value });
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() => 'DeleteFollowingDashboardList{ value: $value }';
 }
 
 class FollowingDashboardListUpdated extends FollowingDashboardListEvent {
-  final List<FollowingDashboardModel> value;
-  final bool mightHaveMore;
+  final List<FollowingDashboardModel?>? value;
+  final bool? mightHaveMore;
 
   const FollowingDashboardListUpdated({ this.value, this.mightHaveMore });
 
   @override
-  List<Object> get props => [ value, mightHaveMore ];
+  List<Object?> get props => [ value, mightHaveMore ];
 
   @override
   String toString() => 'FollowingDashboardListUpdated{ value: $value, mightHaveMore: $mightHaveMore }';

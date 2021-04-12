@@ -14,11 +14,11 @@ import 'package:eliud_pkg_follow/model/invite_dashboard_component.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_model.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_repository.dart';
 import 'package:eliud_pkg_follow/tools/follower_helper.dart';
-import 'package:eliud_pkg_membership/model/abstract_repository_singleton.dart';
-import 'package:eliud_pkg_membership/model/member_public_info_list.dart';
-import 'package:eliud_pkg_membership/model/member_public_info_list_bloc.dart';
-import 'package:eliud_pkg_membership/model/member_public_info_list_event.dart';
-import 'package:eliud_pkg_membership/model/member_public_info_model.dart';
+import 'package:eliud_core/model/abstract_repository_singleton.dart';
+import 'package:eliud_core/model/member_public_info_list.dart';
+import 'package:eliud_core/model/member_public_info_list_bloc.dart';
+import 'package:eliud_core/model/member_public_info_list_event.dart';
+import 'package:eliud_core/model/member_public_info_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -31,13 +31,13 @@ import 'package:flutter/cupertino.dart';
  */
 class InviteDashboardComponentConstructorDefault
     implements ComponentConstructor {
-  Widget createNew({String id, Map<String, Object> parameters}) {
+  Widget createNew({String? id, Map<String, Object>? parameters}) {
     return InviteDashboard(id: id);
   }
 }
 
 class InviteDashboard extends AbstractInviteDashboardComponent {
-  InviteDashboard({String id}) : super(inviteDashboardID: id);
+  InviteDashboard({String? id}) : super(inviteDashboardID: id);
 
   @override
   Widget alertWidget({title = String, content = String}) {
@@ -51,16 +51,16 @@ class InviteDashboard extends AbstractInviteDashboardComponent {
   }
 
   @override
-  Widget yourWidget(BuildContext context, InviteDashboardModel dashboardModel) {
+  Widget yourWidget(BuildContext context, InviteDashboardModel? dashboardModel) {
     var state = AccessBloc.getState(context);
     if (state is AppLoaded) {
       var member = state.getMember();
       var appId = state.app.documentID;
       return BlocProvider<MemberPublicInfoListBloc>(
         create: (context) => MemberPublicInfoListBloc(
-          eliudQuery: getSubscribedMembers(state.app.documentID),
+          eliudQuery: getSubscribedMembers(state.app.documentID!),
           memberPublicInfoRepository:
-              memberPublicInfoRepository(appId: AccessBloc.appId(context)),
+              memberPublicInfoRepository(appId: AccessBloc.appId(context))!,
         )..add(LoadMemberPublicInfoList()),
         child: MemberPublicInfoListWidget(
             readOnly: true,
@@ -73,23 +73,23 @@ class InviteDashboard extends AbstractInviteDashboardComponent {
   }
 
   Widget widgetProvider(
-      String appId, MemberPublicInfoModel value, MemberModel member) {
+      String? appId, MemberPublicInfoModel? value, MemberModel? member) {
     return InviteDashboardItem(appId: appId, value: value, member: member);
   }
 
   @override
   InviteDashboardRepository getInviteDashboardRepository(BuildContext context) {
-    return inviteDashboardRepository(appId: AccessBloc.appId(context));
+    return inviteDashboardRepository(appId: AccessBloc.appId(context))!;
   }
 }
 
 class InviteDashboardItem extends StatelessWidget {
-  final MemberModel member;
-  final MemberPublicInfoModel value;
-  final String appId;
+  final MemberModel? member;
+  final MemberPublicInfoModel? value;
+  final String? appId;
 
   InviteDashboardItem({
-    Key key,
+    Key? key,
     this.member,
     @required this.value,
     this.appId,
@@ -98,32 +98,33 @@ class InviteDashboardItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget profilePhoto;
-    if (value.photoURL != null) {
+    if (value!.photoURL != null) {
       profilePhoto = FadeInImage.memoryNetwork(
         placeholder: kTransparentImage,
-        image: value.photoURL,
+        image: value!.photoURL!,
       );
+    } else {
+      profilePhoto = Icon(Icons.person_outline);
     }
-    profilePhoto ??= Icon(Icons.person_outline);
     return Dismissible(
-        key: Key('__Invite_item_${value.documentID}'),
+        key: Key('__Invite_item_${value!.documentID}'),
         child: ListTile(
             onTap: () {
               openOptions(context, profilePhoto);
             },
             trailing: Container(height: 100, width: 100, child: profilePhoto),
             title: Text(
-              value.name,
+              value!.name == null ? 'No name' : value!.name!,
             )));
   }
 
   Future<void> openOptions(BuildContext context, Widget profilePhoto) async {
-    if (value.documentID != member.documentID) {
-      String key = FollowerHelper.getKey(value.documentID, member.documentID);
-      var following = await followingRepository(appId: appId).get(key);
+    if (value!.documentID != member!.documentID) {
+      String key = FollowerHelper.getKey(value!.documentID!, member!.documentID!);
+      var following = await followingRepository(appId: appId)!.get(key);
       if (following == null) {
         var followRequest =
-            await followRequestRepository(appId: appId).get(key);
+            await followRequestRepository(appId: appId)!.get(key);
         if (followRequest == null) {
           DialogStatefulWidgetHelper.openIt(
               context,
@@ -164,9 +165,9 @@ class InviteDashboardItem extends StatelessWidget {
   Future<void> _invite(BuildContext context) async {
     Navigator.pop(context);
     var follower =
-        await memberPublicInfoRepository(appId: appId).get(member.documentID);
-    await followRequestRepository(appId: appId).add(FollowRequestModel(
-        documentID: FollowerHelper.getKey(value.documentID, member.documentID),
+        await memberPublicInfoRepository(appId: appId)!.get(member!.documentID);
+    await followRequestRepository(appId: appId)!.add(FollowRequestModel(
+        documentID: FollowerHelper.getKey(value!.documentID!, member!.documentID!),
         appId: appId,
         followed: value,
         follower: follower,

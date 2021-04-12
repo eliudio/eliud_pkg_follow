@@ -25,7 +25,7 @@ import 'package:eliud_pkg_follow/model/following_component_state.dart';
 
 abstract class AbstractFollowingComponent extends StatelessWidget {
   static String componentName = "followings";
-  final String followingID;
+  final String? followingID;
 
   AbstractFollowingComponent({this.followingID});
 
@@ -63,7 +63,7 @@ abstract class AbstractFollowingComponent extends StatelessWidget {
     });
   }
 
-  Widget yourWidget(BuildContext context, FollowingModel value);
+  Widget yourWidget(BuildContext context, FollowingModel? value);
   Widget alertWidget({ title: String, content: String});
   FollowingRepository getFollowingRepository(BuildContext context);
 }

@@ -27,53 +27,59 @@ const _followRequestLimit = 5;
 
 class FollowRequestListBloc extends Bloc<FollowRequestListEvent, FollowRequestListState> {
   final FollowRequestRepository _followRequestRepository;
-  StreamSubscription _followRequestsListSubscription;
-  final EliudQuery eliudQuery;
+  StreamSubscription? _followRequestsListSubscription;
+  final EliudQuery? eliudQuery;
   int pages = 1;
-  final bool paged;
-  final String orderBy;
-  final bool descending;
-  final bool detailed;
+  final bool? paged;
+  final String? orderBy;
+  final bool? descending;
+  final bool? detailed;
 
-  FollowRequestListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, @required FollowRequestRepository followRequestRepository})
+  FollowRequestListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required FollowRequestRepository followRequestRepository})
       : assert(followRequestRepository != null),
         _followRequestRepository = followRequestRepository,
         super(FollowRequestListLoading());
 
   Stream<FollowRequestListState> _mapLoadFollowRequestListToState() async* {
-    int amountNow =  (state is FollowRequestListLoaded) ? (state as FollowRequestListLoaded).values.length : 0;
+    int amountNow =  (state is FollowRequestListLoaded) ? (state as FollowRequestListLoaded).values!.length : 0;
     _followRequestsListSubscription?.cancel();
     _followRequestsListSubscription = _followRequestRepository.listen(
           (list) => add(FollowRequestListUpdated(value: list, mightHaveMore: amountNow != list.length)),
       orderBy: orderBy,
       descending: descending,
       eliudQuery: eliudQuery,
-      limit: ((paged != null) && (paged)) ? pages * _followRequestLimit : null
+      limit: ((paged != null) && paged!) ? pages * _followRequestLimit : null
     );
   }
 
   Stream<FollowRequestListState> _mapLoadFollowRequestListWithDetailsToState() async* {
-    int amountNow =  (state is FollowRequestListLoaded) ? (state as FollowRequestListLoaded).values.length : 0;
+    int amountNow =  (state is FollowRequestListLoaded) ? (state as FollowRequestListLoaded).values!.length : 0;
     _followRequestsListSubscription?.cancel();
     _followRequestsListSubscription = _followRequestRepository.listenWithDetails(
             (list) => add(FollowRequestListUpdated(value: list, mightHaveMore: amountNow != list.length)),
         orderBy: orderBy,
         descending: descending,
         eliudQuery: eliudQuery,
-        limit: ((paged != null) && (paged)) ? pages * _followRequestLimit : null
+        limit: ((paged != null) && paged!) ? pages * _followRequestLimit : null
     );
   }
 
   Stream<FollowRequestListState> _mapAddFollowRequestListToState(AddFollowRequestList event) async* {
-    _followRequestRepository.add(event.value);
+    var value = event.value;
+    if (value != null) 
+      _followRequestRepository.add(value);
   }
 
   Stream<FollowRequestListState> _mapUpdateFollowRequestListToState(UpdateFollowRequestList event) async* {
-    _followRequestRepository.update(event.value);
+    var value = event.value;
+    if (value != null) 
+      _followRequestRepository.update(value);
   }
 
   Stream<FollowRequestListState> _mapDeleteFollowRequestListToState(DeleteFollowRequestList event) async* {
-    _followRequestRepository.delete(event.value);
+    var value = event.value;
+    if (value != null) 
+      _followRequestRepository.delete(value);
   }
 
   Stream<FollowRequestListState> _mapFollowRequestListUpdatedToState(
@@ -84,7 +90,7 @@ class FollowRequestListBloc extends Bloc<FollowRequestListEvent, FollowRequestLi
   @override
   Stream<FollowRequestListState> mapEventToState(FollowRequestListEvent event) async* {
     if (event is LoadFollowRequestList) {
-      if ((detailed == null) || (!detailed)) {
+      if ((detailed == null) || (!detailed!)) {
         yield* _mapLoadFollowRequestListToState();
       } else {
         yield* _mapLoadFollowRequestListWithDetailsToState();

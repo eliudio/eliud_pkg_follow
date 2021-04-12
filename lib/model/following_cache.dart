@@ -21,76 +21,71 @@ import 'package:eliud_pkg_follow/model/following_repository.dart';
 
 import 'package:eliud_core/model/repository_export.dart';
 import 'package:eliud_core/model/abstract_repository_singleton.dart';
-import 'package:eliud_pkg_membership/model/repository_export.dart';
-import 'package:eliud_pkg_membership/model/abstract_repository_singleton.dart';
 import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/repository_export.dart';
 import 'package:eliud_core/model/cache_export.dart';
-import 'package:eliud_pkg_membership/model/cache_export.dart';
 import 'package:eliud_pkg_follow/model/cache_export.dart';
 import 'package:eliud_core/model/model_export.dart';
-import 'package:eliud_pkg_membership/model/model_export.dart';
 import '../tools/bespoke_models.dart';
 import 'package:eliud_pkg_follow/model/model_export.dart';
 import 'package:eliud_core/model/entity_export.dart';
-import 'package:eliud_pkg_membership/model/entity_export.dart';
 import '../tools/bespoke_entities.dart';
 import 'package:eliud_pkg_follow/model/entity_export.dart';
 
 class FollowingCache implements FollowingRepository {
 
   final FollowingRepository reference;
-  final Map<String, FollowingModel> fullCache = Map();
+  final Map<String?, FollowingModel?> fullCache = Map();
 
   FollowingCache(this.reference);
 
   Future<FollowingModel> add(FollowingModel value) {
     return reference.add(value).then((newValue) {
-      fullCache[value.documentID] = newValue;
+      fullCache[value!.documentID] = newValue;
       return newValue;
     });
   }
 
   Future<void> delete(FollowingModel value){
-    fullCache.remove(value.documentID);
+    fullCache.remove(value!.documentID);
     reference.delete(value);
     return Future.value();
   }
 
-  Future<FollowingModel> get(String id, {Function(Exception) onError}) {
-    FollowingModel value = fullCache[id];
+  Future<FollowingModel> get(String? id, {Function(Exception)? onError}) {
+    FollowingModel? value = fullCache[id];
     if (value != null) return refreshRelations(value);
     return reference.get(id, onError: onError).then((value) {
       fullCache[id] = value;
-      return value;
+      return value!;
     });
   }
 
   Future<FollowingModel> update(FollowingModel value) {
     return reference.update(value).then((newValue) {
-      fullCache[value.documentID] = newValue;
+      fullCache[value!.documentID] = newValue;
       return newValue;
     });
   }
 
   @override
-  Stream<List<FollowingModel>> values({String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery }) {
+  Stream<List<FollowingModel?>> values({String? orderBy, bool? descending, Object? startAfter, int? limit, SetLastDoc? setLastDoc, int? privilegeLevel, EliudQuery? eliudQuery }) {
     return reference.values(orderBy: orderBy, descending: descending, startAfter: startAfter, limit: limit, setLastDoc: setLastDoc, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery);
   }
 
   @override
-  Stream<List<FollowingModel>> valuesWithDetails({String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery }) {
+  Stream<List<FollowingModel?>> valuesWithDetails({String? orderBy, bool? descending, Object? startAfter, int? limit, SetLastDoc? setLastDoc, int? privilegeLevel, EliudQuery? eliudQuery }) {
     return reference.valuesWithDetails(orderBy: orderBy, descending: descending, startAfter: startAfter, limit: limit, setLastDoc: setLastDoc, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery);
   }
 
   @override
-  Future<List<FollowingModel>> valuesList({String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery }) async {
+  Future<List<FollowingModel?>> valuesList({String? orderBy, bool? descending, Object? startAfter, int? limit, SetLastDoc? setLastDoc, int? privilegeLevel, EliudQuery? eliudQuery }) async {
     return await reference.valuesList(orderBy: orderBy, descending: descending, startAfter: startAfter, limit: limit, setLastDoc: setLastDoc, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery);
   }
   
   @override
-  Future<List<FollowingModel>> valuesListWithDetails({String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery }) async {
+  Future<List<FollowingModel?>> valuesListWithDetails({String? orderBy, bool? descending, Object? startAfter, int? limit, SetLastDoc? setLastDoc, int? privilegeLevel, EliudQuery? eliudQuery }) async {
     return await reference.valuesListWithDetails(orderBy: orderBy, descending: descending, startAfter: startAfter, limit: limit, setLastDoc: setLastDoc, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery);
   }
 
@@ -98,7 +93,7 @@ class FollowingCache implements FollowingRepository {
     fullCache.clear();
   }
   
-  String timeStampToString(dynamic timeStamp) {
+  String? timeStampToString(dynamic timeStamp) {
     return reference.timeStampToString(timeStamp);
   } 
 
@@ -109,7 +104,7 @@ class FollowingCache implements FollowingRepository {
   Future<FollowingModel> changeValue(String documentId, String fieldName, num changeByThisValue) {
     return reference.changeValue(documentId, fieldName, changeByThisValue).then((newValue) {
       fullCache[documentId] = newValue;
-      return newValue;
+      return newValue!;
     });
   }
 
@@ -118,35 +113,35 @@ class FollowingCache implements FollowingRepository {
   }
 
   @override
-  StreamSubscription<List<FollowingModel>> listen(trigger, {String orderBy, bool descending, Object startAfter, int limit, int privilegeLevel, EliudQuery eliudQuery}) {
+  StreamSubscription<List<FollowingModel?>> listen(trigger, {String? orderBy, bool? descending, Object? startAfter, int? limit, int? privilegeLevel, EliudQuery? eliudQuery}) {
     return reference.listen(trigger, orderBy: orderBy, descending: descending, startAfter: startAfter, limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery);
   }
 
   @override
-  StreamSubscription<List<FollowingModel>> listenWithDetails(trigger, {String orderBy, bool descending, Object startAfter, int limit, int privilegeLevel, EliudQuery eliudQuery}) {
+  StreamSubscription<List<FollowingModel?>> listenWithDetails(trigger, {String? orderBy, bool? descending, Object? startAfter, int? limit, int? privilegeLevel, EliudQuery? eliudQuery}) {
     return reference.listenWithDetails(trigger, orderBy: orderBy, descending: descending, startAfter: startAfter, limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery);
   }
 
   @override
-  StreamSubscription<FollowingModel> listenTo(String documentId, changed) {
-    reference.listenTo(documentId, changed);
+  StreamSubscription<FollowingModel?> listenTo(String documentId, FollowingChanged changed) {
+    return reference.listenTo(documentId, changed);
   }
 
   static Future<FollowingModel> refreshRelations(FollowingModel model) async {
 
-    MemberPublicInfoModel followerHolder;
+    MemberPublicInfoModel? followerHolder;
     if (model.follower != null) {
       try {
-        await memberPublicInfoRepository().get(model.follower.documentID).then((val) {
+        await memberPublicInfoRepository()!.get(model.follower!.documentID).then((val) {
           followerHolder = val;
         }).catchError((error) {});
       } catch (_) {}
     }
 
-    MemberPublicInfoModel followedHolder;
+    MemberPublicInfoModel? followedHolder;
     if (model.followed != null) {
       try {
-        await memberPublicInfoRepository().get(model.followed.documentID).then((val) {
+        await memberPublicInfoRepository()!.get(model.followed!.documentID).then((val) {
           followedHolder = val;
         }).catchError((error) {});
       } catch (_) {}

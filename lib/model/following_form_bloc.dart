@@ -27,17 +27,13 @@ import 'package:eliud_core/tools/string_validator.dart';
 
 import 'package:eliud_core/model/repository_export.dart';
 import 'package:eliud_core/model/abstract_repository_singleton.dart';
-import 'package:eliud_pkg_membership/model/repository_export.dart';
-import 'package:eliud_pkg_membership/model/abstract_repository_singleton.dart';
 import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/repository_export.dart';
 import 'package:eliud_core/model/model_export.dart';
-import 'package:eliud_pkg_membership/model/model_export.dart';
 import '../tools/bespoke_models.dart';
 import 'package:eliud_pkg_follow/model/model_export.dart';
 import 'package:eliud_core/model/entity_export.dart';
-import 'package:eliud_pkg_membership/model/entity_export.dart';
 import '../tools/bespoke_entities.dart';
 import 'package:eliud_pkg_follow/model/entity_export.dart';
 
@@ -46,8 +42,8 @@ import 'package:eliud_pkg_follow/model/following_form_state.dart';
 import 'package:eliud_pkg_follow/model/following_repository.dart';
 
 class FollowingFormBloc extends Bloc<FollowingFormEvent, FollowingFormState> {
-  final FormAction formAction;
-  final String appId;
+  final FormAction? formAction;
+  final String? appId;
 
   FollowingFormBloc(this.appId, { this.formAction }): super(FollowingFormUninitialized());
   @override
@@ -68,20 +64,20 @@ class FollowingFormBloc extends Bloc<FollowingFormEvent, FollowingFormState> {
 
       if (event is InitialiseFollowingFormEvent) {
         // Need to re-retrieve the document from the repository so that I get all associated types
-        FollowingFormLoaded loaded = FollowingFormLoaded(value: await followingRepository(appId: appId).get(event.value.documentID));
+        FollowingFormLoaded loaded = FollowingFormLoaded(value: await followingRepository(appId: appId)!.get(event!.value!.documentID));
         yield loaded;
         return;
       } else if (event is InitialiseFollowingFormNoLoadEvent) {
-        FollowingFormLoaded loaded = FollowingFormLoaded(value: event.value);
+        FollowingFormLoaded loaded = FollowingFormLoaded(value: event!.value);
         yield loaded;
         return;
       }
     } else if (currentState is FollowingFormInitialized) {
-      FollowingModel newValue = null;
+      FollowingModel? newValue = null;
       if (event is ChangedFollowingDocumentID) {
-        newValue = currentState.value.copyWith(documentID: event.value);
+        newValue = currentState.value!.copyWith(documentID: event!.value);
         if (formAction == FormAction.AddAction) {
-          yield* _isDocumentIDValid(event.value, newValue).asStream();
+          yield* _isDocumentIDValid(event!.value, newValue).asStream();
         } else {
           yield SubmittableFollowingForm(value: newValue);
         }
@@ -89,27 +85,27 @@ class FollowingFormBloc extends Bloc<FollowingFormEvent, FollowingFormState> {
         return;
       }
       if (event is ChangedFollowingFollower) {
-        if (event.value != null)
-          newValue = currentState.value.copyWith(follower: await memberPublicInfoRepository(appId: appId).get(event.value));
+        if (event!.value != null)
+          newValue = currentState.value!.copyWith(follower: await memberPublicInfoRepository(appId: appId)!.get(event!.value));
         else
           newValue = new FollowingModel(
-                                 documentID: currentState.value.documentID,
-                                 appId: currentState.value.appId,
+                                 documentID: currentState.value!.documentID,
+                                 appId: currentState.value!.appId,
                                  follower: null,
-                                 followed: currentState.value.followed,
+                                 followed: currentState.value!.followed,
           );
         yield SubmittableFollowingForm(value: newValue);
 
         return;
       }
       if (event is ChangedFollowingFollowed) {
-        if (event.value != null)
-          newValue = currentState.value.copyWith(followed: await memberPublicInfoRepository(appId: appId).get(event.value));
+        if (event!.value != null)
+          newValue = currentState.value!.copyWith(followed: await memberPublicInfoRepository(appId: appId)!.get(event!.value));
         else
           newValue = new FollowingModel(
-                                 documentID: currentState.value.documentID,
-                                 appId: currentState.value.appId,
-                                 follower: currentState.value.follower,
+                                 documentID: currentState.value!.documentID,
+                                 appId: currentState.value!.appId,
+                                 follower: currentState.value!.follower,
                                  followed: null,
           );
         yield SubmittableFollowingForm(value: newValue);
@@ -122,10 +118,10 @@ class FollowingFormBloc extends Bloc<FollowingFormEvent, FollowingFormState> {
 
   DocumentIDFollowingFormError error(String message, FollowingModel newValue) => DocumentIDFollowingFormError(message: message, value: newValue);
 
-  Future<FollowingFormState> _isDocumentIDValid(String value, FollowingModel newValue) async {
+  Future<FollowingFormState> _isDocumentIDValid(String? value, FollowingModel newValue) async {
     if (value == null) return Future.value(error("Provide value for documentID", newValue));
     if (value.length == 0) return Future.value(error("Provide value for documentID", newValue));
-    Future<FollowingModel> findDocument = followingRepository(appId: appId).get(value);
+    Future<FollowingModel?> findDocument = followingRepository(appId: appId)!.get(value);
     return await findDocument.then((documentFound) {
       if (documentFound == null) {
         return SubmittableFollowingForm(value: newValue);

@@ -36,56 +36,56 @@ import 'package:eliud_pkg_follow/model/entity_export.dart';
 class InviteDashboardCache implements InviteDashboardRepository {
 
   final InviteDashboardRepository reference;
-  final Map<String, InviteDashboardModel> fullCache = Map();
+  final Map<String?, InviteDashboardModel?> fullCache = Map();
 
   InviteDashboardCache(this.reference);
 
   Future<InviteDashboardModel> add(InviteDashboardModel value) {
     return reference.add(value).then((newValue) {
-      fullCache[value.documentID] = newValue;
+      fullCache[value!.documentID] = newValue;
       return newValue;
     });
   }
 
   Future<void> delete(InviteDashboardModel value){
-    fullCache.remove(value.documentID);
+    fullCache.remove(value!.documentID);
     reference.delete(value);
     return Future.value();
   }
 
-  Future<InviteDashboardModel> get(String id, {Function(Exception) onError}) {
-    InviteDashboardModel value = fullCache[id];
+  Future<InviteDashboardModel> get(String? id, {Function(Exception)? onError}) {
+    InviteDashboardModel? value = fullCache[id];
     if (value != null) return refreshRelations(value);
     return reference.get(id, onError: onError).then((value) {
       fullCache[id] = value;
-      return value;
+      return value!;
     });
   }
 
   Future<InviteDashboardModel> update(InviteDashboardModel value) {
     return reference.update(value).then((newValue) {
-      fullCache[value.documentID] = newValue;
+      fullCache[value!.documentID] = newValue;
       return newValue;
     });
   }
 
   @override
-  Stream<List<InviteDashboardModel>> values({String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery }) {
+  Stream<List<InviteDashboardModel?>> values({String? orderBy, bool? descending, Object? startAfter, int? limit, SetLastDoc? setLastDoc, int? privilegeLevel, EliudQuery? eliudQuery }) {
     return reference.values(orderBy: orderBy, descending: descending, startAfter: startAfter, limit: limit, setLastDoc: setLastDoc, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery);
   }
 
   @override
-  Stream<List<InviteDashboardModel>> valuesWithDetails({String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery }) {
+  Stream<List<InviteDashboardModel?>> valuesWithDetails({String? orderBy, bool? descending, Object? startAfter, int? limit, SetLastDoc? setLastDoc, int? privilegeLevel, EliudQuery? eliudQuery }) {
     return reference.valuesWithDetails(orderBy: orderBy, descending: descending, startAfter: startAfter, limit: limit, setLastDoc: setLastDoc, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery);
   }
 
   @override
-  Future<List<InviteDashboardModel>> valuesList({String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery }) async {
+  Future<List<InviteDashboardModel?>> valuesList({String? orderBy, bool? descending, Object? startAfter, int? limit, SetLastDoc? setLastDoc, int? privilegeLevel, EliudQuery? eliudQuery }) async {
     return await reference.valuesList(orderBy: orderBy, descending: descending, startAfter: startAfter, limit: limit, setLastDoc: setLastDoc, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery);
   }
   
   @override
-  Future<List<InviteDashboardModel>> valuesListWithDetails({String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery }) async {
+  Future<List<InviteDashboardModel?>> valuesListWithDetails({String? orderBy, bool? descending, Object? startAfter, int? limit, SetLastDoc? setLastDoc, int? privilegeLevel, EliudQuery? eliudQuery }) async {
     return await reference.valuesListWithDetails(orderBy: orderBy, descending: descending, startAfter: startAfter, limit: limit, setLastDoc: setLastDoc, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery);
   }
 
@@ -93,7 +93,7 @@ class InviteDashboardCache implements InviteDashboardRepository {
     fullCache.clear();
   }
   
-  String timeStampToString(dynamic timeStamp) {
+  String? timeStampToString(dynamic timeStamp) {
     return reference.timeStampToString(timeStamp);
   } 
 
@@ -104,7 +104,7 @@ class InviteDashboardCache implements InviteDashboardRepository {
   Future<InviteDashboardModel> changeValue(String documentId, String fieldName, num changeByThisValue) {
     return reference.changeValue(documentId, fieldName, changeByThisValue).then((newValue) {
       fullCache[documentId] = newValue;
-      return newValue;
+      return newValue!;
     });
   }
 
@@ -113,18 +113,18 @@ class InviteDashboardCache implements InviteDashboardRepository {
   }
 
   @override
-  StreamSubscription<List<InviteDashboardModel>> listen(trigger, {String orderBy, bool descending, Object startAfter, int limit, int privilegeLevel, EliudQuery eliudQuery}) {
+  StreamSubscription<List<InviteDashboardModel?>> listen(trigger, {String? orderBy, bool? descending, Object? startAfter, int? limit, int? privilegeLevel, EliudQuery? eliudQuery}) {
     return reference.listen(trigger, orderBy: orderBy, descending: descending, startAfter: startAfter, limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery);
   }
 
   @override
-  StreamSubscription<List<InviteDashboardModel>> listenWithDetails(trigger, {String orderBy, bool descending, Object startAfter, int limit, int privilegeLevel, EliudQuery eliudQuery}) {
+  StreamSubscription<List<InviteDashboardModel?>> listenWithDetails(trigger, {String? orderBy, bool? descending, Object? startAfter, int? limit, int? privilegeLevel, EliudQuery? eliudQuery}) {
     return reference.listenWithDetails(trigger, orderBy: orderBy, descending: descending, startAfter: startAfter, limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery);
   }
 
   @override
-  StreamSubscription<InviteDashboardModel> listenTo(String documentId, changed) {
-    reference.listenTo(documentId, changed);
+  StreamSubscription<InviteDashboardModel?> listenTo(String documentId, InviteDashboardChanged changed) {
+    return reference.listenTo(documentId, changed);
   }
 
   static Future<InviteDashboardModel> refreshRelations(InviteDashboardModel model) async {

@@ -25,7 +25,7 @@ import 'package:eliud_pkg_follow/model/follow_requests_dashboard_component_state
 
 abstract class AbstractFollowRequestsDashboardComponent extends StatelessWidget {
   static String componentName = "followRequestsDashboards";
-  final String followRequestsDashboardID;
+  final String? followRequestsDashboardID;
 
   AbstractFollowRequestsDashboardComponent({this.followRequestsDashboardID});
 
@@ -63,7 +63,7 @@ abstract class AbstractFollowRequestsDashboardComponent extends StatelessWidget 
     });
   }
 
-  Widget yourWidget(BuildContext context, FollowRequestsDashboardModel value);
+  Widget yourWidget(BuildContext context, FollowRequestsDashboardModel? value);
   Widget alertWidget({ title: String, content: String});
   FollowRequestsDashboardRepository getFollowRequestsDashboardRepository(BuildContext context);
 }

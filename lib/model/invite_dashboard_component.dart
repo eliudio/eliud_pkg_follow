@@ -25,7 +25,7 @@ import 'package:eliud_pkg_follow/model/invite_dashboard_component_state.dart';
 
 abstract class AbstractInviteDashboardComponent extends StatelessWidget {
   static String componentName = "inviteDashboards";
-  final String inviteDashboardID;
+  final String? inviteDashboardID;
 
   AbstractInviteDashboardComponent({this.inviteDashboardID});
 
@@ -63,7 +63,7 @@ abstract class AbstractInviteDashboardComponent extends StatelessWidget {
     });
   }
 
-  Widget yourWidget(BuildContext context, InviteDashboardModel value);
+  Widget yourWidget(BuildContext context, InviteDashboardModel? value);
   Widget alertWidget({ title: String, content: String});
   InviteDashboardRepository getInviteDashboardRepository(BuildContext context);
 }

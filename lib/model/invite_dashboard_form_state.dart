@@ -22,13 +22,13 @@ abstract class InviteDashboardFormState extends Equatable {
   const InviteDashboardFormState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 // Startup: menu has not been initialised yet and so we should show a "loading indicator" or something
 class InviteDashboardFormUninitialized extends InviteDashboardFormState {
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 
   @override
   String toString() {
@@ -38,22 +38,22 @@ class InviteDashboardFormUninitialized extends InviteDashboardFormState {
 
 // InviteDashboardModel has been initialised and hence InviteDashboardModel is available
 class InviteDashboardFormInitialized extends InviteDashboardFormState {
-  final InviteDashboardModel value;
+  final InviteDashboardModel? value;
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   const InviteDashboardFormInitialized({ this.value });
 }
 
 // Menu has been initialised and hence a menu is available
 abstract class InviteDashboardFormError extends InviteDashboardFormInitialized {
-  final String message;
+  final String? message;
 
   @override
-  List<Object> get props => [ message, value ];
+  List<Object?> get props => [ message, value ];
 
-  const InviteDashboardFormError({this.message, InviteDashboardModel value }) : super(value: value);
+  const InviteDashboardFormError({this.message, InviteDashboardModel? value }) : super(value: value);
 
   @override
   String toString() {
@@ -64,10 +64,10 @@ abstract class InviteDashboardFormError extends InviteDashboardFormInitialized {
   }
 }
 class DocumentIDInviteDashboardFormError extends InviteDashboardFormError { 
-  const DocumentIDInviteDashboardFormError({ String message, InviteDashboardModel value }): super(message: message, value: value);
+  const DocumentIDInviteDashboardFormError({ String? message, InviteDashboardModel? value }): super(message: message, value: value);
 
   @override
-  List<Object> get props => [ message, value ];
+  List<Object?> get props => [ message, value ];
 
   @override
   String toString() {
@@ -80,10 +80,10 @@ class DocumentIDInviteDashboardFormError extends InviteDashboardFormError {
 
 
 class AppIdInviteDashboardFormError extends InviteDashboardFormError { 
-  const AppIdInviteDashboardFormError({ String message, InviteDashboardModel value }): super(message: message, value: value);
+  const AppIdInviteDashboardFormError({ String? message, InviteDashboardModel? value }): super(message: message, value: value);
 
   @override
-  List<Object> get props => [ message, value ];
+  List<Object?> get props => [ message, value ];
 
   @override
   String toString() {
@@ -96,10 +96,10 @@ class AppIdInviteDashboardFormError extends InviteDashboardFormError {
 
 
 class DescriptionInviteDashboardFormError extends InviteDashboardFormError { 
-  const DescriptionInviteDashboardFormError({ String message, InviteDashboardModel value }): super(message: message, value: value);
+  const DescriptionInviteDashboardFormError({ String? message, InviteDashboardModel? value }): super(message: message, value: value);
 
   @override
-  List<Object> get props => [ message, value ];
+  List<Object?> get props => [ message, value ];
 
   @override
   String toString() {
@@ -112,10 +112,10 @@ class DescriptionInviteDashboardFormError extends InviteDashboardFormError {
 
 
 class ConditionsInviteDashboardFormError extends InviteDashboardFormError { 
-  const ConditionsInviteDashboardFormError({ String message, InviteDashboardModel value }): super(message: message, value: value);
+  const ConditionsInviteDashboardFormError({ String? message, InviteDashboardModel? value }): super(message: message, value: value);
 
   @override
-  List<Object> get props => [ message, value ];
+  List<Object?> get props => [ message, value ];
 
   @override
   String toString() {
@@ -128,10 +128,10 @@ class ConditionsInviteDashboardFormError extends InviteDashboardFormError {
 
 
 class InviteDashboardFormLoaded extends InviteDashboardFormInitialized { 
-  const InviteDashboardFormLoaded({ InviteDashboardModel value }): super(value: value);
+  const InviteDashboardFormLoaded({ InviteDashboardModel? value }): super(value: value);
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() {
@@ -143,10 +143,10 @@ class InviteDashboardFormLoaded extends InviteDashboardFormInitialized {
 
 
 class SubmittableInviteDashboardForm extends InviteDashboardFormInitialized { 
-  const SubmittableInviteDashboardForm({ InviteDashboardModel value }): super(value: value);
+  const SubmittableInviteDashboardForm({ InviteDashboardModel? value }): super(value: value);
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() {

@@ -21,7 +21,7 @@ abstract class InviteDashboardComponentEvent extends Equatable {
 }
 
 class FetchInviteDashboardComponent extends InviteDashboardComponentEvent {
-  final String id;
+  final String? id;
 
   FetchInviteDashboardComponent({ this.id });
 }

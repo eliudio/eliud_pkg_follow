@@ -25,7 +25,7 @@ import 'package:eliud_pkg_follow/model/follow_request_component_state.dart';
 
 abstract class AbstractFollowRequestComponent extends StatelessWidget {
   static String componentName = "followRequests";
-  final String followRequestID;
+  final String? followRequestID;
 
   AbstractFollowRequestComponent({this.followRequestID});
 
@@ -63,7 +63,7 @@ abstract class AbstractFollowRequestComponent extends StatelessWidget {
     });
   }
 
-  Widget yourWidget(BuildContext context, FollowRequestModel value);
+  Widget yourWidget(BuildContext context, FollowRequestModel? value);
   Widget alertWidget({ title: String, content: String});
   FollowRequestRepository getFollowRequestRepository(BuildContext context);
 }

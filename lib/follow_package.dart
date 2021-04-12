@@ -12,13 +12,12 @@ import 'package:eliud_core/package/package_with_subscription.dart';
 
 import 'model/component_registry.dart';
 import 'model/follow_request_model.dart';
-import 'package:eliud_pkg_workflow/tools/task/task_model.dart';
 import 'model/abstract_repository_singleton.dart';
 import 'model/repository_singleton.dart';
 
 abstract class FollowPackage extends PackageWithSubscription {
   static final String CONDITION_MEMBER_HAS_OPEN_REQUESTS = 'Has Open Follow Requests';
-  bool stateCONDITION_MEMBER_HAS_OPEN_REQUESTS = null;
+  bool? stateCONDITION_MEMBER_HAS_OPEN_REQUESTS = null;
 
   static EliudQuery getOpenFollowRequestsQuery(String appId, String assigneeId) {
     return EliudQuery(
@@ -30,22 +29,22 @@ abstract class FollowPackage extends PackageWithSubscription {
     );
   }
 
-  void _setState(bool newState, {MemberModel currentMember}) {
+  void _setState(bool newState, {MemberModel ?currentMember}) {
     if (newState != stateCONDITION_MEMBER_HAS_OPEN_REQUESTS) {
       stateCONDITION_MEMBER_HAS_OPEN_REQUESTS = newState;
       accessBloc.add(MemberUpdated(currentMember));
     }
   }
 
-  void resubscribe(AppModel app, MemberModel currentMember) {
-    String appId = app.documentID;
+  void resubscribe(AppModel? app, MemberModel? currentMember) {
+    String appId = app!.documentID!;
     if (currentMember != null) {
-      subscription = followRequestRepository(appId: appId).listen((list) {
+      subscription = followRequestRepository(appId: appId)!.listen((list) {
         // If we have a different set of assignments, i.e. it has assignments were before it didn't or vice versa,
         // then we must inform the AccessBloc, so that it can refresh the state
         _setState(list.length > 0, currentMember: currentMember);
       }, eliudQuery: getOpenFollowRequestsQuery(
-          appId, currentMember.documentID));
+          appId, currentMember!.documentID!));
     } else {
       _setState(false);
     }
@@ -58,7 +57,7 @@ abstract class FollowPackage extends PackageWithSubscription {
 
 
   @override
-  Future<bool> isConditionOk(String pluginCondition, AppModel app, MemberModel member, bool isOwner, bool isBlocked, PrivilegeLevel privilegeLevel) async {
+  Future<bool?> isConditionOk(String? pluginCondition, AppModel? app, MemberModel? member, bool? isOwner, bool? isBlocked, PrivilegeLevel? privilegeLevel) async {
     if (pluginCondition == CONDITION_MEMBER_HAS_OPEN_REQUESTS) {
       if (stateCONDITION_MEMBER_HAS_OPEN_REQUESTS == null) return false;
       return stateCONDITION_MEMBER_HAS_OPEN_REQUESTS;

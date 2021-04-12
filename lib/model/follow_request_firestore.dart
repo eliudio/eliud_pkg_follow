@@ -18,17 +18,13 @@ import 'package:eliud_pkg_follow/model/follow_request_repository.dart';
 
 import 'package:eliud_core/model/repository_export.dart';
 import 'package:eliud_core/model/abstract_repository_singleton.dart';
-import 'package:eliud_pkg_membership/model/repository_export.dart';
-import 'package:eliud_pkg_membership/model/abstract_repository_singleton.dart';
 import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/repository_export.dart';
 import 'package:eliud_core/model/model_export.dart';
-import 'package:eliud_pkg_membership/model/model_export.dart';
 import '../tools/bespoke_models.dart';
 import 'package:eliud_pkg_follow/model/model_export.dart';
 import 'package:eliud_core/model/entity_export.dart';
-import 'package:eliud_pkg_membership/model/entity_export.dart';
 import '../tools/bespoke_entities.dart';
 import 'package:eliud_pkg_follow/model/entity_export.dart';
 
@@ -52,50 +48,50 @@ class FollowRequestFirestore implements FollowRequestRepository {
     return FollowRequestCollection.doc(value.documentID).update(value.toEntity(appId: appId).toDocument()).then((_) => value);
   }
 
-  FollowRequestModel _populateDoc(DocumentSnapshot value) {
+  FollowRequestModel? _populateDoc(DocumentSnapshot value) {
     return FollowRequestModel.fromEntity(value.id, FollowRequestEntity.fromMap(value.data()));
   }
 
-  Future<FollowRequestModel> _populateDocPlus(DocumentSnapshot value) async {
+  Future<FollowRequestModel?> _populateDocPlus(DocumentSnapshot value) async {
     return FollowRequestModel.fromEntityPlus(value.id, FollowRequestEntity.fromMap(value.data()), appId: appId);  }
 
-  Future<FollowRequestModel> get(String id, {Function(Exception) onError}) {
-    return FollowRequestCollection.doc(id).get().then((doc) {
+  Future<FollowRequestModel?> get(String? id, {Function(Exception)? onError}) {
+    return FollowRequestCollection.doc(id).get().then((doc) async {
       if (doc.data() != null)
-        return _populateDocPlus(doc);
+        return await _populateDocPlus(doc);
       else
         return null;
     }).catchError((Object e) {
       if (onError != null) {
-        onError(e);
+        onError(e as Exception);
       }
     });
   }
 
-  StreamSubscription<List<FollowRequestModel>> listen(FollowRequestModelTrigger trigger, {String orderBy, bool descending, Object startAfter, int limit, int privilegeLevel, EliudQuery eliudQuery}) {
-    Stream<List<FollowRequestModel>> stream;
-//    stream = getQuery(FollowRequestCollection, orderBy: orderBy,  descending: descending,  startAfter: startAfter,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId).snapshots().map((data) {
+  StreamSubscription<List<FollowRequestModel?>> listen(FollowRequestModelTrigger trigger, {String? orderBy, bool? descending, Object? startAfter, int? limit, int? privilegeLevel, EliudQuery? eliudQuery}) {
+    Stream<List<FollowRequestModel?>> stream;
+//    stream = getQuery(FollowRequestCollection, orderBy: orderBy,  descending: descending,  startAfter: startAfter,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId)!.snapshots().map((data) {
 //    The above line is replaced by the below line. The reason is because the same collection can not be subscribed to twice
 //    The reason we're subscribing twice to the same list, is because the close on bloc isn't called. This needs to be fixed.
 //    See https://github.com/felangel/bloc/issues/2073.
 //    In the meantime:
-      stream = getQuery(appRepository().getSubCollection(appId, 'followrequest'), orderBy: orderBy,  descending: descending,  startAfter: startAfter,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId).snapshots().map((data) {
-      Iterable<FollowRequestModel> followRequests  = data.docs.map((doc) {
-        FollowRequestModel value = _populateDoc(doc);
+      stream = getQuery(appRepository()!.getSubCollection(appId, 'followrequest'), orderBy: orderBy,  descending: descending,  startAfter: startAfter as DocumentSnapshot?,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId)!.snapshots().map((data) {
+      Iterable<FollowRequestModel?> followRequests  = data.docs.map((doc) {
+        FollowRequestModel? value = _populateDoc(doc);
         return value;
       }).toList();
-      return followRequests;
+      return followRequests as List<FollowRequestModel?>;
     });
     return stream.listen((listOfFollowRequestModels) {
       trigger(listOfFollowRequestModels);
     });
   }
 
-  StreamSubscription<List<FollowRequestModel>> listenWithDetails(FollowRequestModelTrigger trigger, {String orderBy, bool descending, Object startAfter, int limit, int privilegeLevel, EliudQuery eliudQuery}) {
-    Stream<List<FollowRequestModel>> stream;
+  StreamSubscription<List<FollowRequestModel?>> listenWithDetails(FollowRequestModelTrigger trigger, {String? orderBy, bool? descending, Object? startAfter, int? limit, int? privilegeLevel, EliudQuery? eliudQuery}) {
+    Stream<List<FollowRequestModel?>> stream;
 //  stream = getQuery(FollowRequestCollection, orderBy: orderBy,  descending: descending,  startAfter: startAfter,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId).snapshots()
 //  see comment listen(...) above
-    stream = getQuery(appRepository().getSubCollection(appId, 'followrequest'), orderBy: orderBy,  descending: descending,  startAfter: startAfter,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId).snapshots()
+    stream = getQuery(appRepository()!.getSubCollection(appId, 'followrequest'), orderBy: orderBy,  descending: descending,  startAfter: startAfter as DocumentSnapshot?,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId)!.snapshots()
         .asyncMap((data) async {
       return await Future.wait(data.docs.map((doc) =>  _populateDocPlus(doc)).toList());
     });
@@ -106,7 +102,7 @@ class FollowRequestFirestore implements FollowRequestRepository {
   }
 
   @override
-  StreamSubscription<FollowRequestModel> listenTo(String documentId, FollowRequestChanged changed) {
+  StreamSubscription<FollowRequestModel?> listenTo(String documentId, FollowRequestChanged changed) {
     var stream = FollowRequestCollection.doc(documentId)
         .snapshots()
         .asyncMap((data) {
@@ -117,9 +113,9 @@ class FollowRequestFirestore implements FollowRequestRepository {
     });
   }
 
-  Stream<List<FollowRequestModel>> values({String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery }) {
-    DocumentSnapshot lastDoc;
-    Stream<List<FollowRequestModel>> _values = getQuery(FollowRequestCollection, orderBy: orderBy,  descending: descending,  startAfter: startAfter, limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId).snapshots().map((snapshot) {
+  Stream<List<FollowRequestModel?>> values({String? orderBy, bool? descending, Object? startAfter, int? limit, SetLastDoc? setLastDoc, int? privilegeLevel, EliudQuery? eliudQuery }) {
+    DocumentSnapshot? lastDoc;
+    Stream<List<FollowRequestModel?>> _values = getQuery(FollowRequestCollection, orderBy: orderBy,  descending: descending,  startAfter: startAfter as DocumentSnapshot?, limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId)!.snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
         lastDoc = doc;
         return _populateDoc(doc);
@@ -128,9 +124,9 @@ class FollowRequestFirestore implements FollowRequestRepository {
     return _values;
   }
 
-  Stream<List<FollowRequestModel>> valuesWithDetails({String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery }) {
-    DocumentSnapshot lastDoc;
-    Stream<List<FollowRequestModel>> _values = getQuery(FollowRequestCollection, orderBy: orderBy,  descending: descending,  startAfter: startAfter, limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId).snapshots().asyncMap((snapshot) {
+  Stream<List<FollowRequestModel?>> valuesWithDetails({String? orderBy, bool? descending, Object? startAfter, int? limit, SetLastDoc? setLastDoc, int? privilegeLevel, EliudQuery? eliudQuery }) {
+    DocumentSnapshot? lastDoc;
+    Stream<List<FollowRequestModel?>> _values = getQuery(FollowRequestCollection, orderBy: orderBy,  descending: descending,  startAfter: startAfter as DocumentSnapshot?, limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId)!.snapshots().asyncMap((snapshot) {
       return Future.wait(snapshot.docs.map((doc) {
         lastDoc = doc;
         return _populateDocPlus(doc);
@@ -140,9 +136,9 @@ class FollowRequestFirestore implements FollowRequestRepository {
     return _values;
   }
 
-  Future<List<FollowRequestModel>> valuesList({String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery }) async {
-    DocumentSnapshot lastDoc;
-    List<FollowRequestModel> _values = await getQuery(FollowRequestCollection, orderBy: orderBy,  descending: descending,  startAfter: startAfter,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId).get().then((value) {
+  Future<List<FollowRequestModel?>> valuesList({String? orderBy, bool? descending, Object? startAfter, int? limit, SetLastDoc? setLastDoc, int? privilegeLevel, EliudQuery? eliudQuery }) async {
+    DocumentSnapshot? lastDoc;
+    List<FollowRequestModel?> _values = await getQuery(FollowRequestCollection, orderBy: orderBy,  descending: descending,  startAfter: startAfter as DocumentSnapshot?,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId)!.get().then((value) {
       var list = value.docs;
       return list.map((doc) { 
         lastDoc = doc;
@@ -153,9 +149,9 @@ class FollowRequestFirestore implements FollowRequestRepository {
     return _values;
   }
 
-  Future<List<FollowRequestModel>> valuesListWithDetails({String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery }) async {
-    DocumentSnapshot lastDoc;
-    List<FollowRequestModel> _values = await getQuery(FollowRequestCollection, orderBy: orderBy,  descending: descending,  startAfter: startAfter,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId).get().then((value) {
+  Future<List<FollowRequestModel?>> valuesListWithDetails({String? orderBy, bool? descending, Object? startAfter, int? limit, SetLastDoc? setLastDoc, int? privilegeLevel, EliudQuery? eliudQuery }) async {
+    DocumentSnapshot? lastDoc;
+    List<FollowRequestModel?> _values = await getQuery(FollowRequestCollection, orderBy: orderBy,  descending: descending,  startAfter: startAfter as DocumentSnapshot?,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId)!.get().then((value) {
       var list = value.docs;
       return Future.wait(list.map((doc) {
         lastDoc = doc;
@@ -180,11 +176,11 @@ class FollowRequestFirestore implements FollowRequestRepository {
     return FollowRequestCollection.doc(documentId).collection(name);
   }
 
-  String timeStampToString(dynamic timeStamp) {
+  String? timeStampToString(dynamic timeStamp) {
     return firestoreTimeStampToString(timeStamp);
   } 
 
-  Future<FollowRequestModel> changeValue(String documentId, String fieldName, num changeByThisValue) {
+  Future<FollowRequestModel?> changeValue(String documentId, String fieldName, num changeByThisValue) {
     var change = FieldValue.increment(changeByThisValue);
     return FollowRequestCollection.doc(documentId).update({fieldName: change}).then((v) => get(documentId));
   }

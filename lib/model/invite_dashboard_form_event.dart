@@ -34,7 +34,7 @@ abstract class InviteDashboardFormEvent extends Equatable {
   const InviteDashboardFormEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class InitialiseNewInviteDashboardFormEvent extends InviteDashboardFormEvent {
@@ -42,66 +42,66 @@ class InitialiseNewInviteDashboardFormEvent extends InviteDashboardFormEvent {
 
 
 class InitialiseInviteDashboardFormEvent extends InviteDashboardFormEvent {
-  final InviteDashboardModel value;
+  final InviteDashboardModel? value;
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   InitialiseInviteDashboardFormEvent({this.value});
 }
 
 class InitialiseInviteDashboardFormNoLoadEvent extends InviteDashboardFormEvent {
-  final InviteDashboardModel value;
+  final InviteDashboardModel? value;
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   InitialiseInviteDashboardFormNoLoadEvent({this.value});
 }
 
 class ChangedInviteDashboardDocumentID extends InviteDashboardFormEvent {
-  final String value;
+  final String? value;
 
   ChangedInviteDashboardDocumentID({this.value});
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() => 'ChangedInviteDashboardDocumentID{ value: $value }';
 }
 
 class ChangedInviteDashboardAppId extends InviteDashboardFormEvent {
-  final String value;
+  final String? value;
 
   ChangedInviteDashboardAppId({this.value});
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() => 'ChangedInviteDashboardAppId{ value: $value }';
 }
 
 class ChangedInviteDashboardDescription extends InviteDashboardFormEvent {
-  final String value;
+  final String? value;
 
   ChangedInviteDashboardDescription({this.value});
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() => 'ChangedInviteDashboardDescription{ value: $value }';
 }
 
 class ChangedInviteDashboardConditions extends InviteDashboardFormEvent {
-  final ConditionsSimpleModel value;
+  final ConditionsSimpleModel? value;
 
   ChangedInviteDashboardConditions({this.value});
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() => 'ChangedInviteDashboardConditions{ value: $value }';

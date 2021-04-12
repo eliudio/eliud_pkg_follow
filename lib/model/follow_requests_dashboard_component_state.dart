@@ -20,13 +20,13 @@ abstract class FollowRequestsDashboardComponentState extends Equatable {
   const FollowRequestsDashboardComponentState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class FollowRequestsDashboardComponentUninitialized extends FollowRequestsDashboardComponentState {}
 
 class FollowRequestsDashboardComponentError extends FollowRequestsDashboardComponentState {
-  final String message;
+  final String? message;
   FollowRequestsDashboardComponentError({ this.message });
 }
 
@@ -35,16 +35,16 @@ class FollowRequestsDashboardComponentPermissionDenied extends FollowRequestsDas
 }
 
 class FollowRequestsDashboardComponentLoaded extends FollowRequestsDashboardComponentState {
-  final FollowRequestsDashboardModel value;
+  final FollowRequestsDashboardModel? value;
 
   const FollowRequestsDashboardComponentLoaded({ this.value });
 
-  FollowRequestsDashboardComponentLoaded copyWith({ FollowRequestsDashboardModel copyThis }) {
+  FollowRequestsDashboardComponentLoaded copyWith({ FollowRequestsDashboardModel? copyThis }) {
     return FollowRequestsDashboardComponentLoaded(value: copyThis ?? this.value);
   }
 
   @override
-  List<Object> get props => [value];
+  List<Object?> get props => [value];
 
   @override
   String toString() => 'FollowRequestsDashboardComponentLoaded { value: $value }';

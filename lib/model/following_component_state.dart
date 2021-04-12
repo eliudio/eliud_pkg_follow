@@ -20,13 +20,13 @@ abstract class FollowingComponentState extends Equatable {
   const FollowingComponentState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class FollowingComponentUninitialized extends FollowingComponentState {}
 
 class FollowingComponentError extends FollowingComponentState {
-  final String message;
+  final String? message;
   FollowingComponentError({ this.message });
 }
 
@@ -35,16 +35,16 @@ class FollowingComponentPermissionDenied extends FollowingComponentState {
 }
 
 class FollowingComponentLoaded extends FollowingComponentState {
-  final FollowingModel value;
+  final FollowingModel? value;
 
   const FollowingComponentLoaded({ this.value });
 
-  FollowingComponentLoaded copyWith({ FollowingModel copyThis }) {
+  FollowingComponentLoaded copyWith({ FollowingModel? copyThis }) {
     return FollowingComponentLoaded(value: copyThis ?? this.value);
   }
 
   @override
-  List<Object> get props => [value];
+  List<Object?> get props => [value];
 
   @override
   String toString() => 'FollowingComponentLoaded { value: $value }';

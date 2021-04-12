@@ -27,53 +27,59 @@ const _inviteDashboardLimit = 5;
 
 class InviteDashboardListBloc extends Bloc<InviteDashboardListEvent, InviteDashboardListState> {
   final InviteDashboardRepository _inviteDashboardRepository;
-  StreamSubscription _inviteDashboardsListSubscription;
-  final EliudQuery eliudQuery;
+  StreamSubscription? _inviteDashboardsListSubscription;
+  final EliudQuery? eliudQuery;
   int pages = 1;
-  final bool paged;
-  final String orderBy;
-  final bool descending;
-  final bool detailed;
+  final bool? paged;
+  final String? orderBy;
+  final bool? descending;
+  final bool? detailed;
 
-  InviteDashboardListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, @required InviteDashboardRepository inviteDashboardRepository})
+  InviteDashboardListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required InviteDashboardRepository inviteDashboardRepository})
       : assert(inviteDashboardRepository != null),
         _inviteDashboardRepository = inviteDashboardRepository,
         super(InviteDashboardListLoading());
 
   Stream<InviteDashboardListState> _mapLoadInviteDashboardListToState() async* {
-    int amountNow =  (state is InviteDashboardListLoaded) ? (state as InviteDashboardListLoaded).values.length : 0;
+    int amountNow =  (state is InviteDashboardListLoaded) ? (state as InviteDashboardListLoaded).values!.length : 0;
     _inviteDashboardsListSubscription?.cancel();
     _inviteDashboardsListSubscription = _inviteDashboardRepository.listen(
           (list) => add(InviteDashboardListUpdated(value: list, mightHaveMore: amountNow != list.length)),
       orderBy: orderBy,
       descending: descending,
       eliudQuery: eliudQuery,
-      limit: ((paged != null) && (paged)) ? pages * _inviteDashboardLimit : null
+      limit: ((paged != null) && paged!) ? pages * _inviteDashboardLimit : null
     );
   }
 
   Stream<InviteDashboardListState> _mapLoadInviteDashboardListWithDetailsToState() async* {
-    int amountNow =  (state is InviteDashboardListLoaded) ? (state as InviteDashboardListLoaded).values.length : 0;
+    int amountNow =  (state is InviteDashboardListLoaded) ? (state as InviteDashboardListLoaded).values!.length : 0;
     _inviteDashboardsListSubscription?.cancel();
     _inviteDashboardsListSubscription = _inviteDashboardRepository.listenWithDetails(
             (list) => add(InviteDashboardListUpdated(value: list, mightHaveMore: amountNow != list.length)),
         orderBy: orderBy,
         descending: descending,
         eliudQuery: eliudQuery,
-        limit: ((paged != null) && (paged)) ? pages * _inviteDashboardLimit : null
+        limit: ((paged != null) && paged!) ? pages * _inviteDashboardLimit : null
     );
   }
 
   Stream<InviteDashboardListState> _mapAddInviteDashboardListToState(AddInviteDashboardList event) async* {
-    _inviteDashboardRepository.add(event.value);
+    var value = event.value;
+    if (value != null) 
+      _inviteDashboardRepository.add(value);
   }
 
   Stream<InviteDashboardListState> _mapUpdateInviteDashboardListToState(UpdateInviteDashboardList event) async* {
-    _inviteDashboardRepository.update(event.value);
+    var value = event.value;
+    if (value != null) 
+      _inviteDashboardRepository.update(value);
   }
 
   Stream<InviteDashboardListState> _mapDeleteInviteDashboardListToState(DeleteInviteDashboardList event) async* {
-    _inviteDashboardRepository.delete(event.value);
+    var value = event.value;
+    if (value != null) 
+      _inviteDashboardRepository.delete(value);
   }
 
   Stream<InviteDashboardListState> _mapInviteDashboardListUpdatedToState(
@@ -84,7 +90,7 @@ class InviteDashboardListBloc extends Bloc<InviteDashboardListEvent, InviteDashb
   @override
   Stream<InviteDashboardListState> mapEventToState(InviteDashboardListEvent event) async* {
     if (event is LoadInviteDashboardList) {
-      if ((detailed == null) || (!detailed)) {
+      if ((detailed == null) || (!detailed!)) {
         yield* _mapLoadInviteDashboardListToState();
       } else {
         yield* _mapLoadInviteDashboardListWithDetailsToState();

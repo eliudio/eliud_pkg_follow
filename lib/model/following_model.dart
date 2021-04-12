@@ -18,17 +18,13 @@ import 'package:eliud_core/tools/common_tools.dart';
 
 import 'package:eliud_core/model/repository_export.dart';
 import 'package:eliud_core/model/abstract_repository_singleton.dart';
-import 'package:eliud_pkg_membership/model/repository_export.dart';
-import 'package:eliud_pkg_membership/model/abstract_repository_singleton.dart';
 import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/repository_export.dart';
 import 'package:eliud_core/model/model_export.dart';
-import 'package:eliud_pkg_membership/model/model_export.dart';
 import '../tools/bespoke_models.dart';
 import 'package:eliud_pkg_follow/model/model_export.dart';
 import 'package:eliud_core/model/entity_export.dart';
-import 'package:eliud_pkg_membership/model/entity_export.dart';
 import '../tools/bespoke_entities.dart';
 import 'package:eliud_pkg_follow/model/entity_export.dart';
 
@@ -42,18 +38,18 @@ import 'package:eliud_core/tools/random.dart';
 class FollowingModel {
 
   // Member response ID - Member request ID
-  String documentID;
+  String? documentID;
 
   // This is the identifier of the app to which this belongs
-  String appId;
-  MemberPublicInfoModel follower;
-  MemberPublicInfoModel followed;
+  String? appId;
+  MemberPublicInfoModel? follower;
+  MemberPublicInfoModel? followed;
 
   FollowingModel({this.documentID, this.appId, this.follower, this.followed, })  {
     assert(documentID != null);
   }
 
-  FollowingModel copyWith({String documentID, String appId, MemberPublicInfoModel follower, MemberPublicInfoModel followed, }) {
+  FollowingModel copyWith({String? documentID, String? appId, MemberPublicInfoModel? follower, MemberPublicInfoModel? followed, }) {
     return FollowingModel(documentID: documentID ?? this.documentID, appId: appId ?? this.appId, follower: follower ?? this.follower, followed: followed ?? this.followed, );
   }
 
@@ -75,15 +71,15 @@ class FollowingModel {
     return 'FollowingModel{documentID: $documentID, appId: $appId, follower: $follower, followed: $followed}';
   }
 
-  FollowingEntity toEntity({String appId}) {
+  FollowingEntity toEntity({String? appId}) {
     return FollowingEntity(
           appId: (appId != null) ? appId : null, 
-          followerId: (follower != null) ? follower.documentID : null, 
-          followedId: (followed != null) ? followed.documentID : null, 
+          followerId: (follower != null) ? follower!.documentID : null, 
+          followedId: (followed != null) ? followed!.documentID : null, 
     );
   }
 
-  static FollowingModel fromEntity(String documentID, FollowingEntity entity) {
+  static FollowingModel? fromEntity(String documentID, FollowingEntity? entity) {
     if (entity == null) return null;
     return FollowingModel(
           documentID: documentID, 
@@ -91,22 +87,22 @@ class FollowingModel {
     );
   }
 
-  static Future<FollowingModel> fromEntityPlus(String documentID, FollowingEntity entity, { String appId}) async {
+  static Future<FollowingModel?> fromEntityPlus(String documentID, FollowingEntity? entity, { String? appId}) async {
     if (entity == null) return null;
 
-    MemberPublicInfoModel followerHolder;
+    MemberPublicInfoModel? followerHolder;
     if (entity.followerId != null) {
       try {
-        await memberPublicInfoRepository(appId: appId).get(entity.followerId).then((val) {
+        await memberPublicInfoRepository(appId: appId)!.get(entity.followerId).then((val) {
           followerHolder = val;
         }).catchError((error) {});
       } catch (_) {}
     }
 
-    MemberPublicInfoModel followedHolder;
+    MemberPublicInfoModel? followedHolder;
     if (entity.followedId != null) {
       try {
-        await memberPublicInfoRepository(appId: appId).get(entity.followedId).then((val) {
+        await memberPublicInfoRepository(appId: appId)!.get(entity.followedId).then((val) {
           followedHolder = val;
         }).catchError((error) {});
       } catch (_) {}

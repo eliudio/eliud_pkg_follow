@@ -48,50 +48,50 @@ class FollowRequestsDashboardFirestore implements FollowRequestsDashboardReposit
     return FollowRequestsDashboardCollection.doc(value.documentID).update(value.toEntity(appId: appId).toDocument()).then((_) => value);
   }
 
-  FollowRequestsDashboardModel _populateDoc(DocumentSnapshot value) {
+  FollowRequestsDashboardModel? _populateDoc(DocumentSnapshot value) {
     return FollowRequestsDashboardModel.fromEntity(value.id, FollowRequestsDashboardEntity.fromMap(value.data()));
   }
 
-  Future<FollowRequestsDashboardModel> _populateDocPlus(DocumentSnapshot value) async {
+  Future<FollowRequestsDashboardModel?> _populateDocPlus(DocumentSnapshot value) async {
     return FollowRequestsDashboardModel.fromEntityPlus(value.id, FollowRequestsDashboardEntity.fromMap(value.data()), appId: appId);  }
 
-  Future<FollowRequestsDashboardModel> get(String id, {Function(Exception) onError}) {
-    return FollowRequestsDashboardCollection.doc(id).get().then((doc) {
+  Future<FollowRequestsDashboardModel?> get(String? id, {Function(Exception)? onError}) {
+    return FollowRequestsDashboardCollection.doc(id).get().then((doc) async {
       if (doc.data() != null)
-        return _populateDocPlus(doc);
+        return await _populateDocPlus(doc);
       else
         return null;
     }).catchError((Object e) {
       if (onError != null) {
-        onError(e);
+        onError(e as Exception);
       }
     });
   }
 
-  StreamSubscription<List<FollowRequestsDashboardModel>> listen(FollowRequestsDashboardModelTrigger trigger, {String orderBy, bool descending, Object startAfter, int limit, int privilegeLevel, EliudQuery eliudQuery}) {
-    Stream<List<FollowRequestsDashboardModel>> stream;
-//    stream = getQuery(FollowRequestsDashboardCollection, orderBy: orderBy,  descending: descending,  startAfter: startAfter,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId).snapshots().map((data) {
+  StreamSubscription<List<FollowRequestsDashboardModel?>> listen(FollowRequestsDashboardModelTrigger trigger, {String? orderBy, bool? descending, Object? startAfter, int? limit, int? privilegeLevel, EliudQuery? eliudQuery}) {
+    Stream<List<FollowRequestsDashboardModel?>> stream;
+//    stream = getQuery(FollowRequestsDashboardCollection, orderBy: orderBy,  descending: descending,  startAfter: startAfter,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId)!.snapshots().map((data) {
 //    The above line is replaced by the below line. The reason is because the same collection can not be subscribed to twice
 //    The reason we're subscribing twice to the same list, is because the close on bloc isn't called. This needs to be fixed.
 //    See https://github.com/felangel/bloc/issues/2073.
 //    In the meantime:
-      stream = getQuery(appRepository().getSubCollection(appId, 'followrequestsdashboard'), orderBy: orderBy,  descending: descending,  startAfter: startAfter,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId).snapshots().map((data) {
-      Iterable<FollowRequestsDashboardModel> followRequestsDashboards  = data.docs.map((doc) {
-        FollowRequestsDashboardModel value = _populateDoc(doc);
+      stream = getQuery(appRepository()!.getSubCollection(appId, 'followrequestsdashboard'), orderBy: orderBy,  descending: descending,  startAfter: startAfter as DocumentSnapshot?,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId)!.snapshots().map((data) {
+      Iterable<FollowRequestsDashboardModel?> followRequestsDashboards  = data.docs.map((doc) {
+        FollowRequestsDashboardModel? value = _populateDoc(doc);
         return value;
       }).toList();
-      return followRequestsDashboards;
+      return followRequestsDashboards as List<FollowRequestsDashboardModel?>;
     });
     return stream.listen((listOfFollowRequestsDashboardModels) {
       trigger(listOfFollowRequestsDashboardModels);
     });
   }
 
-  StreamSubscription<List<FollowRequestsDashboardModel>> listenWithDetails(FollowRequestsDashboardModelTrigger trigger, {String orderBy, bool descending, Object startAfter, int limit, int privilegeLevel, EliudQuery eliudQuery}) {
-    Stream<List<FollowRequestsDashboardModel>> stream;
+  StreamSubscription<List<FollowRequestsDashboardModel?>> listenWithDetails(FollowRequestsDashboardModelTrigger trigger, {String? orderBy, bool? descending, Object? startAfter, int? limit, int? privilegeLevel, EliudQuery? eliudQuery}) {
+    Stream<List<FollowRequestsDashboardModel?>> stream;
 //  stream = getQuery(FollowRequestsDashboardCollection, orderBy: orderBy,  descending: descending,  startAfter: startAfter,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId).snapshots()
 //  see comment listen(...) above
-    stream = getQuery(appRepository().getSubCollection(appId, 'followrequestsdashboard'), orderBy: orderBy,  descending: descending,  startAfter: startAfter,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId).snapshots()
+    stream = getQuery(appRepository()!.getSubCollection(appId, 'followrequestsdashboard'), orderBy: orderBy,  descending: descending,  startAfter: startAfter as DocumentSnapshot?,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId)!.snapshots()
         .asyncMap((data) async {
       return await Future.wait(data.docs.map((doc) =>  _populateDocPlus(doc)).toList());
     });
@@ -102,7 +102,7 @@ class FollowRequestsDashboardFirestore implements FollowRequestsDashboardReposit
   }
 
   @override
-  StreamSubscription<FollowRequestsDashboardModel> listenTo(String documentId, FollowRequestsDashboardChanged changed) {
+  StreamSubscription<FollowRequestsDashboardModel?> listenTo(String documentId, FollowRequestsDashboardChanged changed) {
     var stream = FollowRequestsDashboardCollection.doc(documentId)
         .snapshots()
         .asyncMap((data) {
@@ -113,9 +113,9 @@ class FollowRequestsDashboardFirestore implements FollowRequestsDashboardReposit
     });
   }
 
-  Stream<List<FollowRequestsDashboardModel>> values({String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery }) {
-    DocumentSnapshot lastDoc;
-    Stream<List<FollowRequestsDashboardModel>> _values = getQuery(FollowRequestsDashboardCollection, orderBy: orderBy,  descending: descending,  startAfter: startAfter, limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId).snapshots().map((snapshot) {
+  Stream<List<FollowRequestsDashboardModel?>> values({String? orderBy, bool? descending, Object? startAfter, int? limit, SetLastDoc? setLastDoc, int? privilegeLevel, EliudQuery? eliudQuery }) {
+    DocumentSnapshot? lastDoc;
+    Stream<List<FollowRequestsDashboardModel?>> _values = getQuery(FollowRequestsDashboardCollection, orderBy: orderBy,  descending: descending,  startAfter: startAfter as DocumentSnapshot?, limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId)!.snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
         lastDoc = doc;
         return _populateDoc(doc);
@@ -124,9 +124,9 @@ class FollowRequestsDashboardFirestore implements FollowRequestsDashboardReposit
     return _values;
   }
 
-  Stream<List<FollowRequestsDashboardModel>> valuesWithDetails({String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery }) {
-    DocumentSnapshot lastDoc;
-    Stream<List<FollowRequestsDashboardModel>> _values = getQuery(FollowRequestsDashboardCollection, orderBy: orderBy,  descending: descending,  startAfter: startAfter, limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId).snapshots().asyncMap((snapshot) {
+  Stream<List<FollowRequestsDashboardModel?>> valuesWithDetails({String? orderBy, bool? descending, Object? startAfter, int? limit, SetLastDoc? setLastDoc, int? privilegeLevel, EliudQuery? eliudQuery }) {
+    DocumentSnapshot? lastDoc;
+    Stream<List<FollowRequestsDashboardModel?>> _values = getQuery(FollowRequestsDashboardCollection, orderBy: orderBy,  descending: descending,  startAfter: startAfter as DocumentSnapshot?, limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId)!.snapshots().asyncMap((snapshot) {
       return Future.wait(snapshot.docs.map((doc) {
         lastDoc = doc;
         return _populateDocPlus(doc);
@@ -136,9 +136,9 @@ class FollowRequestsDashboardFirestore implements FollowRequestsDashboardReposit
     return _values;
   }
 
-  Future<List<FollowRequestsDashboardModel>> valuesList({String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery }) async {
-    DocumentSnapshot lastDoc;
-    List<FollowRequestsDashboardModel> _values = await getQuery(FollowRequestsDashboardCollection, orderBy: orderBy,  descending: descending,  startAfter: startAfter,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId).get().then((value) {
+  Future<List<FollowRequestsDashboardModel?>> valuesList({String? orderBy, bool? descending, Object? startAfter, int? limit, SetLastDoc? setLastDoc, int? privilegeLevel, EliudQuery? eliudQuery }) async {
+    DocumentSnapshot? lastDoc;
+    List<FollowRequestsDashboardModel?> _values = await getQuery(FollowRequestsDashboardCollection, orderBy: orderBy,  descending: descending,  startAfter: startAfter as DocumentSnapshot?,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId)!.get().then((value) {
       var list = value.docs;
       return list.map((doc) { 
         lastDoc = doc;
@@ -149,9 +149,9 @@ class FollowRequestsDashboardFirestore implements FollowRequestsDashboardReposit
     return _values;
   }
 
-  Future<List<FollowRequestsDashboardModel>> valuesListWithDetails({String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery }) async {
-    DocumentSnapshot lastDoc;
-    List<FollowRequestsDashboardModel> _values = await getQuery(FollowRequestsDashboardCollection, orderBy: orderBy,  descending: descending,  startAfter: startAfter,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId).get().then((value) {
+  Future<List<FollowRequestsDashboardModel?>> valuesListWithDetails({String? orderBy, bool? descending, Object? startAfter, int? limit, SetLastDoc? setLastDoc, int? privilegeLevel, EliudQuery? eliudQuery }) async {
+    DocumentSnapshot? lastDoc;
+    List<FollowRequestsDashboardModel?> _values = await getQuery(FollowRequestsDashboardCollection, orderBy: orderBy,  descending: descending,  startAfter: startAfter as DocumentSnapshot?,  limit: limit, privilegeLevel: privilegeLevel, eliudQuery: eliudQuery, appId: appId)!.get().then((value) {
       var list = value.docs;
       return Future.wait(list.map((doc) {
         lastDoc = doc;
@@ -176,11 +176,11 @@ class FollowRequestsDashboardFirestore implements FollowRequestsDashboardReposit
     return FollowRequestsDashboardCollection.doc(documentId).collection(name);
   }
 
-  String timeStampToString(dynamic timeStamp) {
+  String? timeStampToString(dynamic timeStamp) {
     return firestoreTimeStampToString(timeStamp);
   } 
 
-  Future<FollowRequestsDashboardModel> changeValue(String documentId, String fieldName, num changeByThisValue) {
+  Future<FollowRequestsDashboardModel?> changeValue(String documentId, String fieldName, num changeByThisValue) {
     var change = FieldValue.increment(changeByThisValue);
     return FollowRequestsDashboardCollection.doc(documentId).update({fieldName: change}).then((v) => get(documentId));
   }

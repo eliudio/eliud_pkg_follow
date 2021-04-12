@@ -33,29 +33,29 @@ import 'dart:async';
 import 'package:eliud_core/tools/query/query_tools.dart';
 import 'package:eliud_core/tools/common_tools.dart';
 
-typedef FollowRequestsDashboardModelTrigger(List<FollowRequestsDashboardModel> list);
-typedef FollowRequestsDashboardChanged(FollowRequestsDashboardModel value);
+typedef FollowRequestsDashboardModelTrigger(List<FollowRequestsDashboardModel?> list);
+typedef FollowRequestsDashboardChanged(FollowRequestsDashboardModel? value);
 
 abstract class FollowRequestsDashboardRepository {
   Future<FollowRequestsDashboardModel> add(FollowRequestsDashboardModel value);
   Future<void> delete(FollowRequestsDashboardModel value);
-  Future<FollowRequestsDashboardModel> get(String id, { Function(Exception) onError });
+  Future<FollowRequestsDashboardModel?> get(String? id, { Function(Exception)? onError });
   Future<FollowRequestsDashboardModel> update(FollowRequestsDashboardModel value);
 
-  Stream<List<FollowRequestsDashboardModel>> values({String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery });
-  Stream<List<FollowRequestsDashboardModel>> valuesWithDetails({String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery });
-  Future<List<FollowRequestsDashboardModel>> valuesList({String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery });
-  Future<List<FollowRequestsDashboardModel>> valuesListWithDetails({String orderBy, bool descending, Object startAfter, int limit, SetLastDoc setLastDoc, int privilegeLevel, EliudQuery eliudQuery });
+  Stream<List<FollowRequestsDashboardModel?>> values({String? orderBy, bool? descending, Object? startAfter, int? limit, SetLastDoc? setLastDoc, int? privilegeLevel, EliudQuery? eliudQuery });
+  Stream<List<FollowRequestsDashboardModel?>> valuesWithDetails({String? orderBy, bool? descending, Object? startAfter, int? limit, SetLastDoc? setLastDoc, int? privilegeLevel, EliudQuery? eliudQuery });
+  Future<List<FollowRequestsDashboardModel?>> valuesList({String? orderBy, bool? descending, Object? startAfter, int? limit, SetLastDoc? setLastDoc, int? privilegeLevel, EliudQuery? eliudQuery });
+  Future<List<FollowRequestsDashboardModel?>> valuesListWithDetails({String? orderBy, bool? descending, Object? startAfter, int? limit, SetLastDoc? setLastDoc, int? privilegeLevel, EliudQuery? eliudQuery });
 
-  StreamSubscription<List<FollowRequestsDashboardModel>> listen(FollowRequestsDashboardModelTrigger trigger, {String orderBy, bool descending, Object startAfter, int limit, int privilegeLevel, EliudQuery eliudQuery });
-  StreamSubscription<List<FollowRequestsDashboardModel>> listenWithDetails(FollowRequestsDashboardModelTrigger trigger, {String orderBy, bool descending, Object startAfter, int limit, int privilegeLevel, EliudQuery eliudQuery });
-  StreamSubscription<FollowRequestsDashboardModel> listenTo(String documentId, FollowRequestsDashboardChanged changed);
+  StreamSubscription<List<FollowRequestsDashboardModel?>> listen(FollowRequestsDashboardModelTrigger trigger, {String? orderBy, bool? descending, Object? startAfter, int? limit, int? privilegeLevel, EliudQuery? eliudQuery });
+  StreamSubscription<List<FollowRequestsDashboardModel?>> listenWithDetails(FollowRequestsDashboardModelTrigger trigger, {String? orderBy, bool? descending, Object? startAfter, int? limit, int? privilegeLevel, EliudQuery? eliudQuery });
+  StreamSubscription<FollowRequestsDashboardModel?> listenTo(String documentId, FollowRequestsDashboardChanged changed);
   void flush();
   
-  String timeStampToString(dynamic timeStamp);
+  String? timeStampToString(dynamic timeStamp);
 
   dynamic getSubCollection(String documentId, String name);
-  Future<FollowRequestsDashboardModel> changeValue(String documentId, String fieldName, num changeByThisValue);
+  Future<FollowRequestsDashboardModel?> changeValue(String documentId, String fieldName, num changeByThisValue);
 
   Future<void> deleteAll();
 }

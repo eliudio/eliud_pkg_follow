@@ -34,7 +34,7 @@ abstract class FollowRequestsDashboardFormEvent extends Equatable {
   const FollowRequestsDashboardFormEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class InitialiseNewFollowRequestsDashboardFormEvent extends FollowRequestsDashboardFormEvent {
@@ -42,66 +42,66 @@ class InitialiseNewFollowRequestsDashboardFormEvent extends FollowRequestsDashbo
 
 
 class InitialiseFollowRequestsDashboardFormEvent extends FollowRequestsDashboardFormEvent {
-  final FollowRequestsDashboardModel value;
+  final FollowRequestsDashboardModel? value;
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   InitialiseFollowRequestsDashboardFormEvent({this.value});
 }
 
 class InitialiseFollowRequestsDashboardFormNoLoadEvent extends FollowRequestsDashboardFormEvent {
-  final FollowRequestsDashboardModel value;
+  final FollowRequestsDashboardModel? value;
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   InitialiseFollowRequestsDashboardFormNoLoadEvent({this.value});
 }
 
 class ChangedFollowRequestsDashboardDocumentID extends FollowRequestsDashboardFormEvent {
-  final String value;
+  final String? value;
 
   ChangedFollowRequestsDashboardDocumentID({this.value});
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() => 'ChangedFollowRequestsDashboardDocumentID{ value: $value }';
 }
 
 class ChangedFollowRequestsDashboardAppId extends FollowRequestsDashboardFormEvent {
-  final String value;
+  final String? value;
 
   ChangedFollowRequestsDashboardAppId({this.value});
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() => 'ChangedFollowRequestsDashboardAppId{ value: $value }';
 }
 
 class ChangedFollowRequestsDashboardDescription extends FollowRequestsDashboardFormEvent {
-  final String value;
+  final String? value;
 
   ChangedFollowRequestsDashboardDescription({this.value});
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() => 'ChangedFollowRequestsDashboardDescription{ value: $value }';
 }
 
 class ChangedFollowRequestsDashboardConditions extends FollowRequestsDashboardFormEvent {
-  final ConditionsSimpleModel value;
+  final ConditionsSimpleModel? value;
 
   ChangedFollowRequestsDashboardConditions({this.value});
 
   @override
-  List<Object> get props => [ value ];
+  List<Object?> get props => [ value ];
 
   @override
   String toString() => 'ChangedFollowRequestsDashboardConditions{ value: $value }';

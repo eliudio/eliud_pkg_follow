@@ -3,8 +3,8 @@ import 'package:eliud_core/tools/widgets/yes_no_dialog.dart';
 import 'package:eliud_pkg_follow/model/following_list.dart';
 import 'package:eliud_pkg_follow/model/following_list_event.dart';
 import 'package:eliud_pkg_follow/model/following_model.dart';
-import 'package:eliud_pkg_membership/model/member_public_info_model.dart';
-import 'package:eliud_pkg_membership/model/abstract_repository_singleton.dart';
+import 'package:eliud_core/model/member_public_info_model.dart';
+import 'package:eliud_core/model/abstract_repository_singleton.dart';
 import 'package:eliud_core/core/access/bloc/access_bloc.dart';
 import 'package:eliud_core/core/access/bloc/access_state.dart';
 import 'package:eliud_core/core/widgets/alert_widget.dart';
@@ -30,13 +30,13 @@ import 'package:transparent_image/transparent_image.dart';
  */
 class FollowingDashboardComponentConstructorDefault
     implements ComponentConstructor {
-  Widget createNew({String id, Map<String, Object> parameters}) {
+  Widget createNew({String? id, Map<String, Object>? parameters}) {
     return FollowingDashboardComponent(id: id);
   }
 }
 
 class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
-  FollowingDashboardComponent({String id}) : super(followingDashboardID: id);
+  FollowingDashboardComponent({String? id}) : super(followingDashboardID: id);
 
   @override
   Widget alertWidget({title = String, content = String}) {
@@ -45,21 +45,24 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
 
   @override
   Widget yourWidget(
-      BuildContext context, FollowingDashboardModel dashboardModel) {
+      BuildContext? context, FollowingDashboardModel? dashboardModel) {
+    if (context == null) return Text("No context");
+    if (dashboardModel == null) return Text("Not dashboard");
     var state = AccessBloc.getState(context);
     if (state is AppLoaded) {
       var appId = state.app.documentID;
       var member = state.getMember();
+      if (member == null) return Text("No member");
       return BlocProvider<FollowingListBloc>(
         create: (context) => FollowingListBloc(
           eliudQuery: getQuery(dashboardModel, member),
           detailed: true,
           followingRepository:
-              followingRepository(appId: AccessBloc.appId(context)),
+              followingRepository(appId: AccessBloc.appId(context))!,
         )..add(LoadFollowingList()),
         child: FollowingListWidget(
             readOnly: true,
-            widgetProvider: (value) => widgetProvider(appId, value, dashboardModel),
+            widgetProvider: (value) => widgetProvider(appId!, value!, dashboardModel),
             listBackground: BackgroundModel(documentID: "`transparent")),
       );
     } else {
@@ -67,7 +70,7 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
     }
   }
 
-  static EliudQuery getQuery(
+  static EliudQuery? getQuery(
       FollowingDashboardModel followingDashboardModel, MemberModel member) {
     if (followingDashboardModel.view == FollowingView.Followers) {
       return EliudQuery(theConditions: [
@@ -88,17 +91,17 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
   @override
   FollowingDashboardRepository getFollowingDashboardRepository(
       BuildContext context) {
-    return followingDashboardRepository(appId: AccessBloc.appId(context));
+    return followingDashboardRepository(appId: AccessBloc.appId(context))!;
   }
 }
 
 class FollowingDashboardItem extends StatelessWidget {
-  final FollowingModel value;
-  final String appId;
-  final FollowingView followingView;
+  final FollowingModel? value;
+  final String? appId;
+  final FollowingView? followingView;
 
   FollowingDashboardItem({
-    Key key,
+    Key? key,
     this.followingView,
     @required this.value,
     this.appId,
@@ -114,7 +117,19 @@ class FollowingDashboardItem extends StatelessWidget {
           if (snapshot.hasData) {
             var data = snapshot.data;
 */
-            var data = followingView == FollowingView.Followers ? value.follower : value.followed;
+            var data = followingView == FollowingView.Followers ? value!.follower : value!.followed;
+            var photo;
+            var name;
+            if (data == null) {
+              photo = Text("No photo provided");
+              name = "No name";
+            } else {
+              photo = FadeInImage.memoryNetwork(
+                placeholder: kTransparentImage,
+                image: data.photoURL!,
+              );
+              name = data.name;
+            }
             return ListTile(
                 onTap: () {
                   openOptions(context);
@@ -124,10 +139,10 @@ class FollowingDashboardItem extends StatelessWidget {
                     width: 100,
                     child: FadeInImage.memoryNetwork(
                       placeholder: kTransparentImage,
-                      image: data.photoURL,
+                      image: photo,
                     )),
                 title: Text(
-                  data.name,
+                  name,
                 ));
     /*} else {
             return Icon(Icons.person_outline);
@@ -141,10 +156,10 @@ class FollowingDashboardItem extends StatelessWidget {
     var message;
     if (followingView == FollowingView.Followers) {
       title = 'Reject follower?';
-      message = 'Would you like to reject ' + value.follower.name;
+      message = 'Would you like to reject ' + ((value == null) || (value!.follower == null) || (value!.follower!.name == null) ? value!.follower!.name! : '');
     } else {
       title = 'Unfollow this person?';
-      message = "Would you like to unfollow " + value.followed.name;
+      message = "Would you like to unfollow " + ((value == null) || (value!.followed == null) || (value!.followed!.name == null) ? value!.followed!.name! : '');
     }
     DialogStatefulWidgetHelper.openIt(
         context,
@@ -153,7 +168,7 @@ class FollowingDashboardItem extends StatelessWidget {
           message: message,
           yesFunction: () async {
             Navigator.pop(context);
-            await followingRepository(appId: appId).delete(value);
+            await followingRepository(appId: appId)!.delete(value!);
           },
           noFunction: () {},
           yesButtonLabel: 'Yes',
