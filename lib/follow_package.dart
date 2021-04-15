@@ -31,7 +31,7 @@ abstract class FollowPackage extends PackageWithSubscription {
   void _setState(bool newState, {MemberModel ?currentMember}) {
     if (newState != stateCONDITION_MEMBER_HAS_OPEN_REQUESTS) {
       stateCONDITION_MEMBER_HAS_OPEN_REQUESTS = newState;
-      accessBloc.add(MemberUpdated(currentMember));
+      accessBloc!.add(MemberUpdated(currentMember));
     }
   }
 
