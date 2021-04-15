@@ -7,7 +7,6 @@ import 'package:eliud_core/model/member_model.dart';
 import 'package:eliud_core/package/package.dart';
 import 'package:eliud_core/tools/query/query_tools.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
-import 'package:eliud_pkg_notifications/platform/platform.dart';
 import 'package:eliud_core/package/package_with_subscription.dart';
 
 import 'model/component_registry.dart';
@@ -44,7 +43,7 @@ abstract class FollowPackage extends PackageWithSubscription {
         // then we must inform the AccessBloc, so that it can refresh the state
         _setState(list.length > 0, currentMember: currentMember);
       }, eliudQuery: getOpenFollowRequestsQuery(
-          appId, currentMember!.documentID!));
+          appId, currentMember.documentID!));
     } else {
       _setState(false);
     }
