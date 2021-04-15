@@ -31,7 +31,7 @@ import 'package:flutter/cupertino.dart';
  */
 class InviteDashboardComponentConstructorDefault
     implements ComponentConstructor {
-  Widget createNew({String? id, Map<String, Object>? parameters}) {
+  Widget createNew({String? id, Map<String, dynamic>? parameters}) {
     return InviteDashboard(id: id);
   }
 }

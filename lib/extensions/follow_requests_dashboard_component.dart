@@ -32,7 +32,7 @@ import '../follow_package.dart';
  */
 class FollowRequestsDashboardComponentConstructorDefault
     implements ComponentConstructor {
-  Widget createNew({String ?id, Map<String, Object>? parameters}) {
+  Widget createNew({String ?id, Map<String, dynamic>? parameters}) {
     return FollowRequestsDashboardComponent(id: id);
   }
 }

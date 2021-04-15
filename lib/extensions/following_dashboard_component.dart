@@ -30,7 +30,7 @@ import 'package:transparent_image/transparent_image.dart';
  */
 class FollowingDashboardComponentConstructorDefault
     implements ComponentConstructor {
-  Widget createNew({String? id, Map<String, Object>? parameters}) {
+  Widget createNew({String? id, Map<String, dynamic>? parameters}) {
     return FollowingDashboardComponent(id: id);
   }
 }

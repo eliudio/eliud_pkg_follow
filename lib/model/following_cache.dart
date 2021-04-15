@@ -53,12 +53,12 @@ class FollowingCache implements FollowingRepository {
     return Future.value();
   }
 
-  Future<FollowingModel> get(String? id, {Function(Exception)? onError}) async {
+  Future<FollowingModel?> get(String? id, {Function(Exception)? onError}) async {
     var value = fullCache[id];
     if (value != null) return refreshRelations(value);
     value = await reference.get(id, onError: onError);
     fullCache[id] = value;
-    return Future.value(value);
+    return value;
   }
 
   Future<FollowingModel> update(FollowingModel value) {
