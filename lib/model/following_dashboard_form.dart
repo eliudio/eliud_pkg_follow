@@ -176,7 +176,7 @@ class _MyFollowingDashboardFormState extends State<MyFollowingDashboardForm> {
           _viewSelectedRadioTile = 0;
       }
       if (state is FollowingDashboardFormInitialized) {
-        List<Widget?> children = [];
+        List<Widget> children = [];
          children.add(Container(
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),

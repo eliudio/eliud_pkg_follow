@@ -180,7 +180,7 @@ class _MyFollowRequestFormState extends State<MyFollowRequestForm> {
           _statusSelectedRadioTile = 0;
       }
       if (state is FollowRequestFormInitialized) {
-        List<Widget?> children = [];
+        List<Widget> children = [];
          children.add(Container(
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),

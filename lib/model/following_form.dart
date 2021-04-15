@@ -174,7 +174,7 @@ class _MyFollowingFormState extends State<MyFollowingForm> {
           _followed= "";
       }
       if (state is FollowingFormInitialized) {
-        List<Widget?> children = [];
+        List<Widget> children = [];
          children.add(Container(
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
