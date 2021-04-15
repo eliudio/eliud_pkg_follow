@@ -55,17 +55,18 @@ class FollowingDashboardFirestore implements FollowingDashboardRepository {
   Future<FollowingDashboardModel?> _populateDocPlus(DocumentSnapshot value) async {
     return FollowingDashboardModel.fromEntityPlus(value.id, FollowingDashboardEntity.fromMap(value.data()), appId: appId);  }
 
-  Future<FollowingDashboardModel?> get(String? id, {Function(Exception)? onError}) {
-    return FollowingDashboardCollection.doc(id).get().then((doc) async {
-      if (doc.data() != null)
-        return await _populateDocPlus(doc);
-      else
-        return null;
-    }).catchError((Object e) {
+  Future<FollowingDashboardModel?> get(String? id, {Function(Exception)? onError}) async {
+    try {
+      var collection = FollowingDashboardCollection.doc(id);
+      var doc = await collection.get();
+      return await _populateDocPlus(doc);
+    } on Exception catch(e) {
+      print("Error whilst retrieving FollowingDashboard with id $id");
+      print("Exceptoin: $e");
       if (onError != null) {
-        onError(e as Exception);
+        onError(e);
       }
-    });
+    };
   }
 
   StreamSubscription<List<FollowingDashboardModel?>> listen(FollowingDashboardModelTrigger trigger, {String? orderBy, bool? descending, Object? startAfter, int? limit, int? privilegeLevel, EliudQuery? eliudQuery}) {

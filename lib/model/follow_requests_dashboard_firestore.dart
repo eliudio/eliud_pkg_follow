@@ -55,17 +55,18 @@ class FollowRequestsDashboardFirestore implements FollowRequestsDashboardReposit
   Future<FollowRequestsDashboardModel?> _populateDocPlus(DocumentSnapshot value) async {
     return FollowRequestsDashboardModel.fromEntityPlus(value.id, FollowRequestsDashboardEntity.fromMap(value.data()), appId: appId);  }
 
-  Future<FollowRequestsDashboardModel?> get(String? id, {Function(Exception)? onError}) {
-    return FollowRequestsDashboardCollection.doc(id).get().then((doc) async {
-      if (doc.data() != null)
-        return await _populateDocPlus(doc);
-      else
-        return null;
-    }).catchError((Object e) {
+  Future<FollowRequestsDashboardModel?> get(String? id, {Function(Exception)? onError}) async {
+    try {
+      var collection = FollowRequestsDashboardCollection.doc(id);
+      var doc = await collection.get();
+      return await _populateDocPlus(doc);
+    } on Exception catch(e) {
+      print("Error whilst retrieving FollowRequestsDashboard with id $id");
+      print("Exceptoin: $e");
       if (onError != null) {
-        onError(e as Exception);
+        onError(e);
       }
-    });
+    };
   }
 
   StreamSubscription<List<FollowRequestsDashboardModel?>> listen(FollowRequestsDashboardModelTrigger trigger, {String? orderBy, bool? descending, Object? startAfter, int? limit, int? privilegeLevel, EliudQuery? eliudQuery}) {

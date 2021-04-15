@@ -55,17 +55,18 @@ class FollowingFirestore implements FollowingRepository {
   Future<FollowingModel?> _populateDocPlus(DocumentSnapshot value) async {
     return FollowingModel.fromEntityPlus(value.id, FollowingEntity.fromMap(value.data()), appId: appId);  }
 
-  Future<FollowingModel?> get(String? id, {Function(Exception)? onError}) {
-    return FollowingCollection.doc(id).get().then((doc) async {
-      if (doc.data() != null)
-        return await _populateDocPlus(doc);
-      else
-        return null;
-    }).catchError((Object e) {
+  Future<FollowingModel?> get(String? id, {Function(Exception)? onError}) async {
+    try {
+      var collection = FollowingCollection.doc(id);
+      var doc = await collection.get();
+      return await _populateDocPlus(doc);
+    } on Exception catch(e) {
+      print("Error whilst retrieving Following with id $id");
+      print("Exceptoin: $e");
       if (onError != null) {
-        onError(e as Exception);
+        onError(e);
       }
-    });
+    };
   }
 
   StreamSubscription<List<FollowingModel?>> listen(FollowingModelTrigger trigger, {String? orderBy, bool? descending, Object? startAfter, int? limit, int? privilegeLevel, EliudQuery? eliudQuery}) {

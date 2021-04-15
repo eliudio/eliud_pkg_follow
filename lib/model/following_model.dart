@@ -93,19 +93,23 @@ class FollowingModel {
     MemberPublicInfoModel? followerHolder;
     if (entity.followerId != null) {
       try {
-        await memberPublicInfoRepository(appId: appId)!.get(entity.followerId).then((val) {
-          followerHolder = val;
-        }).catchError((error) {});
-      } catch (_) {}
+          followerHolder = await memberPublicInfoRepository(appId: appId)!.get(entity.followerId);
+      } on Exception catch(e) {
+        print('Error whilst trying to initialise follower');
+        print('Error whilst retrieving memberPublicInfo with id ${entity.followerId}');
+        print('Exception: $e');
+      }
     }
 
     MemberPublicInfoModel? followedHolder;
     if (entity.followedId != null) {
       try {
-        await memberPublicInfoRepository(appId: appId)!.get(entity.followedId).then((val) {
-          followedHolder = val;
-        }).catchError((error) {});
-      } catch (_) {}
+          followedHolder = await memberPublicInfoRepository(appId: appId)!.get(entity.followedId);
+      } on Exception catch(e) {
+        print('Error whilst trying to initialise followed');
+        print('Error whilst retrieving memberPublicInfo with id ${entity.followedId}');
+        print('Exception: $e');
+      }
     }
 
     return FollowingModel(
