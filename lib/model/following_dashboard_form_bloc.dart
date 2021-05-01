@@ -65,20 +65,20 @@ class FollowingDashboardFormBloc extends Bloc<FollowingDashboardFormEvent, Follo
 
       if (event is InitialiseFollowingDashboardFormEvent) {
         // Need to re-retrieve the document from the repository so that I get all associated types
-        FollowingDashboardFormLoaded loaded = FollowingDashboardFormLoaded(value: await followingDashboardRepository(appId: appId)!.get(event!.value!.documentID));
+        FollowingDashboardFormLoaded loaded = FollowingDashboardFormLoaded(value: await followingDashboardRepository(appId: appId)!.get(event.value!.documentID));
         yield loaded;
         return;
       } else if (event is InitialiseFollowingDashboardFormNoLoadEvent) {
-        FollowingDashboardFormLoaded loaded = FollowingDashboardFormLoaded(value: event!.value);
+        FollowingDashboardFormLoaded loaded = FollowingDashboardFormLoaded(value: event.value);
         yield loaded;
         return;
       }
     } else if (currentState is FollowingDashboardFormInitialized) {
       FollowingDashboardModel? newValue = null;
       if (event is ChangedFollowingDashboardDocumentID) {
-        newValue = currentState.value!.copyWith(documentID: event!.value);
+        newValue = currentState.value!.copyWith(documentID: event.value);
         if (formAction == FormAction.AddAction) {
-          yield* _isDocumentIDValid(event!.value, newValue).asStream();
+          yield* _isDocumentIDValid(event.value, newValue).asStream();
         } else {
           yield SubmittableFollowingDashboardForm(value: newValue);
         }
@@ -86,25 +86,25 @@ class FollowingDashboardFormBloc extends Bloc<FollowingDashboardFormEvent, Follo
         return;
       }
       if (event is ChangedFollowingDashboardAppId) {
-        newValue = currentState.value!.copyWith(appId: event!.value);
+        newValue = currentState.value!.copyWith(appId: event.value);
         yield SubmittableFollowingDashboardForm(value: newValue);
 
         return;
       }
       if (event is ChangedFollowingDashboardDescription) {
-        newValue = currentState.value!.copyWith(description: event!.value);
+        newValue = currentState.value!.copyWith(description: event.value);
         yield SubmittableFollowingDashboardForm(value: newValue);
 
         return;
       }
       if (event is ChangedFollowingDashboardView) {
-        newValue = currentState.value!.copyWith(view: event!.value);
+        newValue = currentState.value!.copyWith(view: event.value);
         yield SubmittableFollowingDashboardForm(value: newValue);
 
         return;
       }
       if (event is ChangedFollowingDashboardConditions) {
-        newValue = currentState.value!.copyWith(conditions: event!.value);
+        newValue = currentState.value!.copyWith(conditions: event.value);
         yield SubmittableFollowingDashboardForm(value: newValue);
 
         return;

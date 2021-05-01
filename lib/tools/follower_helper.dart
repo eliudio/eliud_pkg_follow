@@ -13,7 +13,7 @@ class FollowerHelper {
         EliudQueryCondition('followedId', isEqualTo: me.documentID)]);
     var valuesList = await followingRepository(appId: appId)!.valuesList(eliudQuery: query);
     if (valuesList != null) {
-      return valuesList!.map((e) => e!.documentID!).toList();
+      return valuesList.map((e) => e!.documentID!).toList();
     } else {
       return null;
     }

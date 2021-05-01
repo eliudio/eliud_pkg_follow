@@ -64,20 +64,20 @@ class FollowRequestFormBloc extends Bloc<FollowRequestFormEvent, FollowRequestFo
 
       if (event is InitialiseFollowRequestFormEvent) {
         // Need to re-retrieve the document from the repository so that I get all associated types
-        FollowRequestFormLoaded loaded = FollowRequestFormLoaded(value: await followRequestRepository(appId: appId)!.get(event!.value!.documentID));
+        FollowRequestFormLoaded loaded = FollowRequestFormLoaded(value: await followRequestRepository(appId: appId)!.get(event.value!.documentID));
         yield loaded;
         return;
       } else if (event is InitialiseFollowRequestFormNoLoadEvent) {
-        FollowRequestFormLoaded loaded = FollowRequestFormLoaded(value: event!.value);
+        FollowRequestFormLoaded loaded = FollowRequestFormLoaded(value: event.value);
         yield loaded;
         return;
       }
     } else if (currentState is FollowRequestFormInitialized) {
       FollowRequestModel? newValue = null;
       if (event is ChangedFollowRequestDocumentID) {
-        newValue = currentState.value!.copyWith(documentID: event!.value);
+        newValue = currentState.value!.copyWith(documentID: event.value);
         if (formAction == FormAction.AddAction) {
-          yield* _isDocumentIDValid(event!.value, newValue).asStream();
+          yield* _isDocumentIDValid(event.value, newValue).asStream();
         } else {
           yield SubmittableFollowRequestForm(value: newValue);
         }
@@ -85,8 +85,8 @@ class FollowRequestFormBloc extends Bloc<FollowRequestFormEvent, FollowRequestFo
         return;
       }
       if (event is ChangedFollowRequestFollower) {
-        if (event!.value != null)
-          newValue = currentState.value!.copyWith(follower: await memberPublicInfoRepository(appId: appId)!.get(event!.value));
+        if (event.value != null)
+          newValue = currentState.value!.copyWith(follower: await memberPublicInfoRepository(appId: appId)!.get(event.value));
         else
           newValue = new FollowRequestModel(
                                  documentID: currentState.value!.documentID,
@@ -100,8 +100,8 @@ class FollowRequestFormBloc extends Bloc<FollowRequestFormEvent, FollowRequestFo
         return;
       }
       if (event is ChangedFollowRequestFollowed) {
-        if (event!.value != null)
-          newValue = currentState.value!.copyWith(followed: await memberPublicInfoRepository(appId: appId)!.get(event!.value));
+        if (event.value != null)
+          newValue = currentState.value!.copyWith(followed: await memberPublicInfoRepository(appId: appId)!.get(event.value));
         else
           newValue = new FollowRequestModel(
                                  documentID: currentState.value!.documentID,
@@ -115,7 +115,7 @@ class FollowRequestFormBloc extends Bloc<FollowRequestFormEvent, FollowRequestFo
         return;
       }
       if (event is ChangedFollowRequestStatus) {
-        newValue = currentState.value!.copyWith(status: event!.value);
+        newValue = currentState.value!.copyWith(status: event.value);
         yield SubmittableFollowRequestForm(value: newValue);
 
         return;

@@ -42,13 +42,13 @@ class FollowingCache implements FollowingRepository {
 
   Future<FollowingModel> add(FollowingModel value) {
     return reference.add(value).then((newValue) {
-      fullCache[value!.documentID] = newValue;
+      fullCache[value.documentID] = newValue;
       return newValue;
     });
   }
 
   Future<void> delete(FollowingModel value){
-    fullCache.remove(value!.documentID);
+    fullCache.remove(value.documentID);
     reference.delete(value);
     return Future.value();
   }
@@ -63,7 +63,7 @@ class FollowingCache implements FollowingRepository {
 
   Future<FollowingModel> update(FollowingModel value) {
     return reference.update(value).then((newValue) {
-      fullCache[value!.documentID] = newValue;
+      fullCache[value.documentID] = newValue;
       return newValue;
     });
   }

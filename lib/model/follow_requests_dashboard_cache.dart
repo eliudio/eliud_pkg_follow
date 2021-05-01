@@ -42,13 +42,13 @@ class FollowRequestsDashboardCache implements FollowRequestsDashboardRepository 
 
   Future<FollowRequestsDashboardModel> add(FollowRequestsDashboardModel value) {
     return reference.add(value).then((newValue) {
-      fullCache[value!.documentID] = newValue;
+      fullCache[value.documentID] = newValue;
       return newValue;
     });
   }
 
   Future<void> delete(FollowRequestsDashboardModel value){
-    fullCache.remove(value!.documentID);
+    fullCache.remove(value.documentID);
     reference.delete(value);
     return Future.value();
   }
@@ -63,7 +63,7 @@ class FollowRequestsDashboardCache implements FollowRequestsDashboardRepository 
 
   Future<FollowRequestsDashboardModel> update(FollowRequestsDashboardModel value) {
     return reference.update(value).then((newValue) {
-      fullCache[value!.documentID] = newValue;
+      fullCache[value.documentID] = newValue;
       return newValue;
     });
   }

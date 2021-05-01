@@ -65,20 +65,20 @@ class InviteDashboardFormBloc extends Bloc<InviteDashboardFormEvent, InviteDashb
 
       if (event is InitialiseInviteDashboardFormEvent) {
         // Need to re-retrieve the document from the repository so that I get all associated types
-        InviteDashboardFormLoaded loaded = InviteDashboardFormLoaded(value: await inviteDashboardRepository(appId: appId)!.get(event!.value!.documentID));
+        InviteDashboardFormLoaded loaded = InviteDashboardFormLoaded(value: await inviteDashboardRepository(appId: appId)!.get(event.value!.documentID));
         yield loaded;
         return;
       } else if (event is InitialiseInviteDashboardFormNoLoadEvent) {
-        InviteDashboardFormLoaded loaded = InviteDashboardFormLoaded(value: event!.value);
+        InviteDashboardFormLoaded loaded = InviteDashboardFormLoaded(value: event.value);
         yield loaded;
         return;
       }
     } else if (currentState is InviteDashboardFormInitialized) {
       InviteDashboardModel? newValue = null;
       if (event is ChangedInviteDashboardDocumentID) {
-        newValue = currentState.value!.copyWith(documentID: event!.value);
+        newValue = currentState.value!.copyWith(documentID: event.value);
         if (formAction == FormAction.AddAction) {
-          yield* _isDocumentIDValid(event!.value, newValue).asStream();
+          yield* _isDocumentIDValid(event.value, newValue).asStream();
         } else {
           yield SubmittableInviteDashboardForm(value: newValue);
         }
@@ -86,19 +86,19 @@ class InviteDashboardFormBloc extends Bloc<InviteDashboardFormEvent, InviteDashb
         return;
       }
       if (event is ChangedInviteDashboardAppId) {
-        newValue = currentState.value!.copyWith(appId: event!.value);
+        newValue = currentState.value!.copyWith(appId: event.value);
         yield SubmittableInviteDashboardForm(value: newValue);
 
         return;
       }
       if (event is ChangedInviteDashboardDescription) {
-        newValue = currentState.value!.copyWith(description: event!.value);
+        newValue = currentState.value!.copyWith(description: event.value);
         yield SubmittableInviteDashboardForm(value: newValue);
 
         return;
       }
       if (event is ChangedInviteDashboardConditions) {
-        newValue = currentState.value!.copyWith(conditions: event!.value);
+        newValue = currentState.value!.copyWith(conditions: event.value);
         yield SubmittableInviteDashboardForm(value: newValue);
 
         return;
