@@ -120,10 +120,8 @@ class FollowRequestsDashboardItem extends StatelessWidget {
                 trailing: Container(
                     height: 100,
                     width: 100,
-                    child: FadeInImage.memoryNetwork(
-                      placeholder: kTransparentImage,
-                      image: photo,
-                    )),
+                    child: photo,
+                    ),
                 title: Text(
                   data!.name!,
                 ));
