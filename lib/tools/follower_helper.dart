@@ -8,14 +8,17 @@ class FollowerHelper {
     return followedId + '-' + followerId;
   }
 
-  static Future<List<String>?> following(MemberModel me, String appId) async {
+  static Future<List<String?>> following(String meId, String appId) async {
     var query = EliudQuery(theConditions: [
-        EliudQueryCondition('followedId', isEqualTo: me.documentID)]);
+      EliudQueryCondition('followedId', isEqualTo: meId)]);
     var valuesList = await followingRepository(appId: appId)!.valuesList(eliudQuery: query);
-    if (valuesList != null) {
-      return valuesList.map((e) => e!.documentID!).toList();
-    } else {
-      return null;
-    }
+    return valuesList.map((e) => e!.documentID).toList();
+  }
+
+  static Future<List<String?>> followers(String meId, String appId) async {
+    var query = EliudQuery(theConditions: [
+      EliudQueryCondition('followerId', isEqualTo: meId)]);
+    var valuesList = await followingRepository(appId: appId)!.valuesList(eliudQuery: query);
+    return valuesList.map((e) => e!.documentID).toList();
   }
 }

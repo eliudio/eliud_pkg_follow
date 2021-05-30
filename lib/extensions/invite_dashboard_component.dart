@@ -137,12 +137,34 @@ class InviteDashboardItem extends StatelessWidget {
                 noButtonLabel: 'No',
               ));
         } else {
-          DialogStatefulWidgetHelper.openIt(
-              context,
-              MessageDialog(
-                  title: 'Error',
-                  message: 'You have already requested to follow this person',
-                  yesFunction: () => Navigator.of(context).pop()));
+          if (followRequest.status == FollowRequestStatus.FollowRequestDenied) {
+            DialogStatefulWidgetHelper.openIt(
+                context,
+                YesNoDialog(
+                  title: "Invite",
+                  message: "Request to follow this person? You've requested this before and this was declined.",
+                  yesFunction: () => _invite(context),
+                  noFunction: () {},
+                  yesButtonLabel: 'Yes',
+                  noButtonLabel: 'No',
+                ));
+          } else {
+            if (followRequest.status == FollowRequestStatus.FollowRequestPending) {
+              DialogStatefulWidgetHelper.openIt(
+                  context,
+                  MessageDialog(
+                      title: 'Error',
+                      message: 'You have already requested to follow this person and the request is pending',
+                      yesFunction: () => Navigator.of(context).pop()));
+            } else {
+              DialogStatefulWidgetHelper.openIt(
+                  context,
+                  MessageDialog(
+                      title: 'Error',
+                      message: 'You have already requested to follow this person and this was accepted',
+                      yesFunction: () => Navigator.of(context).pop()));
+            }
+          }
         }
       } else {
         DialogStatefulWidgetHelper.openIt(
