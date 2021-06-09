@@ -15,6 +15,9 @@ dependencies:
   eliud_core:
     path: ../eliud_core
 
+  eliud_pkg_etc:
+    path: ../eliud_pkg_etc
+
   eliud_pkg_notifications:
     path: ../eliud_pkg_notifications
 

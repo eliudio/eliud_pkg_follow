@@ -8,6 +8,7 @@ import 'package:eliud_core/tools/component_constructor.dart';
 import 'package:eliud_core/tools/query/query_tools.dart';
 import 'package:eliud_core/tools/widgets/message_dialog.dart';
 import 'package:eliud_core/tools/widgets/yes_no_dialog.dart';
+import 'package:eliud_pkg_etc/tools/formatter/format_helpere.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/follow_request_model.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_component.dart';
@@ -62,10 +63,10 @@ class InviteDashboard extends AbstractInviteDashboardComponent {
           memberPublicInfoRepository:
               memberPublicInfoRepository(appId: AccessBloc.appId(context))!,
         )..add(LoadMemberPublicInfoList()),
-        child: MemberPublicInfoListWidget(
+        child: FormatHelper.getFormattedPost([MemberPublicInfoListWidget(
             readOnly: true,
             widgetProvider: (value) => widgetProvider(appId, value, member),
-            listBackground: BackgroundModel(documentID: "`transparent")),
+            listBackground: BackgroundModel(documentID: "`transparent"))]),
       );
     } else {
       return DelayedCircularProgressIndicator();
