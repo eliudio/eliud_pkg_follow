@@ -95,7 +95,7 @@ class FollowRequestForm extends StatelessWidget {
           );
     } else {
       return Scaffold(
-        appBar: StyleRegistry.registry().styleWithContext(context).adminFormStyle().constructAppBar(context, formAction == FormAction.UpdateAction ? 'Update FollowRequest' : 'Add FollowRequest'),
+        appBar: StyleRegistry.registry().styleWithContext(context).adminFormStyle().appBarWithString(context, title: formAction == FormAction.UpdateAction ? 'Update FollowRequest' : 'Add FollowRequest'),
         body: BlocProvider<FollowRequestFormBloc >(
             create: (context) => FollowRequestFormBloc(AccessBloc.appId(context),
                                        formAction: formAction,
@@ -183,7 +183,7 @@ class _MyFollowRequestFormState extends State<MyFollowRequestForm> {
 
         children.add(
 
-                  StyleRegistry.registry().styleWithContext(context).adminFormStyle().textFormField(context, 'Document ID', Icons.vpn_key, (formAction == FormAction.UpdateAction), _documentIDController, FieldType.String, validator: (_) => state is DocumentIDFollowRequestFormError ? state.message : null, hintText: 'Member request ID - Member response ID')
+                  StyleRegistry.registry().styleWithContext(context).adminFormStyle().textFormField(context, labelText: 'Document ID', icon: Icons.vpn_key, readOnly: (formAction == FormAction.UpdateAction), textEditingController: _documentIDController, keyboardType: TextInputType.text, validator: (_) => state is DocumentIDFollowRequestFormError ? state.message : null, hintText: 'field.remark')
           );
 
         children.add(
@@ -215,7 +215,7 @@ class _MyFollowRequestFormState extends State<MyFollowRequestForm> {
 
 
         if ((formAction != FormAction.ShowData) && (formAction != FormAction.ShowPreloadedData))
-          children.add(StyleRegistry.registry().styleWithContext(context).adminFormStyle().submitButton(context, 'Submit',
+          children.add(StyleRegistry.registry().styleWithContext(context).adminFormStyle().button(context, label: 'Submit',
                   onPressed: _readOnly(accessState, state) ? null : () {
                     if (state is FollowRequestFormError) {
                       return null;

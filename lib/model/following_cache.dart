@@ -131,7 +131,7 @@ class FollowingCache implements FollowingRepository {
     MemberPublicInfoModel? followerHolder;
     if (model.follower != null) {
       try {
-        await memberPublicInfoRepository()!.get(model.follower!.documentID).then((val) {
+        await memberPublicInfoRepository(appId: model.appId)!.get(model.follower!.documentID).then((val) {
           followerHolder = val;
         }).catchError((error) {});
       } catch (_) {}
@@ -140,7 +140,7 @@ class FollowingCache implements FollowingRepository {
     MemberPublicInfoModel? followedHolder;
     if (model.followed != null) {
       try {
-        await memberPublicInfoRepository()!.get(model.followed!.documentID).then((val) {
+        await memberPublicInfoRepository(appId: model.appId)!.get(model.followed!.documentID).then((val) {
           followedHolder = val;
         }).catchError((error) {});
       } catch (_) {}
