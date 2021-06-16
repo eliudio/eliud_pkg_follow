@@ -15,7 +15,7 @@
 
 
 import '../model/internal_component.dart';
-import 'package:eliud_core/tools/registry.dart';
+import 'package:eliud_core/core/registry.dart';
 
 import '../extensions/following_dashboard_component.dart';
 import '../extensions/follow_requests_dashboard_component.dart';
