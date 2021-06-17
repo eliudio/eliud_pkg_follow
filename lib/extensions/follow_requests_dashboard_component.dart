@@ -3,9 +3,9 @@ import 'package:eliud_core/core/access/bloc/access_state.dart';
 import 'package:eliud_core/core/widgets/alert_widget.dart';
 import 'package:eliud_core/core/widgets/progress_indicator.dart';
 import 'package:eliud_core/model/background_model.dart';
+import 'package:eliud_core/style/style_registry.dart';
 import 'package:eliud_core/tools/component_constructor.dart';
 import 'package:eliud_core/tools/widgets/yes_no_dialog.dart';
-import 'package:eliud_pkg_etc/tools/formatter/format_helpere.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/follow_request_list.dart';
 import 'package:eliud_pkg_follow/model/follow_request_list_bloc.dart';
@@ -62,10 +62,10 @@ class FollowRequestsDashboardComponent
           followRequestRepository:
               followRequestRepository(appId: AccessBloc.appId(context))!,
         )..add(LoadFollowRequestList()),
-        child: FormatHelper.getFormattedPost([FollowRequestListWidget(
+        child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().topicContainer(context, children:([FollowRequestListWidget(
             readOnly: true,
             widgetProvider: (value) => widgetProvider(appId!, value!),
-            listBackground: BackgroundModel(documentID: "`transparent"))],
+            listBackground: BackgroundModel(documentID: "`transparent"))]),
       ));
     } else {
       return DelayedCircularProgressIndicator();

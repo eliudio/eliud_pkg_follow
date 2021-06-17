@@ -1,6 +1,6 @@
+import 'package:eliud_core/style/style_registry.dart';
 import 'package:eliud_core/tools/widgets/dialog_helper.dart';
 import 'package:eliud_core/tools/widgets/yes_no_dialog.dart';
-import 'package:eliud_pkg_etc/tools/formatter/format_helpere.dart';
 import 'package:eliud_pkg_follow/model/following_list.dart';
 import 'package:eliud_pkg_follow/model/following_list_event.dart';
 import 'package:eliud_pkg_follow/model/following_model.dart';
@@ -61,11 +61,11 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
           followingRepository:
               followingRepository(appId: AccessBloc.appId(context))!,
         )..add(LoadFollowingList()),
-        child: FormatHelper.getFormattedPost([FollowingListWidget(
+        child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().topicContainer(context, children:([FollowingListWidget(
             readOnly: true,
             widgetProvider: (value) => widgetProvider(appId!, value!, dashboardModel),
             listBackground: BackgroundModel(documentID: "`transparent"))]),
-      );
+      ));
     } else {
       return DelayedCircularProgressIndicator();
     }

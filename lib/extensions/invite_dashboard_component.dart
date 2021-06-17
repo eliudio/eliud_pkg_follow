@@ -4,11 +4,11 @@ import 'package:eliud_core/core/widgets/alert_widget.dart';
 import 'package:eliud_core/core/widgets/progress_indicator.dart';
 import 'package:eliud_core/model/background_model.dart';
 import 'package:eliud_core/model/member_model.dart';
+import 'package:eliud_core/style/style_registry.dart';
 import 'package:eliud_core/tools/component_constructor.dart';
 import 'package:eliud_core/tools/query/query_tools.dart';
 import 'package:eliud_core/tools/widgets/message_dialog.dart';
 import 'package:eliud_core/tools/widgets/yes_no_dialog.dart';
-import 'package:eliud_pkg_etc/tools/formatter/format_helpere.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/follow_request_model.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_component.dart';
@@ -63,7 +63,7 @@ class InviteDashboard extends AbstractInviteDashboardComponent {
           memberPublicInfoRepository:
               memberPublicInfoRepository(appId: AccessBloc.appId(context))!,
         )..add(LoadMemberPublicInfoList()),
-        child: FormatHelper.getFormattedPost([MemberPublicInfoListWidget(
+        child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().topicContainer(context, children:[MemberPublicInfoListWidget(
             readOnly: true,
             widgetProvider: (value) => widgetProvider(appId, value, member),
             listBackground: BackgroundModel(documentID: "`transparent"))]),
