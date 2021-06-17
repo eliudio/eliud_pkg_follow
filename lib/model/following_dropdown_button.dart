@@ -66,8 +66,8 @@ class FollowingDropdownButtonWidgetState extends State<FollowingDropdownButtonWi
 
 List<Widget> widgets(FollowingModel pm) {
 var widgets = <Widget>[];
-if (pm.documentID != null) widgets.add(new Text(pm.documentID!));
-if (pm.follower!.name != null) widgets.add(new Text(pm.follower!.name!));
+if (pm.documentID! != null) widgets.add(new Text(pm.documentID!));
+if (pm.follower!.name! != null) widgets.add(new Text(pm.follower!.name!));
 return widgets;
 }
 

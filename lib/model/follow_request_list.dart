@@ -230,7 +230,7 @@ class FollowRequestListItem extends StatelessWidget {
             child: Center(child: StyleRegistry.registry().styleWithContext(context).adminListStyle().listItem(context, value!.documentID!)),
           ),
         ),
-        subtitle: (value!.follower!.name != null) && (value!.follower!.name!.isNotEmpty)
+        subtitle: (value!.follower!.name! != null) && (value!.follower!.name!.isNotEmpty)
             ? Center(child: StyleRegistry.registry().styleWithContext(context).adminListStyle().listItem(context, value!.follower!.name!))
             : null,
       ),

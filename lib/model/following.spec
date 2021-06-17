@@ -57,8 +57,8 @@
     }
   ],
   "listFields": {
-    "title": "documentID",
-    "subTitle": "follower!.name"
+    "title": "documentID!",
+    "subTitle": "follower!.name!"
   },
   "depends": ["eliud_core"]
 }
