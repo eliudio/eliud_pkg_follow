@@ -4,12 +4,9 @@ import 'package:eliud_core/tools/widgets/yes_no_dialog.dart';
 import 'package:eliud_pkg_follow/model/following_list.dart';
 import 'package:eliud_pkg_follow/model/following_list_event.dart';
 import 'package:eliud_pkg_follow/model/following_model.dart';
-import 'package:eliud_core/model/member_public_info_model.dart';
-import 'package:eliud_core/model/abstract_repository_singleton.dart';
 import 'package:eliud_core/core/access/bloc/access_bloc.dart';
 import 'package:eliud_core/core/access/bloc/access_state.dart';
 import 'package:eliud_core/core/widgets/alert_widget.dart';
-import 'package:eliud_core/core/widgets/progress_indicator.dart';
 import 'package:eliud_core/model/background_model.dart';
 import 'package:eliud_core/model/member_model.dart';
 import 'package:eliud_core/tools/component_constructor.dart';
@@ -67,7 +64,7 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
             listBackground: BackgroundModel(documentID: "`transparent"))]),
       ));
     } else {
-      return DelayedCircularProgressIndicator();
+      return StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicator(context);
     }
   }
 
