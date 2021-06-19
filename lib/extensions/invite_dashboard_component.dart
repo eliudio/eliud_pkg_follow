@@ -6,8 +6,8 @@ import 'package:eliud_core/model/member_model.dart';
 import 'package:eliud_core/style/style_registry.dart';
 import 'package:eliud_core/tools/component_constructor.dart';
 import 'package:eliud_core/tools/query/query_tools.dart';
-import 'package:eliud_core/tools/widgets/message_dialog.dart';
-import 'package:eliud_core/tools/widgets/yes_no_dialog.dart';
+import 'package:eliud_core/tools/widgets/simple_dialog_api.dart';
+import 'package:eliud_core/tools/widgets/simple_dialog_api.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/follow_request_model.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_component.dart';
@@ -22,7 +22,6 @@ import 'package:eliud_core/model/member_public_info_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:eliud_core/tools/widgets/dialog_helper.dart';
 import 'package:flutter/cupertino.dart';
 
 /* List (public) members and allow to (try to) follow
@@ -62,7 +61,7 @@ class InviteDashboard extends AbstractInviteDashboardComponent {
           memberPublicInfoRepository:
               memberPublicInfoRepository(appId: AccessBloc.appId(context))!,
         )..add(LoadMemberPublicInfoList()),
-        child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().topicContainer(context, children:[MemberPublicInfoListWidget(
+        child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().simpleTopicContainer(context, children:[MemberPublicInfoListWidget(
             readOnly: true,
             widgetProvider: (value) => widgetProvider(appId, value, member),
             listBackground: BackgroundModel(documentID: "`transparent"))]),
@@ -126,66 +125,35 @@ class InviteDashboardItem extends StatelessWidget {
         var followRequest =
             await followRequestRepository(appId: appId)!.get(key);
         if (followRequest == null) {
-          DialogStatefulWidgetHelper.openIt(
-              context,
-              YesNoDialog(
-                title: "Invite",
-                message: "Request to follow this person?",
-                yesFunction: () => _invite(context),
-                noFunction: () {},
-                yesButtonLabel: 'Yes',
-                noButtonLabel: 'No',
-              ));
+          SimpleDialogApi.openAckNackDialog(context, title: 'Invite', message: 'Request to follow this person?', onSelection: (value) {
+            if (value == 0) {
+              _invite(context);
+            }
+          });
         } else {
           if (followRequest.status == FollowRequestStatus.FollowRequestDenied) {
-            DialogStatefulWidgetHelper.openIt(
-                context,
-                YesNoDialog(
-                  title: "Invite",
-                  message: "Request to follow this person? You've requested this before and this was declined.",
-                  yesFunction: () => _invite(context),
-                  noFunction: () {},
-                  yesButtonLabel: 'Yes',
-                  noButtonLabel: 'No',
-                ));
+            SimpleDialogApi.openAckNackDialog(context, title: 'Invite', message: "Request to follow this person? You've requested this before and this was declined.", onSelection: (value) {
+              if (value == 0) {
+                _invite(context);
+              }
+            });
           } else {
             if (followRequest.status == FollowRequestStatus.FollowRequestPending) {
-              DialogStatefulWidgetHelper.openIt(
-                  context,
-                  MessageDialog(
-                      title: 'Error',
-                      message: 'You have already requested to follow this person and the request is pending',
-                      yesFunction: () => Navigator.of(context).pop()));
+              SimpleDialogApi.openErrorDialog(context, title: 'Error', errorMessage: "You have already requested to follow this person and the request is pending.");
             } else {
-              DialogStatefulWidgetHelper.openIt(
-                  context,
-                  MessageDialog(
-                      title: 'Error',
-                      message: 'You have already requested to follow this person and this was accepted',
-                      yesFunction: () => Navigator.of(context).pop()));
+              SimpleDialogApi.openErrorDialog(context, title: 'Error', errorMessage: "You have already requested to follow this person and this was accepted.");
             }
           }
         }
       } else {
-        DialogStatefulWidgetHelper.openIt(
-            context,
-            MessageDialog(
-                title: 'Error',
-                message: 'You are already following this person',
-                yesFunction: () => Navigator.of(context).pop()));
+        SimpleDialogApi.openErrorDialog(context, title: 'Error', errorMessage: 'You are already following this person');
       }
     } else {
-      DialogStatefulWidgetHelper.openIt(
-          context,
-          MessageDialog(
-              title: 'Error',
-              message: 'This is you. No point following yourself.',
-              yesFunction: () => Navigator.of(context).pop()));
+      SimpleDialogApi.openErrorDialog(context, title: 'Error', errorMessage: 'This is you. No point following yourself');
     }
   }
 
   Future<void> _invite(BuildContext context) async {
-    Navigator.pop(context);
     var follower =
         await memberPublicInfoRepository(appId: appId)!.get(member!.documentID);
     await followRequestRepository(appId: appId)!.add(FollowRequestModel(

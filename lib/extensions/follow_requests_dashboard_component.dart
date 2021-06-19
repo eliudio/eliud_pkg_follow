@@ -4,7 +4,7 @@ import 'package:eliud_core/core/widgets/alert_widget.dart';
 import 'package:eliud_core/model/background_model.dart';
 import 'package:eliud_core/style/style_registry.dart';
 import 'package:eliud_core/tools/component_constructor.dart';
-import 'package:eliud_core/tools/widgets/yes_no_dialog.dart';
+import 'package:eliud_core/tools/widgets/simple_dialog_api.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/follow_request_list.dart';
 import 'package:eliud_pkg_follow/model/follow_request_list_bloc.dart';
@@ -61,7 +61,7 @@ class FollowRequestsDashboardComponent
           followRequestRepository:
               followRequestRepository(appId: AccessBloc.appId(context))!,
         )..add(LoadFollowRequestList()),
-        child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().topicContainer(context, children:([FollowRequestListWidget(
+        child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().simpleTopicContainer(context, children:([FollowRequestListWidget(
             readOnly: true,
             widgetProvider: (value) => widgetProvider(appId!, value!),
             listBackground: BackgroundModel(documentID: "`transparent"))]),
@@ -133,18 +133,15 @@ class FollowRequestsDashboardItem extends StatelessWidget {
 
   void openOptions(BuildContext context) {
     var name = value == null || value!.follower == null || value!.follower!.name == null ? "unkown" : value!.follower!.name;
-    DialogStatefulWidgetHelper.openIt(
-        context,
-        YesNoDialog(
-          title: 'Follow invitation',
-          message: 'This member ' +
-              name! +
-              ' would like to follow you? Do you accept or reject?',
-          yesFunction: () => _accept(context),
-          noFunction: () => _reject(context),
-          yesButtonLabel: 'Accept',
-          noButtonLabel: 'Reject',
-        ));
+    SimpleDialogApi.openAckNackDialog(context, title: 'Follow invitation', message: 'This member ' +
+        name! +
+        ' would like to follow you? Do you accept or reject?', onSelection: (value) {
+      if (value == 0) {
+        _accept(context);
+      } else {
+        _reject(context);
+      }
+    });
   }
 
   Future<void> _accept(BuildContext context) async {

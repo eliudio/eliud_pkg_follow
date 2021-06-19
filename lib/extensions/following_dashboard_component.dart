@@ -1,6 +1,6 @@
 import 'package:eliud_core/style/style_registry.dart';
 import 'package:eliud_core/tools/widgets/dialog_helper.dart';
-import 'package:eliud_core/tools/widgets/yes_no_dialog.dart';
+import 'package:eliud_core/tools/widgets/simple_dialog_api.dart';
 import 'package:eliud_pkg_follow/model/following_list.dart';
 import 'package:eliud_pkg_follow/model/following_list_event.dart';
 import 'package:eliud_pkg_follow/model/following_model.dart';
@@ -58,7 +58,7 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
           followingRepository:
               followingRepository(appId: AccessBloc.appId(context))!,
         )..add(LoadFollowingList()),
-        child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().topicContainer(context, children:([FollowingListWidget(
+        child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().simpleTopicContainer(context, children:([FollowingListWidget(
             readOnly: true,
             widgetProvider: (value) => widgetProvider(appId!, value!, dashboardModel),
             listBackground: BackgroundModel(documentID: "`transparent"))]),
@@ -157,18 +157,12 @@ class FollowingDashboardItem extends StatelessWidget {
       title = 'Unfollow this person?';
       message = "Would you like to unfollow " + ((value == null) || (value!.followed == null) || (value!.followed!.name == null) ? value!.followed!.name! : '');
     }
-    DialogStatefulWidgetHelper.openIt(
-        context,
-        YesNoDialog(
-          title: title,
-          message: message,
-          yesFunction: () async {
-            Navigator.pop(context);
-            await followingRepository(appId: appId)!.delete(value!);
-          },
-          noFunction: () {},
-          yesButtonLabel: 'Yes',
-          noButtonLabel: 'No',
-        ));
+
+    SimpleDialogApi.openAckNackDialog(context, title: title, message: message, onSelection: (selectedValue) async {
+      Navigator.pop(context);
+      if (selectedValue == 0) {
+        await followingRepository(appId: appId)!.delete(value!);
+      }
+    });
   }
 }
