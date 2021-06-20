@@ -4,7 +4,6 @@ import 'package:eliud_core/core/widgets/alert_widget.dart';
 import 'package:eliud_core/model/background_model.dart';
 import 'package:eliud_core/style/style_registry.dart';
 import 'package:eliud_core/tools/component_constructor.dart';
-import 'package:eliud_core/tools/widgets/simple_dialog_api.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/follow_request_list.dart';
 import 'package:eliud_pkg_follow/model/follow_request_list_bloc.dart';
@@ -15,7 +14,6 @@ import 'package:eliud_pkg_follow/model/follow_requests_dashboard_model.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:eliud_core/tools/widgets/dialog_helper.dart';
 import 'package:eliud_pkg_follow/model/following_model.dart';
 import 'package:eliud_pkg_follow/tools/follower_helper.dart';
 import 'package:eliud_core/model/member_public_info_model.dart';
@@ -133,7 +131,7 @@ class FollowRequestsDashboardItem extends StatelessWidget {
 
   void openOptions(BuildContext context) {
     var name = value == null || value!.follower == null || value!.follower!.name == null ? "unkown" : value!.follower!.name;
-    SimpleDialogApi.openAckNackDialog(context, title: 'Follow invitation', message: 'This member ' +
+    StyleRegistry.registry().styleWithContext(context).frontEndStyle().openAckNackDialog(context, title: 'Follow invitation', message: 'This member ' +
         name! +
         ' would like to follow you? Do you accept or reject?', onSelection: (value) {
       if (value == 0) {

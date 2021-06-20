@@ -1,6 +1,4 @@
 import 'package:eliud_core/style/style_registry.dart';
-import 'package:eliud_core/tools/widgets/dialog_helper.dart';
-import 'package:eliud_core/tools/widgets/simple_dialog_api.dart';
 import 'package:eliud_pkg_follow/model/following_list.dart';
 import 'package:eliud_pkg_follow/model/following_list_event.dart';
 import 'package:eliud_pkg_follow/model/following_model.dart';
@@ -158,7 +156,7 @@ class FollowingDashboardItem extends StatelessWidget {
       message = "Would you like to unfollow " + ((value == null) || (value!.followed == null) || (value!.followed!.name == null) ? value!.followed!.name! : '');
     }
 
-    SimpleDialogApi.openAckNackDialog(context, title: title, message: message, onSelection: (selectedValue) async {
+    StyleRegistry.registry().styleWithContext(context).frontEndStyle().openAckNackDialog(context, title: title, message: message, onSelection: (selectedValue) async {
       Navigator.pop(context);
       if (selectedValue == 0) {
         await followingRepository(appId: appId)!.delete(value!);

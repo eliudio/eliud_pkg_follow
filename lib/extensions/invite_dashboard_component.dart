@@ -6,8 +6,6 @@ import 'package:eliud_core/model/member_model.dart';
 import 'package:eliud_core/style/style_registry.dart';
 import 'package:eliud_core/tools/component_constructor.dart';
 import 'package:eliud_core/tools/query/query_tools.dart';
-import 'package:eliud_core/tools/widgets/simple_dialog_api.dart';
-import 'package:eliud_core/tools/widgets/simple_dialog_api.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/follow_request_model.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_component.dart';
@@ -118,6 +116,7 @@ class InviteDashboardItem extends StatelessWidget {
   }
 
   Future<void> openOptions(BuildContext context, Widget profilePhoto) async {
+    var frontEndStyle = StyleRegistry.registry().styleWithContext(context).frontEndStyle();
     if (value!.documentID != member!.documentID) {
       String key = FollowerHelper.getKey(value!.documentID!, member!.documentID!);
       var following = await followingRepository(appId: appId)!.get(key);
@@ -125,31 +124,31 @@ class InviteDashboardItem extends StatelessWidget {
         var followRequest =
             await followRequestRepository(appId: appId)!.get(key);
         if (followRequest == null) {
-          SimpleDialogApi.openAckNackDialog(context, title: 'Invite', message: 'Request to follow this person?', onSelection: (value) {
+          frontEndStyle.openAckNackDialog(context, title: 'Invite', message: 'Request to follow this person?', onSelection: (value) {
             if (value == 0) {
               _invite(context);
             }
           });
         } else {
           if (followRequest.status == FollowRequestStatus.FollowRequestDenied) {
-            SimpleDialogApi.openAckNackDialog(context, title: 'Invite', message: "Request to follow this person? You've requested this before and this was declined.", onSelection: (value) {
+            frontEndStyle.openAckNackDialog(context, title: 'Invite', message: "Request to follow this person? You've requested this before and this was declined.", onSelection: (value) {
               if (value == 0) {
                 _invite(context);
               }
             });
           } else {
             if (followRequest.status == FollowRequestStatus.FollowRequestPending) {
-              SimpleDialogApi.openErrorDialog(context, title: 'Error', errorMessage: "You have already requested to follow this person and the request is pending.");
+              frontEndStyle.openErrorDialog(context, title: 'Error', errorMessage: "You have already requested to follow this person and the request is pending.");
             } else {
-              SimpleDialogApi.openErrorDialog(context, title: 'Error', errorMessage: "You have already requested to follow this person and this was accepted.");
+              frontEndStyle.openErrorDialog(context, title: 'Error', errorMessage: "You have already requested to follow this person and this was accepted.");
             }
           }
         }
       } else {
-        SimpleDialogApi.openErrorDialog(context, title: 'Error', errorMessage: 'You are already following this person');
+        frontEndStyle.openErrorDialog(context, title: 'Error', errorMessage: 'You are already following this person');
       }
     } else {
-      SimpleDialogApi.openErrorDialog(context, title: 'Error', errorMessage: 'This is you. No point following yourself');
+      frontEndStyle.openErrorDialog(context, title: 'Error', errorMessage: 'This is you. No point following yourself');
     }
   }
 
