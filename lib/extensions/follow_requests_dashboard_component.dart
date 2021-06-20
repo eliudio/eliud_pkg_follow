@@ -59,13 +59,13 @@ class FollowRequestsDashboardComponent
           followRequestRepository:
               followRequestRepository(appId: AccessBloc.appId(context))!,
         )..add(LoadFollowRequestList()),
-        child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().simpleTopicContainer(context, children:([FollowRequestListWidget(
+        child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().containerStyle().simpleTopicContainer(context, children:([FollowRequestListWidget(
             readOnly: true,
             widgetProvider: (value) => widgetProvider(appId!, value!),
             listBackground: BackgroundModel(documentID: "`transparent"))]),
       ));
     } else {
-      return StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicator(context);
+      return StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicatorStyle().progressIndicator(context);
     }
   }
 
@@ -131,7 +131,7 @@ class FollowRequestsDashboardItem extends StatelessWidget {
 
   void openOptions(BuildContext context) {
     var name = value == null || value!.follower == null || value!.follower!.name == null ? "unkown" : value!.follower!.name;
-    StyleRegistry.registry().styleWithContext(context).frontEndStyle().openAckNackDialog(context, title: 'Follow invitation', message: 'This member ' +
+    StyleRegistry.registry().styleWithContext(context).frontEndStyle().dialogStyle().openAckNackDialog(context, title: 'Follow invitation', message: 'This member ' +
         name! +
         ' would like to follow you? Do you accept or reject?', onSelection: (value) {
       if (value == 0) {

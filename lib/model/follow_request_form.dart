@@ -147,7 +147,7 @@ class _MyFollowRequestFormState extends State<MyFollowRequestForm> {
     var accessState = AccessBloc.getState(context);
     return BlocBuilder<FollowRequestFormBloc, FollowRequestFormState>(builder: (context, state) {
       if (state is FollowRequestFormUninitialized) return Center(
-        child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicator(context),
+        child: StyleRegistry.registry().styleWithContext(context).adminListStyle().progressIndicator(context),
       );
 
       if (state is FollowRequestFormLoaded) {
@@ -257,7 +257,7 @@ class _MyFollowRequestFormState extends State<MyFollowRequestForm> {
           ), formAction!
         );
       } else {
-        return StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicator(context);
+        return StyleRegistry.registry().styleWithContext(context).adminListStyle().progressIndicator(context);
       }
     });
   }

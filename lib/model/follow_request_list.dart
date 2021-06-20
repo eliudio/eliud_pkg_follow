@@ -100,7 +100,7 @@ class FollowRequestListWidgetState extends State<FollowRequestListWidget> {
     if (accessState is AppLoaded) {
       return BlocBuilder<FollowRequestListBloc, FollowRequestListState>(builder: (context, state) {
         if (state is FollowRequestListLoading) {
-          return StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicator(context);
+          return StyleRegistry.registry().styleWithContext(context).adminListStyle().progressIndicator(context);
         } else if (state is FollowRequestListLoaded) {
           final values = state.values;
           if ((widget.isEmbedded != null) && widget.isEmbedded!) {
@@ -130,7 +130,7 @@ class FollowRequestListWidgetState extends State<FollowRequestListWidget> {
             return theList(context, values, accessState);
           }
         } else {
-          return StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicator(context);
+          return StyleRegistry.registry().styleWithContext(context).adminListStyle().progressIndicator(context);
         }
       });
     } else {

@@ -100,7 +100,7 @@ class FollowingDashboardListWidgetState extends State<FollowingDashboardListWidg
     if (accessState is AppLoaded) {
       return BlocBuilder<FollowingDashboardListBloc, FollowingDashboardListState>(builder: (context, state) {
         if (state is FollowingDashboardListLoading) {
-          return StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicator(context);
+          return StyleRegistry.registry().styleWithContext(context).adminListStyle().progressIndicator(context);
         } else if (state is FollowingDashboardListLoaded) {
           final values = state.values;
           if ((widget.isEmbedded != null) && widget.isEmbedded!) {
@@ -130,7 +130,7 @@ class FollowingDashboardListWidgetState extends State<FollowingDashboardListWidg
             return theList(context, values, accessState);
           }
         } else {
-          return StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicator(context);
+          return StyleRegistry.registry().styleWithContext(context).adminListStyle().progressIndicator(context);
         }
       });
     } else {

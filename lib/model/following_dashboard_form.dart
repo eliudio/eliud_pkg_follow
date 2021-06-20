@@ -147,7 +147,7 @@ class _MyFollowingDashboardFormState extends State<MyFollowingDashboardForm> {
     var accessState = AccessBloc.getState(context);
     return BlocBuilder<FollowingDashboardFormBloc, FollowingDashboardFormState>(builder: (context, state) {
       if (state is FollowingDashboardFormUninitialized) return Center(
-        child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicator(context),
+        child: StyleRegistry.registry().styleWithContext(context).adminListStyle().progressIndicator(context),
       );
 
       if (state is FollowingDashboardFormLoaded) {
@@ -261,7 +261,7 @@ class _MyFollowingDashboardFormState extends State<MyFollowingDashboardForm> {
           ), formAction!
         );
       } else {
-        return StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicator(context);
+        return StyleRegistry.registry().styleWithContext(context).adminListStyle().progressIndicator(context);
       }
     });
   }

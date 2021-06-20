@@ -145,7 +145,7 @@ class _MyInviteDashboardFormState extends State<MyInviteDashboardForm> {
     var accessState = AccessBloc.getState(context);
     return BlocBuilder<InviteDashboardFormBloc, InviteDashboardFormState>(builder: (context, state) {
       if (state is InviteDashboardFormUninitialized) return Center(
-        child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicator(context),
+        child: StyleRegistry.registry().styleWithContext(context).adminListStyle().progressIndicator(context),
       );
 
       if (state is InviteDashboardFormLoaded) {
@@ -244,7 +244,7 @@ class _MyInviteDashboardFormState extends State<MyInviteDashboardForm> {
           ), formAction!
         );
       } else {
-        return StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicator(context);
+        return StyleRegistry.registry().styleWithContext(context).adminListStyle().progressIndicator(context);
       }
     });
   }

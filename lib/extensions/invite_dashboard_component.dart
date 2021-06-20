@@ -59,13 +59,13 @@ class InviteDashboard extends AbstractInviteDashboardComponent {
           memberPublicInfoRepository:
               memberPublicInfoRepository(appId: AccessBloc.appId(context))!,
         )..add(LoadMemberPublicInfoList()),
-        child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().simpleTopicContainer(context, children:[MemberPublicInfoListWidget(
+        child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().containerStyle().simpleTopicContainer(context, children:[MemberPublicInfoListWidget(
             readOnly: true,
             widgetProvider: (value) => widgetProvider(appId, value, member),
             listBackground: BackgroundModel(documentID: "`transparent"))]),
       );
     } else {
-      return StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicator(context);
+      return StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicatorStyle().progressIndicator(context);
     }
   }
 
@@ -124,31 +124,31 @@ class InviteDashboardItem extends StatelessWidget {
         var followRequest =
             await followRequestRepository(appId: appId)!.get(key);
         if (followRequest == null) {
-          frontEndStyle.openAckNackDialog(context, title: 'Invite', message: 'Request to follow this person?', onSelection: (value) {
+          frontEndStyle.dialogStyle().openAckNackDialog(context, title: 'Invite', message: 'Request to follow this person?', onSelection: (value) {
             if (value == 0) {
               _invite(context);
             }
           });
         } else {
           if (followRequest.status == FollowRequestStatus.FollowRequestDenied) {
-            frontEndStyle.openAckNackDialog(context, title: 'Invite', message: "Request to follow this person? You've requested this before and this was declined.", onSelection: (value) {
+            frontEndStyle.dialogStyle().openAckNackDialog(context, title: 'Invite', message: "Request to follow this person? You've requested this before and this was declined.", onSelection: (value) {
               if (value == 0) {
                 _invite(context);
               }
             });
           } else {
             if (followRequest.status == FollowRequestStatus.FollowRequestPending) {
-              frontEndStyle.openErrorDialog(context, title: 'Error', errorMessage: "You have already requested to follow this person and the request is pending.");
+              frontEndStyle.dialogStyle().openErrorDialog(context, title: 'Error', errorMessage: "You have already requested to follow this person and the request is pending.");
             } else {
-              frontEndStyle.openErrorDialog(context, title: 'Error', errorMessage: "You have already requested to follow this person and this was accepted.");
+              frontEndStyle.dialogStyle().openErrorDialog(context, title: 'Error', errorMessage: "You have already requested to follow this person and this was accepted.");
             }
           }
         }
       } else {
-        frontEndStyle.openErrorDialog(context, title: 'Error', errorMessage: 'You are already following this person');
+        frontEndStyle.dialogStyle().openErrorDialog(context, title: 'Error', errorMessage: 'You are already following this person');
       }
     } else {
-      frontEndStyle.openErrorDialog(context, title: 'Error', errorMessage: 'This is you. No point following yourself');
+      frontEndStyle.dialogStyle().openErrorDialog(context, title: 'Error', errorMessage: 'This is you. No point following yourself');
     }
   }
 

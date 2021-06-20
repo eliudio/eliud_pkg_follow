@@ -100,7 +100,7 @@ class InviteDashboardListWidgetState extends State<InviteDashboardListWidget> {
     if (accessState is AppLoaded) {
       return BlocBuilder<InviteDashboardListBloc, InviteDashboardListState>(builder: (context, state) {
         if (state is InviteDashboardListLoading) {
-          return StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicator(context);
+          return StyleRegistry.registry().styleWithContext(context).adminListStyle().progressIndicator(context);
         } else if (state is InviteDashboardListLoaded) {
           final values = state.values;
           if ((widget.isEmbedded != null) && widget.isEmbedded!) {
@@ -130,7 +130,7 @@ class InviteDashboardListWidgetState extends State<InviteDashboardListWidget> {
             return theList(context, values, accessState);
           }
         } else {
-          return StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicator(context);
+          return StyleRegistry.registry().styleWithContext(context).adminListStyle().progressIndicator(context);
         }
       });
     } else {

@@ -56,13 +56,13 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
           followingRepository:
               followingRepository(appId: AccessBloc.appId(context))!,
         )..add(LoadFollowingList()),
-        child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().simpleTopicContainer(context, children:([FollowingListWidget(
+        child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().containerStyle().simpleTopicContainer(context, children:([FollowingListWidget(
             readOnly: true,
             widgetProvider: (value) => widgetProvider(appId!, value!, dashboardModel),
             listBackground: BackgroundModel(documentID: "`transparent"))]),
       ));
     } else {
-      return StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicator(context);
+      return StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicatorStyle().progressIndicator(context);
     }
   }
 
@@ -156,7 +156,7 @@ class FollowingDashboardItem extends StatelessWidget {
       message = "Would you like to unfollow " + ((value == null) || (value!.followed == null) || (value!.followed!.name == null) ? value!.followed!.name! : '');
     }
 
-    StyleRegistry.registry().styleWithContext(context).frontEndStyle().openAckNackDialog(context, title: title, message: message, onSelection: (selectedValue) async {
+    StyleRegistry.registry().styleWithContext(context).frontEndStyle().dialogStyle().openAckNackDialog(context, title: title, message: message, onSelection: (selectedValue) async {
       Navigator.pop(context);
       if (selectedValue == 0) {
         await followingRepository(appId: appId)!.delete(value!);
