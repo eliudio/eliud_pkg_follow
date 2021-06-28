@@ -96,6 +96,7 @@ class FollowRequestModel {
 
   static FollowRequestModel? fromEntity(String documentID, FollowRequestEntity? entity) {
     if (entity == null) return null;
+    var counter = 0;
     return FollowRequestModel(
           documentID: documentID, 
           appId: entity.appId, 
@@ -128,6 +129,7 @@ class FollowRequestModel {
       }
     }
 
+    var counter = 0;
     return FollowRequestModel(
           documentID: documentID, 
           appId: entity.appId, 

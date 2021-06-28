@@ -78,6 +78,7 @@ class InviteDashboardModel {
 
   static InviteDashboardModel? fromEntity(String documentID, InviteDashboardEntity? entity) {
     if (entity == null) return null;
+    var counter = 0;
     return InviteDashboardModel(
           documentID: documentID, 
           appId: entity.appId, 
@@ -90,6 +91,7 @@ class InviteDashboardModel {
   static Future<InviteDashboardModel?> fromEntityPlus(String documentID, InviteDashboardEntity? entity, { String? appId}) async {
     if (entity == null) return null;
 
+    var counter = 0;
     return InviteDashboardModel(
           documentID: documentID, 
           appId: entity.appId, 

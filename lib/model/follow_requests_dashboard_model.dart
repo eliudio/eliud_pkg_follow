@@ -78,6 +78,7 @@ class FollowRequestsDashboardModel {
 
   static FollowRequestsDashboardModel? fromEntity(String documentID, FollowRequestsDashboardEntity? entity) {
     if (entity == null) return null;
+    var counter = 0;
     return FollowRequestsDashboardModel(
           documentID: documentID, 
           appId: entity.appId, 
@@ -90,6 +91,7 @@ class FollowRequestsDashboardModel {
   static Future<FollowRequestsDashboardModel?> fromEntityPlus(String documentID, FollowRequestsDashboardEntity? entity, { String? appId}) async {
     if (entity == null) return null;
 
+    var counter = 0;
     return FollowRequestsDashboardModel(
           documentID: documentID, 
           appId: entity.appId, 

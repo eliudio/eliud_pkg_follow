@@ -80,6 +80,7 @@ class FollowingModel {
 
   static FollowingModel? fromEntity(String documentID, FollowingEntity? entity) {
     if (entity == null) return null;
+    var counter = 0;
     return FollowingModel(
           documentID: documentID, 
           appId: entity.appId, 
@@ -111,6 +112,7 @@ class FollowingModel {
       }
     }
 
+    var counter = 0;
     return FollowingModel(
           documentID: documentID, 
           appId: entity.appId, 
