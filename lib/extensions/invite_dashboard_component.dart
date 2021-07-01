@@ -48,24 +48,42 @@ class InviteDashboard extends AbstractInviteDashboardComponent {
   }
 
   @override
-  Widget yourWidget(BuildContext context, InviteDashboardModel? dashboardModel) {
+  Widget yourWidget(
+      BuildContext context, InviteDashboardModel? dashboardModel) {
     var state = AccessBloc.getState(context);
     if (state is AppLoaded) {
       var member = state.getMember();
       var appId = state.app.documentID;
-      return BlocProvider<MemberPublicInfoListBloc>(
-        create: (context) => MemberPublicInfoListBloc(
-          eliudQuery: getSubscribedMembers(state.app.documentID!),
-          memberPublicInfoRepository:
-              memberPublicInfoRepository(appId: AccessBloc.appId(context))!,
-        )..add(LoadMemberPublicInfoList()),
-        child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().containerStyle().simpleTopicContainer(context, children:[MemberPublicInfoListWidget(
-            readOnly: true,
-            widgetProvider: (value) => widgetProvider(appId, value, member),
-            listBackground: BackgroundModel(documentID: "`transparent"))]),
-      );
+      return StyleRegistry.registry()
+          .styleWithContext(context)
+          .frontEndStyle()
+          .containerStyle()
+          .topicContainer(context, children: [
+        BlocProvider<MemberPublicInfoListBloc>(
+          create: (context) => MemberPublicInfoListBloc(
+            eliudQuery: getSubscribedMembers(state.app.documentID!),
+            memberPublicInfoRepository:
+                memberPublicInfoRepository(appId: AccessBloc.appId(context))!,
+          )..add(LoadMemberPublicInfoList()),
+          child: StyleRegistry.registry()
+              .styleWithContext(context)
+              .frontEndStyle()
+              .containerStyle()
+              .simpleTopicContainer(context, children: [
+            MemberPublicInfoListWidget(
+                readOnly: true,
+                widgetProvider: (value) => widgetProvider(appId, value, member),
+                listBackground: BackgroundModel(documentID: "`transparent"))
+          ]),
+        )
+      ]);
+      ;
     } else {
-      return StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicatorStyle().progressIndicator(context);
+      return StyleRegistry.registry()
+          .styleWithContext(context)
+          .frontEndStyle()
+          .progressIndicatorStyle()
+          .progressIndicator(context);
     }
   }
 
@@ -116,39 +134,58 @@ class InviteDashboardItem extends StatelessWidget {
   }
 
   Future<void> openOptions(BuildContext context, Widget profilePhoto) async {
-    var frontEndStyle = StyleRegistry.registry().styleWithContext(context).frontEndStyle();
+    var frontEndStyle =
+        StyleRegistry.registry().styleWithContext(context).frontEndStyle();
     if (value!.documentID != member!.documentID) {
-      String key = FollowerHelper.getKey(value!.documentID!, member!.documentID!);
+      String key =
+          FollowerHelper.getKey(value!.documentID!, member!.documentID!);
       var following = await followingRepository(appId: appId)!.get(key);
       if (following == null) {
         var followRequest =
             await followRequestRepository(appId: appId)!.get(key);
         if (followRequest == null) {
-          frontEndStyle.dialogStyle().openAckNackDialog(context, title: 'Invite', message: 'Request to follow this person?', onSelection: (value) {
+          frontEndStyle.dialogStyle().openAckNackDialog(context,
+              title: 'Invite',
+              message: 'Request to follow this person?', onSelection: (value) {
             if (value == 0) {
               _invite(context);
             }
           });
         } else {
           if (followRequest.status == FollowRequestStatus.FollowRequestDenied) {
-            frontEndStyle.dialogStyle().openAckNackDialog(context, title: 'Invite', message: "Request to follow this person? You've requested this before and this was declined.", onSelection: (value) {
+            frontEndStyle.dialogStyle().openAckNackDialog(context,
+                title: 'Invite',
+                message:
+                    "Request to follow this person? You've requested this before and this was declined.",
+                onSelection: (value) {
               if (value == 0) {
                 _invite(context);
               }
             });
           } else {
-            if (followRequest.status == FollowRequestStatus.FollowRequestPending) {
-              frontEndStyle.dialogStyle().openErrorDialog(context, title: 'Error', errorMessage: "You have already requested to follow this person and the request is pending.");
+            if (followRequest.status ==
+                FollowRequestStatus.FollowRequestPending) {
+              frontEndStyle.dialogStyle().openErrorDialog(context,
+                  title: 'Error',
+                  errorMessage:
+                      "You have already requested to follow this person and the request is pending.");
             } else {
-              frontEndStyle.dialogStyle().openErrorDialog(context, title: 'Error', errorMessage: "You have already requested to follow this person and this was accepted.");
+              frontEndStyle.dialogStyle().openErrorDialog(context,
+                  title: 'Error',
+                  errorMessage:
+                      "You have already requested to follow this person and this was accepted.");
             }
           }
         }
       } else {
-        frontEndStyle.dialogStyle().openErrorDialog(context, title: 'Error', errorMessage: 'You are already following this person');
+        frontEndStyle.dialogStyle().openErrorDialog(context,
+            title: 'Error',
+            errorMessage: 'You are already following this person');
       }
     } else {
-      frontEndStyle.dialogStyle().openErrorDialog(context, title: 'Error', errorMessage: 'This is you. No point following yourself');
+      frontEndStyle.dialogStyle().openErrorDialog(context,
+          title: 'Error',
+          errorMessage: 'This is you. No point following yourself');
     }
   }
 
@@ -156,7 +193,8 @@ class InviteDashboardItem extends StatelessWidget {
     var follower =
         await memberPublicInfoRepository(appId: appId)!.get(member!.documentID);
     await followRequestRepository(appId: appId)!.add(FollowRequestModel(
-        documentID: FollowerHelper.getKey(value!.documentID!, member!.documentID!),
+        documentID:
+            FollowerHelper.getKey(value!.documentID!, member!.documentID!),
         appId: appId,
         followed: value,
         follower: follower,

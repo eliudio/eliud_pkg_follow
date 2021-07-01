@@ -30,7 +30,7 @@ import '../follow_package.dart';
  */
 class FollowRequestsDashboardComponentConstructorDefault
     implements ComponentConstructor {
-  Widget createNew({String ?id, Map<String, dynamic>? parameters}) {
+  Widget createNew({String? id, Map<String, dynamic>? parameters}) {
     return FollowRequestsDashboardComponent(id: id);
   }
 }
@@ -51,21 +51,41 @@ class FollowRequestsDashboardComponent
     var state = AccessBloc.getState(context);
     if (state is AppLoaded) {
       var appId = state.app.documentID;
-      return BlocProvider<FollowRequestListBloc>(
-        create: (context) => FollowRequestListBloc(
-          detailed: true,
-          eliudQuery: FollowPackage.getOpenFollowRequestsQuery(
-              state.app.documentID!, state.getMember()!.documentID!),
-          followRequestRepository:
-              followRequestRepository(appId: AccessBloc.appId(context))!,
-        )..add(LoadFollowRequestList()),
-        child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().containerStyle().simpleTopicContainer(context, children:([FollowRequestListWidget(
-            readOnly: true,
-            widgetProvider: (value) => widgetProvider(appId!, value!),
-            listBackground: BackgroundModel(documentID: "`transparent"))]),
-      ));
+      return StyleRegistry.registry()
+          .styleWithContext(context)
+          .frontEndStyle()
+          .containerStyle()
+          .topicContainer(context, children: [
+        BlocProvider<FollowRequestListBloc>(
+            create: (context) => FollowRequestListBloc(
+                  detailed: true,
+                  eliudQuery: FollowPackage.getOpenFollowRequestsQuery(
+                      state.app.documentID!, state.getMember()!.documentID!),
+                  followRequestRepository: followRequestRepository(
+                      appId: AccessBloc.appId(context))!,
+                )..add(LoadFollowRequestList()),
+            child: StyleRegistry.registry()
+                .styleWithContext(context)
+                .frontEndStyle()
+                .containerStyle()
+                .simpleTopicContainer(
+                  context,
+                  children: ([
+                    FollowRequestListWidget(
+                        readOnly: true,
+                        widgetProvider: (value) =>
+                            widgetProvider(appId!, value!),
+                        listBackground:
+                            BackgroundModel(documentID: "`transparent"))
+                  ]),
+                ))
+      ]);
     } else {
-      return StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicatorStyle().progressIndicator(context);
+      return StyleRegistry.registry()
+          .styleWithContext(context)
+          .frontEndStyle()
+          .progressIndicatorStyle()
+          .progressIndicator(context);
     }
   }
 
@@ -95,8 +115,7 @@ class FollowRequestsDashboardItem extends StatelessWidget {
     if (value == null) return Text("Value is null");
     if (value!.follower == null) return Text("Follower is null");
     var followerId = value!.follower!.documentID!;
-    var theFuture =  memberPublicInfoRepository(appId: appId)!
-        .get(followerId);
+    var theFuture = memberPublicInfoRepository(appId: appId)!.get(followerId);
     return FutureBuilder<MemberPublicInfoModel?>(
         future: theFuture,
         builder: (context, snapshot) {
@@ -111,15 +130,15 @@ class FollowRequestsDashboardItem extends StatelessWidget {
                 image: data.photoURL!,
               );
             }
-          return ListTile(
+            return ListTile(
                 onTap: () {
                   openOptions(context);
                 },
                 trailing: Container(
-                    height: 100,
-                    width: 100,
-                    child: photo,
-                    ),
+                  height: 100,
+                  width: 100,
+                  child: photo,
+                ),
                 title: Text(
                   data!.name!,
                 ));
@@ -130,10 +149,21 @@ class FollowRequestsDashboardItem extends StatelessWidget {
   }
 
   void openOptions(BuildContext context) {
-    var name = value == null || value!.follower == null || value!.follower!.name == null ? "unkown" : value!.follower!.name;
-    StyleRegistry.registry().styleWithContext(context).frontEndStyle().dialogStyle().openAckNackDialog(context, title: 'Follow invitation', message: 'This member ' +
-        name! +
-        ' would like to follow you? Do you accept or reject?', onSelection: (value) {
+    var name = value == null ||
+            value!.follower == null ||
+            value!.follower!.name == null
+        ? "unkown"
+        : value!.follower!.name;
+    StyleRegistry.registry()
+        .styleWithContext(context)
+        .frontEndStyle()
+        .dialogStyle()
+        .openAckNackDialog(context,
+            title: 'Follow invitation',
+            message: 'This member ' +
+                name! +
+                ' would like to follow you? Do you accept or reject?',
+            onSelection: (value) {
       if (value == 0) {
         _accept(context);
       } else {
@@ -158,7 +188,7 @@ class FollowRequestsDashboardItem extends StatelessWidget {
       }
     }
   }
-  
+
   Future<void> _reject(BuildContext context) async {
     Navigator.pop(context);
     if (value != null) {

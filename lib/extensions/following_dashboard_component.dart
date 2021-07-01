@@ -49,20 +49,40 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
       var appId = state.app.documentID;
       var member = state.getMember();
       if (member == null) return Text("No member");
-      return BlocProvider<FollowingListBloc>(
-        create: (context) => FollowingListBloc(
-          eliudQuery: getQuery(dashboardModel, member),
-          detailed: true,
-          followingRepository:
-              followingRepository(appId: AccessBloc.appId(context))!,
-        )..add(LoadFollowingList()),
-        child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().containerStyle().simpleTopicContainer(context, children:([FollowingListWidget(
-            readOnly: true,
-            widgetProvider: (value) => widgetProvider(appId!, value!, dashboardModel),
-            listBackground: BackgroundModel(documentID: "`transparent"))]),
-      ));
+      return StyleRegistry.registry()
+          .styleWithContext(context)
+          .frontEndStyle()
+          .containerStyle()
+          .topicContainer(context, children: [
+        BlocProvider<FollowingListBloc>(
+            create: (context) => FollowingListBloc(
+                  eliudQuery: getQuery(dashboardModel, member),
+                  detailed: true,
+                  followingRepository:
+                      followingRepository(appId: AccessBloc.appId(context))!,
+                )..add(LoadFollowingList()),
+            child: StyleRegistry.registry()
+                .styleWithContext(context)
+                .frontEndStyle()
+                .containerStyle()
+                .simpleTopicContainer(
+                  context,
+                  children: ([
+                    FollowingListWidget(
+                        readOnly: true,
+                        widgetProvider: (value) =>
+                            widgetProvider(appId!, value!, dashboardModel),
+                        listBackground:
+                            BackgroundModel(documentID: "`transparent"))
+                  ]),
+                ))
+      ]);
     } else {
-      return StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicatorStyle().progressIndicator(context);
+      return StyleRegistry.registry()
+          .styleWithContext(context)
+          .frontEndStyle()
+          .progressIndicatorStyle()
+          .progressIndicator(context);
     }
   }
 
@@ -80,8 +100,10 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
     return null;
   }
 
-  Widget widgetProvider(String appId, FollowingModel value, FollowingDashboardModel dashboardModel) {
-    return FollowingDashboardItem(appId: appId, value: value, followingView: dashboardModel.view);
+  Widget widgetProvider(String appId, FollowingModel value,
+      FollowingDashboardModel dashboardModel) {
+    return FollowingDashboardItem(
+        appId: appId, value: value, followingView: dashboardModel.view);
   }
 
   @override
@@ -113,31 +135,33 @@ class FollowingDashboardItem extends StatelessWidget {
           if (snapshot.hasData) {
             var data = snapshot.data;
 */
-            var data = followingView == FollowingView.Followers ? value!.follower : value!.followed;
-            var photo;
-            var name;
-            if (data == null) {
-              photo = Text("No photo provided");
-              name = "No name";
-            } else {
-              photo = FadeInImage.memoryNetwork(
-                placeholder: kTransparentImage,
-                image: data.photoURL!,
-              );
-              name = data.name;
-            }
-            return ListTile(
-                onTap: () {
-                  openOptions(context);
-                },
-                trailing: Container(
-                    height: 100,
-                    width: 100,
-                    child: photo,
-                    ),
-                title: Text(
-                  name,
-                ));
+    var data = followingView == FollowingView.Followers
+        ? value!.follower
+        : value!.followed;
+    var photo;
+    var name;
+    if (data == null) {
+      photo = Text("No photo provided");
+      name = "No name";
+    } else {
+      photo = FadeInImage.memoryNetwork(
+        placeholder: kTransparentImage,
+        image: data.photoURL!,
+      );
+      name = data.name;
+    }
+    return ListTile(
+        onTap: () {
+          openOptions(context);
+        },
+        trailing: Container(
+          height: 100,
+          width: 100,
+          child: photo,
+        ),
+        title: Text(
+          name,
+        ));
     /*} else {
             return Icon(Icons.person_outline);
 
@@ -150,13 +174,28 @@ class FollowingDashboardItem extends StatelessWidget {
     var message;
     if (followingView == FollowingView.Followers) {
       title = 'Reject follower?';
-      message = 'Would you like to reject ' + ((value == null) || (value!.follower == null) || (value!.follower!.name == null) ? value!.follower!.name! : '');
+      message = 'Would you like to reject ' +
+          ((value == null) ||
+                  (value!.follower == null) ||
+                  (value!.follower!.name == null)
+              ? value!.follower!.name!
+              : '');
     } else {
       title = 'Unfollow this person?';
-      message = "Would you like to unfollow " + ((value == null) || (value!.followed == null) || (value!.followed!.name == null) ? value!.followed!.name! : '');
+      message = "Would you like to unfollow " +
+          ((value == null) ||
+                  (value!.followed == null) ||
+                  (value!.followed!.name == null)
+              ? value!.followed!.name!
+              : '');
     }
 
-    StyleRegistry.registry().styleWithContext(context).frontEndStyle().dialogStyle().openAckNackDialog(context, title: title, message: message, onSelection: (selectedValue) async {
+    StyleRegistry.registry()
+        .styleWithContext(context)
+        .frontEndStyle()
+        .dialogStyle()
+        .openAckNackDialog(context, title: title, message: message,
+            onSelection: (selectedValue) async {
       Navigator.pop(context);
       if (selectedValue == 0) {
         await followingRepository(appId: appId)!.delete(value!);
