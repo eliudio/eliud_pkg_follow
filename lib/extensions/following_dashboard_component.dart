@@ -157,9 +157,8 @@ class FollowingDashboardItem extends StatelessWidget {
         onTap: () {
           MemberPopupMenu.showPopupMenuWithAllActions(
               context,
-              followingView == FollowingView.Followers ? 'Reject' : 'Unfollow',
+              followingView == FollowingView.Followers ? 'Reject follow request' : 'Unfollow member',
               () => openOptions(context), dashboardModel.memberActions, value!.documentID!, );
-          openOptions(context);
         },
         trailing: Container(
           height: 100,

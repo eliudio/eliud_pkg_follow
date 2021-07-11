@@ -164,6 +164,8 @@ class FollowRequestsDashboardItem extends StatelessWidget {
         .dialogStyle()
         .openAckNackDialog(context,
             title: 'Follow invitation',
+            ackButtonLabel: 'Accept',
+            nackButtonLabel: 'Reject',
             message: 'This member ' +
                 name! +
                 ' would like to follow you? Do you accept or reject?',
