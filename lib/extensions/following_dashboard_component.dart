@@ -1,4 +1,5 @@
 import 'package:eliud_core/style/style_registry.dart';
+import 'package:eliud_pkg_etc/tools/member_popup_menu.dart';
 import 'package:eliud_pkg_follow/model/following_list.dart';
 import 'package:eliud_pkg_follow/model/following_list_event.dart';
 import 'package:eliud_pkg_follow/model/following_model.dart';
@@ -103,7 +104,7 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
   Widget widgetProvider(String appId, FollowingModel value,
       FollowingDashboardModel dashboardModel) {
     return FollowingDashboardItem(
-        appId: appId, value: value, followingView: dashboardModel.view);
+        appId: appId, value: value, followingView: dashboardModel.view, dashboardModel: dashboardModel);
   }
 
   @override
@@ -117,12 +118,14 @@ class FollowingDashboardItem extends StatelessWidget {
   final FollowingModel? value;
   final String? appId;
   final FollowingView? followingView;
+  final FollowingDashboardModel dashboardModel;
 
   FollowingDashboardItem({
     Key? key,
     this.followingView,
-    @required this.value,
+    required this.value,
     this.appId,
+    required this.dashboardModel,
   }) : super(key: key);
 
   @override
@@ -152,6 +155,10 @@ class FollowingDashboardItem extends StatelessWidget {
     }
     return ListTile(
         onTap: () {
+          MemberPopupMenu.showPopupMenuWithAllActions(
+              context,
+              followingView == FollowingView.Followers ? 'Reject' : 'Unfollow',
+              () => openOptions(context), dashboardModel.memberActions, value!.documentID!, );
           openOptions(context);
         },
         trailing: Container(

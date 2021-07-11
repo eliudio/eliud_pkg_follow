@@ -27,13 +27,17 @@ import 'package:eliud_core/tools/string_validator.dart';
 
 import 'package:eliud_core/model/repository_export.dart';
 import 'package:eliud_core/model/abstract_repository_singleton.dart';
+import 'package:eliud_pkg_etc/model/repository_export.dart';
+import 'package:eliud_pkg_etc/model/abstract_repository_singleton.dart';
 import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/repository_export.dart';
 import 'package:eliud_core/model/model_export.dart';
+import 'package:eliud_pkg_etc/model/model_export.dart';
 import '../tools/bespoke_models.dart';
 import 'package:eliud_pkg_follow/model/model_export.dart';
 import 'package:eliud_core/model/entity_export.dart';
+import 'package:eliud_pkg_etc/model/entity_export.dart';
 import '../tools/bespoke_entities.dart';
 import 'package:eliud_pkg_follow/model/entity_export.dart';
 
@@ -55,6 +59,7 @@ class InviteDashboardFormBloc extends Bloc<InviteDashboardFormEvent, InviteDashb
                                                documentID: "",
                                  appId: "",
                                  description: "",
+                                 memberActions: [],
 
         ));
         yield loaded;
@@ -93,6 +98,12 @@ class InviteDashboardFormBloc extends Bloc<InviteDashboardFormEvent, InviteDashb
       }
       if (event is ChangedInviteDashboardDescription) {
         newValue = currentState.value!.copyWith(description: event.value);
+        yield SubmittableInviteDashboardForm(value: newValue);
+
+        return;
+      }
+      if (event is ChangedInviteDashboardMemberActions) {
+        newValue = currentState.value!.copyWith(memberActions: event.value);
         yield SubmittableInviteDashboardForm(value: newValue);
 
         return;

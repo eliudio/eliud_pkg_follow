@@ -127,6 +127,22 @@ class ViewFollowingDashboardFormError extends FollowingDashboardFormError {
 }
 
 
+class MemberActionsFollowingDashboardFormError extends FollowingDashboardFormError { 
+  const MemberActionsFollowingDashboardFormError({ String? message, FollowingDashboardModel? value }): super(message: message, value: value);
+
+  @override
+  List<Object?> get props => [ message, value ];
+
+  @override
+  String toString() {
+    return '''MemberActionsFollowingDashboardFormError {
+      value: $value,
+      message: $message,
+    }''';
+  }
+}
+
+
 class ConditionsFollowingDashboardFormError extends FollowingDashboardFormError { 
   const ConditionsFollowingDashboardFormError({ String? message, FollowingDashboardModel? value }): super(message: message, value: value);
 

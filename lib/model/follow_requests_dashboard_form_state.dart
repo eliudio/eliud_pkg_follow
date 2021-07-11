@@ -111,6 +111,22 @@ class DescriptionFollowRequestsDashboardFormError extends FollowRequestsDashboar
 }
 
 
+class MemberActionsFollowRequestsDashboardFormError extends FollowRequestsDashboardFormError { 
+  const MemberActionsFollowRequestsDashboardFormError({ String? message, FollowRequestsDashboardModel? value }): super(message: message, value: value);
+
+  @override
+  List<Object?> get props => [ message, value ];
+
+  @override
+  String toString() {
+    return '''MemberActionsFollowRequestsDashboardFormError {
+      value: $value,
+      message: $message,
+    }''';
+  }
+}
+
+
 class ConditionsFollowRequestsDashboardFormError extends FollowRequestsDashboardFormError { 
   const ConditionsFollowRequestsDashboardFormError({ String? message, FollowRequestsDashboardModel? value }): super(message: message, value: value);
 

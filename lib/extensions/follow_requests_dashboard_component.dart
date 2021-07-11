@@ -4,6 +4,7 @@ import 'package:eliud_core/core/widgets/alert_widget.dart';
 import 'package:eliud_core/model/background_model.dart';
 import 'package:eliud_core/style/style_registry.dart';
 import 'package:eliud_core/tools/component_constructor.dart';
+import 'package:eliud_pkg_etc/tools/member_popup_menu.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/follow_request_list.dart';
 import 'package:eliud_pkg_follow/model/follow_request_list_bloc.dart';
@@ -74,7 +75,7 @@ class FollowRequestsDashboardComponent
                     FollowRequestListWidget(
                         readOnly: true,
                         widgetProvider: (value) =>
-                            widgetProvider(appId!, value!),
+                            widgetProvider(appId!, value!, dashboardModel!),
                         listBackground:
                             BackgroundModel(documentID: "`transparent"))
                   ]),
@@ -89,8 +90,8 @@ class FollowRequestsDashboardComponent
     }
   }
 
-  Widget widgetProvider(String appId, FollowRequestModel value) {
-    return FollowRequestsDashboardItem(appId: appId, value: value);
+  Widget widgetProvider(String appId, FollowRequestModel value, FollowRequestsDashboardModel dashboardModel) {
+    return FollowRequestsDashboardItem(appId: appId, dashboardModel: dashboardModel,value: value);
   }
 
   @override
@@ -103,10 +104,12 @@ class FollowRequestsDashboardComponent
 class FollowRequestsDashboardItem extends StatelessWidget {
   final FollowRequestModel? value;
   final String? appId;
+  final FollowRequestsDashboardModel dashboardModel;
 
   FollowRequestsDashboardItem({
     Key? key,
-    @required this.value,
+    required this.value,
+    required this.dashboardModel,
     this.appId,
   }) : super(key: key);
 
@@ -132,7 +135,8 @@ class FollowRequestsDashboardItem extends StatelessWidget {
             }
             return ListTile(
                 onTap: () {
-                  openOptions(context);
+                  MemberPopupMenu.showPopupMenuWithAllActions(
+                      context, 'Follow request', () => openOptions(context), dashboardModel.memberActions, value!.documentID!, );
                 },
                 trailing: Container(
                   height: 100,

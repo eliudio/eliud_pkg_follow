@@ -27,13 +27,17 @@ import 'package:eliud_core/tools/string_validator.dart';
 
 import 'package:eliud_core/model/repository_export.dart';
 import 'package:eliud_core/model/abstract_repository_singleton.dart';
+import 'package:eliud_pkg_etc/model/repository_export.dart';
+import 'package:eliud_pkg_etc/model/abstract_repository_singleton.dart';
 import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/repository_export.dart';
 import 'package:eliud_core/model/model_export.dart';
+import 'package:eliud_pkg_etc/model/model_export.dart';
 import '../tools/bespoke_models.dart';
 import 'package:eliud_pkg_follow/model/model_export.dart';
 import 'package:eliud_core/model/entity_export.dart';
+import 'package:eliud_pkg_etc/model/entity_export.dart';
 import '../tools/bespoke_entities.dart';
 import 'package:eliud_pkg_follow/model/entity_export.dart';
 
@@ -55,6 +59,7 @@ class FollowingDashboardFormBloc extends Bloc<FollowingDashboardFormEvent, Follo
                                                documentID: "",
                                  appId: "",
                                  description: "",
+                                 memberActions: [],
 
         ));
         yield loaded;
@@ -99,6 +104,12 @@ class FollowingDashboardFormBloc extends Bloc<FollowingDashboardFormEvent, Follo
       }
       if (event is ChangedFollowingDashboardView) {
         newValue = currentState.value!.copyWith(view: event.value);
+        yield SubmittableFollowingDashboardForm(value: newValue);
+
+        return;
+      }
+      if (event is ChangedFollowingDashboardMemberActions) {
+        newValue = currentState.value!.copyWith(memberActions: event.value);
         yield SubmittableFollowingDashboardForm(value: newValue);
 
         return;

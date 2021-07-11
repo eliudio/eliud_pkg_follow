@@ -6,6 +6,7 @@ import 'package:eliud_core/model/member_model.dart';
 import 'package:eliud_core/style/style_registry.dart';
 import 'package:eliud_core/tools/component_constructor.dart';
 import 'package:eliud_core/tools/query/query_tools.dart';
+import 'package:eliud_pkg_etc/tools/member_popup_menu.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/follow_request_model.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_component.dart';
@@ -72,7 +73,7 @@ class InviteDashboard extends AbstractInviteDashboardComponent {
               .simpleTopicContainer(context, children: [
             MemberPublicInfoListWidget(
                 readOnly: true,
-                widgetProvider: (value) => widgetProvider(appId, value, member),
+                widgetProvider: (value) => widgetProvider(appId, value, member, dashboardModel!),
                 listBackground: BackgroundModel(documentID: "`transparent"))
           ]),
         )
@@ -88,8 +89,8 @@ class InviteDashboard extends AbstractInviteDashboardComponent {
   }
 
   Widget widgetProvider(
-      String? appId, MemberPublicInfoModel? value, MemberModel? member) {
-    return InviteDashboardItem(appId: appId, value: value, member: member);
+      String? appId, MemberPublicInfoModel? value, MemberModel? member, InviteDashboardModel dashboardModel) {
+    return InviteDashboardItem(appId: appId, value: value, member: member, dashboardModel: dashboardModel,);
   }
 
   @override
@@ -102,12 +103,14 @@ class InviteDashboardItem extends StatelessWidget {
   final MemberModel? member;
   final MemberPublicInfoModel? value;
   final String? appId;
+  final InviteDashboardModel dashboardModel;
 
   InviteDashboardItem({
     Key? key,
     this.member,
-    @required this.value,
+    required this.value,
     this.appId,
+    required this.dashboardModel,
   }) : super(key: key);
 
   @override
@@ -125,7 +128,8 @@ class InviteDashboardItem extends StatelessWidget {
         key: Key('__Invite_item_${value!.documentID}'),
         child: ListTile(
             onTap: () {
-              openOptions(context, profilePhoto);
+              MemberPopupMenu.showPopupMenuWithAllActions(
+                  context, 'Invite', () => openOptions(context, profilePhoto), dashboardModel.memberActions, value!.documentID!, );
             },
             trailing: Container(height: 100, width: 100, child: profilePhoto),
             title: Text(

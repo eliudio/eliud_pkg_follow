@@ -41,15 +41,20 @@ import 'package:eliud_core/tools/etc.dart';
 
 import 'package:eliud_core/model/repository_export.dart';
 import 'package:eliud_core/model/abstract_repository_singleton.dart';
+import 'package:eliud_pkg_etc/model/repository_export.dart';
+import 'package:eliud_pkg_etc/model/abstract_repository_singleton.dart';
 import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/repository_export.dart';
 import 'package:eliud_core/model/embedded_component.dart';
+import 'package:eliud_pkg_etc/model/embedded_component.dart';
 import 'package:eliud_pkg_follow/model/embedded_component.dart';
 import 'package:eliud_core/model/model_export.dart';
+import 'package:eliud_pkg_etc/model/model_export.dart';
 import '../tools/bespoke_models.dart';
 import 'package:eliud_pkg_follow/model/model_export.dart';
 import 'package:eliud_core/model/entity_export.dart';
+import 'package:eliud_pkg_etc/model/entity_export.dart';
 import '../tools/bespoke_entities.dart';
 import 'package:eliud_pkg_follow/model/entity_export.dart';
 
@@ -177,6 +182,25 @@ class _MyFollowingDashboardFormState extends State<MyFollowingDashboardForm> {
 
         children.add(
 
+                new Container(
+                    height: (fullScreenHeight(context) / 2.5), 
+                    child: memberActionsList(context, state.value!.memberActions, _onMemberActionsChanged)
+                )
+          );
+
+
+        children.add(Container(height: 20.0));
+        children.add(StyleRegistry.registry().styleWithContext(context).adminFormStyle().divider(context));
+
+
+         children.add(Container(
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                  child: StyleRegistry.registry().styleWithContext(context).adminFormStyle().groupTitle(context, 'General')
+                ));
+
+        children.add(
+
                   StyleRegistry.registry().styleWithContext(context).adminFormStyle().textFormField(context, labelText: 'Document ID', icon: Icons.vpn_key, readOnly: (formAction == FormAction.UpdateAction), textEditingController: _documentIDController, keyboardType: TextInputType.text, validator: (_) => state is DocumentIDFollowingDashboardFormError ? state.message : null, hintText: null)
           );
 
@@ -216,6 +240,28 @@ class _MyFollowingDashboardFormState extends State<MyFollowingDashboardForm> {
         children.add(StyleRegistry.registry().styleWithContext(context).adminFormStyle().divider(context));
 
 
+         children.add(Container(
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                  child: StyleRegistry.registry().styleWithContext(context).adminFormStyle().groupTitle(context, 'Open Feed Action')
+                ));
+
+
+        children.add(Container(height: 20.0));
+        children.add(StyleRegistry.registry().styleWithContext(context).adminFormStyle().divider(context));
+
+
+         children.add(Container(
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                  child: StyleRegistry.registry().styleWithContext(context).adminFormStyle().groupTitle(context, 'Open Profile Action')
+                ));
+
+
+        children.add(Container(height: 20.0));
+        children.add(StyleRegistry.registry().styleWithContext(context).adminFormStyle().divider(context));
+
+
         if ((formAction != FormAction.ShowData) && (formAction != FormAction.ShowPreloadedData))
           children.add(StyleRegistry.registry().styleWithContext(context).adminFormStyle().button(context, label: 'Submit',
                   onPressed: _readOnly(accessState, state) ? null : () {
@@ -229,6 +275,7 @@ class _MyFollowingDashboardFormState extends State<MyFollowingDashboardForm> {
                               appId: state.value!.appId, 
                               description: state.value!.description, 
                               view: state.value!.view, 
+                              memberActions: state.value!.memberActions, 
                               conditions: state.value!.conditions, 
                         )));
                       } else {
@@ -238,6 +285,7 @@ class _MyFollowingDashboardFormState extends State<MyFollowingDashboardForm> {
                               appId: state.value!.appId, 
                               description: state.value!.description, 
                               view: state.value!.view, 
+                              memberActions: state.value!.memberActions, 
                               conditions: state.value!.conditions, 
                           )));
                       }
@@ -285,6 +333,12 @@ class _MyFollowingDashboardFormState extends State<MyFollowingDashboardForm> {
       _viewSelectedRadioTile = val;
     });
     _myFormBloc.add(ChangedFollowingDashboardView(value: toFollowingView(val)));
+  }
+
+
+  void _onMemberActionsChanged(value) {
+    _myFormBloc.add(ChangedFollowingDashboardMemberActions(value: value));
+    setState(() {});
   }
 
 

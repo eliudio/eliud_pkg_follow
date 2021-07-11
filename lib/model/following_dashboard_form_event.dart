@@ -18,13 +18,17 @@ import 'package:meta/meta.dart';
 import 'package:eliud_core/tools/common_tools.dart';
 import 'package:eliud_core/model/repository_export.dart';
 import 'package:eliud_core/model/abstract_repository_singleton.dart';
+import 'package:eliud_pkg_etc/model/repository_export.dart';
+import 'package:eliud_pkg_etc/model/abstract_repository_singleton.dart';
 import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/repository_export.dart';
 import 'package:eliud_core/model/model_export.dart';
+import 'package:eliud_pkg_etc/model/model_export.dart';
 import '../tools/bespoke_models.dart';
 import 'package:eliud_pkg_follow/model/model_export.dart';
 import 'package:eliud_core/model/entity_export.dart';
+import 'package:eliud_pkg_etc/model/entity_export.dart';
 import '../tools/bespoke_entities.dart';
 import 'package:eliud_pkg_follow/model/entity_export.dart';
 
@@ -105,6 +109,18 @@ class ChangedFollowingDashboardView extends FollowingDashboardFormEvent {
 
   @override
   String toString() => 'ChangedFollowingDashboardView{ value: $value }';
+}
+
+class ChangedFollowingDashboardMemberActions extends FollowingDashboardFormEvent {
+  final List<MemberActionModel>? value;
+
+  ChangedFollowingDashboardMemberActions({this.value});
+
+  @override
+  List<Object?> get props => [ value ];
+
+  @override
+  String toString() => 'ChangedFollowingDashboardMemberActions{ value: $value }';
 }
 
 class ChangedFollowingDashboardConditions extends FollowingDashboardFormEvent {

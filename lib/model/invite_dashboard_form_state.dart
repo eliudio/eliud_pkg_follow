@@ -111,6 +111,22 @@ class DescriptionInviteDashboardFormError extends InviteDashboardFormError {
 }
 
 
+class MemberActionsInviteDashboardFormError extends InviteDashboardFormError { 
+  const MemberActionsInviteDashboardFormError({ String? message, InviteDashboardModel? value }): super(message: message, value: value);
+
+  @override
+  List<Object?> get props => [ message, value ];
+
+  @override
+  String toString() {
+    return '''MemberActionsInviteDashboardFormError {
+      value: $value,
+      message: $message,
+    }''';
+  }
+}
+
+
 class ConditionsInviteDashboardFormError extends InviteDashboardFormError { 
   const ConditionsInviteDashboardFormError({ String? message, InviteDashboardModel? value }): super(message: message, value: value);
 
