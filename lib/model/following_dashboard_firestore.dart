@@ -53,11 +53,11 @@ class FollowingDashboardFirestore implements FollowingDashboardRepository {
   }
 
   FollowingDashboardModel? _populateDoc(DocumentSnapshot value) {
-    return FollowingDashboardModel.fromEntity(value.id, FollowingDashboardEntity.fromMap(value.data()));
+    return FollowingDashboardModel.fromEntity(value.id, FollowingDashboardEntity.fromMap(value.data() as Map<String, dynamic>));
   }
 
   Future<FollowingDashboardModel?> _populateDocPlus(DocumentSnapshot value) async {
-    return FollowingDashboardModel.fromEntityPlus(value.id, FollowingDashboardEntity.fromMap(value.data()), appId: appId);  }
+    return FollowingDashboardModel.fromEntityPlus(value.id, FollowingDashboardEntity.fromMap(value.data() as Map<String, dynamic>), appId: appId);  }
 
   Future<FollowingDashboardModel?> get(String? id, {Function(Exception)? onError}) async {
     try {

@@ -49,11 +49,11 @@ class FollowRequestFirestore implements FollowRequestRepository {
   }
 
   FollowRequestModel? _populateDoc(DocumentSnapshot value) {
-    return FollowRequestModel.fromEntity(value.id, FollowRequestEntity.fromMap(value.data()));
+    return FollowRequestModel.fromEntity(value.id, FollowRequestEntity.fromMap(value.data() as Map<String, dynamic>));
   }
 
   Future<FollowRequestModel?> _populateDocPlus(DocumentSnapshot value) async {
-    return FollowRequestModel.fromEntityPlus(value.id, FollowRequestEntity.fromMap(value.data()), appId: appId);  }
+    return FollowRequestModel.fromEntityPlus(value.id, FollowRequestEntity.fromMap(value.data() as Map<String, dynamic>), appId: appId);  }
 
   Future<FollowRequestModel?> get(String? id, {Function(Exception)? onError}) async {
     try {

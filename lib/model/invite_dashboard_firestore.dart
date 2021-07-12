@@ -53,11 +53,11 @@ class InviteDashboardFirestore implements InviteDashboardRepository {
   }
 
   InviteDashboardModel? _populateDoc(DocumentSnapshot value) {
-    return InviteDashboardModel.fromEntity(value.id, InviteDashboardEntity.fromMap(value.data()));
+    return InviteDashboardModel.fromEntity(value.id, InviteDashboardEntity.fromMap(value.data() as Map<String, dynamic>));
   }
 
   Future<InviteDashboardModel?> _populateDocPlus(DocumentSnapshot value) async {
-    return InviteDashboardModel.fromEntityPlus(value.id, InviteDashboardEntity.fromMap(value.data()), appId: appId);  }
+    return InviteDashboardModel.fromEntityPlus(value.id, InviteDashboardEntity.fromMap(value.data() as Map<String, dynamic>), appId: appId);  }
 
   Future<InviteDashboardModel?> get(String? id, {Function(Exception)? onError}) async {
     try {

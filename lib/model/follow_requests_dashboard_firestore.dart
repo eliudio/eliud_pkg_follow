@@ -53,11 +53,11 @@ class FollowRequestsDashboardFirestore implements FollowRequestsDashboardReposit
   }
 
   FollowRequestsDashboardModel? _populateDoc(DocumentSnapshot value) {
-    return FollowRequestsDashboardModel.fromEntity(value.id, FollowRequestsDashboardEntity.fromMap(value.data()));
+    return FollowRequestsDashboardModel.fromEntity(value.id, FollowRequestsDashboardEntity.fromMap(value.data() as Map<String, dynamic>));
   }
 
   Future<FollowRequestsDashboardModel?> _populateDocPlus(DocumentSnapshot value) async {
-    return FollowRequestsDashboardModel.fromEntityPlus(value.id, FollowRequestsDashboardEntity.fromMap(value.data()), appId: appId);  }
+    return FollowRequestsDashboardModel.fromEntityPlus(value.id, FollowRequestsDashboardEntity.fromMap(value.data() as Map<String, dynamic>), appId: appId);  }
 
   Future<FollowRequestsDashboardModel?> get(String? id, {Function(Exception)? onError}) async {
     try {
