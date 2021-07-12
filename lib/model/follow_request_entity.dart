@@ -37,8 +37,9 @@ class FollowRequestEntity {
     return 'FollowRequestEntity{appId: $appId, followerId: $followerId, followedId: $followedId, status: $status}';
   }
 
-  static FollowRequestEntity? fromMap(Map? map) {
-    if (map == null) return null;
+  static FollowRequestEntity? fromMap(Object? o) {
+    if (o == null) return null;
+    var map = o as Map<String, dynamic>;
 
     return FollowRequestEntity(
       appId: map['appId'], 

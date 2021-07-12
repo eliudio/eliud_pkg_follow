@@ -40,8 +40,9 @@ class FollowRequestsDashboardEntity {
     return 'FollowRequestsDashboardEntity{appId: $appId, description: $description, memberActions: MemberAction[] { $memberActionsCsv }, conditions: $conditions}';
   }
 
-  static FollowRequestsDashboardEntity? fromMap(Map? map) {
-    if (map == null) return null;
+  static FollowRequestsDashboardEntity? fromMap(Object? o) {
+    if (o == null) return null;
+    var map = o as Map<String, dynamic>;
 
     var memberActionsFromMap;
     memberActionsFromMap = map['memberActions'];

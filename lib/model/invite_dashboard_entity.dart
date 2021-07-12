@@ -40,8 +40,9 @@ class InviteDashboardEntity {
     return 'InviteDashboardEntity{appId: $appId, description: $description, memberActions: MemberAction[] { $memberActionsCsv }, conditions: $conditions}';
   }
 
-  static InviteDashboardEntity? fromMap(Map? map) {
-    if (map == null) return null;
+  static InviteDashboardEntity? fromMap(Object? o) {
+    if (o == null) return null;
+    var map = o as Map<String, dynamic>;
 
     var memberActionsFromMap;
     memberActionsFromMap = map['memberActions'];

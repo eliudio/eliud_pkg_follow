@@ -49,11 +49,11 @@ class FollowingFirestore implements FollowingRepository {
   }
 
   FollowingModel? _populateDoc(DocumentSnapshot value) {
-    return FollowingModel.fromEntity(value.id, FollowingEntity.fromMap(value.data() as Map<String, dynamic>));
+    return FollowingModel.fromEntity(value.id, FollowingEntity.fromMap(value.data()));
   }
 
   Future<FollowingModel?> _populateDocPlus(DocumentSnapshot value) async {
-    return FollowingModel.fromEntityPlus(value.id, FollowingEntity.fromMap(value.data() as Map<String, dynamic>), appId: appId);  }
+    return FollowingModel.fromEntityPlus(value.id, FollowingEntity.fromMap(value.data()), appId: appId);  }
 
   Future<FollowingModel?> get(String? id, {Function(Exception)? onError}) async {
     try {
