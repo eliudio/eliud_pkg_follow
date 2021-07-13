@@ -152,7 +152,7 @@ class FollowRequestsDashboardListWidgetState extends State<FollowRequestsDashboa
 
           return FollowRequestsDashboardListItem(
             value: value,
-            app: accessState.app,
+//            app: accessState.app,
             onDismissed: (direction) {
               BlocProvider.of<FollowRequestsDashboardListBloc>(context)
                   .add(DeleteFollowRequestsDashboardList(value: value));
@@ -199,7 +199,6 @@ class FollowRequestsDashboardListWidgetState extends State<FollowRequestsDashboa
 class FollowRequestsDashboardListItem extends StatelessWidget {
   final DismissDirectionCallback onDismissed;
   final GestureTapCallback onTap;
-  final AppModel app;
   final FollowRequestsDashboardModel? value;
 
   FollowRequestsDashboardListItem({
@@ -207,7 +206,6 @@ class FollowRequestsDashboardListItem extends StatelessWidget {
     required this.onDismissed,
     required this.onTap,
     required this.value,
-    required this.app,
   }) : super(key: key);
 
   @override

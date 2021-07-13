@@ -152,7 +152,7 @@ class FollowingDashboardListWidgetState extends State<FollowingDashboardListWidg
 
           return FollowingDashboardListItem(
             value: value,
-            app: accessState.app,
+//            app: accessState.app,
             onDismissed: (direction) {
               BlocProvider.of<FollowingDashboardListBloc>(context)
                   .add(DeleteFollowingDashboardList(value: value));
@@ -199,7 +199,6 @@ class FollowingDashboardListWidgetState extends State<FollowingDashboardListWidg
 class FollowingDashboardListItem extends StatelessWidget {
   final DismissDirectionCallback onDismissed;
   final GestureTapCallback onTap;
-  final AppModel app;
   final FollowingDashboardModel? value;
 
   FollowingDashboardListItem({
@@ -207,7 +206,6 @@ class FollowingDashboardListItem extends StatelessWidget {
     required this.onDismissed,
     required this.onTap,
     required this.value,
-    required this.app,
   }) : super(key: key);
 
   @override

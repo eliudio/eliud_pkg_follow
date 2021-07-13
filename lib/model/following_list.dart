@@ -152,7 +152,7 @@ class FollowingListWidgetState extends State<FollowingListWidget> {
 
           return FollowingListItem(
             value: value,
-            app: accessState.app,
+//            app: accessState.app,
             onDismissed: (direction) {
               BlocProvider.of<FollowingListBloc>(context)
                   .add(DeleteFollowingList(value: value));
@@ -199,7 +199,6 @@ class FollowingListWidgetState extends State<FollowingListWidget> {
 class FollowingListItem extends StatelessWidget {
   final DismissDirectionCallback onDismissed;
   final GestureTapCallback onTap;
-  final AppModel app;
   final FollowingModel? value;
 
   FollowingListItem({
@@ -207,7 +206,6 @@ class FollowingListItem extends StatelessWidget {
     required this.onDismissed,
     required this.onTap,
     required this.value,
-    required this.app,
   }) : super(key: key);
 
   @override

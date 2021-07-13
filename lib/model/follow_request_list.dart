@@ -152,7 +152,7 @@ class FollowRequestListWidgetState extends State<FollowRequestListWidget> {
 
           return FollowRequestListItem(
             value: value,
-            app: accessState.app,
+//            app: accessState.app,
             onDismissed: (direction) {
               BlocProvider.of<FollowRequestListBloc>(context)
                   .add(DeleteFollowRequestList(value: value));
@@ -199,7 +199,6 @@ class FollowRequestListWidgetState extends State<FollowRequestListWidget> {
 class FollowRequestListItem extends StatelessWidget {
   final DismissDirectionCallback onDismissed;
   final GestureTapCallback onTap;
-  final AppModel app;
   final FollowRequestModel? value;
 
   FollowRequestListItem({
@@ -207,7 +206,6 @@ class FollowRequestListItem extends StatelessWidget {
     required this.onDismissed,
     required this.onTap,
     required this.value,
-    required this.app,
   }) : super(key: key);
 
   @override

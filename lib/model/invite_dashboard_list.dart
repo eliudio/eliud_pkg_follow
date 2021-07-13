@@ -152,7 +152,7 @@ class InviteDashboardListWidgetState extends State<InviteDashboardListWidget> {
 
           return InviteDashboardListItem(
             value: value,
-            app: accessState.app,
+//            app: accessState.app,
             onDismissed: (direction) {
               BlocProvider.of<InviteDashboardListBloc>(context)
                   .add(DeleteInviteDashboardList(value: value));
@@ -199,7 +199,6 @@ class InviteDashboardListWidgetState extends State<InviteDashboardListWidget> {
 class InviteDashboardListItem extends StatelessWidget {
   final DismissDirectionCallback onDismissed;
   final GestureTapCallback onTap;
-  final AppModel app;
   final InviteDashboardModel? value;
 
   InviteDashboardListItem({
@@ -207,7 +206,6 @@ class InviteDashboardListItem extends StatelessWidget {
     required this.onDismissed,
     required this.onTap,
     required this.value,
-    required this.app,
   }) : super(key: key);
 
   @override
