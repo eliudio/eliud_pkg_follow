@@ -16,7 +16,7 @@
     "generateDropDownButton": true,
     "generateInternalComponent": true,
     "generateEmbeddedComponent": false,
-    "isDocumentCollection": true
+    "documentSubCollectionOf": "app"
   },
   "fields": [
     {

@@ -41,5 +41,10 @@ abstract class AbstractRepositorySingleton {
   InviteDashboardRepository? inviteDashboardRepository(String? appId);
 
   void flush(String? appId) {
+    followingRepository(appId)!.flush();
+    followingDashboardRepository(appId)!.flush();
+    followRequestRepository(appId)!.flush();
+    followRequestsDashboardRepository(appId)!.flush();
+    inviteDashboardRepository(appId)!.flush();
   }
 }
