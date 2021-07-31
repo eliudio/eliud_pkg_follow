@@ -153,12 +153,13 @@ class FollowingDashboardItem extends StatelessWidget {
       );
       name = data.name;
     }
+    var memberId = followingView == FollowingView.Followers ? value!.follower!.documentID! : value!.followed!.documentID!;
     return ListTile(
         onTap: () {
           MemberPopupMenu.showPopupMenuWithAllActions(
               context,
               followingView == FollowingView.Followers ? 'Reject follow request' : 'Unfollow member',
-              () => openOptions(context), dashboardModel.memberActions, value!.documentID!, );
+              () => openOptions(context), dashboardModel.memberActions, memberId, );
         },
         trailing: Container(
           height: 100,
