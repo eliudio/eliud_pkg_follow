@@ -23,7 +23,6 @@ import 'package:eliud_pkg_follow/model/invite_dashboard_list_state.dart';
 import 'package:eliud_core/tools/query/query_tools.dart';
 
 
-const _inviteDashboardLimit = 5;
 
 class InviteDashboardListBloc extends Bloc<InviteDashboardListEvent, InviteDashboardListState> {
   final InviteDashboardRepository _inviteDashboardRepository;
@@ -34,8 +33,9 @@ class InviteDashboardListBloc extends Bloc<InviteDashboardListEvent, InviteDashb
   final String? orderBy;
   final bool? descending;
   final bool? detailed;
+  final int inviteDashboardLimit;
 
-  InviteDashboardListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required InviteDashboardRepository inviteDashboardRepository})
+  InviteDashboardListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required InviteDashboardRepository inviteDashboardRepository, this.inviteDashboardLimit = 5})
       : assert(inviteDashboardRepository != null),
         _inviteDashboardRepository = inviteDashboardRepository,
         super(InviteDashboardListLoading());
@@ -48,7 +48,7 @@ class InviteDashboardListBloc extends Bloc<InviteDashboardListEvent, InviteDashb
       orderBy: orderBy,
       descending: descending,
       eliudQuery: eliudQuery,
-      limit: ((paged != null) && paged!) ? pages * _inviteDashboardLimit : null
+      limit: ((paged != null) && paged!) ? pages * inviteDashboardLimit : null
     );
   }
 
@@ -60,7 +60,7 @@ class InviteDashboardListBloc extends Bloc<InviteDashboardListEvent, InviteDashb
         orderBy: orderBy,
         descending: descending,
         eliudQuery: eliudQuery,
-        limit: ((paged != null) && paged!) ? pages * _inviteDashboardLimit : null
+        limit: ((paged != null) && paged!) ? pages * inviteDashboardLimit : null
     );
   }
 

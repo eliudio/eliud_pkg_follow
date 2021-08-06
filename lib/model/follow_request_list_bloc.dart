@@ -23,7 +23,6 @@ import 'package:eliud_pkg_follow/model/follow_request_list_state.dart';
 import 'package:eliud_core/tools/query/query_tools.dart';
 
 
-const _followRequestLimit = 5;
 
 class FollowRequestListBloc extends Bloc<FollowRequestListEvent, FollowRequestListState> {
   final FollowRequestRepository _followRequestRepository;
@@ -34,8 +33,9 @@ class FollowRequestListBloc extends Bloc<FollowRequestListEvent, FollowRequestLi
   final String? orderBy;
   final bool? descending;
   final bool? detailed;
+  final int followRequestLimit;
 
-  FollowRequestListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required FollowRequestRepository followRequestRepository})
+  FollowRequestListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required FollowRequestRepository followRequestRepository, this.followRequestLimit = 5})
       : assert(followRequestRepository != null),
         _followRequestRepository = followRequestRepository,
         super(FollowRequestListLoading());
@@ -48,7 +48,7 @@ class FollowRequestListBloc extends Bloc<FollowRequestListEvent, FollowRequestLi
       orderBy: orderBy,
       descending: descending,
       eliudQuery: eliudQuery,
-      limit: ((paged != null) && paged!) ? pages * _followRequestLimit : null
+      limit: ((paged != null) && paged!) ? pages * followRequestLimit : null
     );
   }
 
@@ -60,7 +60,7 @@ class FollowRequestListBloc extends Bloc<FollowRequestListEvent, FollowRequestLi
         orderBy: orderBy,
         descending: descending,
         eliudQuery: eliudQuery,
-        limit: ((paged != null) && paged!) ? pages * _followRequestLimit : null
+        limit: ((paged != null) && paged!) ? pages * followRequestLimit : null
     );
   }
 

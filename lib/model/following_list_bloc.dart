@@ -23,7 +23,6 @@ import 'package:eliud_pkg_follow/model/following_list_state.dart';
 import 'package:eliud_core/tools/query/query_tools.dart';
 
 
-const _followingLimit = 5;
 
 class FollowingListBloc extends Bloc<FollowingListEvent, FollowingListState> {
   final FollowingRepository _followingRepository;
@@ -34,8 +33,9 @@ class FollowingListBloc extends Bloc<FollowingListEvent, FollowingListState> {
   final String? orderBy;
   final bool? descending;
   final bool? detailed;
+  final int followingLimit;
 
-  FollowingListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required FollowingRepository followingRepository})
+  FollowingListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required FollowingRepository followingRepository, this.followingLimit = 5})
       : assert(followingRepository != null),
         _followingRepository = followingRepository,
         super(FollowingListLoading());
@@ -48,7 +48,7 @@ class FollowingListBloc extends Bloc<FollowingListEvent, FollowingListState> {
       orderBy: orderBy,
       descending: descending,
       eliudQuery: eliudQuery,
-      limit: ((paged != null) && paged!) ? pages * _followingLimit : null
+      limit: ((paged != null) && paged!) ? pages * followingLimit : null
     );
   }
 
@@ -60,7 +60,7 @@ class FollowingListBloc extends Bloc<FollowingListEvent, FollowingListState> {
         orderBy: orderBy,
         descending: descending,
         eliudQuery: eliudQuery,
-        limit: ((paged != null) && paged!) ? pages * _followingLimit : null
+        limit: ((paged != null) && paged!) ? pages * followingLimit : null
     );
   }
 

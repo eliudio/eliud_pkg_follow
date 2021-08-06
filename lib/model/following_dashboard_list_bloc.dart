@@ -23,7 +23,6 @@ import 'package:eliud_pkg_follow/model/following_dashboard_list_state.dart';
 import 'package:eliud_core/tools/query/query_tools.dart';
 
 
-const _followingDashboardLimit = 5;
 
 class FollowingDashboardListBloc extends Bloc<FollowingDashboardListEvent, FollowingDashboardListState> {
   final FollowingDashboardRepository _followingDashboardRepository;
@@ -34,8 +33,9 @@ class FollowingDashboardListBloc extends Bloc<FollowingDashboardListEvent, Follo
   final String? orderBy;
   final bool? descending;
   final bool? detailed;
+  final int followingDashboardLimit;
 
-  FollowingDashboardListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required FollowingDashboardRepository followingDashboardRepository})
+  FollowingDashboardListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required FollowingDashboardRepository followingDashboardRepository, this.followingDashboardLimit = 5})
       : assert(followingDashboardRepository != null),
         _followingDashboardRepository = followingDashboardRepository,
         super(FollowingDashboardListLoading());
@@ -48,7 +48,7 @@ class FollowingDashboardListBloc extends Bloc<FollowingDashboardListEvent, Follo
       orderBy: orderBy,
       descending: descending,
       eliudQuery: eliudQuery,
-      limit: ((paged != null) && paged!) ? pages * _followingDashboardLimit : null
+      limit: ((paged != null) && paged!) ? pages * followingDashboardLimit : null
     );
   }
 
@@ -60,7 +60,7 @@ class FollowingDashboardListBloc extends Bloc<FollowingDashboardListEvent, Follo
         orderBy: orderBy,
         descending: descending,
         eliudQuery: eliudQuery,
-        limit: ((paged != null) && paged!) ? pages * _followingDashboardLimit : null
+        limit: ((paged != null) && paged!) ? pages * followingDashboardLimit : null
     );
   }
 
