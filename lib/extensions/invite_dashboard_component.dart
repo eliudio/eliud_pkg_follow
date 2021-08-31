@@ -29,13 +29,13 @@ import 'package:flutter/cupertino.dart';
  */
 class InviteDashboardComponentConstructorDefault
     implements ComponentConstructor {
-  Widget createNew({String? id, Map<String, dynamic>? parameters}) {
-    return InviteDashboard(id: id);
+  Widget createNew({Key? key, required String id, Map<String, dynamic>? parameters}) {
+    return InviteDashboard(key: key, id: id);
   }
 }
 
 class InviteDashboard extends AbstractInviteDashboardComponent {
-  InviteDashboard({String? id}) : super(inviteDashboardID: id);
+  InviteDashboard({Key? key, required String id}) : super(key: key, inviteDashboardID: id);
 
   @override
   Widget alertWidget({title = String, content = String}) {

@@ -31,15 +31,15 @@ import '../follow_package.dart';
  */
 class FollowRequestsDashboardComponentConstructorDefault
     implements ComponentConstructor {
-  Widget createNew({String? id, Map<String, dynamic>? parameters}) {
-    return FollowRequestsDashboardComponent(id: id);
+  Widget createNew({Key? key, required String id, Map<String, dynamic>? parameters}) {
+    return FollowRequestsDashboardComponent(key: key, id: id);
   }
 }
 
 class FollowRequestsDashboardComponent
     extends AbstractFollowRequestsDashboardComponent {
-  FollowRequestsDashboardComponent({String? id})
-      : super(followRequestsDashboardID: id);
+  FollowRequestsDashboardComponent({Key? key, required String id})
+      : super(key: key, followRequestsDashboardID: id);
 
   @override
   Widget alertWidget({title = String, content = String}) {

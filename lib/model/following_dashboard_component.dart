@@ -27,7 +27,7 @@ abstract class AbstractFollowingDashboardComponent extends StatelessWidget {
   static String componentName = "followingDashboards";
   final String? followingDashboardID;
 
-  AbstractFollowingDashboardComponent({this.followingDashboardID});
+  AbstractFollowingDashboardComponent({Key? key, this.followingDashboardID}): super(key: key);
 
   @override
   Widget build(BuildContext context) {

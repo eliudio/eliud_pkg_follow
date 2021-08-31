@@ -27,13 +27,13 @@ import 'package:transparent_image/transparent_image.dart';
  */
 class FollowingDashboardComponentConstructorDefault
     implements ComponentConstructor {
-  Widget createNew({String? id, Map<String, dynamic>? parameters}) {
-    return FollowingDashboardComponent(id: id);
+  Widget createNew({Key? key, required String id, Map<String, dynamic>? parameters}) {
+    return FollowingDashboardComponent(key: key, id: id);
   }
 }
 
 class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
-  FollowingDashboardComponent({String? id}) : super(followingDashboardID: id);
+  FollowingDashboardComponent({Key? key, required String id}) : super(key: key, followingDashboardID: id);
 
   @override
   Widget alertWidget({title = String, content = String}) {
