@@ -1,3 +1,6 @@
+import 'package:eliud_core/style/frontend/has_container.dart';
+import 'package:eliud_core/style/frontend/has_dialog.dart';
+import 'package:eliud_core/style/frontend/has_progress_indicator.dart';
 import 'package:eliud_core/style/style_registry.dart';
 import 'package:eliud_pkg_etc/tools/member_popup_menu.dart';
 import 'package:eliud_pkg_follow/model/following_list.dart';
@@ -50,11 +53,7 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
       var appId = state.app.documentID;
       var member = state.getMember();
       if (member == null) return Text("No member");
-      return StyleRegistry.registry()
-          .styleWithContext(context)
-          .frontEndStyle()
-          .containerStyle()
-          .topicContainer(context, children: [
+      return topicContainer(context, children: [
         BlocProvider<FollowingListBloc>(
             create: (context) => FollowingListBloc(
                   eliudQuery: getQuery(dashboardModel, member),
@@ -62,11 +61,7 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
                   followingRepository:
                       followingRepository(appId: AccessBloc.appId(context))!,
                 )..add(LoadFollowingList()),
-            child: StyleRegistry.registry()
-                .styleWithContext(context)
-                .frontEndStyle()
-                .containerStyle()
-                .simpleTopicContainer(
+            child: simpleTopicContainer(
                   context,
                   children: ([
                     FollowingListWidget(
@@ -79,11 +74,7 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
                 ))
       ]);
     } else {
-      return StyleRegistry.registry()
-          .styleWithContext(context)
-          .frontEndStyle()
-          .progressIndicatorStyle()
-          .progressIndicator(context);
+      return progressIndicator(context);
     }
   }
 
@@ -197,11 +188,7 @@ class FollowingDashboardItem extends StatelessWidget {
               : '');
     }
 
-    StyleRegistry.registry()
-        .styleWithContext(context)
-        .frontEndStyle()
-        .dialogStyle()
-        .openAckNackDialog(context, title: title, message: message,
+    openAckNackDialog(context, title: title, message: message,
             onSelection: (selectedValue) async {
       Navigator.pop(context);
       if (selectedValue == 0) {

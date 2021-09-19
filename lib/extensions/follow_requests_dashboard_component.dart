@@ -2,6 +2,9 @@ import 'package:eliud_core/core/access/bloc/access_bloc.dart';
 import 'package:eliud_core/core/access/bloc/access_state.dart';
 import 'package:eliud_core/core/widgets/alert_widget.dart';
 import 'package:eliud_core/model/background_model.dart';
+import 'package:eliud_core/style/frontend/has_container.dart';
+import 'package:eliud_core/style/frontend/has_dialog.dart';
+import 'package:eliud_core/style/frontend/has_progress_indicator.dart';
 import 'package:eliud_core/style/style_registry.dart';
 import 'package:eliud_core/tools/component_constructor.dart';
 import 'package:eliud_pkg_etc/tools/member_popup_menu.dart';
@@ -52,11 +55,7 @@ class FollowRequestsDashboardComponent
     var state = AccessBloc.getState(context);
     if (state is AppLoaded) {
       var appId = state.app.documentID;
-      return StyleRegistry.registry()
-          .styleWithContext(context)
-          .frontEndStyle()
-          .containerStyle()
-          .topicContainer(context, children: [
+      return topicContainer(context, children: [
         BlocProvider<FollowRequestListBloc>(
             create: (context) => FollowRequestListBloc(
                   detailed: true,
@@ -65,11 +64,7 @@ class FollowRequestsDashboardComponent
                   followRequestRepository: followRequestRepository(
                       appId: AccessBloc.appId(context))!,
                 )..add(LoadFollowRequestList()),
-            child: StyleRegistry.registry()
-                .styleWithContext(context)
-                .frontEndStyle()
-                .containerStyle()
-                .simpleTopicContainer(
+            child: simpleTopicContainer(
                   context,
                   children: ([
                     FollowRequestListWidget(
@@ -82,11 +77,7 @@ class FollowRequestsDashboardComponent
                 ))
       ]);
     } else {
-      return StyleRegistry.registry()
-          .styleWithContext(context)
-          .frontEndStyle()
-          .progressIndicatorStyle()
-          .progressIndicator(context);
+      return progressIndicator(context);
     }
   }
 
@@ -158,11 +149,7 @@ class FollowRequestsDashboardItem extends StatelessWidget {
             value!.follower!.name == null
         ? "unkown"
         : value!.follower!.name;
-    StyleRegistry.registry()
-        .styleWithContext(context)
-        .frontEndStyle()
-        .dialogStyle()
-        .openAckNackDialog(context,
+    openAckNackDialog(context,
             title: 'Follow invitation',
             ackButtonLabel: 'Accept',
             nackButtonLabel: 'Reject',

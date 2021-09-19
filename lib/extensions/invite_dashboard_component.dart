@@ -3,6 +3,9 @@ import 'package:eliud_core/core/access/bloc/access_state.dart';
 import 'package:eliud_core/core/widgets/alert_widget.dart';
 import 'package:eliud_core/model/background_model.dart';
 import 'package:eliud_core/model/member_model.dart';
+import 'package:eliud_core/style/frontend/has_container.dart';
+import 'package:eliud_core/style/frontend/has_dialog.dart';
+import 'package:eliud_core/style/frontend/has_progress_indicator.dart';
 import 'package:eliud_core/style/style_registry.dart';
 import 'package:eliud_core/tools/component_constructor.dart';
 import 'package:eliud_core/tools/query/query_tools.dart';
@@ -55,22 +58,14 @@ class InviteDashboard extends AbstractInviteDashboardComponent {
     if (state is AppLoaded) {
       var member = state.getMember();
       var appId = state.app.documentID;
-      return StyleRegistry.registry()
-          .styleWithContext(context)
-          .frontEndStyle()
-          .containerStyle()
-          .topicContainer(context, children: [
+      return topicContainer(context, children: [
         BlocProvider<MemberPublicInfoListBloc>(
           create: (context) => MemberPublicInfoListBloc(
             eliudQuery: getSubscribedMembers(state.app.documentID!),
             memberPublicInfoRepository:
                 memberPublicInfoRepository(appId: AccessBloc.appId(context))!,
           )..add(LoadMemberPublicInfoList()),
-          child: StyleRegistry.registry()
-              .styleWithContext(context)
-              .frontEndStyle()
-              .containerStyle()
-              .simpleTopicContainer(context, children: [
+          child: simpleTopicContainer(context, children: [
             MemberPublicInfoListWidget(
                 readOnly: true,
                 widgetProvider: (value) => widgetProvider(appId, value, member, dashboardModel!),
@@ -80,11 +75,7 @@ class InviteDashboard extends AbstractInviteDashboardComponent {
       ]);
       ;
     } else {
-      return StyleRegistry.registry()
-          .styleWithContext(context)
-          .frontEndStyle()
-          .progressIndicatorStyle()
-          .progressIndicator(context);
+      return progressIndicator(context);
     }
   }
 
@@ -138,8 +129,6 @@ class InviteDashboardItem extends StatelessWidget {
   }
 
   Future<void> openOptions(BuildContext context, Widget profilePhoto) async {
-    var frontEndStyle =
-        StyleRegistry.registry().styleWithContext(context).frontEndStyle();
     if (value!.documentID != member!.documentID) {
       String key =
           FollowerHelper.getKey(value!.documentID!, member!.documentID!);
@@ -148,7 +137,7 @@ class InviteDashboardItem extends StatelessWidget {
         var followRequest =
             await followRequestRepository(appId: appId)!.get(key);
         if (followRequest == null) {
-          frontEndStyle.dialogStyle().openAckNackDialog(context,
+          openAckNackDialog(context,
               title: 'Invite',
               message: 'Request to follow this person?', onSelection: (value) {
             if (value == 0) {
@@ -157,7 +146,7 @@ class InviteDashboardItem extends StatelessWidget {
           });
         } else {
           if (followRequest.status == FollowRequestStatus.FollowRequestDenied) {
-            frontEndStyle.dialogStyle().openAckNackDialog(context,
+            openAckNackDialog(context,
                 title: 'Invite',
                 message:
                     "Request to follow this person? You've requested this before and this was declined.",
@@ -169,12 +158,12 @@ class InviteDashboardItem extends StatelessWidget {
           } else {
             if (followRequest.status ==
                 FollowRequestStatus.FollowRequestPending) {
-              frontEndStyle.dialogStyle().openErrorDialog(context,
+              openErrorDialog(context,
                   title: 'Error',
                   errorMessage:
                       "You have already requested to follow this person and the request is pending.");
             } else {
-              frontEndStyle.dialogStyle().openErrorDialog(context,
+              openErrorDialog(context,
                   title: 'Error',
                   errorMessage:
                       "You have already requested to follow this person and this was accepted.");
@@ -182,12 +171,12 @@ class InviteDashboardItem extends StatelessWidget {
           }
         }
       } else {
-        frontEndStyle.dialogStyle().openErrorDialog(context,
+        openErrorDialog(context,
             title: 'Error',
             errorMessage: 'You are already following this person');
       }
     } else {
-      frontEndStyle.dialogStyle().openErrorDialog(context,
+      openErrorDialog(context,
           title: 'Error',
           errorMessage: 'This is you. No point following yourself');
     }
