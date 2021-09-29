@@ -63,8 +63,8 @@ class FollowRequestDropdownButtonWidgetState extends State<FollowRequestDropdown
 
 List<Widget> widgets(FollowRequestModel value) {
 var widgets = <Widget>[];
-widgets.add(value.documentID != null ? Center(child: StyleRegistry.registry().styleWithContext(context).adminListStyle().listItem(context, value.documentID!)) : Container());
-widgets.add(value.follower!.name != null ? Center(child: StyleRegistry.registry().styleWithContext(context).adminListStyle().listItem(context, value.follower!.name!)) : Container());
+widgets.add(value.documentID != null ? Center(child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().textStyle().text(context, value.documentID!)) : Container());
+widgets.add(value.follower!.name != null ? Center(child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().textStyle().text(context, value.follower!.name!)) : Container());
 return widgets;
 }
 
