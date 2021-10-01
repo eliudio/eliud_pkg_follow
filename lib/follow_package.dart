@@ -15,6 +15,8 @@ import 'model/abstract_repository_singleton.dart';
 import 'model/repository_singleton.dart';
 
 abstract class FollowPackage extends PackageWithSubscription {
+  FollowPackage() : super('eliud_pkg_follow');
+
   static final String CONDITION_MEMBER_HAS_OPEN_REQUESTS = 'Has Open Follow Requests';
   bool? stateCONDITION_MEMBER_HAS_OPEN_REQUESTS = null;
 
