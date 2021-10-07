@@ -30,9 +30,13 @@ import 'package:transparent_image/transparent_image.dart';
  */
 class FollowingDashboardComponentConstructorDefault
     implements ComponentConstructor {
+  @override
   Widget createNew({Key? key, required String id, Map<String, dynamic>? parameters}) {
     return FollowingDashboardComponent(key: key, id: id);
   }
+
+  @override
+  Future<dynamic> getModel({required String appId, required String id}) async => await followingDashboardRepository(appId: appId)!.get(id);
 }
 
 class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {

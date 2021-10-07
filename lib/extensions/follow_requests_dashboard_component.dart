@@ -34,9 +34,13 @@ import '../follow_package.dart';
  */
 class FollowRequestsDashboardComponentConstructorDefault
     implements ComponentConstructor {
+  @override
   Widget createNew({Key? key, required String id, Map<String, dynamic>? parameters}) {
     return FollowRequestsDashboardComponent(key: key, id: id);
   }
+
+  @override
+  Future<dynamic> getModel({required String appId, required String id}) async => await followRequestsDashboardRepository(appId: appId)!.get(id);
 }
 
 class FollowRequestsDashboardComponent
