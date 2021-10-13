@@ -25,42 +25,30 @@ import 'package:flutter/services.dart';
 
 class FollowRequestComponentBloc extends Bloc<FollowRequestComponentEvent, FollowRequestComponentState> {
   final FollowRequestRepository? followRequestRepository;
+  StreamSubscription? _followRequestSubscription;
+
+  Stream<FollowRequestComponentState> _mapLoadFollowRequestComponentUpdateToState(String documentId) async* {
+    _followRequestSubscription?.cancel();
+    _followRequestSubscription = followRequestRepository!.listenTo(documentId, (value) {
+      if (value != null) add(FollowRequestComponentUpdated(value: value!));
+    });
+  }
 
   FollowRequestComponentBloc({ this.followRequestRepository }): super(FollowRequestComponentUninitialized());
+
   @override
   Stream<FollowRequestComponentState> mapEventToState(FollowRequestComponentEvent event) async* {
     final currentState = state;
     if (event is FetchFollowRequestComponent) {
-      try {
-        if (currentState is FollowRequestComponentUninitialized) {
-          bool permissionDenied = false;
-          final model = await followRequestRepository!.get(event.id, onError: (error) {
-            // Unfortunatly the below is currently the only way we know how to identify if a document is read protected
-            if ((error is PlatformException) &&  (error.message!.startsWith("PERMISSION_DENIED"))) {
-              permissionDenied = true;
-            }
-          });
-          if (permissionDenied) {
-            yield FollowRequestComponentPermissionDenied();
-          } else {
-            if (model != null) {
-              yield FollowRequestComponentLoaded(value: model);
-            } else {
-              String? id = event.id;
-              yield FollowRequestComponentError(
-                  message: "FollowRequest with id = '$id' not found");
-            }
-          }
-          return;
-        }
-      } catch (_) {
-        yield FollowRequestComponentError(message: "Unknown error whilst retrieving FollowRequest");
-      }
+      yield* _mapLoadFollowRequestComponentUpdateToState(event.id!);
+    } else if (event is FollowRequestComponentUpdated) {
+      yield FollowRequestComponentLoaded(value: event.value);
     }
   }
 
   @override
   Future<void> close() {
+    _followRequestSubscription?.cancel();
     return super.close();
   }
 

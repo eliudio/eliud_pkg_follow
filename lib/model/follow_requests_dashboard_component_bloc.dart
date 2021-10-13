@@ -24,42 +24,30 @@ import 'package:flutter/services.dart';
 
 class FollowRequestsDashboardComponentBloc extends Bloc<FollowRequestsDashboardComponentEvent, FollowRequestsDashboardComponentState> {
   final FollowRequestsDashboardRepository? followRequestsDashboardRepository;
+  StreamSubscription? _followRequestsDashboardSubscription;
+
+  Stream<FollowRequestsDashboardComponentState> _mapLoadFollowRequestsDashboardComponentUpdateToState(String documentId) async* {
+    _followRequestsDashboardSubscription?.cancel();
+    _followRequestsDashboardSubscription = followRequestsDashboardRepository!.listenTo(documentId, (value) {
+      if (value != null) add(FollowRequestsDashboardComponentUpdated(value: value!));
+    });
+  }
 
   FollowRequestsDashboardComponentBloc({ this.followRequestsDashboardRepository }): super(FollowRequestsDashboardComponentUninitialized());
+
   @override
   Stream<FollowRequestsDashboardComponentState> mapEventToState(FollowRequestsDashboardComponentEvent event) async* {
     final currentState = state;
     if (event is FetchFollowRequestsDashboardComponent) {
-      try {
-        if (currentState is FollowRequestsDashboardComponentUninitialized) {
-          bool permissionDenied = false;
-          final model = await followRequestsDashboardRepository!.get(event.id, onError: (error) {
-            // Unfortunatly the below is currently the only way we know how to identify if a document is read protected
-            if ((error is PlatformException) &&  (error.message!.startsWith("PERMISSION_DENIED"))) {
-              permissionDenied = true;
-            }
-          });
-          if (permissionDenied) {
-            yield FollowRequestsDashboardComponentPermissionDenied();
-          } else {
-            if (model != null) {
-              yield FollowRequestsDashboardComponentLoaded(value: model);
-            } else {
-              String? id = event.id;
-              yield FollowRequestsDashboardComponentError(
-                  message: "FollowRequestsDashboard with id = '$id' not found");
-            }
-          }
-          return;
-        }
-      } catch (_) {
-        yield FollowRequestsDashboardComponentError(message: "Unknown error whilst retrieving FollowRequestsDashboard");
-      }
+      yield* _mapLoadFollowRequestsDashboardComponentUpdateToState(event.id!);
+    } else if (event is FollowRequestsDashboardComponentUpdated) {
+      yield FollowRequestsDashboardComponentLoaded(value: event.value);
     }
   }
 
   @override
   Future<void> close() {
+    _followRequestsDashboardSubscription?.cancel();
     return super.close();
   }
 

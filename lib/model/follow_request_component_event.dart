@@ -14,6 +14,7 @@
 */
 
 import 'package:equatable/equatable.dart';
+import 'package:eliud_pkg_follow/model/follow_request_model.dart';
 
 abstract class FollowRequestComponentEvent extends Equatable {
   @override
@@ -25,4 +26,11 @@ class FetchFollowRequestComponent extends FollowRequestComponentEvent {
 
   FetchFollowRequestComponent({ this.id });
 }
+
+class FollowRequestComponentUpdated extends FollowRequestComponentEvent {
+  final FollowRequestModel value;
+
+  FollowRequestComponentUpdated({ required this.value });
+}
+
 

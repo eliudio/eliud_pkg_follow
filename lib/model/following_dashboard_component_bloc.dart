@@ -24,42 +24,30 @@ import 'package:flutter/services.dart';
 
 class FollowingDashboardComponentBloc extends Bloc<FollowingDashboardComponentEvent, FollowingDashboardComponentState> {
   final FollowingDashboardRepository? followingDashboardRepository;
+  StreamSubscription? _followingDashboardSubscription;
+
+  Stream<FollowingDashboardComponentState> _mapLoadFollowingDashboardComponentUpdateToState(String documentId) async* {
+    _followingDashboardSubscription?.cancel();
+    _followingDashboardSubscription = followingDashboardRepository!.listenTo(documentId, (value) {
+      if (value != null) add(FollowingDashboardComponentUpdated(value: value!));
+    });
+  }
 
   FollowingDashboardComponentBloc({ this.followingDashboardRepository }): super(FollowingDashboardComponentUninitialized());
+
   @override
   Stream<FollowingDashboardComponentState> mapEventToState(FollowingDashboardComponentEvent event) async* {
     final currentState = state;
     if (event is FetchFollowingDashboardComponent) {
-      try {
-        if (currentState is FollowingDashboardComponentUninitialized) {
-          bool permissionDenied = false;
-          final model = await followingDashboardRepository!.get(event.id, onError: (error) {
-            // Unfortunatly the below is currently the only way we know how to identify if a document is read protected
-            if ((error is PlatformException) &&  (error.message!.startsWith("PERMISSION_DENIED"))) {
-              permissionDenied = true;
-            }
-          });
-          if (permissionDenied) {
-            yield FollowingDashboardComponentPermissionDenied();
-          } else {
-            if (model != null) {
-              yield FollowingDashboardComponentLoaded(value: model);
-            } else {
-              String? id = event.id;
-              yield FollowingDashboardComponentError(
-                  message: "FollowingDashboard with id = '$id' not found");
-            }
-          }
-          return;
-        }
-      } catch (_) {
-        yield FollowingDashboardComponentError(message: "Unknown error whilst retrieving FollowingDashboard");
-      }
+      yield* _mapLoadFollowingDashboardComponentUpdateToState(event.id!);
+    } else if (event is FollowingDashboardComponentUpdated) {
+      yield FollowingDashboardComponentLoaded(value: event.value);
     }
   }
 
   @override
   Future<void> close() {
+    _followingDashboardSubscription?.cancel();
     return super.close();
   }
 

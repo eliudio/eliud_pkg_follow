@@ -24,42 +24,30 @@ import 'package:flutter/services.dart';
 
 class InviteDashboardComponentBloc extends Bloc<InviteDashboardComponentEvent, InviteDashboardComponentState> {
   final InviteDashboardRepository? inviteDashboardRepository;
+  StreamSubscription? _inviteDashboardSubscription;
+
+  Stream<InviteDashboardComponentState> _mapLoadInviteDashboardComponentUpdateToState(String documentId) async* {
+    _inviteDashboardSubscription?.cancel();
+    _inviteDashboardSubscription = inviteDashboardRepository!.listenTo(documentId, (value) {
+      if (value != null) add(InviteDashboardComponentUpdated(value: value!));
+    });
+  }
 
   InviteDashboardComponentBloc({ this.inviteDashboardRepository }): super(InviteDashboardComponentUninitialized());
+
   @override
   Stream<InviteDashboardComponentState> mapEventToState(InviteDashboardComponentEvent event) async* {
     final currentState = state;
     if (event is FetchInviteDashboardComponent) {
-      try {
-        if (currentState is InviteDashboardComponentUninitialized) {
-          bool permissionDenied = false;
-          final model = await inviteDashboardRepository!.get(event.id, onError: (error) {
-            // Unfortunatly the below is currently the only way we know how to identify if a document is read protected
-            if ((error is PlatformException) &&  (error.message!.startsWith("PERMISSION_DENIED"))) {
-              permissionDenied = true;
-            }
-          });
-          if (permissionDenied) {
-            yield InviteDashboardComponentPermissionDenied();
-          } else {
-            if (model != null) {
-              yield InviteDashboardComponentLoaded(value: model);
-            } else {
-              String? id = event.id;
-              yield InviteDashboardComponentError(
-                  message: "InviteDashboard with id = '$id' not found");
-            }
-          }
-          return;
-        }
-      } catch (_) {
-        yield InviteDashboardComponentError(message: "Unknown error whilst retrieving InviteDashboard");
-      }
+      yield* _mapLoadInviteDashboardComponentUpdateToState(event.id!);
+    } else if (event is InviteDashboardComponentUpdated) {
+      yield InviteDashboardComponentLoaded(value: event.value);
     }
   }
 
   @override
   Future<void> close() {
+    _inviteDashboardSubscription?.cancel();
     return super.close();
   }
 

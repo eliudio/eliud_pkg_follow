@@ -14,6 +14,7 @@
 */
 
 import 'package:equatable/equatable.dart';
+import 'package:eliud_pkg_follow/model/invite_dashboard_model.dart';
 
 abstract class InviteDashboardComponentEvent extends Equatable {
   @override
@@ -25,4 +26,11 @@ class FetchInviteDashboardComponent extends InviteDashboardComponentEvent {
 
   FetchInviteDashboardComponent({ this.id });
 }
+
+class InviteDashboardComponentUpdated extends InviteDashboardComponentEvent {
+  final InviteDashboardModel value;
+
+  InviteDashboardComponentUpdated({ required this.value });
+}
+
 

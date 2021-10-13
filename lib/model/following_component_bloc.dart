@@ -25,42 +25,30 @@ import 'package:flutter/services.dart';
 
 class FollowingComponentBloc extends Bloc<FollowingComponentEvent, FollowingComponentState> {
   final FollowingRepository? followingRepository;
+  StreamSubscription? _followingSubscription;
+
+  Stream<FollowingComponentState> _mapLoadFollowingComponentUpdateToState(String documentId) async* {
+    _followingSubscription?.cancel();
+    _followingSubscription = followingRepository!.listenTo(documentId, (value) {
+      if (value != null) add(FollowingComponentUpdated(value: value!));
+    });
+  }
 
   FollowingComponentBloc({ this.followingRepository }): super(FollowingComponentUninitialized());
+
   @override
   Stream<FollowingComponentState> mapEventToState(FollowingComponentEvent event) async* {
     final currentState = state;
     if (event is FetchFollowingComponent) {
-      try {
-        if (currentState is FollowingComponentUninitialized) {
-          bool permissionDenied = false;
-          final model = await followingRepository!.get(event.id, onError: (error) {
-            // Unfortunatly the below is currently the only way we know how to identify if a document is read protected
-            if ((error is PlatformException) &&  (error.message!.startsWith("PERMISSION_DENIED"))) {
-              permissionDenied = true;
-            }
-          });
-          if (permissionDenied) {
-            yield FollowingComponentPermissionDenied();
-          } else {
-            if (model != null) {
-              yield FollowingComponentLoaded(value: model);
-            } else {
-              String? id = event.id;
-              yield FollowingComponentError(
-                  message: "Following with id = '$id' not found");
-            }
-          }
-          return;
-        }
-      } catch (_) {
-        yield FollowingComponentError(message: "Unknown error whilst retrieving Following");
-      }
+      yield* _mapLoadFollowingComponentUpdateToState(event.id!);
+    } else if (event is FollowingComponentUpdated) {
+      yield FollowingComponentLoaded(value: event.value);
     }
   }
 
   @override
   Future<void> close() {
+    _followingSubscription?.cancel();
     return super.close();
   }
 

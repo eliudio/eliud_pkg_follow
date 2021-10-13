@@ -14,6 +14,7 @@
 */
 
 import 'package:equatable/equatable.dart';
+import 'package:eliud_pkg_follow/model/following_dashboard_model.dart';
 
 abstract class FollowingDashboardComponentEvent extends Equatable {
   @override
@@ -25,4 +26,11 @@ class FetchFollowingDashboardComponent extends FollowingDashboardComponentEvent 
 
   FetchFollowingDashboardComponent({ this.id });
 }
+
+class FollowingDashboardComponentUpdated extends FollowingDashboardComponentEvent {
+  final FollowingDashboardModel value;
+
+  FollowingDashboardComponentUpdated({ required this.value });
+}
+
 
