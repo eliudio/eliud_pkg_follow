@@ -30,7 +30,7 @@ class FollowingComponentBloc extends Bloc<FollowingComponentEvent, FollowingComp
   Stream<FollowingComponentState> _mapLoadFollowingComponentUpdateToState(String documentId) async* {
     _followingSubscription?.cancel();
     _followingSubscription = followingRepository!.listenTo(documentId, (value) {
-      if (value != null) add(FollowingComponentUpdated(value: value!));
+      if (value != null) add(FollowingComponentUpdated(value: value));
     });
   }
 

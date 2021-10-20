@@ -30,7 +30,7 @@ class FollowRequestComponentBloc extends Bloc<FollowRequestComponentEvent, Follo
   Stream<FollowRequestComponentState> _mapLoadFollowRequestComponentUpdateToState(String documentId) async* {
     _followRequestSubscription?.cancel();
     _followRequestSubscription = followRequestRepository!.listenTo(documentId, (value) {
-      if (value != null) add(FollowRequestComponentUpdated(value: value!));
+      if (value != null) add(FollowRequestComponentUpdated(value: value));
     });
   }
 

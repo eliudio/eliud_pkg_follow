@@ -29,7 +29,7 @@ class InviteDashboardComponentBloc extends Bloc<InviteDashboardComponentEvent, I
   Stream<InviteDashboardComponentState> _mapLoadInviteDashboardComponentUpdateToState(String documentId) async* {
     _inviteDashboardSubscription?.cancel();
     _inviteDashboardSubscription = inviteDashboardRepository!.listenTo(documentId, (value) {
-      if (value != null) add(InviteDashboardComponentUpdated(value: value!));
+      if (value != null) add(InviteDashboardComponentUpdated(value: value));
     });
   }
 

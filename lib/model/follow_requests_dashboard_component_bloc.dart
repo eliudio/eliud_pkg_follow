@@ -29,7 +29,7 @@ class FollowRequestsDashboardComponentBloc extends Bloc<FollowRequestsDashboardC
   Stream<FollowRequestsDashboardComponentState> _mapLoadFollowRequestsDashboardComponentUpdateToState(String documentId) async* {
     _followRequestsDashboardSubscription?.cancel();
     _followRequestsDashboardSubscription = followRequestsDashboardRepository!.listenTo(documentId, (value) {
-      if (value != null) add(FollowRequestsDashboardComponentUpdated(value: value!));
+      if (value != null) add(FollowRequestsDashboardComponentUpdated(value: value));
     });
   }
 
