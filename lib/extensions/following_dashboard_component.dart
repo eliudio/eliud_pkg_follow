@@ -1,3 +1,6 @@
+import 'package:eliud_core/core/blocs/access/access_bloc.dart';
+import 'package:eliud_core/core/blocs/access/state/access_determined.dart';
+import 'package:eliud_core/core/blocs/access/state/access_state.dart';
 import 'package:eliud_core/style/frontend/has_container.dart';
 import 'package:eliud_core/style/frontend/has_dialog.dart';
 import 'package:eliud_core/style/frontend/has_progress_indicator.dart';
@@ -6,8 +9,6 @@ import 'package:eliud_pkg_etc/tools/member_popup_menu.dart';
 import 'package:eliud_pkg_follow/model/following_list.dart';
 import 'package:eliud_pkg_follow/model/following_list_event.dart';
 import 'package:eliud_pkg_follow/model/following_model.dart';
-import 'package:eliud_core/core/access/bloc/access_bloc.dart';
-import 'package:eliud_core/core/access/bloc/access_state.dart';
 import 'package:eliud_core/core/widgets/alert_widget.dart';
 import 'package:eliud_core/model/background_model.dart';
 import 'package:eliud_core/model/member_model.dart';
@@ -31,16 +32,19 @@ import 'package:transparent_image/transparent_image.dart';
 class FollowingDashboardComponentConstructorDefault
     implements ComponentConstructor {
   @override
-  Widget createNew({Key? key, required String id, Map<String, dynamic>? parameters}) {
+  Widget createNew(
+      {Key? key, required String id, Map<String, dynamic>? parameters}) {
     return FollowingDashboardComponent(key: key, id: id);
   }
 
   @override
-  Future<dynamic> getModel({required String appId, required String id}) async => await followingDashboardRepository(appId: appId)!.get(id);
+  Future<dynamic> getModel({required String appId, required String id}) async =>
+      await followingDashboardRepository(appId: appId)!.get(id);
 }
 
 class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
-  FollowingDashboardComponent({Key? key, required String id}) : super(key: key, followingDashboardID: id);
+  FollowingDashboardComponent({Key? key, required String id})
+      : super(key: key, followingDashboardID: id);
 
   @override
   Widget alertWidget({title = String, content = String}) {
@@ -49,37 +53,38 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
 
   @override
   Widget yourWidget(
-      BuildContext? context, FollowingDashboardModel? dashboardModel) {
-    if (context == null) return Text("No context");
+      BuildContext context, FollowingDashboardModel? dashboardModel) {
     if (dashboardModel == null) return Text("Not dashboard");
-    var state = AccessBloc.getState(context);
-    if (state is AppLoaded) {
-      var appId = state.app.documentID;
-      var member = state.getMember();
-      if (member == null) return Text("No member");
-      return topicContainer(context, children: [
-        BlocProvider<FollowingListBloc>(
-            create: (context) => FollowingListBloc(
-                  eliudQuery: getQuery(dashboardModel, member),
-                  detailed: true,
-                  followingRepository:
-                      followingRepository(appId: AccessBloc.appId(context))!,
-                )..add(LoadFollowingList()),
-            child: simpleTopicContainer(
-                  context,
-                  children: ([
-                    FollowingListWidget(
-                        readOnly: true,
-                        widgetProvider: (value) =>
-                            widgetProvider(appId!, value!, dashboardModel),
-                        listBackground:
-                            BackgroundModel(documentID: "`transparent"))
-                  ]),
-                ))
-      ]);
-    } else {
-      return progressIndicator(context);
-    }
+    return BlocBuilder<AccessBloc, AccessState>(
+        builder: (context, accessState) {
+      if (accessState is AccessDetermined) {
+        var appId = accessState.currentApp.documentID;
+        var member = accessState.getMember();
+        if (member == null) return Text("No member");
+        return topicContainer(context, children: [
+          BlocProvider<FollowingListBloc>(
+              create: (context) => FollowingListBloc(
+                    eliudQuery: getQuery(dashboardModel, member),
+                    detailed: true,
+                    followingRepository:
+                        followingRepository(appId: appId)!,
+                  )..add(LoadFollowingList()),
+              child: simpleTopicContainer(
+                context,
+                children: ([
+                  FollowingListWidget(
+                      readOnly: true,
+                      widgetProvider: (value) =>
+                          widgetProvider(appId!, value!, dashboardModel),
+                      listBackground:
+                          BackgroundModel(documentID: "`transparent"))
+                ]),
+              ))
+        ]);
+      } else {
+        return progressIndicator(context);
+      }
+    });
   }
 
   static EliudQuery? getQuery(
@@ -99,13 +104,16 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
   Widget widgetProvider(String appId, FollowingModel value,
       FollowingDashboardModel dashboardModel) {
     return FollowingDashboardItem(
-        appId: appId, value: value, followingView: dashboardModel.view, dashboardModel: dashboardModel);
+        appId: appId,
+        value: value,
+        followingView: dashboardModel.view,
+        dashboardModel: dashboardModel);
   }
 
   @override
   FollowingDashboardRepository getFollowingDashboardRepository(
       BuildContext context) {
-    return followingDashboardRepository(appId: AccessBloc.appId(context))!;
+    return followingDashboardRepository(appId: AccessBloc.currentAppId(context))!;
   }
 }
 
@@ -148,13 +156,20 @@ class FollowingDashboardItem extends StatelessWidget {
       );
       name = data.name;
     }
-    var memberId = followingView == FollowingView.Followers ? value!.follower!.documentID! : value!.followed!.documentID!;
+    var memberId = followingView == FollowingView.Followers
+        ? value!.follower!.documentID!
+        : value!.followed!.documentID!;
     return ListTile(
         onTap: () {
           MemberPopupMenu.showPopupMenuWithAllActions(
-              context,
-              followingView == FollowingView.Followers ? 'Reject follow request' : 'Unfollow member',
-              () => openOptions(context), dashboardModel.memberActions, memberId, );
+            context,
+            followingView == FollowingView.Followers
+                ? 'Reject follow request'
+                : 'Unfollow member',
+            () => openOptions(context),
+            dashboardModel.memberActions,
+            memberId,
+          );
         },
         trailing: Container(
           height: 100,
@@ -193,7 +208,7 @@ class FollowingDashboardItem extends StatelessWidget {
     }
 
     openAckNackDialog(context, title: title, message: message,
-            onSelection: (selectedValue) async {
+        onSelection: (selectedValue) async {
       Navigator.pop(context);
       if (selectedValue == 0) {
         await followingRepository(appId: appId)!.delete(value!);

@@ -1,12 +1,12 @@
-import 'package:eliud_core/core/access/bloc/access_bloc.dart';
-import 'package:eliud_core/core/access/bloc/access_state.dart';
+import 'package:eliud_core/core/blocs/access/access_bloc.dart';
+import 'package:eliud_core/core/blocs/access/state/access_determined.dart';
+import 'package:eliud_core/core/blocs/access/state/access_state.dart';
 import 'package:eliud_core/core/widgets/alert_widget.dart';
 import 'package:eliud_core/model/background_model.dart';
 import 'package:eliud_core/model/member_model.dart';
 import 'package:eliud_core/style/frontend/has_container.dart';
 import 'package:eliud_core/style/frontend/has_dialog.dart';
 import 'package:eliud_core/style/frontend/has_progress_indicator.dart';
-import 'package:eliud_core/style/style_registry.dart';
 import 'package:eliud_core/tools/component/component_constructor.dart';
 import 'package:eliud_core/tools/query/query_tools.dart';
 import 'package:eliud_pkg_etc/tools/member_popup_menu.dart';
@@ -32,16 +32,19 @@ import 'package:flutter/cupertino.dart';
  */
 class InviteDashboardComponentConstructorDefault
     implements ComponentConstructor {
-  Widget createNew({Key? key, required String id, Map<String, dynamic>? parameters}) {
+  Widget createNew(
+      {Key? key, required String id, Map<String, dynamic>? parameters}) {
     return InviteDashboard(key: key, id: id);
   }
 
   @override
-  Future<dynamic> getModel({required String appId, required String id}) async => await inviteDashboardRepository(appId: appId)!.get(id);
+  Future<dynamic> getModel({required String appId, required String id}) async =>
+      await inviteDashboardRepository(appId: appId)!.get(id);
 }
 
 class InviteDashboard extends AbstractInviteDashboardComponent {
-  InviteDashboard({Key? key, required String id}) : super(key: key, inviteDashboardID: id);
+  InviteDashboard({Key? key, required String id})
+      : super(key: key, inviteDashboardID: id);
 
   @override
   Widget alertWidget({title = String, content = String}) {
@@ -57,39 +60,46 @@ class InviteDashboard extends AbstractInviteDashboardComponent {
   @override
   Widget yourWidget(
       BuildContext context, InviteDashboardModel? dashboardModel) {
-    var state = AccessBloc.getState(context);
-    if (state is AppLoaded) {
-      var member = state.getMember();
-      var appId = state.app.documentID;
-      return topicContainer(context, children: [
-        BlocProvider<MemberPublicInfoListBloc>(
-          create: (context) => MemberPublicInfoListBloc(
-            eliudQuery: getSubscribedMembers(state.app.documentID!),
-            memberPublicInfoRepository:
-                memberPublicInfoRepository(appId: AccessBloc.appId(context))!,
-          )..add(LoadMemberPublicInfoList()),
-          child: simpleTopicContainer(context, children: [
-            MemberPublicInfoListWidget(
-                readOnly: true,
-                widgetProvider: (value) => widgetProvider(appId, value, member, dashboardModel!),
-                listBackground: BackgroundModel(documentID: "`transparent"))
-          ]),
-        )
-      ]);
-      ;
-    } else {
-      return progressIndicator(context);
-    }
+    return BlocBuilder<AccessBloc, AccessState>(
+        builder: (context, accessState) {
+      if (accessState is AccessDetermined) {
+        var member = accessState.getMember();
+        var appId = accessState.currentApp.documentID!;
+        return topicContainer(context, children: [
+          BlocProvider<MemberPublicInfoListBloc>(
+            create: (context) => MemberPublicInfoListBloc(
+              eliudQuery: getSubscribedMembers(appId),
+              memberPublicInfoRepository:
+                  memberPublicInfoRepository(appId: appId)!,
+            )..add(LoadMemberPublicInfoList()),
+            child: simpleTopicContainer(context, children: [
+              MemberPublicInfoListWidget(
+                  readOnly: true,
+                  widgetProvider: (value) =>
+                      widgetProvider(appId, value, member, dashboardModel!),
+                  listBackground: BackgroundModel(documentID: "`transparent"))
+            ]),
+          )
+        ]);
+      } else {
+        return progressIndicator(context);
+      }
+    });
   }
 
-  Widget widgetProvider(
-      String? appId, MemberPublicInfoModel? value, MemberModel? member, InviteDashboardModel dashboardModel) {
-    return InviteDashboardItem(appId: appId, value: value, member: member, dashboardModel: dashboardModel,);
+  Widget widgetProvider(String? appId, MemberPublicInfoModel? value,
+      MemberModel? member, InviteDashboardModel dashboardModel) {
+    return InviteDashboardItem(
+      appId: appId,
+      value: value,
+      member: member,
+      dashboardModel: dashboardModel,
+    );
   }
 
   @override
   InviteDashboardRepository getInviteDashboardRepository(BuildContext context) {
-    return inviteDashboardRepository(appId: AccessBloc.appId(context))!;
+    return inviteDashboardRepository(appId: AccessBloc.currentAppId(context))!;
   }
 }
 
@@ -123,7 +133,12 @@ class InviteDashboardItem extends StatelessWidget {
         child: ListTile(
             onTap: () {
               MemberPopupMenu.showPopupMenuWithAllActions(
-                  context, 'Invite', () => openOptions(context, profilePhoto), dashboardModel.memberActions, value!.documentID!, );
+                context,
+                'Invite',
+                () => openOptions(context, profilePhoto),
+                dashboardModel.memberActions,
+                value!.documentID!,
+              );
             },
             trailing: Container(height: 100, width: 100, child: profilePhoto),
             title: Text(

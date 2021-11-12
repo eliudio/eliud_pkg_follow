@@ -13,7 +13,7 @@
 
 */
 
-import 'package:eliud_core/core/access/bloc/access_bloc.dart';
+import 'package:eliud_core/core/blocs/access/access_bloc.dart';
 import 'package:eliud_core/style/frontend/has_button.dart';
 import 'package:eliud_core/style/frontend/has_divider.dart';
 import 'package:eliud_core/style/frontend/has_list_tile.dart';
@@ -38,7 +38,7 @@ class FollowRequestComponentSelector extends ComponentSelector {
     return BlocProvider<FollowRequestListBloc>(
           create: (context) => FollowRequestListBloc(
             followRequestRepository:
-                followRequestRepository(appId: AccessBloc.appId(context))!,
+                followRequestRepository(appId: AccessBloc.currentAppId(context))!,
           )..add(LoadFollowRequestList()),
       child: SelectFollowRequestWidget(
           height: height,

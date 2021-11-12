@@ -1,24 +1,21 @@
 import 'dart:async';
 import 'package:eliud_core/model/access_model.dart';
-
-import 'package:eliud_core/core/access/bloc/access_event.dart';
 import 'package:eliud_core/model/app_model.dart';
 import 'package:eliud_core/model/member_model.dart';
 import 'package:eliud_core/package/package.dart';
 import 'package:eliud_core/tools/query/query_tools.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
-import 'package:eliud_core/package/package_with_subscription.dart';
-
 import 'model/component_registry.dart';
 import 'model/follow_request_model.dart';
 import 'model/abstract_repository_singleton.dart';
 import 'model/repository_singleton.dart';
 
-abstract class FollowPackage extends PackageWithSubscription {
+abstract class FollowPackage extends Package {
   FollowPackage() : super('eliud_pkg_follow');
 
   static final String CONDITION_MEMBER_HAS_OPEN_REQUESTS = 'Has Open Follow Requests';
   bool? stateCONDITION_MEMBER_HAS_OPEN_REQUESTS = null;
+  late StreamSubscription<List<FollowRequestModel?>> subscription;
 
   static EliudQuery getOpenFollowRequestsQuery(String appId, String assigneeId) {
     return EliudQuery(
@@ -49,12 +46,6 @@ abstract class FollowPackage extends PackageWithSubscription {
       _setState(false);
     }
   }
-
-  void unsubscribe() {
-    super.unsubscribe();
-    _setState(false);
-  }
-
 
   @override
   Future<bool?> isConditionOk(String? pluginCondition, AppModel? app, MemberModel? member, bool? isOwner, bool? isBlocked, PrivilegeLevel? privilegeLevel) async {

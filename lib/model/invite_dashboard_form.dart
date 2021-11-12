@@ -13,8 +13,9 @@
 
 */
 
-import 'package:eliud_core/core/access/bloc/access_state.dart';
-import 'package:eliud_core/core/access/bloc/access_bloc.dart';
+import 'package:eliud_core/core/blocs/access/state/access_state.dart';
+import 'package:eliud_core/core/blocs/access/state/logged_in.dart';
+import 'package:eliud_core/core/blocs/access/access_bloc.dart';
 import '../tools/bespoke_models.dart';
 import 'package:eliud_core/core/navigate/router.dart' as eliudrouter;
 import 'package:eliud_core/tools/screen_size.dart';
@@ -76,11 +77,11 @@ class InviteDashboardForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var accessState = AccessBloc.getState(context);
-    var app = AccessBloc.app(context);
+    var app = AccessBloc.currentApp(context);
     if (app == null) return Text("No app available");
     if (formAction == FormAction.ShowData) {
       return BlocProvider<InviteDashboardFormBloc >(
-            create: (context) => InviteDashboardFormBloc(AccessBloc.appId(context),
+            create: (context) => InviteDashboardFormBloc(AccessBloc.currentAppId(context),
                                        formAction: formAction,
 
                                                 )..add(InitialiseInviteDashboardFormEvent(value: value)),
@@ -89,7 +90,7 @@ class InviteDashboardForm extends StatelessWidget {
           );
     } if (formAction == FormAction.ShowPreloadedData) {
       return BlocProvider<InviteDashboardFormBloc >(
-            create: (context) => InviteDashboardFormBloc(AccessBloc.appId(context),
+            create: (context) => InviteDashboardFormBloc(AccessBloc.currentAppId(context),
                                        formAction: formAction,
 
                                                 )..add(InitialiseInviteDashboardFormNoLoadEvent(value: value)),
@@ -100,7 +101,7 @@ class InviteDashboardForm extends StatelessWidget {
       return Scaffold(
         appBar: StyleRegistry.registry().styleWithContext(context).adminFormStyle().appBarWithString(context, title: formAction == FormAction.UpdateAction ? 'Update InviteDashboard' : 'Add InviteDashboard'),
         body: BlocProvider<InviteDashboardFormBloc >(
-            create: (context) => InviteDashboardFormBloc(AccessBloc.appId(context),
+            create: (context) => InviteDashboardFormBloc(AccessBloc.currentAppId(context),
                                        formAction: formAction,
 
                                                 )..add((formAction == FormAction.UpdateAction ? InitialiseInviteDashboardFormEvent(value: value) : InitialiseNewInviteDashboardFormEvent())),
@@ -144,7 +145,7 @@ class _MyInviteDashboardFormState extends State<MyInviteDashboardForm> {
 
   @override
   Widget build(BuildContext context) {
-    var app = AccessBloc.app(context);
+    var app = AccessBloc.currentApp(context);
     if (app == null) return Text('No app available');
     var accessState = AccessBloc.getState(context);
     return BlocBuilder<InviteDashboardFormBloc, InviteDashboardFormState>(builder: (context, state) {
@@ -316,7 +317,7 @@ class _MyInviteDashboardFormState extends State<MyInviteDashboardForm> {
   }
 
   bool _readOnly(AccessState accessState, InviteDashboardFormInitialized state) {
-    return (formAction == FormAction.ShowData) || (formAction == FormAction.ShowPreloadedData) || (!accessState.memberIsOwner());
+    return (formAction == FormAction.ShowData) || (formAction == FormAction.ShowPreloadedData) || (!accessState.memberIsOwner(AccessBloc.currentAppId(context)));
   }
   
 

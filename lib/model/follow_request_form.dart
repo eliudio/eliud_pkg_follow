@@ -13,8 +13,9 @@
 
 */
 
-import 'package:eliud_core/core/access/bloc/access_state.dart';
-import 'package:eliud_core/core/access/bloc/access_bloc.dart';
+import 'package:eliud_core/core/blocs/access/state/access_state.dart';
+import 'package:eliud_core/core/blocs/access/state/logged_in.dart';
+import 'package:eliud_core/core/blocs/access/access_bloc.dart';
 import '../tools/bespoke_models.dart';
 import 'package:eliud_core/core/navigate/router.dart' as eliudrouter;
 import 'package:eliud_core/tools/screen_size.dart';
@@ -71,11 +72,11 @@ class FollowRequestForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var accessState = AccessBloc.getState(context);
-    var app = AccessBloc.app(context);
+    var app = AccessBloc.currentApp(context);
     if (app == null) return Text("No app available");
     if (formAction == FormAction.ShowData) {
       return BlocProvider<FollowRequestFormBloc >(
-            create: (context) => FollowRequestFormBloc(AccessBloc.appId(context),
+            create: (context) => FollowRequestFormBloc(AccessBloc.currentAppId(context),
                                        formAction: formAction,
 
                                                 )..add(InitialiseFollowRequestFormEvent(value: value)),
@@ -84,7 +85,7 @@ class FollowRequestForm extends StatelessWidget {
           );
     } if (formAction == FormAction.ShowPreloadedData) {
       return BlocProvider<FollowRequestFormBloc >(
-            create: (context) => FollowRequestFormBloc(AccessBloc.appId(context),
+            create: (context) => FollowRequestFormBloc(AccessBloc.currentAppId(context),
                                        formAction: formAction,
 
                                                 )..add(InitialiseFollowRequestFormNoLoadEvent(value: value)),
@@ -95,7 +96,7 @@ class FollowRequestForm extends StatelessWidget {
       return Scaffold(
         appBar: StyleRegistry.registry().styleWithContext(context).adminFormStyle().appBarWithString(context, title: formAction == FormAction.UpdateAction ? 'Update FollowRequest' : 'Add FollowRequest'),
         body: BlocProvider<FollowRequestFormBloc >(
-            create: (context) => FollowRequestFormBloc(AccessBloc.appId(context),
+            create: (context) => FollowRequestFormBloc(AccessBloc.currentAppId(context),
                                        formAction: formAction,
 
                                                 )..add((formAction == FormAction.UpdateAction ? InitialiseFollowRequestFormEvent(value: value) : InitialiseNewFollowRequestFormEvent())),
@@ -141,7 +142,7 @@ class _MyFollowRequestFormState extends State<MyFollowRequestForm> {
 
   @override
   Widget build(BuildContext context) {
-    var app = AccessBloc.app(context);
+    var app = AccessBloc.currentApp(context);
     if (app == null) return Text('No app available');
     var accessState = AccessBloc.getState(context);
     return BlocBuilder<FollowRequestFormBloc, FollowRequestFormState>(builder: (context, state) {
@@ -196,15 +197,15 @@ class _MyFollowRequestFormState extends State<MyFollowRequestForm> {
 
         children.add(
 
-                  StyleRegistry.registry().styleWithContext(context).adminFormStyle().radioListTile(context, 0, _statusSelectedRadioTile, 'FollowRequestPending', 'FollowRequestPending', !accessState.memberIsOwner() ? null : (dynamic val) => setSelectionStatus(val))
+                  StyleRegistry.registry().styleWithContext(context).adminFormStyle().radioListTile(context, 0, _statusSelectedRadioTile, 'FollowRequestPending', 'FollowRequestPending', !accessState.memberIsOwner(AccessBloc.currentAppId(context)) ? null : (dynamic val) => setSelectionStatus(val))
           );
         children.add(
 
-                  StyleRegistry.registry().styleWithContext(context).adminFormStyle().radioListTile(context, 0, _statusSelectedRadioTile, 'FollowRequestAccepted', 'FollowRequestAccepted', !accessState.memberIsOwner() ? null : (dynamic val) => setSelectionStatus(val))
+                  StyleRegistry.registry().styleWithContext(context).adminFormStyle().radioListTile(context, 0, _statusSelectedRadioTile, 'FollowRequestAccepted', 'FollowRequestAccepted', !accessState.memberIsOwner(AccessBloc.currentAppId(context)) ? null : (dynamic val) => setSelectionStatus(val))
           );
         children.add(
 
-                  StyleRegistry.registry().styleWithContext(context).adminFormStyle().radioListTile(context, 0, _statusSelectedRadioTile, 'FollowRequestDenied', 'FollowRequestDenied', !accessState.memberIsOwner() ? null : (dynamic val) => setSelectionStatus(val))
+                  StyleRegistry.registry().styleWithContext(context).adminFormStyle().radioListTile(context, 0, _statusSelectedRadioTile, 'FollowRequestDenied', 'FollowRequestDenied', !accessState.memberIsOwner(AccessBloc.currentAppId(context)) ? null : (dynamic val) => setSelectionStatus(val))
           );
 
 
@@ -304,7 +305,7 @@ class _MyFollowRequestFormState extends State<MyFollowRequestForm> {
   }
 
   bool _readOnly(AccessState accessState, FollowRequestFormInitialized state) {
-    return (formAction == FormAction.ShowData) || (formAction == FormAction.ShowPreloadedData) || (!accessState.memberIsOwner());
+    return (formAction == FormAction.ShowData) || (formAction == FormAction.ShowPreloadedData) || (!accessState.memberIsOwner(AccessBloc.currentAppId(context)));
   }
   
 

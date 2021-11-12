@@ -1,11 +1,11 @@
-import 'package:eliud_core/core/access/bloc/access_bloc.dart';
-import 'package:eliud_core/core/access/bloc/access_state.dart';
+import 'package:eliud_core/core/blocs/access/access_bloc.dart';
+import 'package:eliud_core/core/blocs/access/state/access_determined.dart';
+import 'package:eliud_core/core/blocs/access/state/access_state.dart';
 import 'package:eliud_core/core/widgets/alert_widget.dart';
 import 'package:eliud_core/model/background_model.dart';
 import 'package:eliud_core/style/frontend/has_container.dart';
 import 'package:eliud_core/style/frontend/has_dialog.dart';
 import 'package:eliud_core/style/frontend/has_progress_indicator.dart';
-import 'package:eliud_core/style/style_registry.dart';
 import 'package:eliud_core/tools/component/component_constructor.dart';
 import 'package:eliud_pkg_etc/tools/member_popup_menu.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
@@ -35,12 +35,14 @@ import '../follow_package.dart';
 class FollowRequestsDashboardComponentConstructorDefault
     implements ComponentConstructor {
   @override
-  Widget createNew({Key? key, required String id, Map<String, dynamic>? parameters}) {
+  Widget createNew(
+      {Key? key, required String id, Map<String, dynamic>? parameters}) {
     return FollowRequestsDashboardComponent(key: key, id: id);
   }
 
   @override
-  Future<dynamic> getModel({required String appId, required String id}) async => await followRequestsDashboardRepository(appId: appId)!.get(id);
+  Future<dynamic> getModel({required String appId, required String id}) async =>
+      await followRequestsDashboardRepository(appId: appId)!.get(id);
 }
 
 class FollowRequestsDashboardComponent
@@ -56,43 +58,49 @@ class FollowRequestsDashboardComponent
   @override
   Widget yourWidget(
       BuildContext context, FollowRequestsDashboardModel? dashboardModel) {
-    var state = AccessBloc.getState(context);
-    if (state is AppLoaded) {
-      var appId = state.app.documentID;
-      return topicContainer(context, children: [
-        BlocProvider<FollowRequestListBloc>(
-            create: (context) => FollowRequestListBloc(
-                  detailed: true,
-                  eliudQuery: FollowPackage.getOpenFollowRequestsQuery(
-                      state.app.documentID!, state.getMember()!.documentID!),
-                  followRequestRepository: followRequestRepository(
-                      appId: AccessBloc.appId(context))!,
-                )..add(LoadFollowRequestList()),
-            child: simpleTopicContainer(
-                  context,
-                  children: ([
-                    FollowRequestListWidget(
-                        readOnly: true,
-                        widgetProvider: (value) =>
-                            widgetProvider(appId!, value!, dashboardModel!),
-                        listBackground:
-                            BackgroundModel(documentID: "`transparent"))
-                  ]),
-                ))
-      ]);
-    } else {
-      return progressIndicator(context);
-    }
+    return BlocBuilder<AccessBloc, AccessState>(
+        builder: (context, accessState) {
+      if (accessState is AccessDetermined) {
+        var appId = accessState.currentApp.documentID;
+        return topicContainer(context, children: [
+          BlocProvider<FollowRequestListBloc>(
+              create: (context) => FollowRequestListBloc(
+                    detailed: true,
+                    eliudQuery: FollowPackage.getOpenFollowRequestsQuery(
+                        accessState.currentApp.documentID!,
+                        accessState.getMember()!.documentID!),
+                    followRequestRepository:
+                        followRequestRepository(appId: appId)!,
+                  )..add(LoadFollowRequestList()),
+              child: simpleTopicContainer(
+                context,
+                children: ([
+                  FollowRequestListWidget(
+                      readOnly: true,
+                      widgetProvider: (value) =>
+                          widgetProvider(appId!, value!, dashboardModel!),
+                      listBackground:
+                          BackgroundModel(documentID: "`transparent"))
+                ]),
+              ))
+        ]);
+      } else {
+        return progressIndicator(context);
+      }
+    });
   }
 
-  Widget widgetProvider(String appId, FollowRequestModel value, FollowRequestsDashboardModel dashboardModel) {
-    return FollowRequestsDashboardItem(appId: appId, dashboardModel: dashboardModel,value: value);
+  Widget widgetProvider(String appId, FollowRequestModel value,
+      FollowRequestsDashboardModel dashboardModel) {
+    return FollowRequestsDashboardItem(
+        appId: appId, dashboardModel: dashboardModel, value: value);
   }
 
   @override
   FollowRequestsDashboardRepository getFollowRequestsDashboardRepository(
       BuildContext context) {
-    return followRequestsDashboardRepository(appId: AccessBloc.appId(context))!;
+    return followRequestsDashboardRepository(
+        appId: AccessBloc.currentAppId(context))!;
   }
 }
 
@@ -131,7 +139,12 @@ class FollowRequestsDashboardItem extends StatelessWidget {
             return ListTile(
                 onTap: () {
                   MemberPopupMenu.showPopupMenuWithAllActions(
-                      context, 'Follow request', () => openOptions(context), dashboardModel.memberActions, value!.documentID!, );
+                    context,
+                    'Follow request',
+                    () => openOptions(context),
+                    dashboardModel.memberActions,
+                    value!.documentID!,
+                  );
                 },
                 trailing: Container(
                   height: 100,
@@ -154,13 +167,13 @@ class FollowRequestsDashboardItem extends StatelessWidget {
         ? "unkown"
         : value!.follower!.name;
     openAckNackDialog(context,
-            title: 'Follow invitation',
-            ackButtonLabel: 'Accept',
-            nackButtonLabel: 'Reject',
-            message: 'This member ' +
-                name! +
-                ' would like to follow you? Do you accept or reject?',
-            onSelection: (value) {
+        title: 'Follow invitation',
+        ackButtonLabel: 'Accept',
+        nackButtonLabel: 'Reject',
+        message: 'This member ' +
+            name! +
+            ' would like to follow you? Do you accept or reject?',
+        onSelection: (value) {
       if (value == 0) {
         _accept(context);
       } else {

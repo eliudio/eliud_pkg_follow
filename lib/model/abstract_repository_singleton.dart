@@ -18,7 +18,7 @@ import '../model/following_dashboard_repository.dart';
 import '../model/follow_request_repository.dart';
 import '../model/follow_requests_dashboard_repository.dart';
 import '../model/invite_dashboard_repository.dart';
-import 'package:eliud_core/core/access/bloc/user_repository.dart';
+import 'package:eliud_core/core/blocs/access/repo/user_repository.dart';
 import 'package:eliud_core/tools/common_tools.dart';
 import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
 import 'package:eliud_core/package/package.dart';

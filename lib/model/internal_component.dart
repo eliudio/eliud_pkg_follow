@@ -15,7 +15,7 @@
 
 
 import 'package:eliud_core/tools/component/component_constructor.dart';
-import 'package:eliud_core/core/access/bloc/access_bloc.dart';
+import 'package:eliud_core/core/blocs/access/access_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -213,7 +213,7 @@ class ListComponent extends StatelessWidget with HasFab {
       providers: [
         BlocProvider<FollowingListBloc>(
           create: (context) => FollowingListBloc(
-            followingRepository: followingRepository(appId: AccessBloc.appId(context))!,
+            followingRepository: followingRepository(appId: AccessBloc.currentAppId(context))!,
           )..add(LoadFollowingList()),
         )
       ],
@@ -226,7 +226,7 @@ class ListComponent extends StatelessWidget with HasFab {
       providers: [
         BlocProvider<FollowingDashboardListBloc>(
           create: (context) => FollowingDashboardListBloc(
-            followingDashboardRepository: followingDashboardRepository(appId: AccessBloc.appId(context))!,
+            followingDashboardRepository: followingDashboardRepository(appId: AccessBloc.currentAppId(context))!,
           )..add(LoadFollowingDashboardList()),
         )
       ],
@@ -239,7 +239,7 @@ class ListComponent extends StatelessWidget with HasFab {
       providers: [
         BlocProvider<FollowRequestListBloc>(
           create: (context) => FollowRequestListBloc(
-            followRequestRepository: followRequestRepository(appId: AccessBloc.appId(context))!,
+            followRequestRepository: followRequestRepository(appId: AccessBloc.currentAppId(context))!,
           )..add(LoadFollowRequestList()),
         )
       ],
@@ -252,7 +252,7 @@ class ListComponent extends StatelessWidget with HasFab {
       providers: [
         BlocProvider<FollowRequestsDashboardListBloc>(
           create: (context) => FollowRequestsDashboardListBloc(
-            followRequestsDashboardRepository: followRequestsDashboardRepository(appId: AccessBloc.appId(context))!,
+            followRequestsDashboardRepository: followRequestsDashboardRepository(appId: AccessBloc.currentAppId(context))!,
           )..add(LoadFollowRequestsDashboardList()),
         )
       ],
@@ -265,7 +265,7 @@ class ListComponent extends StatelessWidget with HasFab {
       providers: [
         BlocProvider<InviteDashboardListBloc>(
           create: (context) => InviteDashboardListBloc(
-            inviteDashboardRepository: inviteDashboardRepository(appId: AccessBloc.appId(context))!,
+            inviteDashboardRepository: inviteDashboardRepository(appId: AccessBloc.currentAppId(context))!,
           )..add(LoadInviteDashboardList()),
         )
       ],
@@ -303,7 +303,7 @@ class DropdownButtonComponent extends StatelessWidget {
       providers: [
         BlocProvider<FollowingListBloc>(
           create: (context) => FollowingListBloc(
-            followingRepository: followingRepository(appId: AccessBloc.appId(context))!,
+            followingRepository: followingRepository(appId: AccessBloc.currentAppId(context))!,
           )..add(LoadFollowingList()),
         )
       ],
@@ -316,7 +316,7 @@ class DropdownButtonComponent extends StatelessWidget {
       providers: [
         BlocProvider<FollowingDashboardListBloc>(
           create: (context) => FollowingDashboardListBloc(
-            followingDashboardRepository: followingDashboardRepository(appId: AccessBloc.appId(context))!,
+            followingDashboardRepository: followingDashboardRepository(appId: AccessBloc.currentAppId(context))!,
           )..add(LoadFollowingDashboardList()),
         )
       ],
@@ -329,7 +329,7 @@ class DropdownButtonComponent extends StatelessWidget {
       providers: [
         BlocProvider<FollowRequestListBloc>(
           create: (context) => FollowRequestListBloc(
-            followRequestRepository: followRequestRepository(appId: AccessBloc.appId(context))!,
+            followRequestRepository: followRequestRepository(appId: AccessBloc.currentAppId(context))!,
           )..add(LoadFollowRequestList()),
         )
       ],
@@ -342,7 +342,7 @@ class DropdownButtonComponent extends StatelessWidget {
       providers: [
         BlocProvider<FollowRequestsDashboardListBloc>(
           create: (context) => FollowRequestsDashboardListBloc(
-            followRequestsDashboardRepository: followRequestsDashboardRepository(appId: AccessBloc.appId(context))!,
+            followRequestsDashboardRepository: followRequestsDashboardRepository(appId: AccessBloc.currentAppId(context))!,
           )..add(LoadFollowRequestsDashboardList()),
         )
       ],
@@ -355,7 +355,7 @@ class DropdownButtonComponent extends StatelessWidget {
       providers: [
         BlocProvider<InviteDashboardListBloc>(
           create: (context) => InviteDashboardListBloc(
-            inviteDashboardRepository: inviteDashboardRepository(appId: AccessBloc.appId(context))!,
+            inviteDashboardRepository: inviteDashboardRepository(appId: AccessBloc.currentAppId(context))!,
           )..add(LoadInviteDashboardList()),
         )
       ],
