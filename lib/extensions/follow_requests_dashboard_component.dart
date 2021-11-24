@@ -92,14 +92,14 @@ class FollowRequestsDashboardComponent
 
 class FollowRequestsDashboardItem extends StatelessWidget {
   final FollowRequestModel? value;
-  final String? appId;
+  final String appId;
   final FollowRequestsDashboardModel dashboardModel;
 
   FollowRequestsDashboardItem({
     Key? key,
     required this.value,
     required this.dashboardModel,
-    this.appId,
+    required this.appId,
   }) : super(key: key);
 
   @override
@@ -152,7 +152,7 @@ class FollowRequestsDashboardItem extends StatelessWidget {
             value!.follower!.name == null
         ? 'unkown'
         : value!.follower!.name;
-    openAckNackDialog(context,
+    openAckNackDialog(context, appId + '/_followinvitation',
         title: 'Follow invitation',
         ackButtonLabel: 'Accept',
         nackButtonLabel: 'Reject',

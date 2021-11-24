@@ -82,7 +82,7 @@ class InviteDashboard extends AbstractInviteDashboardComponent {
     });
   }
 
-  Widget widgetProvider(String? appId, MemberPublicInfoModel? value,
+  Widget widgetProvider(String appId, MemberPublicInfoModel? value,
       MemberModel? member, InviteDashboardModel dashboardModel) {
     return InviteDashboardItem(
       appId: appId,
@@ -96,14 +96,14 @@ class InviteDashboard extends AbstractInviteDashboardComponent {
 class InviteDashboardItem extends StatelessWidget {
   final MemberModel? member;
   final MemberPublicInfoModel? value;
-  final String? appId;
+  final String appId;
   final InviteDashboardModel dashboardModel;
 
   InviteDashboardItem({
     Key? key,
     this.member,
     required this.value,
-    this.appId,
+    required this.appId,
     required this.dashboardModel,
   }) : super(key: key);
 
@@ -145,7 +145,7 @@ class InviteDashboardItem extends StatelessWidget {
         var followRequest =
             await followRequestRepository(appId: appId)!.get(key);
         if (followRequest == null) {
-          openAckNackDialog(context,
+          openAckNackDialog(context, appId + '/requestfollow',
               title: 'Invite',
               message: 'Request to follow this person?', onSelection: (value) {
             if (value == 0) {
@@ -154,7 +154,7 @@ class InviteDashboardItem extends StatelessWidget {
           });
         } else {
           if (followRequest.status == FollowRequestStatus.FollowRequestDenied) {
-            openAckNackDialog(context,
+            openAckNackDialog(context, appId + '/invite',
                 title: 'Invite',
                 message:
                     "Request to follow this person? You've requested this before and this was declined.",
@@ -166,12 +166,12 @@ class InviteDashboardItem extends StatelessWidget {
           } else {
             if (followRequest.status ==
                 FollowRequestStatus.FollowRequestPending) {
-              openErrorDialog(context,
+              openErrorDialog(context,AccessBloc.currentAppId(context) + '/_error', 
                   title: 'Error',
                   errorMessage:
                       "You have already requested to follow this person and the request is pending.");
             } else {
-              openErrorDialog(context,
+              openErrorDialog(context,AccessBloc.currentAppId(context) + '/_error', 
                   title: 'Error',
                   errorMessage:
                       "You have already requested to follow this person and this was accepted.");
@@ -179,12 +179,12 @@ class InviteDashboardItem extends StatelessWidget {
           }
         }
       } else {
-        openErrorDialog(context,
+        openErrorDialog(context,AccessBloc.currentAppId(context) + '/_error', 
             title: 'Error',
             errorMessage: 'You are already following this person');
       }
     } else {
-      openErrorDialog(context,
+      openErrorDialog(context,AccessBloc.currentAppId(context) + '/_error', 
           title: 'Error',
           errorMessage: 'This is you. No point following yourself');
     }

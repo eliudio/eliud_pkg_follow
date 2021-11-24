@@ -105,7 +105,7 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
 
 class FollowingDashboardItem extends StatelessWidget {
   final FollowingModel? value;
-  final String? appId;
+  final String appId;
   final FollowingView? followingView;
   final FollowingDashboardModel dashboardModel;
 
@@ -113,7 +113,7 @@ class FollowingDashboardItem extends StatelessWidget {
     Key? key,
     this.followingView,
     required this.value,
-    this.appId,
+    required this.appId,
     required this.dashboardModel,
   }) : super(key: key);
 
@@ -193,7 +193,7 @@ class FollowingDashboardItem extends StatelessWidget {
               : '');
     }
 
-    openAckNackDialog(context, title: title, message: message,
+    openAckNackDialog(context, appId + '/follow', title: title, message: message,
         onSelection: (selectedValue) async {
       Navigator.pop(context);
       if (selectedValue == 0) {
