@@ -33,8 +33,8 @@ import 'package:flutter/cupertino.dart';
 class InviteDashboardComponentConstructorDefault
     implements ComponentConstructor {
   Widget createNew(
-      {Key? key, required String id, Map<String, dynamic>? parameters}) {
-    return InviteDashboard(key: key, id: id);
+      {Key? key, required String appId, required String id, Map<String, dynamic>? parameters}) {
+    return InviteDashboard(key: key, appId: appId, id: id);
   }
 
   @override
@@ -43,13 +43,8 @@ class InviteDashboardComponentConstructorDefault
 }
 
 class InviteDashboard extends AbstractInviteDashboardComponent {
-  InviteDashboard({Key? key, required String id})
-      : super(key: key, inviteDashboardID: id);
-
-  @override
-  Widget alertWidget({title = String, content = String}) {
-    return AlertWidget(title: title, content: content);
-  }
+  InviteDashboard({Key? key, required String appId, required String id})
+      : super(key: key, theAppId: appId, inviteDashboardId: id);
 
   static EliudQuery getSubscribedMembers(String appId) {
     return EliudQuery(theConditions: [
@@ -64,7 +59,7 @@ class InviteDashboard extends AbstractInviteDashboardComponent {
         builder: (context, accessState) {
       if (accessState is AccessDetermined) {
         var member = accessState.getMember();
-        var appId = accessState.currentApp.documentID!;
+        var appId = accessState.currentAppId(context);
         return topicContainer(context, children: [
           BlocProvider<MemberPublicInfoListBloc>(
             create: (context) => MemberPublicInfoListBloc(
@@ -95,11 +90,6 @@ class InviteDashboard extends AbstractInviteDashboardComponent {
       member: member,
       dashboardModel: dashboardModel,
     );
-  }
-
-  @override
-  InviteDashboardRepository getInviteDashboardRepository(BuildContext context) {
-    return inviteDashboardRepository(appId: AccessBloc.currentAppId(context))!;
   }
 }
 

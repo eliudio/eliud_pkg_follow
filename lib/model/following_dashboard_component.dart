@@ -13,9 +13,6 @@
 
 */
 
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:eliud_core/style/style_registry.dart';
 
 import 'package:eliud_pkg_follow/model/following_dashboard_component_bloc.dart';
 import 'package:eliud_pkg_follow/model/following_dashboard_component_event.dart';
@@ -23,18 +20,26 @@ import 'package:eliud_pkg_follow/model/following_dashboard_model.dart';
 import 'package:eliud_pkg_follow/model/following_dashboard_repository.dart';
 import 'package:eliud_pkg_follow/model/following_dashboard_component_state.dart';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:eliud_core/style/style_registry.dart';
+import 'abstract_repository_singleton.dart';
+import 'package:eliud_core/core/widgets/alert_widget.dart';
+import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
+
 abstract class AbstractFollowingDashboardComponent extends StatelessWidget {
   static String componentName = "followingDashboards";
-  final String? followingDashboardID;
+  final String theAppId;
+  final String followingDashboardId;
 
-  AbstractFollowingDashboardComponent({Key? key, this.followingDashboardID}): super(key: key);
+  AbstractFollowingDashboardComponent({Key? key, required this.theAppId, required this.followingDashboardId}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<FollowingDashboardComponentBloc> (
           create: (context) => FollowingDashboardComponentBloc(
-            followingDashboardRepository: getFollowingDashboardRepository(context))
-        ..add(FetchFollowingDashboardComponent(id: followingDashboardID)),
+            followingDashboardRepository: followingDashboardRepository(appId: theAppId)!)
+        ..add(FetchFollowingDashboardComponent(id: followingDashboardId)),
       child: _followingDashboardBlockBuilder(context),
     );
   }
@@ -43,7 +48,7 @@ abstract class AbstractFollowingDashboardComponent extends StatelessWidget {
     return BlocBuilder<FollowingDashboardComponentBloc, FollowingDashboardComponentState>(builder: (context, state) {
       if (state is FollowingDashboardComponentLoaded) {
         if (state.value == null) {
-          return alertWidget(title: 'Error', content: 'No FollowingDashboard defined');
+          return AlertWidget(title: "Error", content: 'No FollowingDashboard defined');
         } else {
           return yourWidget(context, state.value);
         }
@@ -54,7 +59,7 @@ abstract class AbstractFollowingDashboardComponent extends StatelessWidget {
           size: 30.0,
         );
       } else if (state is FollowingDashboardComponentError) {
-        return alertWidget(title: 'Error', content: state.message);
+        return AlertWidget(title: 'Error', content: state.message);
       } else {
         return Center(
           child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicatorStyle().progressIndicator(context),
@@ -63,8 +68,6 @@ abstract class AbstractFollowingDashboardComponent extends StatelessWidget {
     });
   }
 
-  Widget yourWidget(BuildContext context, FollowingDashboardModel? value);
-  Widget alertWidget({ title: String, content: String});
-  FollowingDashboardRepository getFollowingDashboardRepository(BuildContext context);
+  Widget yourWidget(BuildContext context, FollowingDashboardModel value);
 }
 

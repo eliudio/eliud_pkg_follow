@@ -35,9 +35,9 @@ class FollowingComponentPermissionDenied extends FollowingComponentState {
 }
 
 class FollowingComponentLoaded extends FollowingComponentState {
-  final FollowingModel? value;
+  final FollowingModel value;
 
-  const FollowingComponentLoaded({ this.value });
+  const FollowingComponentLoaded({ required this.value });
 
   FollowingComponentLoaded copyWith({ FollowingModel? copyThis }) {
     return FollowingComponentLoaded(value: copyThis ?? this.value);

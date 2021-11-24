@@ -4,12 +4,10 @@ import 'package:eliud_core/core/blocs/access/state/access_state.dart';
 import 'package:eliud_core/style/frontend/has_container.dart';
 import 'package:eliud_core/style/frontend/has_dialog.dart';
 import 'package:eliud_core/style/frontend/has_progress_indicator.dart';
-import 'package:eliud_core/style/style_registry.dart';
 import 'package:eliud_pkg_etc/tools/member_popup_menu.dart';
 import 'package:eliud_pkg_follow/model/following_list.dart';
 import 'package:eliud_pkg_follow/model/following_list_event.dart';
 import 'package:eliud_pkg_follow/model/following_model.dart';
-import 'package:eliud_core/core/widgets/alert_widget.dart';
 import 'package:eliud_core/model/background_model.dart';
 import 'package:eliud_core/model/member_model.dart';
 import 'package:eliud_core/tools/component/component_constructor.dart';
@@ -17,7 +15,6 @@ import 'package:eliud_core/tools/query/query_tools.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/following_dashboard_component.dart';
 import 'package:eliud_pkg_follow/model/following_dashboard_model.dart';
-import 'package:eliud_pkg_follow/model/following_dashboard_repository.dart';
 import 'package:eliud_pkg_follow/model/following_list_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,8 +30,8 @@ class FollowingDashboardComponentConstructorDefault
     implements ComponentConstructor {
   @override
   Widget createNew(
-      {Key? key, required String id, Map<String, dynamic>? parameters}) {
-    return FollowingDashboardComponent(key: key, id: id);
+      {Key? key, required String appId, required String id, Map<String, dynamic>? parameters}) {
+    return FollowingDashboardComponent(key: key, appId: appId, id: id);
   }
 
   @override
@@ -43,13 +40,8 @@ class FollowingDashboardComponentConstructorDefault
 }
 
 class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
-  FollowingDashboardComponent({Key? key, required String id})
-      : super(key: key, followingDashboardID: id);
-
-  @override
-  Widget alertWidget({title = String, content = String}) {
-    return AlertWidget(title: title, content: content);
-  }
+  FollowingDashboardComponent({Key? key, required String appId, required String id})
+      : super(key: key, theAppId: appId, followingDashboardId: id);
 
   @override
   Widget yourWidget(
@@ -58,7 +50,7 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
     return BlocBuilder<AccessBloc, AccessState>(
         builder: (context, accessState) {
       if (accessState is AccessDetermined) {
-        var appId = accessState.currentApp.documentID;
+        var appId = accessState.currentApp(context).documentID;
         var member = accessState.getMember();
         if (member == null) return Text("No member");
         return topicContainer(context, children: [
@@ -108,12 +100,6 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
         value: value,
         followingView: dashboardModel.view,
         dashboardModel: dashboardModel);
-  }
-
-  @override
-  FollowingDashboardRepository getFollowingDashboardRepository(
-      BuildContext context) {
-    return followingDashboardRepository(appId: AccessBloc.currentAppId(context))!;
   }
 }
 

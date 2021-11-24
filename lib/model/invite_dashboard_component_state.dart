@@ -35,9 +35,9 @@ class InviteDashboardComponentPermissionDenied extends InviteDashboardComponentS
 }
 
 class InviteDashboardComponentLoaded extends InviteDashboardComponentState {
-  final InviteDashboardModel? value;
+  final InviteDashboardModel value;
 
-  const InviteDashboardComponentLoaded({ this.value });
+  const InviteDashboardComponentLoaded({ required this.value });
 
   InviteDashboardComponentLoaded copyWith({ InviteDashboardModel? copyThis }) {
     return InviteDashboardComponentLoaded(value: copyThis ?? this.value);

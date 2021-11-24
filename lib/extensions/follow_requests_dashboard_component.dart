@@ -1,7 +1,6 @@
 import 'package:eliud_core/core/blocs/access/access_bloc.dart';
 import 'package:eliud_core/core/blocs/access/state/access_determined.dart';
 import 'package:eliud_core/core/blocs/access/state/access_state.dart';
-import 'package:eliud_core/core/widgets/alert_widget.dart';
 import 'package:eliud_core/model/background_model.dart';
 import 'package:eliud_core/style/frontend/has_container.dart';
 import 'package:eliud_core/style/frontend/has_dialog.dart';
@@ -15,7 +14,6 @@ import 'package:eliud_pkg_follow/model/follow_request_list_event.dart';
 import 'package:eliud_pkg_follow/model/follow_request_model.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_component.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_model.dart';
-import 'package:eliud_pkg_follow/model/follow_requests_dashboard_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eliud_pkg_follow/model/following_model.dart';
@@ -36,8 +34,8 @@ class FollowRequestsDashboardComponentConstructorDefault
     implements ComponentConstructor {
   @override
   Widget createNew(
-      {Key? key, required String id, Map<String, dynamic>? parameters}) {
-    return FollowRequestsDashboardComponent(key: key, id: id);
+      {Key? key, required String appId, required String id, Map<String, dynamic>? parameters}) {
+    return FollowRequestsDashboardComponent(key: key, appId: appId, id: id);
   }
 
   @override
@@ -47,13 +45,8 @@ class FollowRequestsDashboardComponentConstructorDefault
 
 class FollowRequestsDashboardComponent
     extends AbstractFollowRequestsDashboardComponent {
-  FollowRequestsDashboardComponent({Key? key, required String id})
-      : super(key: key, followRequestsDashboardID: id);
-
-  @override
-  Widget alertWidget({title = String, content = String}) {
-    return AlertWidget(title: title, content: content);
-  }
+  FollowRequestsDashboardComponent({Key? key, required String appId, required String id})
+      : super(key: key, theAppId: appId, followRequestsDashboardId: id);
 
   @override
   Widget yourWidget(
@@ -61,13 +54,13 @@ class FollowRequestsDashboardComponent
     return BlocBuilder<AccessBloc, AccessState>(
         builder: (context, accessState) {
       if (accessState is AccessDetermined) {
-        var appId = accessState.currentApp.documentID;
+        var appId = accessState.currentAppId(context);
         return topicContainer(context, children: [
           BlocProvider<FollowRequestListBloc>(
               create: (context) => FollowRequestListBloc(
                     detailed: true,
                     eliudQuery: FollowPackage.getOpenFollowRequestsQuery(
-                        accessState.currentApp.documentID!,
+                        appId,
                         accessState.getMember()!.documentID!),
                     followRequestRepository:
                         followRequestRepository(appId: appId)!,
@@ -78,7 +71,7 @@ class FollowRequestsDashboardComponent
                   FollowRequestListWidget(
                       readOnly: true,
                       widgetProvider: (value) =>
-                          widgetProvider(appId!, value!, dashboardModel!),
+                          widgetProvider(appId, value!, dashboardModel!),
                       listBackground:
                           BackgroundModel(documentID: "`transparent"))
                 ]),
@@ -94,13 +87,6 @@ class FollowRequestsDashboardComponent
       FollowRequestsDashboardModel dashboardModel) {
     return FollowRequestsDashboardItem(
         appId: appId, dashboardModel: dashboardModel, value: value);
-  }
-
-  @override
-  FollowRequestsDashboardRepository getFollowRequestsDashboardRepository(
-      BuildContext context) {
-    return followRequestsDashboardRepository(
-        appId: AccessBloc.currentAppId(context))!;
   }
 }
 
@@ -164,7 +150,7 @@ class FollowRequestsDashboardItem extends StatelessWidget {
     var name = value == null ||
             value!.follower == null ||
             value!.follower!.name == null
-        ? "unkown"
+        ? 'unkown'
         : value!.follower!.name;
     openAckNackDialog(context,
         title: 'Follow invitation',

@@ -13,9 +13,6 @@
 
 */
 
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:eliud_core/style/style_registry.dart';
 
 import 'package:eliud_pkg_follow/model/follow_request_component_bloc.dart';
 import 'package:eliud_pkg_follow/model/follow_request_component_event.dart';
@@ -23,18 +20,26 @@ import 'package:eliud_pkg_follow/model/follow_request_model.dart';
 import 'package:eliud_pkg_follow/model/follow_request_repository.dart';
 import 'package:eliud_pkg_follow/model/follow_request_component_state.dart';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:eliud_core/style/style_registry.dart';
+import 'abstract_repository_singleton.dart';
+import 'package:eliud_core/core/widgets/alert_widget.dart';
+import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
+
 abstract class AbstractFollowRequestComponent extends StatelessWidget {
   static String componentName = "followRequests";
-  final String? followRequestID;
+  final String theAppId;
+  final String followRequestId;
 
-  AbstractFollowRequestComponent({Key? key, this.followRequestID}): super(key: key);
+  AbstractFollowRequestComponent({Key? key, required this.theAppId, required this.followRequestId}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<FollowRequestComponentBloc> (
           create: (context) => FollowRequestComponentBloc(
-            followRequestRepository: getFollowRequestRepository(context))
-        ..add(FetchFollowRequestComponent(id: followRequestID)),
+            followRequestRepository: followRequestRepository(appId: theAppId)!)
+        ..add(FetchFollowRequestComponent(id: followRequestId)),
       child: _followRequestBlockBuilder(context),
     );
   }
@@ -43,7 +48,7 @@ abstract class AbstractFollowRequestComponent extends StatelessWidget {
     return BlocBuilder<FollowRequestComponentBloc, FollowRequestComponentState>(builder: (context, state) {
       if (state is FollowRequestComponentLoaded) {
         if (state.value == null) {
-          return alertWidget(title: 'Error', content: 'No FollowRequest defined');
+          return AlertWidget(title: "Error", content: 'No FollowRequest defined');
         } else {
           return yourWidget(context, state.value);
         }
@@ -54,7 +59,7 @@ abstract class AbstractFollowRequestComponent extends StatelessWidget {
           size: 30.0,
         );
       } else if (state is FollowRequestComponentError) {
-        return alertWidget(title: 'Error', content: state.message);
+        return AlertWidget(title: 'Error', content: state.message);
       } else {
         return Center(
           child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicatorStyle().progressIndicator(context),
@@ -63,8 +68,6 @@ abstract class AbstractFollowRequestComponent extends StatelessWidget {
     });
   }
 
-  Widget yourWidget(BuildContext context, FollowRequestModel? value);
-  Widget alertWidget({ title: String, content: String});
-  FollowRequestRepository getFollowRequestRepository(BuildContext context);
+  Widget yourWidget(BuildContext context, FollowRequestModel value);
 }
 

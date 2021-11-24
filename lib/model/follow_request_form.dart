@@ -74,6 +74,7 @@ class FollowRequestForm extends StatelessWidget {
     var accessState = AccessBloc.getState(context);
     var app = AccessBloc.currentApp(context);
     if (app == null) return Text("No app available");
+    var appId = app.documentID!;
     if (formAction == FormAction.ShowData) {
       return BlocProvider<FollowRequestFormBloc >(
             create: (context) => FollowRequestFormBloc(AccessBloc.currentAppId(context),
@@ -144,6 +145,7 @@ class _MyFollowRequestFormState extends State<MyFollowRequestForm> {
   Widget build(BuildContext context) {
     var app = AccessBloc.currentApp(context);
     if (app == null) return Text('No app available');
+    var appId = app.documentID!;
     var accessState = AccessBloc.getState(context);
     return BlocBuilder<FollowRequestFormBloc, FollowRequestFormState>(builder: (context, state) {
       if (state is FollowRequestFormUninitialized) return Center(
@@ -187,12 +189,12 @@ class _MyFollowRequestFormState extends State<MyFollowRequestForm> {
 
         children.add(
 
-                DropdownButtonComponentFactory().createNew(id: "memberPublicInfos", value: _follower, trigger: _onFollowerSelected, optional: false),
+                DropdownButtonComponentFactory().createNew(appId: appId, id: "memberPublicInfos", value: _follower, trigger: _onFollowerSelected, optional: false),
           );
 
         children.add(
 
-                DropdownButtonComponentFactory().createNew(id: "memberPublicInfos", value: _followed, trigger: _onFollowedSelected, optional: false),
+                DropdownButtonComponentFactory().createNew(appId: appId, id: "memberPublicInfos", value: _followed, trigger: _onFollowedSelected, optional: false),
           );
 
         children.add(

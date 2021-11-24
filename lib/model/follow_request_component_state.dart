@@ -35,9 +35,9 @@ class FollowRequestComponentPermissionDenied extends FollowRequestComponentState
 }
 
 class FollowRequestComponentLoaded extends FollowRequestComponentState {
-  final FollowRequestModel? value;
+  final FollowRequestModel value;
 
-  const FollowRequestComponentLoaded({ this.value });
+  const FollowRequestComponentLoaded({ required this.value });
 
   FollowRequestComponentLoaded copyWith({ FollowRequestModel? copyThis }) {
     return FollowRequestComponentLoaded(value: copyThis ?? this.value);

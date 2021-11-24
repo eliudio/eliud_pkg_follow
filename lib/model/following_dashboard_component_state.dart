@@ -35,9 +35,9 @@ class FollowingDashboardComponentPermissionDenied extends FollowingDashboardComp
 }
 
 class FollowingDashboardComponentLoaded extends FollowingDashboardComponentState {
-  final FollowingDashboardModel? value;
+  final FollowingDashboardModel value;
 
-  const FollowingDashboardComponentLoaded({ this.value });
+  const FollowingDashboardComponentLoaded({ required this.value });
 
   FollowingDashboardComponentLoaded copyWith({ FollowingDashboardModel? copyThis }) {
     return FollowingDashboardComponentLoaded(value: copyThis ?? this.value);

@@ -107,7 +107,7 @@ class FollowingDashboardListWidgetState extends State<FollowingDashboardListWidg
                       context, label: 'Add',
                       onPressed: () {
                         Navigator.of(context).push(
-                                  pageRouteBuilder(accessState.currentApp, page: BlocProvider.value(
+                                  pageRouteBuilder(accessState.currentApp(context), page: BlocProvider.value(
                                       value: BlocProvider.of<FollowingDashboardListBloc>(context),
                                       child: FollowingDashboardForm(
                                           value: null,
