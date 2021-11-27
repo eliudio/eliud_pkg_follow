@@ -82,7 +82,7 @@ class FollowingDashboardForm extends StatelessWidget {
     var appId = app.documentID!;
     if (formAction == FormAction.ShowData) {
       return BlocProvider<FollowingDashboardFormBloc >(
-            create: (context) => FollowingDashboardFormBloc(AccessBloc.currentAppId(context),
+            create: (context) => FollowingDashboardFormBloc(appId,
                                        formAction: formAction,
 
                                                 )..add(InitialiseFollowingDashboardFormEvent(value: value)),
@@ -91,7 +91,7 @@ class FollowingDashboardForm extends StatelessWidget {
           );
     } if (formAction == FormAction.ShowPreloadedData) {
       return BlocProvider<FollowingDashboardFormBloc >(
-            create: (context) => FollowingDashboardFormBloc(AccessBloc.currentAppId(context),
+            create: (context) => FollowingDashboardFormBloc(appId,
                                        formAction: formAction,
 
                                                 )..add(InitialiseFollowingDashboardFormNoLoadEvent(value: value)),
@@ -102,7 +102,7 @@ class FollowingDashboardForm extends StatelessWidget {
       return Scaffold(
         appBar: StyleRegistry.registry().styleWithContext(context).adminFormStyle().appBarWithString(context, title: formAction == FormAction.UpdateAction ? 'Update FollowingDashboard' : 'Add FollowingDashboard'),
         body: BlocProvider<FollowingDashboardFormBloc >(
-            create: (context) => FollowingDashboardFormBloc(AccessBloc.currentAppId(context),
+            create: (context) => FollowingDashboardFormBloc(appId,
                                        formAction: formAction,
 
                                                 )..add((formAction == FormAction.UpdateAction ? InitialiseFollowingDashboardFormEvent(value: value) : InitialiseNewFollowingDashboardFormEvent())),

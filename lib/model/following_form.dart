@@ -77,7 +77,7 @@ class FollowingForm extends StatelessWidget {
     var appId = app.documentID!;
     if (formAction == FormAction.ShowData) {
       return BlocProvider<FollowingFormBloc >(
-            create: (context) => FollowingFormBloc(AccessBloc.currentAppId(context),
+            create: (context) => FollowingFormBloc(appId,
                                        formAction: formAction,
 
                                                 )..add(InitialiseFollowingFormEvent(value: value)),
@@ -86,7 +86,7 @@ class FollowingForm extends StatelessWidget {
           );
     } if (formAction == FormAction.ShowPreloadedData) {
       return BlocProvider<FollowingFormBloc >(
-            create: (context) => FollowingFormBloc(AccessBloc.currentAppId(context),
+            create: (context) => FollowingFormBloc(appId,
                                        formAction: formAction,
 
                                                 )..add(InitialiseFollowingFormNoLoadEvent(value: value)),
@@ -97,7 +97,7 @@ class FollowingForm extends StatelessWidget {
       return Scaffold(
         appBar: StyleRegistry.registry().styleWithContext(context).adminFormStyle().appBarWithString(context, title: formAction == FormAction.UpdateAction ? 'Update Following' : 'Add Following'),
         body: BlocProvider<FollowingFormBloc >(
-            create: (context) => FollowingFormBloc(AccessBloc.currentAppId(context),
+            create: (context) => FollowingFormBloc(appId,
                                        formAction: formAction,
 
                                                 )..add((formAction == FormAction.UpdateAction ? InitialiseFollowingFormEvent(value: value) : InitialiseNewFollowingFormEvent())),

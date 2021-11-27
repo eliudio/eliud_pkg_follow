@@ -82,7 +82,7 @@ class InviteDashboardForm extends StatelessWidget {
     var appId = app.documentID!;
     if (formAction == FormAction.ShowData) {
       return BlocProvider<InviteDashboardFormBloc >(
-            create: (context) => InviteDashboardFormBloc(AccessBloc.currentAppId(context),
+            create: (context) => InviteDashboardFormBloc(appId,
                                        formAction: formAction,
 
                                                 )..add(InitialiseInviteDashboardFormEvent(value: value)),
@@ -91,7 +91,7 @@ class InviteDashboardForm extends StatelessWidget {
           );
     } if (formAction == FormAction.ShowPreloadedData) {
       return BlocProvider<InviteDashboardFormBloc >(
-            create: (context) => InviteDashboardFormBloc(AccessBloc.currentAppId(context),
+            create: (context) => InviteDashboardFormBloc(appId,
                                        formAction: formAction,
 
                                                 )..add(InitialiseInviteDashboardFormNoLoadEvent(value: value)),
@@ -102,7 +102,7 @@ class InviteDashboardForm extends StatelessWidget {
       return Scaffold(
         appBar: StyleRegistry.registry().styleWithContext(context).adminFormStyle().appBarWithString(context, title: formAction == FormAction.UpdateAction ? 'Update InviteDashboard' : 'Add InviteDashboard'),
         body: BlocProvider<InviteDashboardFormBloc >(
-            create: (context) => InviteDashboardFormBloc(AccessBloc.currentAppId(context),
+            create: (context) => InviteDashboardFormBloc(appId,
                                        formAction: formAction,
 
                                                 )..add((formAction == FormAction.UpdateAction ? InitialiseInviteDashboardFormEvent(value: value) : InitialiseNewInviteDashboardFormEvent())),

@@ -35,10 +35,11 @@ class FollowRequestComponentSelector extends ComponentSelector {
   @override
   Widget createSelectWidget(BuildContext context, double height,
       SelectComponent selected, editorConstructor) {
+    var appId = AccessBloc.currentAppId(context);
     return BlocProvider<FollowRequestListBloc>(
           create: (context) => FollowRequestListBloc(
             followRequestRepository:
-                followRequestRepository(appId: AccessBloc.currentAppId(context))!,
+                followRequestRepository(appId: appId)!,
           )..add(LoadFollowRequestList()),
       child: SelectFollowRequestWidget(
           height: height,

@@ -35,10 +35,11 @@ class InviteDashboardComponentSelector extends ComponentSelector {
   @override
   Widget createSelectWidget(BuildContext context, double height,
       SelectComponent selected, editorConstructor) {
+    var appId = AccessBloc.currentAppId(context);
     return BlocProvider<InviteDashboardListBloc>(
           create: (context) => InviteDashboardListBloc(
             inviteDashboardRepository:
-                inviteDashboardRepository(appId: AccessBloc.currentAppId(context))!,
+                inviteDashboardRepository(appId: appId)!,
           )..add(LoadInviteDashboardList()),
       child: SelectInviteDashboardWidget(
           height: height,
