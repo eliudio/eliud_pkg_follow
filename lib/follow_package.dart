@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:eliud_core/core/blocs/access/access_bloc.dart';
 import 'package:eliud_core/model/access_model.dart';
 import 'package:eliud_core/model/app_model.dart';
 import 'package:eliud_core/model/member_model.dart';
@@ -48,7 +49,7 @@ abstract class FollowPackage extends Package {
   }
 
   @override
-  Future<bool?> isConditionOk(String? pluginCondition, AppModel? app, MemberModel? member, bool? isOwner, bool? isBlocked, PrivilegeLevel? privilegeLevel) async {
+  Future<bool?> isConditionOk(AccessBloc accessBloc, String pluginCondition, AppModel app, MemberModel? member, bool isOwner, bool? isBlocked, PrivilegeLevel? privilegeLevel) async {
     if (pluginCondition == CONDITION_MEMBER_HAS_OPEN_REQUESTS) {
       if (stateCONDITION_MEMBER_HAS_OPEN_REQUESTS == null) return false;
       return stateCONDITION_MEMBER_HAS_OPEN_REQUESTS;
