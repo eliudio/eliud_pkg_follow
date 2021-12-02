@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'follow_package.dart';
 import 'model/abstract_repository_singleton.dart';
 
@@ -13,5 +15,5 @@ class FollowWebPackage extends FollowPackage {
       identical(this, other) ||
           other is FollowWebPackage &&
               runtimeType == other.runtimeType &&
-              stateCONDITION_MEMBER_HAS_OPEN_REQUESTS == other.stateCONDITION_MEMBER_HAS_OPEN_REQUESTS;
+              mapEquals(stateCONDITION_MEMBER_HAS_OPEN_REQUESTS, other.stateCONDITION_MEMBER_HAS_OPEN_REQUESTS);
 }
