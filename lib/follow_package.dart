@@ -59,6 +59,7 @@ abstract class FollowPackage extends Package {
           appId, member.documentID!));
       return c.future;
     } else {
+      stateCONDITION_MEMBER_HAS_OPEN_REQUESTS[appId] = false;
       return Future.value([
         PackageConditionDetails(
             packageName: packageName,
