@@ -27,7 +27,7 @@ class FollowRequestsDashboardEntity {
   final String? appId;
   final String? description;
   final List<MemberActionEntity>? memberActions;
-  final ConditionsSimpleEntity? conditions;
+  final StorageConditionsEntity? conditions;
 
   FollowRequestsDashboardEntity({this.appId, this.description, this.memberActions, this.conditions, });
 
@@ -56,7 +56,7 @@ class FollowRequestsDashboardEntity {
     var conditionsFromMap;
     conditionsFromMap = map['conditions'];
     if (conditionsFromMap != null)
-      conditionsFromMap = ConditionsSimpleEntity.fromMap(conditionsFromMap);
+      conditionsFromMap = StorageConditionsEntity.fromMap(conditionsFromMap);
 
     return FollowRequestsDashboardEntity(
       appId: map['appId'], 

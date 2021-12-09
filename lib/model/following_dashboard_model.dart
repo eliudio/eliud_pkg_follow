@@ -62,13 +62,13 @@ class FollowingDashboardModel {
 
   // The extra actions that can be done on a member
   List<MemberActionModel>? memberActions;
-  ConditionsSimpleModel? conditions;
+  StorageConditionsModel? conditions;
 
   FollowingDashboardModel({this.documentID, this.appId, this.description, this.view, this.memberActions, this.conditions, })  {
     assert(documentID != null);
   }
 
-  FollowingDashboardModel copyWith({String? documentID, String? appId, String? description, FollowingView? view, List<MemberActionModel>? memberActions, ConditionsSimpleModel? conditions, }) {
+  FollowingDashboardModel copyWith({String? documentID, String? appId, String? description, FollowingView? view, List<MemberActionModel>? memberActions, StorageConditionsModel? conditions, }) {
     return FollowingDashboardModel(documentID: documentID ?? this.documentID, appId: appId ?? this.appId, description: description ?? this.description, view: view ?? this.view, memberActions: memberActions ?? this.memberActions, conditions: conditions ?? this.conditions, );
   }
 
@@ -123,7 +123,7 @@ class FollowingDashboardModel {
             })
             .toList(), 
           conditions: 
-            ConditionsSimpleModel.fromEntity(entity.conditions), 
+            StorageConditionsModel.fromEntity(entity.conditions), 
     );
   }
 
@@ -143,7 +143,7 @@ class FollowingDashboardModel {
             return MemberActionModel.fromEntityPlus(counter.toString(), item, appId: appId);})
             .toList())), 
           conditions: 
-            await ConditionsSimpleModel.fromEntityPlus(entity.conditions, appId: appId), 
+            await StorageConditionsModel.fromEntityPlus(entity.conditions, appId: appId), 
     );
   }
 

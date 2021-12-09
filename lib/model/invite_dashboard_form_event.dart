@@ -112,7 +112,7 @@ class ChangedInviteDashboardMemberActions extends InviteDashboardFormEvent {
 }
 
 class ChangedInviteDashboardConditions extends InviteDashboardFormEvent {
-  final ConditionsSimpleModel? value;
+  final StorageConditionsModel? value;
 
   ChangedInviteDashboardConditions({this.value});
 

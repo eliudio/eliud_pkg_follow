@@ -112,7 +112,7 @@ class ChangedFollowRequestsDashboardMemberActions extends FollowRequestsDashboar
 }
 
 class ChangedFollowRequestsDashboardConditions extends FollowRequestsDashboardFormEvent {
-  final ConditionsSimpleModel? value;
+  final StorageConditionsModel? value;
 
   ChangedFollowRequestsDashboardConditions({this.value});
 

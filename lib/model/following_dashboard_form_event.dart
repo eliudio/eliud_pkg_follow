@@ -124,7 +124,7 @@ class ChangedFollowingDashboardMemberActions extends FollowingDashboardFormEvent
 }
 
 class ChangedFollowingDashboardConditions extends FollowingDashboardFormEvent {
-  final ConditionsSimpleModel? value;
+  final StorageConditionsModel? value;
 
   ChangedFollowingDashboardConditions({this.value});
 

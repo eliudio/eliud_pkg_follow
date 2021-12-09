@@ -27,7 +27,7 @@ class InviteDashboardEntity {
   final String? appId;
   final String? description;
   final List<MemberActionEntity>? memberActions;
-  final ConditionsSimpleEntity? conditions;
+  final StorageConditionsEntity? conditions;
 
   InviteDashboardEntity({this.appId, this.description, this.memberActions, this.conditions, });
 
@@ -56,7 +56,7 @@ class InviteDashboardEntity {
     var conditionsFromMap;
     conditionsFromMap = map['conditions'];
     if (conditionsFromMap != null)
-      conditionsFromMap = ConditionsSimpleEntity.fromMap(conditionsFromMap);
+      conditionsFromMap = StorageConditionsEntity.fromMap(conditionsFromMap);
 
     return InviteDashboardEntity(
       appId: map['appId'], 
