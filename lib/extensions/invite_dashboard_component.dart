@@ -59,7 +59,7 @@ class InviteDashboard extends AbstractInviteDashboardComponent {
         builder: (context, accessState) {
       if (accessState is AccessDetermined) {
         var member = accessState.getMember();
-        var appId = accessState.currentAppId(context);
+        var appId = accessState.currentApp.documentID!;
         return topicContainer(context, children: [
           BlocProvider<MemberPublicInfoListBloc>(
             create: (context) => MemberPublicInfoListBloc(

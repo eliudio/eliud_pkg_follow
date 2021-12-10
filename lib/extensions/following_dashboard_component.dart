@@ -50,7 +50,7 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
     return BlocBuilder<AccessBloc, AccessState>(
         builder: (context, accessState) {
       if (accessState is AccessDetermined) {
-        var appId = accessState.currentApp(context).documentID;
+        var appId = accessState.currentApp.documentID;
         var member = accessState.getMember();
         if (member == null) return Text("No member");
         return topicContainer(context, children: [

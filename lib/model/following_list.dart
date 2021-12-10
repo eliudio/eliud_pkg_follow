@@ -107,7 +107,7 @@ class FollowingListWidgetState extends State<FollowingListWidget> {
                       context, label: 'Add',
                       onPressed: () {
                         Navigator.of(context).push(
-                                  pageRouteBuilder(accessState.currentApp(context), page: BlocProvider.value(
+                                  pageRouteBuilder(accessState.currentApp, page: BlocProvider.value(
                                       value: BlocProvider.of<FollowingListBloc>(context),
                                       child: FollowingForm(
                                           value: null,
