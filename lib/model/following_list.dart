@@ -155,7 +155,7 @@ class FollowingListWidgetState extends State<FollowingListWidget> {
               BlocProvider.of<FollowingListBloc>(context)
                   .add(DeleteFollowingList(value: value));
               Scaffold.of(context).showSnackBar(DeleteSnackBar(
-                message: "Following " + value.,
+                message: "Following " + value.documentID,
                 onUndo: () => BlocProvider.of<FollowingListBloc>(context)
                     .add(AddFollowingList(value: value)),
               ));
@@ -168,7 +168,7 @@ class FollowingListWidgetState extends State<FollowingListWidget> {
                       if (removedItem != null) {
                         Scaffold.of(context).showSnackBar(
                           DeleteSnackBar(
-                        message: "Following " + value.,
+                        message: "Following " + value.documentID,
                             onUndo: () => BlocProvider.of<FollowingListBloc>(context)
                                 .add(AddFollowingList(value: value)),
                           ),

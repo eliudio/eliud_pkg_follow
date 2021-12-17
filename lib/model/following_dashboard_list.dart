@@ -155,7 +155,7 @@ class FollowingDashboardListWidgetState extends State<FollowingDashboardListWidg
               BlocProvider.of<FollowingDashboardListBloc>(context)
                   .add(DeleteFollowingDashboardList(value: value));
               Scaffold.of(context).showSnackBar(DeleteSnackBar(
-                message: "FollowingDashboard " + value.,
+                message: "FollowingDashboard " + value.documentID,
                 onUndo: () => BlocProvider.of<FollowingDashboardListBloc>(context)
                     .add(AddFollowingDashboardList(value: value)),
               ));
@@ -168,7 +168,7 @@ class FollowingDashboardListWidgetState extends State<FollowingDashboardListWidg
                       if (removedItem != null) {
                         Scaffold.of(context).showSnackBar(
                           DeleteSnackBar(
-                        message: "FollowingDashboard " + value.,
+                        message: "FollowingDashboard " + value.documentID,
                             onUndo: () => BlocProvider.of<FollowingDashboardListBloc>(context)
                                 .add(AddFollowingDashboardList(value: value)),
                           ),
