@@ -123,7 +123,12 @@ class FollowRequestCache implements FollowRequestRepository {
 
   @override
   StreamSubscription<FollowRequestModel?> listenTo(String documentId, FollowRequestChanged changed) {
-    return reference.listenTo(documentId, changed);
+    return reference.listenTo(documentId, ((value) {
+      if (value != null) {
+        fullCache[value.documentID] = value;
+      }
+      changed(value);
+    }));
   }
 
   static Future<FollowRequestModel> refreshRelations(FollowRequestModel model) async {

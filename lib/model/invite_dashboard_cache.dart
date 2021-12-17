@@ -128,7 +128,12 @@ class InviteDashboardCache implements InviteDashboardRepository {
 
   @override
   StreamSubscription<InviteDashboardModel?> listenTo(String documentId, InviteDashboardChanged changed) {
-    return reference.listenTo(documentId, changed);
+    return reference.listenTo(documentId, ((value) {
+      if (value != null) {
+        fullCache[value.documentID] = value;
+      }
+      changed(value);
+    }));
   }
 
   static Future<InviteDashboardModel> refreshRelations(InviteDashboardModel model) async {

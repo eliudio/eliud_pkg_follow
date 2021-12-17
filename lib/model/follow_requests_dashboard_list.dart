@@ -155,7 +155,7 @@ class FollowRequestsDashboardListWidgetState extends State<FollowRequestsDashboa
               BlocProvider.of<FollowRequestsDashboardListBloc>(context)
                   .add(DeleteFollowRequestsDashboardList(value: value));
               Scaffold.of(context).showSnackBar(DeleteSnackBar(
-                message: "FollowRequestsDashboard " + value.documentID,
+                message: "FollowRequestsDashboard " + value.,
                 onUndo: () => BlocProvider.of<FollowRequestsDashboardListBloc>(context)
                     .add(AddFollowRequestsDashboardList(value: value)),
               ));
@@ -168,7 +168,7 @@ class FollowRequestsDashboardListWidgetState extends State<FollowRequestsDashboa
                       if (removedItem != null) {
                         Scaffold.of(context).showSnackBar(
                           DeleteSnackBar(
-                        message: "FollowRequestsDashboard " + value.documentID,
+                        message: "FollowRequestsDashboard " + value.,
                             onUndo: () => BlocProvider.of<FollowRequestsDashboardListBloc>(context)
                                 .add(AddFollowRequestsDashboardList(value: value)),
                           ),
