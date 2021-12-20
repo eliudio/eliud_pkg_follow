@@ -43,23 +43,23 @@ class RepositorySingleton extends AbstractRepositorySingleton {
     var _inviteDashboardRepository = HashMap<String, InviteDashboardRepository>();
 
     FollowingRepository? followingRepository(String? appId) {
-      if ((appId != null) && (_followingRepository[appId] == null)) _followingRepository[appId] = FollowingCache(FollowingFirestore(appRepository()!.getSubCollection(appId, 'following'), appId));
+      if ((appId != null) && (_followingRepository[appId] == null)) _followingRepository[appId] = FollowingCache(FollowingFirestore(() => appRepository()!.getSubCollection(appId, 'following'), appId));
       return _followingRepository[appId];
     }
     FollowingDashboardRepository? followingDashboardRepository(String? appId) {
-      if ((appId != null) && (_followingDashboardRepository[appId] == null)) _followingDashboardRepository[appId] = FollowingDashboardCache(FollowingDashboardFirestore(appRepository()!.getSubCollection(appId, 'followingdashboard'), appId));
+      if ((appId != null) && (_followingDashboardRepository[appId] == null)) _followingDashboardRepository[appId] = FollowingDashboardCache(FollowingDashboardFirestore(() => appRepository()!.getSubCollection(appId, 'followingdashboard'), appId));
       return _followingDashboardRepository[appId];
     }
     FollowRequestRepository? followRequestRepository(String? appId) {
-      if ((appId != null) && (_followRequestRepository[appId] == null)) _followRequestRepository[appId] = FollowRequestCache(FollowRequestFirestore(appRepository()!.getSubCollection(appId, 'followrequest'), appId));
+      if ((appId != null) && (_followRequestRepository[appId] == null)) _followRequestRepository[appId] = FollowRequestCache(FollowRequestFirestore(() => appRepository()!.getSubCollection(appId, 'followrequest'), appId));
       return _followRequestRepository[appId];
     }
     FollowRequestsDashboardRepository? followRequestsDashboardRepository(String? appId) {
-      if ((appId != null) && (_followRequestsDashboardRepository[appId] == null)) _followRequestsDashboardRepository[appId] = FollowRequestsDashboardCache(FollowRequestsDashboardFirestore(appRepository()!.getSubCollection(appId, 'followrequestsdashboard'), appId));
+      if ((appId != null) && (_followRequestsDashboardRepository[appId] == null)) _followRequestsDashboardRepository[appId] = FollowRequestsDashboardCache(FollowRequestsDashboardFirestore(() => appRepository()!.getSubCollection(appId, 'followrequestsdashboard'), appId));
       return _followRequestsDashboardRepository[appId];
     }
     InviteDashboardRepository? inviteDashboardRepository(String? appId) {
-      if ((appId != null) && (_inviteDashboardRepository[appId] == null)) _inviteDashboardRepository[appId] = InviteDashboardCache(InviteDashboardFirestore(appRepository()!.getSubCollection(appId, 'invitedashboard'), appId));
+      if ((appId != null) && (_inviteDashboardRepository[appId] == null)) _inviteDashboardRepository[appId] = InviteDashboardCache(InviteDashboardFirestore(() => appRepository()!.getSubCollection(appId, 'invitedashboard'), appId));
       return _inviteDashboardRepository[appId];
     }
 
