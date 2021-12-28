@@ -26,19 +26,20 @@ import 'package:eliud_core/style/style_registry.dart';
 import 'abstract_repository_singleton.dart';
 import 'package:eliud_core/core/widgets/alert_widget.dart';
 import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
+import 'package:eliud_core/model/app_model.dart';
 
 abstract class AbstractFollowRequestsDashboardComponent extends StatelessWidget {
   static String componentName = "followRequestsDashboards";
-  final String theAppId;
+  final AppModel app;
   final String followRequestsDashboardId;
 
-  AbstractFollowRequestsDashboardComponent({Key? key, required this.theAppId, required this.followRequestsDashboardId}): super(key: key);
+  AbstractFollowRequestsDashboardComponent({Key? key, required this.app, required this.followRequestsDashboardId}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<FollowRequestsDashboardComponentBloc> (
           create: (context) => FollowRequestsDashboardComponentBloc(
-            followRequestsDashboardRepository: followRequestsDashboardRepository(appId: theAppId)!)
+            followRequestsDashboardRepository: followRequestsDashboardRepository(appId: app.documentID!)!)
         ..add(FetchFollowRequestsDashboardComponent(id: followRequestsDashboardId)),
       child: _followRequestsDashboardBlockBuilder(context),
     );
@@ -48,7 +49,7 @@ abstract class AbstractFollowRequestsDashboardComponent extends StatelessWidget 
     return BlocBuilder<FollowRequestsDashboardComponentBloc, FollowRequestsDashboardComponentState>(builder: (context, state) {
       if (state is FollowRequestsDashboardComponentLoaded) {
         if (state.value == null) {
-          return AlertWidget(title: "Error", content: 'No FollowRequestsDashboard defined');
+          return AlertWidget(app: app, title: "Error", content: 'No FollowRequestsDashboard defined');
         } else {
           return yourWidget(context, state.value);
         }
@@ -59,10 +60,10 @@ abstract class AbstractFollowRequestsDashboardComponent extends StatelessWidget 
           size: 30.0,
         );
       } else if (state is FollowRequestsDashboardComponentError) {
-        return AlertWidget(title: 'Error', content: state.message);
+        return AlertWidget(app: app, title: 'Error', content: state.message);
       } else {
         return Center(
-          child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicatorStyle().progressIndicator(context),
+          child: StyleRegistry.registry().styleWithApp(app).frontEndStyle().progressIndicatorStyle().progressIndicator(app, context),
         );
       }
     });

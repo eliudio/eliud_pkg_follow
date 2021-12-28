@@ -120,12 +120,12 @@ import '../tools/bespoke_entities.dart';
 import 'package:eliud_pkg_follow/model/entity_export.dart';
 
 class ListComponentFactory implements ComponentConstructor {
-  Widget? createNew({Key? key, required String appId,  required String id, Map<String, dynamic>? parameters}) {
-    return ListComponent(appId: appId, componentId: id);
+  Widget? createNew({Key? key, required AppModel app,  required String id, Map<String, dynamic>? parameters}) {
+    return ListComponent(app: app, componentId: id);
   }
 
   @override
-  dynamic getModel({required String appId, required String id}) {
+  dynamic getModel({required AppModel app, required String id}) {
     return null;
   }
 }
@@ -135,7 +135,7 @@ typedef DropdownButtonChanged(String? value);
 
 class DropdownButtonComponentFactory implements ComponentDropDown {
   @override
-  dynamic getModel({required String appId, required String id}) {
+  dynamic getModel({required AppModel app, required String id}) {
     return null;
   }
 
@@ -150,22 +150,22 @@ class DropdownButtonComponentFactory implements ComponentDropDown {
     return false;
   }
 
-  Widget createNew({Key? key, required String appId, required String id, Map<String, dynamic>? parameters, String? value, DropdownButtonChanged? trigger, bool? optional}) {
+  Widget createNew({Key? key, required AppModel app, required String id, Map<String, dynamic>? parameters, String? value, DropdownButtonChanged? trigger, bool? optional}) {
 
     if (id == "followings")
-      return DropdownButtonComponent(appId: appId, componentId: id, value: value, trigger: trigger, optional: optional);
+      return DropdownButtonComponent(app: app, componentId: id, value: value, trigger: trigger, optional: optional);
 
     if (id == "followingDashboards")
-      return DropdownButtonComponent(appId: appId, componentId: id, value: value, trigger: trigger, optional: optional);
+      return DropdownButtonComponent(app: app, componentId: id, value: value, trigger: trigger, optional: optional);
 
     if (id == "followRequests")
-      return DropdownButtonComponent(appId: appId, componentId: id, value: value, trigger: trigger, optional: optional);
+      return DropdownButtonComponent(app: app, componentId: id, value: value, trigger: trigger, optional: optional);
 
     if (id == "followRequestsDashboards")
-      return DropdownButtonComponent(appId: appId, componentId: id, value: value, trigger: trigger, optional: optional);
+      return DropdownButtonComponent(app: app, componentId: id, value: value, trigger: trigger, optional: optional);
 
     if (id == "inviteDashboards")
-      return DropdownButtonComponent(appId: appId, componentId: id, value: value, trigger: trigger, optional: optional);
+      return DropdownButtonComponent(app: app, componentId: id, value: value, trigger: trigger, optional: optional);
 
     return Text("Id $id not found");
   }
@@ -173,7 +173,7 @@ class DropdownButtonComponentFactory implements ComponentDropDown {
 
 
 class ListComponent extends StatelessWidget with HasFab {
-  final String appId;
+  final AppModel app;
   final String? componentId;
   Widget? widget;
 
@@ -186,7 +186,7 @@ class ListComponent extends StatelessWidget with HasFab {
     return null;
   }
 
-  ListComponent({required this.appId, this.componentId}) {
+  ListComponent({required this.app, this.componentId}) {
     initWidget();
   }
 
@@ -202,11 +202,11 @@ class ListComponent extends StatelessWidget with HasFab {
   }
 
   void initWidget() {
-    if (componentId == 'followings') widget = FollowingListWidget();
-    if (componentId == 'followingDashboards') widget = FollowingDashboardListWidget();
-    if (componentId == 'followRequests') widget = FollowRequestListWidget();
-    if (componentId == 'followRequestsDashboards') widget = FollowRequestsDashboardListWidget();
-    if (componentId == 'inviteDashboards') widget = InviteDashboardListWidget();
+    if (componentId == 'followings') widget = FollowingListWidget(app: app);
+    if (componentId == 'followingDashboards') widget = FollowingDashboardListWidget(app: app);
+    if (componentId == 'followRequests') widget = FollowRequestListWidget(app: app);
+    if (componentId == 'followRequestsDashboards') widget = FollowRequestsDashboardListWidget(app: app);
+    if (componentId == 'inviteDashboards') widget = InviteDashboardListWidget(app: app);
   }
 
   Widget _followingBuild(BuildContext context) {
@@ -214,7 +214,7 @@ class ListComponent extends StatelessWidget with HasFab {
       providers: [
         BlocProvider<FollowingListBloc>(
           create: (context) => FollowingListBloc(
-            followingRepository: followingRepository(appId: appId)!,
+            followingRepository: followingRepository(appId: app.documentID!)!,
           )..add(LoadFollowingList()),
         )
       ],
@@ -227,7 +227,7 @@ class ListComponent extends StatelessWidget with HasFab {
       providers: [
         BlocProvider<FollowingDashboardListBloc>(
           create: (context) => FollowingDashboardListBloc(
-            followingDashboardRepository: followingDashboardRepository(appId: appId)!,
+            followingDashboardRepository: followingDashboardRepository(appId: app.documentID!)!,
           )..add(LoadFollowingDashboardList()),
         )
       ],
@@ -240,7 +240,7 @@ class ListComponent extends StatelessWidget with HasFab {
       providers: [
         BlocProvider<FollowRequestListBloc>(
           create: (context) => FollowRequestListBloc(
-            followRequestRepository: followRequestRepository(appId: appId)!,
+            followRequestRepository: followRequestRepository(appId: app.documentID!)!,
           )..add(LoadFollowRequestList()),
         )
       ],
@@ -253,7 +253,7 @@ class ListComponent extends StatelessWidget with HasFab {
       providers: [
         BlocProvider<FollowRequestsDashboardListBloc>(
           create: (context) => FollowRequestsDashboardListBloc(
-            followRequestsDashboardRepository: followRequestsDashboardRepository(appId: appId)!,
+            followRequestsDashboardRepository: followRequestsDashboardRepository(appId: app.documentID!)!,
           )..add(LoadFollowRequestsDashboardList()),
         )
       ],
@@ -266,7 +266,7 @@ class ListComponent extends StatelessWidget with HasFab {
       providers: [
         BlocProvider<InviteDashboardListBloc>(
           create: (context) => InviteDashboardListBloc(
-            inviteDashboardRepository: inviteDashboardRepository(appId: appId)!,
+            inviteDashboardRepository: inviteDashboardRepository(appId: app.documentID!)!,
           )..add(LoadInviteDashboardList()),
         )
       ],
@@ -280,13 +280,13 @@ class ListComponent extends StatelessWidget with HasFab {
 typedef Changed(String? value);
 
 class DropdownButtonComponent extends StatelessWidget {
-  final String appId;
+  final AppModel app;
   final String? componentId;
   final String? value;
   final Changed? trigger;
   final bool? optional;
 
-  DropdownButtonComponent({required this.appId, this.componentId, this.value, this.trigger, this.optional});
+  DropdownButtonComponent({required this.app, this.componentId, this.value, this.trigger, this.optional});
 
   @override
   Widget build(BuildContext context) {
@@ -305,11 +305,11 @@ class DropdownButtonComponent extends StatelessWidget {
       providers: [
         BlocProvider<FollowingListBloc>(
           create: (context) => FollowingListBloc(
-            followingRepository: followingRepository(appId: appId)!,
+            followingRepository: followingRepository(appId: app.documentID!)!,
           )..add(LoadFollowingList()),
         )
       ],
-      child: FollowingDropdownButtonWidget(value: value, trigger: trigger, optional: optional),
+      child: FollowingDropdownButtonWidget(app: app, value: value, trigger: trigger, optional: optional),
     );
   }
 
@@ -318,11 +318,11 @@ class DropdownButtonComponent extends StatelessWidget {
       providers: [
         BlocProvider<FollowingDashboardListBloc>(
           create: (context) => FollowingDashboardListBloc(
-            followingDashboardRepository: followingDashboardRepository(appId: appId)!,
+            followingDashboardRepository: followingDashboardRepository(appId: app.documentID!)!,
           )..add(LoadFollowingDashboardList()),
         )
       ],
-      child: FollowingDashboardDropdownButtonWidget(value: value, trigger: trigger, optional: optional),
+      child: FollowingDashboardDropdownButtonWidget(app: app, value: value, trigger: trigger, optional: optional),
     );
   }
 
@@ -331,11 +331,11 @@ class DropdownButtonComponent extends StatelessWidget {
       providers: [
         BlocProvider<FollowRequestListBloc>(
           create: (context) => FollowRequestListBloc(
-            followRequestRepository: followRequestRepository(appId: appId)!,
+            followRequestRepository: followRequestRepository(appId: app.documentID!)!,
           )..add(LoadFollowRequestList()),
         )
       ],
-      child: FollowRequestDropdownButtonWidget(value: value, trigger: trigger, optional: optional),
+      child: FollowRequestDropdownButtonWidget(app: app, value: value, trigger: trigger, optional: optional),
     );
   }
 
@@ -344,11 +344,11 @@ class DropdownButtonComponent extends StatelessWidget {
       providers: [
         BlocProvider<FollowRequestsDashboardListBloc>(
           create: (context) => FollowRequestsDashboardListBloc(
-            followRequestsDashboardRepository: followRequestsDashboardRepository(appId: appId)!,
+            followRequestsDashboardRepository: followRequestsDashboardRepository(appId: app.documentID!)!,
           )..add(LoadFollowRequestsDashboardList()),
         )
       ],
-      child: FollowRequestsDashboardDropdownButtonWidget(value: value, trigger: trigger, optional: optional),
+      child: FollowRequestsDashboardDropdownButtonWidget(app: app, value: value, trigger: trigger, optional: optional),
     );
   }
 
@@ -357,11 +357,11 @@ class DropdownButtonComponent extends StatelessWidget {
       providers: [
         BlocProvider<InviteDashboardListBloc>(
           create: (context) => InviteDashboardListBloc(
-            inviteDashboardRepository: inviteDashboardRepository(appId: appId)!,
+            inviteDashboardRepository: inviteDashboardRepository(appId: app.documentID!)!,
           )..add(LoadInviteDashboardList()),
         )
       ],
-      child: InviteDashboardDropdownButtonWidget(value: value, trigger: trigger, optional: optional),
+      child: InviteDashboardDropdownButtonWidget(app: app, value: value, trigger: trigger, optional: optional),
     );
   }
 

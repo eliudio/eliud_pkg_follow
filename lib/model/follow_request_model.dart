@@ -95,7 +95,7 @@ class FollowRequestModel {
     );
   }
 
-  static FollowRequestModel? fromEntity(String documentID, FollowRequestEntity? entity) {
+  static Future<FollowRequestModel?> fromEntity(String documentID, FollowRequestEntity? entity) async {
     if (entity == null) return null;
     var counter = 0;
     return FollowRequestModel(

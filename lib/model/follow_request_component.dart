@@ -26,19 +26,20 @@ import 'package:eliud_core/style/style_registry.dart';
 import 'abstract_repository_singleton.dart';
 import 'package:eliud_core/core/widgets/alert_widget.dart';
 import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
+import 'package:eliud_core/model/app_model.dart';
 
 abstract class AbstractFollowRequestComponent extends StatelessWidget {
   static String componentName = "followRequests";
-  final String theAppId;
+  final AppModel app;
   final String followRequestId;
 
-  AbstractFollowRequestComponent({Key? key, required this.theAppId, required this.followRequestId}): super(key: key);
+  AbstractFollowRequestComponent({Key? key, required this.app, required this.followRequestId}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<FollowRequestComponentBloc> (
           create: (context) => FollowRequestComponentBloc(
-            followRequestRepository: followRequestRepository(appId: theAppId)!)
+            followRequestRepository: followRequestRepository(appId: app.documentID!)!)
         ..add(FetchFollowRequestComponent(id: followRequestId)),
       child: _followRequestBlockBuilder(context),
     );
@@ -48,7 +49,7 @@ abstract class AbstractFollowRequestComponent extends StatelessWidget {
     return BlocBuilder<FollowRequestComponentBloc, FollowRequestComponentState>(builder: (context, state) {
       if (state is FollowRequestComponentLoaded) {
         if (state.value == null) {
-          return AlertWidget(title: "Error", content: 'No FollowRequest defined');
+          return AlertWidget(app: app, title: "Error", content: 'No FollowRequest defined');
         } else {
           return yourWidget(context, state.value);
         }
@@ -59,10 +60,10 @@ abstract class AbstractFollowRequestComponent extends StatelessWidget {
           size: 30.0,
         );
       } else if (state is FollowRequestComponentError) {
-        return AlertWidget(title: 'Error', content: state.message);
+        return AlertWidget(app: app, title: 'Error', content: state.message);
       } else {
         return Center(
-          child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicatorStyle().progressIndicator(context),
+          child: StyleRegistry.registry().styleWithApp(app).frontEndStyle().progressIndicatorStyle().progressIndicator(app, context),
         );
       }
     });

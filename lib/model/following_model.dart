@@ -79,7 +79,7 @@ class FollowingModel {
     );
   }
 
-  static FollowingModel? fromEntity(String documentID, FollowingEntity? entity) {
+  static Future<FollowingModel?> fromEntity(String documentID, FollowingEntity? entity) async {
     if (entity == null) return null;
     var counter = 0;
     return FollowingModel(

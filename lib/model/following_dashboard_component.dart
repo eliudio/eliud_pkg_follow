@@ -26,19 +26,20 @@ import 'package:eliud_core/style/style_registry.dart';
 import 'abstract_repository_singleton.dart';
 import 'package:eliud_core/core/widgets/alert_widget.dart';
 import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
+import 'package:eliud_core/model/app_model.dart';
 
 abstract class AbstractFollowingDashboardComponent extends StatelessWidget {
   static String componentName = "followingDashboards";
-  final String theAppId;
+  final AppModel app;
   final String followingDashboardId;
 
-  AbstractFollowingDashboardComponent({Key? key, required this.theAppId, required this.followingDashboardId}): super(key: key);
+  AbstractFollowingDashboardComponent({Key? key, required this.app, required this.followingDashboardId}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<FollowingDashboardComponentBloc> (
           create: (context) => FollowingDashboardComponentBloc(
-            followingDashboardRepository: followingDashboardRepository(appId: theAppId)!)
+            followingDashboardRepository: followingDashboardRepository(appId: app.documentID!)!)
         ..add(FetchFollowingDashboardComponent(id: followingDashboardId)),
       child: _followingDashboardBlockBuilder(context),
     );
@@ -48,7 +49,7 @@ abstract class AbstractFollowingDashboardComponent extends StatelessWidget {
     return BlocBuilder<FollowingDashboardComponentBloc, FollowingDashboardComponentState>(builder: (context, state) {
       if (state is FollowingDashboardComponentLoaded) {
         if (state.value == null) {
-          return AlertWidget(title: "Error", content: 'No FollowingDashboard defined');
+          return AlertWidget(app: app, title: "Error", content: 'No FollowingDashboard defined');
         } else {
           return yourWidget(context, state.value);
         }
@@ -59,10 +60,10 @@ abstract class AbstractFollowingDashboardComponent extends StatelessWidget {
           size: 30.0,
         );
       } else if (state is FollowingDashboardComponentError) {
-        return AlertWidget(title: 'Error', content: state.message);
+        return AlertWidget(app: app, title: 'Error', content: state.message);
       } else {
         return Center(
-          child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().progressIndicatorStyle().progressIndicator(context),
+          child: StyleRegistry.registry().styleWithApp(app).frontEndStyle().progressIndicatorStyle().progressIndicator(app, context),
         );
       }
     });

@@ -13,6 +13,7 @@
 
 */
 
+import 'package:eliud_core/model/app_model.dart';
 import 'package:eliud_core/package/packages.dart';
 
 import 'package:flutter/material.dart';
@@ -32,11 +33,12 @@ import 'package:eliud_pkg_follow/model/following_model.dart';
 typedef FollowingChanged(String? value);
 
 class FollowingDropdownButtonWidget extends StatefulWidget {
+  final AppModel app;
   final String? value;
   final FollowingChanged? trigger;
   final bool? optional;
 
-  FollowingDropdownButtonWidget({ this.value, this.trigger, this.optional, Key? key }): super(key: key);
+  FollowingDropdownButtonWidget({ required this.app, this.value, this.trigger, this.optional, Key? key }): super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -62,9 +64,10 @@ class FollowingDropdownButtonWidgetState extends State<FollowingDropdownButtonWi
   }
 
 List<Widget> widgets(FollowingModel value) {
+var app = widget.app;
 var widgets = <Widget>[];
-widgets.add(value.documentID != null ? Center(child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().textStyle().text(context, value.documentID!)) : Container());
-widgets.add(value.follower!.name != null ? Center(child: StyleRegistry.registry().styleWithContext(context).frontEndStyle().textStyle().text(context, value.follower!.name!)) : Container());
+widgets.add(value.documentID != null ? Center(child: StyleRegistry.registry().styleWithApp(app).frontEndStyle().textStyle().text(app, context, value.documentID!)) : Container());
+widgets.add(value.follower!.name != null ? Center(child: StyleRegistry.registry().styleWithApp(app).frontEndStyle().textStyle().text(app, context, value.follower!.name!)) : Container());
 return widgets;
 }
 
@@ -74,7 +77,7 @@ return widgets;
     var accessState = AccessBloc.getState(context);
     return BlocBuilder<FollowingListBloc, FollowingListState>(builder: (context, state) {
       if (state is FollowingListLoading) {
-        return StyleRegistry.registry().styleWithContext(context).adminListStyle().progressIndicator(context);
+        return StyleRegistry.registry().styleWithApp(widget.app).adminListStyle().progressIndicator(widget.app, context);
       } else if (state is FollowingListLoaded) {
         String? valueChosen;
         if (state.values!.indexWhere((v) => (v!.documentID == widget.value)) >= 0)
@@ -117,7 +120,7 @@ return widgets;
                       items: items,
                       value: valueChosen,
                       hint: Text('Select a following'),
-                      onChanged: !accessState.memberIsOwner(AccessBloc.currentAppId(context)) ? null : _onChange,
+                      onChanged: !accessState.memberIsOwner(widget.app.documentID!) ? null : _onChange,
                     );
         if (false) {
           return Container(height:48, child: Center(child: button));
@@ -125,7 +128,7 @@ return widgets;
           return Center(child: button);
         }
       } else {
-        return StyleRegistry.registry().styleWithContext(context).adminListStyle().progressIndicator(context);
+        return StyleRegistry.registry().styleWithApp(widget.app).adminListStyle().progressIndicator(widget.app, context);
       }
     });
   }

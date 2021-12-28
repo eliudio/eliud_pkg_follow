@@ -13,6 +13,7 @@
 
 */
 
+import 'package:eliud_core/model/app_model.dart';
 import 'package:eliud_core/core/blocs/access/state/access_state.dart';
 import 'package:eliud_core/core/blocs/access/state/logged_in.dart';
 import 'package:eliud_core/core/blocs/access/access_bloc.dart';
@@ -63,17 +64,16 @@ import 'package:eliud_pkg_follow/model/following_form_state.dart';
 
 
 class FollowingForm extends StatelessWidget {
+  final AppModel app;
   FormAction formAction;
   FollowingModel? value;
   ActionModel? submitAction;
 
-  FollowingForm({Key? key, required this.formAction, required this.value, this.submitAction}) : super(key: key);
+  FollowingForm({Key? key, required this.app, required this.formAction, required this.value, this.submitAction}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var accessState = AccessBloc.getState(context);
-    var app = AccessBloc.currentApp(context);
-    if (app == null) return Text("No app available");
     var appId = app.documentID!;
     if (formAction == FormAction.ShowData) {
       return BlocProvider<FollowingFormBloc >(
@@ -82,7 +82,7 @@ class FollowingForm extends StatelessWidget {
 
                                                 )..add(InitialiseFollowingFormEvent(value: value)),
   
-        child: MyFollowingForm(submitAction: submitAction, formAction: formAction),
+        child: MyFollowingForm(app:app, submitAction: submitAction, formAction: formAction),
           );
     } if (formAction == FormAction.ShowPreloadedData) {
       return BlocProvider<FollowingFormBloc >(
@@ -91,18 +91,18 @@ class FollowingForm extends StatelessWidget {
 
                                                 )..add(InitialiseFollowingFormNoLoadEvent(value: value)),
   
-        child: MyFollowingForm(submitAction: submitAction, formAction: formAction),
+        child: MyFollowingForm(app:app, submitAction: submitAction, formAction: formAction),
           );
     } else {
       return Scaffold(
-        appBar: StyleRegistry.registry().styleWithContext(context).adminFormStyle().appBarWithString(context, title: formAction == FormAction.UpdateAction ? 'Update Following' : 'Add Following'),
+        appBar: StyleRegistry.registry().styleWithApp(app).adminFormStyle().appBarWithString(app, context, title: formAction == FormAction.UpdateAction ? 'Update Following' : 'Add Following'),
         body: BlocProvider<FollowingFormBloc >(
             create: (context) => FollowingFormBloc(appId,
                                        formAction: formAction,
 
                                                 )..add((formAction == FormAction.UpdateAction ? InitialiseFollowingFormEvent(value: value) : InitialiseNewFollowingFormEvent())),
   
-        child: MyFollowingForm(submitAction: submitAction, formAction: formAction),
+        child: MyFollowingForm(app: app, submitAction: submitAction, formAction: formAction),
           ));
     }
   }
@@ -110,10 +110,11 @@ class FollowingForm extends StatelessWidget {
 
 
 class MyFollowingForm extends StatefulWidget {
+  final AppModel app;
   final FormAction? formAction;
   final ActionModel? submitAction;
 
-  MyFollowingForm({this.formAction, this.submitAction});
+  MyFollowingForm({required this.app, this.formAction, this.submitAction});
 
   _MyFollowingFormState createState() => _MyFollowingFormState(this.formAction);
 }
@@ -141,13 +142,10 @@ class _MyFollowingFormState extends State<MyFollowingForm> {
 
   @override
   Widget build(BuildContext context) {
-    var app = AccessBloc.currentApp(context);
-    if (app == null) return Text('No app available');
-    var appId = app.documentID!;
     var accessState = AccessBloc.getState(context);
     return BlocBuilder<FollowingFormBloc, FollowingFormState>(builder: (context, state) {
       if (state is FollowingFormUninitialized) return Center(
-        child: StyleRegistry.registry().styleWithContext(context).adminListStyle().progressIndicator(context),
+        child: StyleRegistry.registry().styleWithApp(widget.app).adminListStyle().progressIndicator(widget.app, context),
       );
 
       if (state is FollowingFormLoaded) {
@@ -173,31 +171,31 @@ class _MyFollowingFormState extends State<MyFollowingForm> {
          children.add(Container(
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                  child: StyleRegistry.registry().styleWithContext(context).adminFormStyle().groupTitle(context, 'General')
+                  child: StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().groupTitle(widget.app, context, 'General')
                 ));
 
         children.add(
 
-                  StyleRegistry.registry().styleWithContext(context).adminFormStyle().textFormField(context, labelText: 'Document ID', icon: Icons.vpn_key, readOnly: (formAction == FormAction.UpdateAction), textEditingController: _documentIDController, keyboardType: TextInputType.text, validator: (_) => state is DocumentIDFollowingFormError ? state.message : null, hintText: 'field.remark')
+                  StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().textFormField(widget.app, context, labelText: 'Document ID', icon: Icons.vpn_key, readOnly: (formAction == FormAction.UpdateAction), textEditingController: _documentIDController, keyboardType: TextInputType.text, validator: (_) => state is DocumentIDFollowingFormError ? state.message : null, hintText: 'field.remark')
           );
 
         children.add(
 
-                DropdownButtonComponentFactory().createNew(appId: appId, id: "memberPublicInfos", value: _follower, trigger: _onFollowerSelected, optional: false),
+                DropdownButtonComponentFactory().createNew(app: widget.app, id: "memberPublicInfos", value: _follower, trigger: _onFollowerSelected, optional: false),
           );
 
         children.add(
 
-                DropdownButtonComponentFactory().createNew(appId: appId, id: "memberPublicInfos", value: _followed, trigger: _onFollowedSelected, optional: false),
+                DropdownButtonComponentFactory().createNew(app: widget.app, id: "memberPublicInfos", value: _followed, trigger: _onFollowedSelected, optional: false),
           );
 
 
         children.add(Container(height: 20.0));
-        children.add(StyleRegistry.registry().styleWithContext(context).adminFormStyle().divider(context));
+        children.add(StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().divider(widget.app, context));
 
 
         if ((formAction != FormAction.ShowData) && (formAction != FormAction.ShowPreloadedData))
-          children.add(StyleRegistry.registry().styleWithContext(context).adminFormStyle().button(context, label: 'Submit',
+          children.add(StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().button(widget.app, context, label: 'Submit',
                   onPressed: _readOnly(accessState, state) ? null : () {
                     if (state is FollowingFormError) {
                       return null;
@@ -228,7 +226,7 @@ class _MyFollowingFormState extends State<MyFollowingForm> {
                   },
                 ));
 
-        return StyleRegistry.registry().styleWithContext(context).adminFormStyle().container(context, Form(
+        return StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().container(widget.app, context, Form(
             child: ListView(
               padding: const EdgeInsets.all(8),
               physics: ((formAction == FormAction.ShowData) || (formAction == FormAction.ShowPreloadedData)) ? NeverScrollableScrollPhysics() : null,
@@ -238,7 +236,7 @@ class _MyFollowingFormState extends State<MyFollowingForm> {
           ), formAction!
         );
       } else {
-        return StyleRegistry.registry().styleWithContext(context).adminListStyle().progressIndicator(context);
+        return StyleRegistry.registry().styleWithApp(widget.app).adminListStyle().progressIndicator(widget.app, context);
       }
     });
   }
@@ -278,7 +276,7 @@ class _MyFollowingFormState extends State<MyFollowingForm> {
   }
 
   bool _readOnly(AccessState accessState, FollowingFormInitialized state) {
-    return (formAction == FormAction.ShowData) || (formAction == FormAction.ShowPreloadedData) || (!accessState.memberIsOwner(AccessBloc.currentAppId(context)));
+    return (formAction == FormAction.ShowData) || (formAction == FormAction.ShowPreloadedData) || (!accessState.memberIsOwner(widget.app.documentID!));
   }
   
 

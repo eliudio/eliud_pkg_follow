@@ -191,7 +191,7 @@ class AdminApp extends AdminAppInstallerBase {
 
 class AdminMenu extends AdminAppMenuInstallerBase {
 
-  Future<MenuDefModel> menu(String appId) async {
+  Future<MenuDefModel> menu(AppModel app) async {
     var menuItems = <MenuItemModel>[];
 
     menuItems.add(
@@ -200,7 +200,7 @@ class AdminMenu extends AdminAppMenuInstallerBase {
         text: "Followings",
         description: "Followings",
         icon: IconModel(codePoint: 0xe88a, fontFamily: "MaterialIcons"),
-        action: GotoPage(appId, pageID: "eliud_pkg_follow_followings_page"))
+        action: GotoPage(app, pageID: "eliud_pkg_follow_followings_page"))
     );
 
 
@@ -210,7 +210,7 @@ class AdminMenu extends AdminAppMenuInstallerBase {
         text: "FollowingDashboards",
         description: "FollowingDashboards",
         icon: IconModel(codePoint: 0xe88a, fontFamily: "MaterialIcons"),
-        action: GotoPage(appId, pageID: "eliud_pkg_follow_followingdashboards_page"))
+        action: GotoPage(app, pageID: "eliud_pkg_follow_followingdashboards_page"))
     );
 
 
@@ -220,7 +220,7 @@ class AdminMenu extends AdminAppMenuInstallerBase {
         text: "FollowRequests",
         description: "FollowRequests",
         icon: IconModel(codePoint: 0xe88a, fontFamily: "MaterialIcons"),
-        action: GotoPage(appId, pageID: "eliud_pkg_follow_followrequests_page"))
+        action: GotoPage(app, pageID: "eliud_pkg_follow_followrequests_page"))
     );
 
 
@@ -230,7 +230,7 @@ class AdminMenu extends AdminAppMenuInstallerBase {
         text: "FollowRequestsDashboards",
         description: "FollowRequestsDashboards",
         icon: IconModel(codePoint: 0xe88a, fontFamily: "MaterialIcons"),
-        action: GotoPage(appId, pageID: "eliud_pkg_follow_followrequestsdashboards_page"))
+        action: GotoPage(app, pageID: "eliud_pkg_follow_followrequestsdashboards_page"))
     );
 
 
@@ -240,18 +240,18 @@ class AdminMenu extends AdminAppMenuInstallerBase {
         text: "InviteDashboards",
         description: "InviteDashboards",
         icon: IconModel(codePoint: 0xe88a, fontFamily: "MaterialIcons"),
-        action: GotoPage(appId, pageID: "eliud_pkg_follow_invitedashboards_page"))
+        action: GotoPage(app, pageID: "eliud_pkg_follow_invitedashboards_page"))
     );
 
 
     MenuDefModel menu = MenuDefModel(
       admin: true,
       documentID: "eliud_pkg_follow_admin_menu",
-      appId: appId,
+      appId: app.documentID,
       name: "eliud_pkg_follow",
       menuItems: menuItems
     );
-    await menuDefRepository(appId: appId)!.add(menu);
+    await menuDefRepository(appId: app.documentID!)!.add(menu);
     return menu;
   }
 }

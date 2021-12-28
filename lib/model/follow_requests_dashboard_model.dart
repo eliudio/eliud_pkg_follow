@@ -91,7 +91,7 @@ class FollowRequestsDashboardModel {
     );
   }
 
-  static FollowRequestsDashboardModel? fromEntity(String documentID, FollowRequestsDashboardEntity? entity) {
+  static Future<FollowRequestsDashboardModel?> fromEntity(String documentID, FollowRequestsDashboardEntity? entity) async {
     if (entity == null) return null;
     var counter = 0;
     return FollowRequestsDashboardModel(
@@ -99,15 +99,14 @@ class FollowRequestsDashboardModel {
           appId: entity.appId, 
           description: entity.description, 
           memberActions: 
-            entity.memberActions == null ? null :
-            entity.memberActions
+            entity.memberActions == null ? null : List<MemberActionModel>.from(await Future.wait(entity. memberActions
             !.map((item) {
-              counter++; 
-              return MemberActionModel.fromEntity(counter.toString(), item)!;
+            counter++;
+              return MemberActionModel.fromEntity(counter.toString(), item);
             })
-            .toList(), 
+            .toList())), 
           conditions: 
-            StorageConditionsModel.fromEntity(entity.conditions), 
+            await StorageConditionsModel.fromEntity(entity.conditions), 
     );
   }
 
