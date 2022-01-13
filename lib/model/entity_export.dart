@@ -18,3 +18,4 @@ export '../model/following_dashboard_entity.dart';
 export '../model/follow_request_entity.dart';
 export '../model/follow_requests_dashboard_entity.dart';
 export '../model/invite_dashboard_entity.dart';
+export '../model/following_array_entity.dart';
