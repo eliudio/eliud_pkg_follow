@@ -49,7 +49,7 @@ class InviteDashboard extends AbstractInviteDashboardComponent {
 
   static EliudQuery getSubscribedMembers(String appId) {
     return EliudQuery(theConditions: [
-      EliudQueryCondition('subscriptionsAsString', arrayContains: appId),
+      EliudQueryCondition('subscriptionsAsStrArr', arrayContains: appId),
     ]);
   }
 
