@@ -152,7 +152,7 @@ class FollowingDashboardItem extends StatelessWidget {
           MemberPopupMenu.showPopupMenuWithAllActions(app,
             context,
             followingView == FollowingView.Followers
-                ? 'Reject follow request'
+                ? 'Remove follower'
                 : 'Unfollow member',
             () => openOptions(app, context),
             dashboardModel.memberActions,

@@ -155,7 +155,7 @@ class FollowRequestsDashboardItem extends StatelessWidget {
         ? 'unkown'
         : value!.follower!.name;
     openAckNackDialog(app, context, app.documentID! + '/_followinvitation',
-        title: 'Follow invitation',
+        title: 'Follow Request',
         ackButtonLabel: 'Accept',
         nackButtonLabel: 'Reject',
         message: 'This member ' +

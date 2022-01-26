@@ -126,7 +126,7 @@ class InviteDashboardItem extends StatelessWidget {
             onTap: () {
               MemberPopupMenu.showPopupMenuWithAllActions(app,
                 context,
-                'Invite',
+                'Request to follow',
                 () => openOptions(context, profilePhoto),
                 dashboardModel.memberActions,
                 value!.documentID!,
@@ -146,9 +146,10 @@ class InviteDashboardItem extends StatelessWidget {
       if (following == null) {
         var followRequest =
             await followRequestRepository(appId: app.documentID!)!.get(key);
-        if (followRequest == null) {
+        if ((followRequest == null) || (followRequest.status == FollowRequestStatus.FollowRequestAccepted)) {
+          // allow to re-request to follow, if the follower has removed the follower but accepted in the past
           openAckNackDialog(app, context, app.documentID! + '/requestfollow',
-              title: 'Invite',
+              title: 'Request to follow',
               message: 'Request to follow this person?', onSelection: (value) {
             if (value == 0) {
               _invite(context);
@@ -157,7 +158,7 @@ class InviteDashboardItem extends StatelessWidget {
         } else {
           if (followRequest.status == FollowRequestStatus.FollowRequestDenied) {
             openAckNackDialog(app, context, app.documentID! + '/invite',
-                title: 'Invite',
+                title: 'Request to follow',
                 message:
                     "Request to follow this person? You've requested this before and this was declined.",
                 onSelection: (value) {
@@ -172,11 +173,13 @@ class InviteDashboardItem extends StatelessWidget {
                   title: 'Error',
                   errorMessage:
                       "You have already requested to follow this person and the request is pending.");
+/*
             } else {
               openErrorDialog(app, context, app.documentID! + '/_error',
                   title: 'Error',
                   errorMessage:
                       "You have already requested to follow this person and this was accepted.");
+*/
             }
           }
         }
