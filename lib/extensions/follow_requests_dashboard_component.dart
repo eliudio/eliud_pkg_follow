@@ -75,7 +75,7 @@ class FollowRequestsDashboardComponent
                       widgetProvider: (value) =>
                           widgetProvider(app, value!, dashboardModel!),
                       listBackground:
-                          BackgroundModel(documentID: "`transparent"))
+                          BackgroundModel())
                 ]),
               ))
         ]);

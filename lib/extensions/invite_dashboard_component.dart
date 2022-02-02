@@ -74,7 +74,7 @@ class InviteDashboard extends AbstractInviteDashboardComponent {
                   readOnly: true,
                   widgetProvider: (value) =>
                       widgetProvider(app, value, member, dashboardModel!),
-                  listBackground: BackgroundModel(documentID: "`transparent"))
+                  listBackground: BackgroundModel())
             ]),
           )
         ]);
