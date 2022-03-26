@@ -36,11 +36,12 @@ import 'package:eliud_pkg_follow/model/entity_export.dart';
 import 'dart:async';
 import 'package:eliud_core/tools/query/query_tools.dart';
 import 'package:eliud_core/tools/common_tools.dart';
+import 'package:eliud_core/tools/repository_base.dart';
 
 typedef FollowingDashboardModelTrigger(List<FollowingDashboardModel?> list);
 typedef FollowingDashboardChanged(FollowingDashboardModel? value);
 
-abstract class FollowingDashboardRepository {
+abstract class FollowingDashboardRepository extends RepositoryBase<FollowingDashboardModel> {
   Future<FollowingDashboardModel> add(FollowingDashboardModel value);
   Future<void> delete(FollowingDashboardModel value);
   Future<FollowingDashboardModel?> get(String? id, { Function(Exception)? onError });

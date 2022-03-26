@@ -32,11 +32,12 @@ import 'package:eliud_pkg_follow/model/entity_export.dart';
 import 'dart:async';
 import 'package:eliud_core/tools/query/query_tools.dart';
 import 'package:eliud_core/tools/common_tools.dart';
+import 'package:eliud_core/tools/repository_base.dart';
 
 typedef FollowingModelTrigger(List<FollowingModel?> list);
 typedef FollowingChanged(FollowingModel? value);
 
-abstract class FollowingRepository {
+abstract class FollowingRepository extends RepositoryBase<FollowingModel> {
   Future<FollowingModel> add(FollowingModel value);
   Future<void> delete(FollowingModel value);
   Future<FollowingModel?> get(String? id, { Function(Exception)? onError });
