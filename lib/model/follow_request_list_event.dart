@@ -13,6 +13,7 @@
 
 */
 
+import 'package:eliud_core/tools/query/query_tools.dart';
 import 'package:equatable/equatable.dart';
 import 'package:eliud_pkg_follow/model/follow_request_model.dart';
 
@@ -73,5 +74,17 @@ class FollowRequestListUpdated extends FollowRequestListEvent {
 
   @override
   String toString() => 'FollowRequestListUpdated{ value: $value, mightHaveMore: $mightHaveMore }';
+}
+
+class FollowRequestChangeQuery extends FollowRequestListEvent {
+  final EliudQuery newQuery;
+
+  const FollowRequestChangeQuery({ required this.newQuery });
+
+  @override
+  List<Object?> get props => [ newQuery ];
+
+  @override
+  String toString() => 'FollowRequestChangeQuery{ value: $newQuery }';
 }
 

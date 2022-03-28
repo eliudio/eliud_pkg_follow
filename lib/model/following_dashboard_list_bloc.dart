@@ -27,7 +27,7 @@ import 'package:eliud_core/tools/query/query_tools.dart';
 class FollowingDashboardListBloc extends Bloc<FollowingDashboardListEvent, FollowingDashboardListState> {
   final FollowingDashboardRepository _followingDashboardRepository;
   StreamSubscription? _followingDashboardsListSubscription;
-  final EliudQuery? eliudQuery;
+  EliudQuery? eliudQuery;
   int pages = 1;
   final bool? paged;
   final String? orderBy;
@@ -99,6 +99,13 @@ class FollowingDashboardListBloc extends Bloc<FollowingDashboardListEvent, Follo
     if (event is NewPage) {
       pages = pages + 1; // it doesn't matter so much if we increase pages beyond the end
       yield* _mapLoadFollowingDashboardListWithDetailsToState();
+    } else if (event is FollowingDashboardChangeQuery) {
+      eliudQuery = event.newQuery;
+      if ((detailed == null) || (!detailed!)) {
+        yield* _mapLoadFollowingDashboardListToState();
+      } else {
+        yield* _mapLoadFollowingDashboardListWithDetailsToState();
+      }
     } else if (event is AddFollowingDashboardList) {
       yield* _mapAddFollowingDashboardListToState(event);
     } else if (event is UpdateFollowingDashboardList) {

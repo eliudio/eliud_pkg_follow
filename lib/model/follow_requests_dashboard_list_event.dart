@@ -13,6 +13,7 @@
 
 */
 
+import 'package:eliud_core/tools/query/query_tools.dart';
 import 'package:equatable/equatable.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_model.dart';
 
@@ -73,5 +74,17 @@ class FollowRequestsDashboardListUpdated extends FollowRequestsDashboardListEven
 
   @override
   String toString() => 'FollowRequestsDashboardListUpdated{ value: $value, mightHaveMore: $mightHaveMore }';
+}
+
+class FollowRequestsDashboardChangeQuery extends FollowRequestsDashboardListEvent {
+  final EliudQuery newQuery;
+
+  const FollowRequestsDashboardChangeQuery({ required this.newQuery });
+
+  @override
+  List<Object?> get props => [ newQuery ];
+
+  @override
+  String toString() => 'FollowRequestsDashboardChangeQuery{ value: $newQuery }';
 }
 

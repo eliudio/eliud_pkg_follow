@@ -13,6 +13,7 @@
 
 */
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_model.dart';
 
@@ -36,6 +37,13 @@ class InviteDashboardListLoaded extends InviteDashboardListState {
 
   @override
   String toString() => 'InviteDashboardListLoaded { values: $values }';
+
+  @override
+  bool operator ==(Object other) => 
+          other is InviteDashboardListLoaded &&
+              runtimeType == other.runtimeType &&
+              ListEquality().equals(values, other.values) &&
+              mightHaveMore == other.mightHaveMore;
 }
 
 class InviteDashboardNotLoaded extends InviteDashboardListState {}

@@ -13,6 +13,7 @@
 
 */
 
+import 'package:eliud_core/tools/query/query_tools.dart';
 import 'package:equatable/equatable.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_model.dart';
 
@@ -73,5 +74,17 @@ class InviteDashboardListUpdated extends InviteDashboardListEvent {
 
   @override
   String toString() => 'InviteDashboardListUpdated{ value: $value, mightHaveMore: $mightHaveMore }';
+}
+
+class InviteDashboardChangeQuery extends InviteDashboardListEvent {
+  final EliudQuery newQuery;
+
+  const InviteDashboardChangeQuery({ required this.newQuery });
+
+  @override
+  List<Object?> get props => [ newQuery ];
+
+  @override
+  String toString() => 'InviteDashboardChangeQuery{ value: $newQuery }';
 }
 

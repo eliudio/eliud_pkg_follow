@@ -13,6 +13,7 @@
 
 */
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_model.dart';
 
@@ -36,6 +37,13 @@ class FollowRequestsDashboardListLoaded extends FollowRequestsDashboardListState
 
   @override
   String toString() => 'FollowRequestsDashboardListLoaded { values: $values }';
+
+  @override
+  bool operator ==(Object other) => 
+          other is FollowRequestsDashboardListLoaded &&
+              runtimeType == other.runtimeType &&
+              ListEquality().equals(values, other.values) &&
+              mightHaveMore == other.mightHaveMore;
 }
 
 class FollowRequestsDashboardNotLoaded extends FollowRequestsDashboardListState {}

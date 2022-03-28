@@ -27,7 +27,7 @@ import 'package:eliud_core/tools/query/query_tools.dart';
 class FollowingListBloc extends Bloc<FollowingListEvent, FollowingListState> {
   final FollowingRepository _followingRepository;
   StreamSubscription? _followingsListSubscription;
-  final EliudQuery? eliudQuery;
+  EliudQuery? eliudQuery;
   int pages = 1;
   final bool? paged;
   final String? orderBy;
@@ -99,6 +99,13 @@ class FollowingListBloc extends Bloc<FollowingListEvent, FollowingListState> {
     if (event is NewPage) {
       pages = pages + 1; // it doesn't matter so much if we increase pages beyond the end
       yield* _mapLoadFollowingListWithDetailsToState();
+    } else if (event is FollowingChangeQuery) {
+      eliudQuery = event.newQuery;
+      if ((detailed == null) || (!detailed!)) {
+        yield* _mapLoadFollowingListToState();
+      } else {
+        yield* _mapLoadFollowingListWithDetailsToState();
+      }
     } else if (event is AddFollowingList) {
       yield* _mapAddFollowingListToState(event);
     } else if (event is UpdateFollowingList) {

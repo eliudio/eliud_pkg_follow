@@ -27,7 +27,7 @@ import 'package:eliud_core/tools/query/query_tools.dart';
 class InviteDashboardListBloc extends Bloc<InviteDashboardListEvent, InviteDashboardListState> {
   final InviteDashboardRepository _inviteDashboardRepository;
   StreamSubscription? _inviteDashboardsListSubscription;
-  final EliudQuery? eliudQuery;
+  EliudQuery? eliudQuery;
   int pages = 1;
   final bool? paged;
   final String? orderBy;
@@ -99,6 +99,13 @@ class InviteDashboardListBloc extends Bloc<InviteDashboardListEvent, InviteDashb
     if (event is NewPage) {
       pages = pages + 1; // it doesn't matter so much if we increase pages beyond the end
       yield* _mapLoadInviteDashboardListWithDetailsToState();
+    } else if (event is InviteDashboardChangeQuery) {
+      eliudQuery = event.newQuery;
+      if ((detailed == null) || (!detailed!)) {
+        yield* _mapLoadInviteDashboardListToState();
+      } else {
+        yield* _mapLoadInviteDashboardListWithDetailsToState();
+      }
     } else if (event is AddInviteDashboardList) {
       yield* _mapAddInviteDashboardListToState(event);
     } else if (event is UpdateInviteDashboardList) {
