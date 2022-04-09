@@ -24,10 +24,9 @@ class InviteDashboardPageBuilder extends SingleComponentPageBuilder {
       AppBarModel theAppBar,
       DrawerModel leftDrawer,
       DrawerModel rightDrawer,
-      PageProvider pageProvider,
       )
       : super(uniqueId, pageId, app, memberId, theHomeMenu, theAppBar,
-            leftDrawer, rightDrawer, pageProvider, );
+            leftDrawer, rightDrawer, );
 
   static InviteDashboardModel _dashboardModel(String feedMenuPageId, AppModel app, String uniqueId, String componentIdentifier) {
     return InviteDashboardModel(
