@@ -181,12 +181,12 @@ class _MyFollowingFormState extends State<MyFollowingForm> {
 
         children.add(
 
-                DropdownButtonComponentFactory().createNew(app: widget.app, id: "memberPublicInfos", value: _follower, trigger: _onFollowerSelected, optional: false),
+                DropdownButtonComponentFactory().createNew(app: widget.app, id: "memberPublicInfos", value: _follower, trigger: (value, privilegeLevel) => _onFollowerSelected(value), optional: false),
           );
 
         children.add(
 
-                DropdownButtonComponentFactory().createNew(app: widget.app, id: "memberPublicInfos", value: _followed, trigger: _onFollowedSelected, optional: false),
+                DropdownButtonComponentFactory().createNew(app: widget.app, id: "memberPublicInfos", value: _followed, trigger: (value, privilegeLevel) => _onFollowedSelected(value), optional: false),
           );
 
 
