@@ -49,10 +49,7 @@ class InviteDashboardBloc extends ExtEditorBaseBloc<InviteDashboardModel, Member
   @override
   InviteDashboardModel setDefaultValues(InviteDashboardModel t, StorageConditionsModel conditions) {
     return t.copyWith(
-        conditions: t.conditions ??
-            StorageConditionsModel(
-                privilegeLevelRequired:
-                PrivilegeLevelRequiredSimple.NoPrivilegeRequiredSimple));
+        conditions: t.conditions ?? conditions);
   }
 
   @override

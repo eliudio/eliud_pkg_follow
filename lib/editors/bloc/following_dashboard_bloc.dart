@@ -49,10 +49,7 @@ class FollowingDashboardBloc extends ExtEditorBaseBloc<FollowingDashboardModel, 
   @override
   FollowingDashboardModel setDefaultValues(FollowingDashboardModel t, StorageConditionsModel conditions) {
     return t.copyWith(
-        conditions: t.conditions ??
-            StorageConditionsModel(
-                privilegeLevelRequired:
-                PrivilegeLevelRequiredSimple.NoPrivilegeRequiredSimple));
+        conditions: t.conditions ?? conditions);
   }
 
   @override
