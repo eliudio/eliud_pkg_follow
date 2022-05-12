@@ -162,6 +162,13 @@ class _FollowRequestsDashboardComponentEditorState
                             )),
                       ]),
                   topicContainer(widget.app, context,
+                      title: 'Member actions',
+                      collapsible: true,
+                      collapsed: true,
+                      children: [
+                        _actions(followRequestsDashboardState),
+                      ]),
+                  topicContainer(widget.app, context,
                       title: 'Condition',
                       collapsible: true,
                       collapsed: true,
@@ -172,13 +179,6 @@ class _FollowRequestsDashboardComponentEditorState
                               app: widget.app,
                               value: followRequestsDashboardState.model.conditions!,
                             )),
-                      ]),
-                  topicContainer(widget.app, context,
-                      title: 'Member actions',
-                      collapsible: true,
-                      collapsed: true,
-                      children: [
-                        _actions(followRequestsDashboardState),
                       ]),
                 ]);
           } else {

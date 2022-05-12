@@ -41,6 +41,7 @@ class InviteDashboardBloc extends ExtEditorBaseBloc<InviteDashboardModel, Member
   InviteDashboardModel newInstance(StorageConditionsModel conditions) {
     return InviteDashboardModel(
       appId: appId,
+      description: 'Invite Dashboard',
       documentID: newRandomKey(),
       conditions: conditions,
     );

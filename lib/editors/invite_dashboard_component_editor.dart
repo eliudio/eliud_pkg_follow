@@ -45,6 +45,7 @@ class InviteDashboardComponentEditorConstructor
         InviteDashboardModel(
           appId: app.documentID,
           documentID: newRandomKey(),
+          description: 'Invite Dashboard',
           conditions: StorageConditionsModel(
               privilegeLevelRequired:
                   PrivilegeLevelRequiredSimple.NoPrivilegeRequiredSimple),
@@ -162,6 +163,13 @@ class _InviteDashboardComponentEditorState
                             )),
                       ]),
                   topicContainer(widget.app, context,
+                      title: 'Member actions',
+                      collapsible: true,
+                      collapsed: true,
+                      children: [
+                        _actions(inviteDashboardState),
+                      ]),
+                  topicContainer(widget.app, context,
                       title: 'Condition',
                       collapsible: true,
                       collapsed: true,
@@ -172,13 +180,6 @@ class _InviteDashboardComponentEditorState
                               app: widget.app,
                               value: inviteDashboardState.model.conditions!,
                             )),
-                      ]),
-                  topicContainer(widget.app, context,
-                      title: 'Member actions',
-                      collapsible: true,
-                      collapsed: true,
-                      children: [
-                        _actions(inviteDashboardState),
                       ]),
                 ]);
           } else {

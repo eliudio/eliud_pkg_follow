@@ -44,7 +44,7 @@ class ComponentRegistry {
     Registry.registry()!.register(componentName: "followRequestsDashboards", componentConstructor: FollowRequestsDashboardComponentConstructorDefault());
     Registry.registry()!.addDropDownSupporter("inviteDashboards", DropdownButtonComponentFactory());
     Registry.registry()!.register(componentName: "inviteDashboards", componentConstructor: InviteDashboardComponentConstructorDefault());
-    Registry.registry()!.addComponentSpec('eliud_pkg_follow', [
+    Registry.registry()!.addComponentSpec('eliud_pkg_follow', 'follow', [
       ComponentSpec('followingDashboards', FollowingDashboardComponentConstructorDefault(), FollowingDashboardComponentSelector(), FollowingDashboardComponentEditorConstructor(), ), 
       ComponentSpec('followRequestsDashboards', FollowRequestsDashboardComponentConstructorDefault(), FollowRequestsDashboardComponentSelector(), FollowRequestsDashboardComponentEditorConstructor(), ), 
       ComponentSpec('inviteDashboards', InviteDashboardComponentConstructorDefault(), InviteDashboardComponentSelector(), InviteDashboardComponentEditorConstructor(), ), 

@@ -42,6 +42,7 @@ class FollowingDashboardBloc extends ExtEditorBaseBloc<FollowingDashboardModel, 
     return FollowingDashboardModel(
       appId: appId,
       documentID: newRandomKey(),
+      description: 'Following dashboard',
       conditions: conditions,
     );
   }

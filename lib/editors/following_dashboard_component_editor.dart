@@ -46,6 +46,7 @@ class FollowingDashboardComponentEditorConstructor
         FollowingDashboardModel(
           appId: app.documentID,
           documentID: newRandomKey(),
+          description: 'Following dashboard',
           conditions: StorageConditionsModel(
               privilegeLevelRequired:
                   PrivilegeLevelRequiredSimple.NoPrivilegeRequiredSimple),
@@ -172,6 +173,13 @@ class _FollowingDashboardComponentEditorState
                         ),
                       ]),
                   topicContainer(widget.app, context,
+                      title: 'Member actions',
+                      collapsible: true,
+                      collapsed: true,
+                      children: [
+                        _actions(followingDashboardState),
+                      ]),
+                  topicContainer(widget.app, context,
                       title: 'Condition',
                       collapsible: true,
                       collapsed: true,
@@ -182,13 +190,6 @@ class _FollowingDashboardComponentEditorState
                               app: widget.app,
                               value: followingDashboardState.model.conditions!,
                             )),
-                      ]),
-                  topicContainer(widget.app, context,
-                      title: 'Member actions',
-                      collapsible: true,
-                      collapsed: true,
-                      children: [
-                        _actions(followingDashboardState),
                       ]),
                 ]);
           } else {

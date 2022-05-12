@@ -1,12 +1,13 @@
 {
   "id": "Following",
   "packageName": "eliud_pkg_follow",
+  "packageFriendlyName": "follow",
   "isAppModel": true,
   "generate": {
     "generateComponent": true,
     "generateRepository": true,
     "generateCache": true,
-	"hasPersistentRepository": true,
+    "hasPersistentRepository": true,
     "generateFirestoreRepository": true,
     "generateRepositorySingleton": true,
     "generateModel": true,
