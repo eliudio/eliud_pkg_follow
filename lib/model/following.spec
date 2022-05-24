@@ -22,6 +22,7 @@
   "fields": [
     {
       "fieldName": "documentID",
+      "required": true,
       "remark": "Member response ID - Member request ID",
       "displayName": "Document ID",
       "fieldType": "String",
@@ -30,6 +31,7 @@
     },
     {
       "fieldName": "appId",
+      "required": true,
       "displayName": "App Identifier",
       "remark": "This is the identifier of the app to which this belongs",
       "fieldType": "String",
@@ -58,7 +60,7 @@
     }
   ],
   "listFields": {
-    "title": "value.documentID != null ? Center(child: StyleRegistry.registry().styleWithApp(app).frontEndStyle().textStyle().text(app, context, value.documentID!)) : Container()",
+    "title": "value.documentID != null ? Center(child: StyleRegistry.registry().styleWithApp(app).frontEndStyle().textStyle().text(app, context, value.documentID)) : Container()",
     "subTitle": "value.follower!.name != null ? Center(child: StyleRegistry.registry().styleWithApp(app).frontEndStyle().textStyle().text(app, context, value.follower!.name!)) : Container()"
   },
   "depends": ["eliud_core"]

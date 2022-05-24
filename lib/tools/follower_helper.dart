@@ -10,7 +10,7 @@ class FollowerHelper {
   }
 
   static Future<List<String?>> following(String meId, AppModel app) async {
-    var appId = app.documentID!;
+    var appId = app.documentID;
     var query = EliudQuery(theConditions: [
       EliudQueryCondition('followedId', isEqualTo: meId)]);
     var valuesList = await followingRepository(appId: appId)!.valuesList(eliudQuery: query);
@@ -18,7 +18,7 @@ class FollowerHelper {
   }
 
   static Future<List<String?>> followers(String meId, AppModel app) async {
-    var appId = app.documentID!;
+    var appId = app.documentID;
     var query = EliudQuery(theConditions: [
       EliudQueryCondition('followerId', isEqualTo: meId)]);
     var valuesList = await followingRepository(appId: appId)!.valuesList(eliudQuery: query);

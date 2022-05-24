@@ -37,7 +37,7 @@ class FollowingDashboardComponentConstructorDefault
 
   @override
   Future<dynamic> getModel({required AppModel app, required String id}) async =>
-      await followingDashboardRepository(appId: app.documentID!)!.get(id);
+      await followingDashboardRepository(appId: app.documentID)!.get(id);
 }
 
 class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
@@ -145,8 +145,8 @@ class FollowingDashboardItem extends StatelessWidget {
       name = data.name;
     }
     var memberId = followingView == FollowingView.Followers
-        ? value!.follower!.documentID!
-        : value!.followed!.documentID!;
+        ? value!.follower!.documentID
+        : value!.followed!.documentID;
     return ListTile(
         onTap: () {
           MemberPopupMenu.showPopupMenuWithAllActions(app,
@@ -195,11 +195,11 @@ class FollowingDashboardItem extends StatelessWidget {
               : '');
     }
 
-    openAckNackDialog(app, context, app.documentID! + '/follow', title: title, message: message,
+    openAckNackDialog(app, context, app.documentID + '/follow', title: title, message: message,
         onSelection: (selectedValue) async {
       Navigator.pop(context);
       if (selectedValue == 0) {
-        await followingRepository(appId: app.documentID!)!.delete(value!);
+        await followingRepository(appId: app.documentID)!.delete(value!);
       }
     });
   }

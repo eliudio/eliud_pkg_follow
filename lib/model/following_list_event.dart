@@ -77,7 +77,7 @@ class FollowingListUpdated extends FollowingListEvent {
 }
 
 class FollowingChangeQuery extends FollowingListEvent {
-  final EliudQuery newQuery;
+  final EliudQuery? newQuery;
 
   const FollowingChangeQuery({ required this.newQuery });
 

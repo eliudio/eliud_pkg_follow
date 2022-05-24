@@ -55,7 +55,7 @@ class InviteDashboardFormBloc extends Bloc<InviteDashboardFormEvent, InviteDashb
   Stream<InviteDashboardFormState> mapEventToState(InviteDashboardFormEvent event) async* {
     final currentState = state;
     if (currentState is InviteDashboardFormUninitialized) {
-      if (event is InitialiseNewInviteDashboardFormEvent) {
+      on <InitialiseNewInviteDashboardFormEvent> ((event, emit) {
         InviteDashboardFormLoaded loaded = InviteDashboardFormLoaded(value: InviteDashboardModel(
                                                documentID: "",
                                  appId: "",
@@ -63,58 +63,49 @@ class InviteDashboardFormBloc extends Bloc<InviteDashboardFormEvent, InviteDashb
                                  memberActions: [],
 
         ));
-        yield loaded;
-        return;
-
-      }
+        emit(loaded);
+      });
 
 
       if (event is InitialiseInviteDashboardFormEvent) {
         // Need to re-retrieve the document from the repository so that I get all associated types
         InviteDashboardFormLoaded loaded = InviteDashboardFormLoaded(value: await inviteDashboardRepository(appId: appId)!.get(event.value!.documentID));
-        yield loaded;
-        return;
+        emit(loaded);
       } else if (event is InitialiseInviteDashboardFormNoLoadEvent) {
         InviteDashboardFormLoaded loaded = InviteDashboardFormLoaded(value: event.value);
-        yield loaded;
-        return;
+        emit(loaded);
       }
     } else if (currentState is InviteDashboardFormInitialized) {
       InviteDashboardModel? newValue = null;
-      if (event is ChangedInviteDashboardDocumentID) {
+      on <ChangedInviteDashboardDocumentID> ((event, emit) async {
         newValue = currentState.value!.copyWith(documentID: event.value);
         if (formAction == FormAction.AddAction) {
-          yield* _isDocumentIDValid(event.value, newValue).asStream();
+          emit(await _isDocumentIDValid(event.value, newValue!));
         } else {
-          yield SubmittableInviteDashboardForm(value: newValue);
+          emit(SubmittableInviteDashboardForm(value: newValue));
         }
 
-        return;
-      }
-      if (event is ChangedInviteDashboardAppId) {
+      });
+      on <ChangedInviteDashboardAppId> ((event, emit) async {
         newValue = currentState.value!.copyWith(appId: event.value);
-        yield SubmittableInviteDashboardForm(value: newValue);
+        emit(SubmittableInviteDashboardForm(value: newValue));
 
-        return;
-      }
-      if (event is ChangedInviteDashboardDescription) {
+      });
+      on <ChangedInviteDashboardDescription> ((event, emit) async {
         newValue = currentState.value!.copyWith(description: event.value);
-        yield SubmittableInviteDashboardForm(value: newValue);
+        emit(SubmittableInviteDashboardForm(value: newValue));
 
-        return;
-      }
-      if (event is ChangedInviteDashboardMemberActions) {
+      });
+      on <ChangedInviteDashboardMemberActions> ((event, emit) async {
         newValue = currentState.value!.copyWith(memberActions: event.value);
-        yield SubmittableInviteDashboardForm(value: newValue);
+        emit(SubmittableInviteDashboardForm(value: newValue));
 
-        return;
-      }
-      if (event is ChangedInviteDashboardConditions) {
+      });
+      on <ChangedInviteDashboardConditions> ((event, emit) async {
         newValue = currentState.value!.copyWith(conditions: event.value);
-        yield SubmittableInviteDashboardForm(value: newValue);
+        emit(SubmittableInviteDashboardForm(value: newValue));
 
-        return;
-      }
+      });
     }
   }
 

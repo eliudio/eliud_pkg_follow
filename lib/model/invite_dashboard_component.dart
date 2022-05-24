@@ -39,7 +39,7 @@ abstract class AbstractInviteDashboardComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<InviteDashboardComponentBloc> (
           create: (context) => InviteDashboardComponentBloc(
-            inviteDashboardRepository: inviteDashboardRepository(appId: app.documentID!)!)
+            inviteDashboardRepository: inviteDashboardRepository(appId: app.documentID)!)
         ..add(FetchInviteDashboardComponent(id: inviteDashboardId)),
       child: _inviteDashboardBlockBuilder(context),
     );

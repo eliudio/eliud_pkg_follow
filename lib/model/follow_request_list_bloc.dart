@@ -38,9 +38,47 @@ class FollowRequestListBloc extends Bloc<FollowRequestListEvent, FollowRequestLi
   FollowRequestListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required FollowRequestRepository followRequestRepository, this.followRequestLimit = 5})
       : assert(followRequestRepository != null),
         _followRequestRepository = followRequestRepository,
-        super(FollowRequestListLoading());
+        super(FollowRequestListLoading()) {
+    on <LoadFollowRequestList> ((event, emit) {
+      if ((detailed == null) || (!detailed!)) {
+        _mapLoadFollowRequestListToState();
+      } else {
+        _mapLoadFollowRequestListWithDetailsToState();
+      }
+    });
+    
+    on <NewPage> ((event, emit) {
+      pages = pages + 1; // it doesn't matter so much if we increase pages beyond the end
+      _mapLoadFollowRequestListWithDetailsToState();
+    });
+    
+    on <FollowRequestChangeQuery> ((event, emit) {
+      eliudQuery = event.newQuery;
+      if ((detailed == null) || (!detailed!)) {
+        _mapLoadFollowRequestListToState();
+      } else {
+        _mapLoadFollowRequestListWithDetailsToState();
+      }
+    });
+      
+    on <AddFollowRequestList> ((event, emit) async {
+      await _mapAddFollowRequestListToState(event);
+    });
+    
+    on <UpdateFollowRequestList> ((event, emit) async {
+      await _mapUpdateFollowRequestListToState(event);
+    });
+    
+    on <DeleteFollowRequestList> ((event, emit) async {
+      await _mapDeleteFollowRequestListToState(event);
+    });
+    
+    on <FollowRequestListUpdated> ((event, emit) {
+      emit(_mapFollowRequestListUpdatedToState(event));
+    });
+  }
 
-  Stream<FollowRequestListState> _mapLoadFollowRequestListToState() async* {
+  Future<void> _mapLoadFollowRequestListToState() async {
     int amountNow =  (state is FollowRequestListLoaded) ? (state as FollowRequestListLoaded).values!.length : 0;
     _followRequestsListSubscription?.cancel();
     _followRequestsListSubscription = _followRequestRepository.listen(
@@ -52,7 +90,7 @@ class FollowRequestListBloc extends Bloc<FollowRequestListEvent, FollowRequestLi
     );
   }
 
-  Stream<FollowRequestListState> _mapLoadFollowRequestListWithDetailsToState() async* {
+  Future<void> _mapLoadFollowRequestListWithDetailsToState() async {
     int amountNow =  (state is FollowRequestListLoaded) ? (state as FollowRequestListLoaded).values!.length : 0;
     _followRequestsListSubscription?.cancel();
     _followRequestsListSubscription = _followRequestRepository.listenWithDetails(
@@ -64,58 +102,29 @@ class FollowRequestListBloc extends Bloc<FollowRequestListEvent, FollowRequestLi
     );
   }
 
-  Stream<FollowRequestListState> _mapAddFollowRequestListToState(AddFollowRequestList event) async* {
+  Future<void> _mapAddFollowRequestListToState(AddFollowRequestList event) async {
     var value = event.value;
-    if (value != null) 
-      _followRequestRepository.add(value);
-  }
-
-  Stream<FollowRequestListState> _mapUpdateFollowRequestListToState(UpdateFollowRequestList event) async* {
-    var value = event.value;
-    if (value != null) 
-      _followRequestRepository.update(value);
-  }
-
-  Stream<FollowRequestListState> _mapDeleteFollowRequestListToState(DeleteFollowRequestList event) async* {
-    var value = event.value;
-    if (value != null) 
-      _followRequestRepository.delete(value);
-  }
-
-  Stream<FollowRequestListState> _mapFollowRequestListUpdatedToState(
-      FollowRequestListUpdated event) async* {
-    yield FollowRequestListLoaded(values: event.value, mightHaveMore: event.mightHaveMore);
-  }
-
-  @override
-  Stream<FollowRequestListState> mapEventToState(FollowRequestListEvent event) async* {
-    if (event is LoadFollowRequestList) {
-      if ((detailed == null) || (!detailed!)) {
-        yield* _mapLoadFollowRequestListToState();
-      } else {
-        yield* _mapLoadFollowRequestListWithDetailsToState();
-      }
-    }
-    if (event is NewPage) {
-      pages = pages + 1; // it doesn't matter so much if we increase pages beyond the end
-      yield* _mapLoadFollowRequestListWithDetailsToState();
-    } else if (event is FollowRequestChangeQuery) {
-      eliudQuery = event.newQuery;
-      if ((detailed == null) || (!detailed!)) {
-        yield* _mapLoadFollowRequestListToState();
-      } else {
-        yield* _mapLoadFollowRequestListWithDetailsToState();
-      }
-    } else if (event is AddFollowRequestList) {
-      yield* _mapAddFollowRequestListToState(event);
-    } else if (event is UpdateFollowRequestList) {
-      yield* _mapUpdateFollowRequestListToState(event);
-    } else if (event is DeleteFollowRequestList) {
-      yield* _mapDeleteFollowRequestListToState(event);
-    } else if (event is FollowRequestListUpdated) {
-      yield* _mapFollowRequestListUpdatedToState(event);
+    if (value != null) {
+      await _followRequestRepository.add(value);
     }
   }
+
+  Future<void> _mapUpdateFollowRequestListToState(UpdateFollowRequestList event) async {
+    var value = event.value;
+    if (value != null) {
+      await _followRequestRepository.update(value);
+    }
+  }
+
+  Future<void> _mapDeleteFollowRequestListToState(DeleteFollowRequestList event) async {
+    var value = event.value;
+    if (value != null) {
+      await _followRequestRepository.delete(value);
+    }
+  }
+
+  FollowRequestListLoaded _mapFollowRequestListUpdatedToState(
+      FollowRequestListUpdated event) => FollowRequestListLoaded(values: event.value, mightHaveMore: event.mightHaveMore);
 
   @override
   Future<void> close() {

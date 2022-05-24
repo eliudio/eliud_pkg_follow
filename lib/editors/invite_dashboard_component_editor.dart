@@ -57,11 +57,11 @@ class InviteDashboardComponentEditorConstructor
   void updateComponentWithID(AppModel app, BuildContext context, String id,
       EditorFeedback feedback) async {
     var inviteDashboard =
-        await inviteDashboardRepository(appId: app.documentID!)!.get(id);
+        await inviteDashboardRepository(appId: app.documentID)!.get(id);
     if (inviteDashboard != null) {
       _openIt(app, context, false, inviteDashboard, feedback);
     } else {
-      openErrorDialog(app, context, app.documentID! + '/_error',
+      openErrorDialog(app, context, app.documentID + '/_error',
           title: 'Error',
           errorMessage: 'Cannot find invite dashboard with id $id');
     }
@@ -72,7 +72,7 @@ class InviteDashboardComponentEditorConstructor
     openComplexDialog(
       app,
       context,
-      app.documentID! + '/invitedashboard',
+      app.documentID + '/invitedashboard',
       title: create
           ? 'Create Invite Dashboard'
           : 'Update Invite Dashboard',
@@ -80,7 +80,7 @@ class InviteDashboardComponentEditorConstructor
       widthFraction: .9,
       child: BlocProvider<InviteDashboardBloc>(
           create: (context) => InviteDashboardBloc(
-                app.documentID!,
+                app.documentID,
                 /*create,
             */
                 feedback,
@@ -143,7 +143,7 @@ class _InviteDashboardComponentEditorState
                         getListTile(context, widget.app,
                             leading: Icon(Icons.vpn_key),
                             title: text(widget.app, context,
-                                inviteDashboardState.model.documentID!)),
+                                inviteDashboardState.model.documentID)),
                         getListTile(context, widget.app,
                             leading: Icon(Icons.description),
                             title: dialogField(
@@ -297,7 +297,7 @@ class _InviteDashboardComponentEditorState
     openFlexibleDialog(
       widget.app,
       context,
-      widget.app.documentID! + '/_memberaction',
+      widget.app.documentID + '/_memberaction',
       includeHeading: false,
       widthFraction: .8,
       child: MemberActionModelWidget.getIt(

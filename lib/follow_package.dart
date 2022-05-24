@@ -31,7 +31,7 @@ abstract class FollowPackage extends Package {
 
   @override
   Future<List<PackageConditionDetails>>? getAndSubscribe(AccessBloc accessBloc, AppModel app, MemberModel? member, bool isOwner, bool? isBlocked, PrivilegeLevel? privilegeLevel) {
-    String appId = app.documentID!;
+    String appId = app.documentID;
     subscription[appId]?.cancel();
     if (member != null) {
       final c = Completer<List<PackageConditionDetails>>();
@@ -57,7 +57,7 @@ abstract class FollowPackage extends Package {
           }
         }
       }, eliudQuery: getOpenFollowRequestsQuery(
-          appId, member.documentID!));
+          appId, member.documentID));
       return c.future;
     } else {
       stateCONDITION_MEMBER_HAS_OPEN_REQUESTS[appId] = false;

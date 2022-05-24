@@ -28,7 +28,7 @@ class FollowRequestEntity {
   final String? followedId;
   final int? status;
 
-  FollowRequestEntity({this.appId, this.followerId, this.followedId, this.status, });
+  FollowRequestEntity({required this.appId, this.followerId, this.followedId, this.status, });
 
 
   List<Object?> get props => [appId, followerId, followedId, status, ];

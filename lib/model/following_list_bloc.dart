@@ -38,9 +38,47 @@ class FollowingListBloc extends Bloc<FollowingListEvent, FollowingListState> {
   FollowingListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required FollowingRepository followingRepository, this.followingLimit = 5})
       : assert(followingRepository != null),
         _followingRepository = followingRepository,
-        super(FollowingListLoading());
+        super(FollowingListLoading()) {
+    on <LoadFollowingList> ((event, emit) {
+      if ((detailed == null) || (!detailed!)) {
+        _mapLoadFollowingListToState();
+      } else {
+        _mapLoadFollowingListWithDetailsToState();
+      }
+    });
+    
+    on <NewPage> ((event, emit) {
+      pages = pages + 1; // it doesn't matter so much if we increase pages beyond the end
+      _mapLoadFollowingListWithDetailsToState();
+    });
+    
+    on <FollowingChangeQuery> ((event, emit) {
+      eliudQuery = event.newQuery;
+      if ((detailed == null) || (!detailed!)) {
+        _mapLoadFollowingListToState();
+      } else {
+        _mapLoadFollowingListWithDetailsToState();
+      }
+    });
+      
+    on <AddFollowingList> ((event, emit) async {
+      await _mapAddFollowingListToState(event);
+    });
+    
+    on <UpdateFollowingList> ((event, emit) async {
+      await _mapUpdateFollowingListToState(event);
+    });
+    
+    on <DeleteFollowingList> ((event, emit) async {
+      await _mapDeleteFollowingListToState(event);
+    });
+    
+    on <FollowingListUpdated> ((event, emit) {
+      emit(_mapFollowingListUpdatedToState(event));
+    });
+  }
 
-  Stream<FollowingListState> _mapLoadFollowingListToState() async* {
+  Future<void> _mapLoadFollowingListToState() async {
     int amountNow =  (state is FollowingListLoaded) ? (state as FollowingListLoaded).values!.length : 0;
     _followingsListSubscription?.cancel();
     _followingsListSubscription = _followingRepository.listen(
@@ -52,7 +90,7 @@ class FollowingListBloc extends Bloc<FollowingListEvent, FollowingListState> {
     );
   }
 
-  Stream<FollowingListState> _mapLoadFollowingListWithDetailsToState() async* {
+  Future<void> _mapLoadFollowingListWithDetailsToState() async {
     int amountNow =  (state is FollowingListLoaded) ? (state as FollowingListLoaded).values!.length : 0;
     _followingsListSubscription?.cancel();
     _followingsListSubscription = _followingRepository.listenWithDetails(
@@ -64,58 +102,29 @@ class FollowingListBloc extends Bloc<FollowingListEvent, FollowingListState> {
     );
   }
 
-  Stream<FollowingListState> _mapAddFollowingListToState(AddFollowingList event) async* {
+  Future<void> _mapAddFollowingListToState(AddFollowingList event) async {
     var value = event.value;
-    if (value != null) 
-      _followingRepository.add(value);
-  }
-
-  Stream<FollowingListState> _mapUpdateFollowingListToState(UpdateFollowingList event) async* {
-    var value = event.value;
-    if (value != null) 
-      _followingRepository.update(value);
-  }
-
-  Stream<FollowingListState> _mapDeleteFollowingListToState(DeleteFollowingList event) async* {
-    var value = event.value;
-    if (value != null) 
-      _followingRepository.delete(value);
-  }
-
-  Stream<FollowingListState> _mapFollowingListUpdatedToState(
-      FollowingListUpdated event) async* {
-    yield FollowingListLoaded(values: event.value, mightHaveMore: event.mightHaveMore);
-  }
-
-  @override
-  Stream<FollowingListState> mapEventToState(FollowingListEvent event) async* {
-    if (event is LoadFollowingList) {
-      if ((detailed == null) || (!detailed!)) {
-        yield* _mapLoadFollowingListToState();
-      } else {
-        yield* _mapLoadFollowingListWithDetailsToState();
-      }
-    }
-    if (event is NewPage) {
-      pages = pages + 1; // it doesn't matter so much if we increase pages beyond the end
-      yield* _mapLoadFollowingListWithDetailsToState();
-    } else if (event is FollowingChangeQuery) {
-      eliudQuery = event.newQuery;
-      if ((detailed == null) || (!detailed!)) {
-        yield* _mapLoadFollowingListToState();
-      } else {
-        yield* _mapLoadFollowingListWithDetailsToState();
-      }
-    } else if (event is AddFollowingList) {
-      yield* _mapAddFollowingListToState(event);
-    } else if (event is UpdateFollowingList) {
-      yield* _mapUpdateFollowingListToState(event);
-    } else if (event is DeleteFollowingList) {
-      yield* _mapDeleteFollowingListToState(event);
-    } else if (event is FollowingListUpdated) {
-      yield* _mapFollowingListUpdatedToState(event);
+    if (value != null) {
+      await _followingRepository.add(value);
     }
   }
+
+  Future<void> _mapUpdateFollowingListToState(UpdateFollowingList event) async {
+    var value = event.value;
+    if (value != null) {
+      await _followingRepository.update(value);
+    }
+  }
+
+  Future<void> _mapDeleteFollowingListToState(DeleteFollowingList event) async {
+    var value = event.value;
+    if (value != null) {
+      await _followingRepository.delete(value);
+    }
+  }
+
+  FollowingListLoaded _mapFollowingListUpdatedToState(
+      FollowingListUpdated event) => FollowingListLoaded(values: event.value, mightHaveMore: event.mightHaveMore);
 
   @override
   Future<void> close() {

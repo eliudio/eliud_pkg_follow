@@ -31,7 +31,7 @@ class InviteDashboardPageBuilder extends SingleComponentPageBuilder {
   static InviteDashboardModel _dashboardModel(String feedMenuPageId, AppModel app, String uniqueId, String componentIdentifier) {
     return InviteDashboardModel(
       documentID: constructDocumentId(uniqueId: uniqueId, documentId: componentIdentifier),
-      appId: app.documentID!,
+      appId: app.documentID,
       description: "Follow members",
       memberActions: ProfileAndFeedToAction.getMemberActionModels(app, feedMenuPageId),
       conditions: StorageConditionsModel(
@@ -41,7 +41,7 @@ class InviteDashboardPageBuilder extends SingleComponentPageBuilder {
   }
 
   static Future<InviteDashboardModel> setupDashboard(String feedMenuPageId, AppModel app, String uniqueId, String componentIdentifier) async {
-    return await inviteDashboardRepository(appId: app.documentID!)!
+    return await inviteDashboardRepository(appId: app.documentID)!
         .add(_dashboardModel(feedMenuPageId, app, uniqueId, componentIdentifier));
   }
 

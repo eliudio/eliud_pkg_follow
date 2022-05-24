@@ -39,7 +39,7 @@ abstract class AbstractFollowingComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<FollowingComponentBloc> (
           create: (context) => FollowingComponentBloc(
-            followingRepository: followingRepository(appId: app.documentID!)!)
+            followingRepository: followingRepository(appId: app.documentID)!)
         ..add(FetchFollowingComponent(id: followingId)),
       child: _followingBlockBuilder(context),
     );

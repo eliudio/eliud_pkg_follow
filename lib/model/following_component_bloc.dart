@@ -27,23 +27,22 @@ class FollowingComponentBloc extends Bloc<FollowingComponentEvent, FollowingComp
   final FollowingRepository? followingRepository;
   StreamSubscription? _followingSubscription;
 
-  Stream<FollowingComponentState> _mapLoadFollowingComponentUpdateToState(String documentId) async* {
+  void _mapLoadFollowingComponentUpdateToState(String documentId) {
     _followingSubscription?.cancel();
     _followingSubscription = followingRepository!.listenTo(documentId, (value) {
-      if (value != null) add(FollowingComponentUpdated(value: value));
+      if (value != null) {
+        add(FollowingComponentUpdated(value: value));
+      }
     });
   }
 
-  FollowingComponentBloc({ this.followingRepository }): super(FollowingComponentUninitialized());
-
-  @override
-  Stream<FollowingComponentState> mapEventToState(FollowingComponentEvent event) async* {
-    final currentState = state;
-    if (event is FetchFollowingComponent) {
-      yield* _mapLoadFollowingComponentUpdateToState(event.id!);
-    } else if (event is FollowingComponentUpdated) {
-      yield FollowingComponentLoaded(value: event.value);
-    }
+  FollowingComponentBloc({ this.followingRepository }): super(FollowingComponentUninitialized()) {
+    on <FetchFollowingComponent> ((event, emit) {
+      _mapLoadFollowingComponentUpdateToState(event.id!);
+    });
+    on <FollowingComponentUpdated> ((event, emit) {
+      emit(FollowingComponentLoaded(value: event.value));
+    });
   }
 
   @override

@@ -77,7 +77,7 @@ class FollowRequestsDashboardListUpdated extends FollowRequestsDashboardListEven
 }
 
 class FollowRequestsDashboardChangeQuery extends FollowRequestsDashboardListEvent {
-  final EliudQuery newQuery;
+  final EliudQuery? newQuery;
 
   const FollowRequestsDashboardChangeQuery({ required this.newQuery });
 

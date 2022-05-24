@@ -40,7 +40,7 @@ class InviteDashboardComponentConstructorDefault
 
   @override
   Future<dynamic> getModel({required AppModel app, required String id}) async =>
-      await inviteDashboardRepository(appId: app.documentID!)!.get(id);
+      await inviteDashboardRepository(appId: app.documentID)!.get(id);
 }
 
 class InviteDashboard extends AbstractInviteDashboardComponent {
@@ -60,7 +60,7 @@ class InviteDashboard extends AbstractInviteDashboardComponent {
         builder: (context, accessState) {
       if (accessState is AccessDetermined) {
         var member = accessState.getMember();
-        var appId = app.documentID!;
+        var appId = app.documentID;
         return topicContainer(app, context, children: [
           BlocProvider<MemberPublicInfoListBloc>(
             create: (context) => MemberPublicInfoListBloc(
@@ -129,7 +129,7 @@ class InviteDashboardItem extends StatelessWidget {
                 'Request to follow',
                 () => openOptions(context, profilePhoto),
                 dashboardModel.memberActions,
-                value!.documentID!,
+                value!.documentID,
               );
             },
             trailing: Container(height: 100, width: 100, child: profilePhoto),
@@ -141,14 +141,14 @@ class InviteDashboardItem extends StatelessWidget {
   Future<void> openOptions(BuildContext context, Widget profilePhoto) async {
     if (value!.documentID != member!.documentID) {
       String key =
-          FollowerHelper.getKey(value!.documentID!, member!.documentID!);
+          FollowerHelper.getKey(value!.documentID, member!.documentID);
       var following = await followingRepository(appId: app.documentID)!.get(key);
       if (following == null) {
         var followRequest =
-            await followRequestRepository(appId: app.documentID!)!.get(key);
+            await followRequestRepository(appId: app.documentID)!.get(key);
         if ((followRequest == null) || (followRequest.status == FollowRequestStatus.FollowRequestAccepted)) {
           // allow to re-request to follow, if the follower has removed the follower but accepted in the past
-          openAckNackDialog(app, context, app.documentID! + '/requestfollow',
+          openAckNackDialog(app, context, app.documentID + '/requestfollow',
               title: 'Request to follow',
               message: 'Request to follow this person?', onSelection: (value) {
             if (value == 0) {
@@ -157,7 +157,7 @@ class InviteDashboardItem extends StatelessWidget {
           });
         } else {
           if (followRequest.status == FollowRequestStatus.FollowRequestDenied) {
-            openAckNackDialog(app, context, app.documentID! + '/invite',
+            openAckNackDialog(app, context, app.documentID + '/invite',
                 title: 'Request to follow',
                 message:
                     "Request to follow this person? You've requested this before and this was declined.",
@@ -169,13 +169,13 @@ class InviteDashboardItem extends StatelessWidget {
           } else {
             if (followRequest.status ==
                 FollowRequestStatus.FollowRequestPending) {
-              openErrorDialog(app, context, app.documentID! + '/_error',
+              openErrorDialog(app, context, app.documentID + '/_error',
                   title: 'Error',
                   errorMessage:
                       "You have already requested to follow this person and the request is pending.");
 /*
             } else {
-              openErrorDialog(app, context, app.documentID! + '/_error',
+              openErrorDialog(app, context, app.documentID + '/_error',
                   title: 'Error',
                   errorMessage:
                       "You have already requested to follow this person and this was accepted.");
@@ -184,12 +184,12 @@ class InviteDashboardItem extends StatelessWidget {
           }
         }
       } else {
-        openErrorDialog(app, context, app.documentID! + '/_error',
+        openErrorDialog(app, context, app.documentID + '/_error',
             title: 'Error',
             errorMessage: 'You are already following this person');
       }
     } else {
-      openErrorDialog(app, context, app.documentID! + '/_error',
+      openErrorDialog(app, context, app.documentID + '/_error',
           title: 'Error',
           errorMessage: 'This is you. No point following yourself');
     }
@@ -197,11 +197,11 @@ class InviteDashboardItem extends StatelessWidget {
 
   Future<void> _invite(BuildContext context) async {
     var follower =
-        await memberPublicInfoRepository(appId: app.documentID!)!.get(member!.documentID);
-    await followRequestRepository(appId: app.documentID!)!.add(FollowRequestModel(
+        await memberPublicInfoRepository(appId: app.documentID)!.get(member!.documentID);
+    await followRequestRepository(appId: app.documentID)!.add(FollowRequestModel(
         documentID:
-            FollowerHelper.getKey(value!.documentID!, member!.documentID!),
-        appId: app.documentID!,
+            FollowerHelper.getKey(value!.documentID, member!.documentID),
+        appId: app.documentID,
         followed: value,
         follower: follower,
         status: FollowRequestStatus.FollowRequestPending));

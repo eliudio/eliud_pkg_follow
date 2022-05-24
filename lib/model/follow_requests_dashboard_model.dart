@@ -16,6 +16,7 @@
 import 'package:collection/collection.dart';
 import 'package:eliud_core/tools/common_tools.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eliud_core/core/base/model_base.dart';
 
 import 'package:eliud_core/model/repository_export.dart';
 import 'package:eliud_core/model/abstract_repository_singleton.dart';
@@ -40,18 +41,18 @@ import 'package:eliud_core/tools/random.dart';
 
 
 
-class FollowRequestsDashboardModel {
-  String? documentID;
+class FollowRequestsDashboardModel implements ModelBase, WithAppId {
+  String documentID;
 
   // This is the identifier of the app to which this belongs
-  String? appId;
+  String appId;
   String? description;
 
   // The extra actions that can be done on a member
   List<MemberActionModel>? memberActions;
   StorageConditionsModel? conditions;
 
-  FollowRequestsDashboardModel({this.documentID, this.appId, this.description, this.memberActions, this.conditions, })  {
+  FollowRequestsDashboardModel({required this.documentID, required this.appId, this.description, this.memberActions, this.conditions, })  {
     assert(documentID != null);
   }
 
@@ -96,7 +97,7 @@ class FollowRequestsDashboardModel {
     var counter = 0;
     return FollowRequestsDashboardModel(
           documentID: documentID, 
-          appId: entity.appId, 
+          appId: entity.appId ?? '', 
           description: entity.description, 
           memberActions: 
             entity.memberActions == null ? null : List<MemberActionModel>.from(await Future.wait(entity. memberActions
@@ -116,7 +117,7 @@ class FollowRequestsDashboardModel {
     var counter = 0;
     return FollowRequestsDashboardModel(
           documentID: documentID, 
-          appId: entity.appId, 
+          appId: entity.appId ?? '', 
           description: entity.description, 
           memberActions: 
             entity. memberActions == null ? null : List<MemberActionModel>.from(await Future.wait(entity. memberActions

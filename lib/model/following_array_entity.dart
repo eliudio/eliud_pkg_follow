@@ -26,7 +26,7 @@ class FollowingArrayEntity {
   final String? appId;
   final List<String>? followers;
 
-  FollowingArrayEntity({this.appId, this.followers, });
+  FollowingArrayEntity({required this.appId, this.followers, });
 
 
   List<Object?> get props => [appId, followers, ];

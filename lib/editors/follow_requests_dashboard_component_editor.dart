@@ -56,11 +56,11 @@ class FollowRequestsDashboardComponentEditorConstructor
   void updateComponentWithID(AppModel app, BuildContext context, String id,
       EditorFeedback feedback) async {
     var followRequestsDashboard =
-        await followRequestsDashboardRepository(appId: app.documentID!)!.get(id);
+        await followRequestsDashboardRepository(appId: app.documentID)!.get(id);
     if (followRequestsDashboard != null) {
       _openIt(app, context, false, followRequestsDashboard, feedback);
     } else {
-      openErrorDialog(app, context, app.documentID! + '/_error',
+      openErrorDialog(app, context, app.documentID + '/_error',
           title: 'Error',
           errorMessage: 'Cannot find followRequests dashboard with id $id');
     }
@@ -71,7 +71,7 @@ class FollowRequestsDashboardComponentEditorConstructor
     openComplexDialog(
       app,
       context,
-      app.documentID! + '/followRequestsdashboard',
+      app.documentID + '/followRequestsdashboard',
       title: create
           ? 'Create FollowRequests Dashboard'
           : 'Update FollowRequests Dashboard',
@@ -79,7 +79,7 @@ class FollowRequestsDashboardComponentEditorConstructor
       widthFraction: .9,
       child: BlocProvider<FollowRequestsDashboardBloc>(
           create: (context) => FollowRequestsDashboardBloc(
-                app.documentID!,
+                app.documentID,
                 /*create,
             */
                 feedback,
@@ -142,7 +142,7 @@ class _FollowRequestsDashboardComponentEditorState
                         getListTile(context, widget.app,
                             leading: Icon(Icons.vpn_key),
                             title: text(widget.app, context,
-                                followRequestsDashboardState.model.documentID!)),
+                                followRequestsDashboardState.model.documentID)),
                         getListTile(context, widget.app,
                             leading: Icon(Icons.description),
                             title: dialogField(
@@ -296,7 +296,7 @@ class _FollowRequestsDashboardComponentEditorState
     openFlexibleDialog(
       widget.app,
       context,
-      widget.app.documentID! + '/_memberaction',
+      widget.app.documentID + '/_memberaction',
       includeHeading: false,
       widthFraction: .8,
       child: MemberActionModelWidget.getIt(

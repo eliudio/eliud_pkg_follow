@@ -26,23 +26,22 @@ class InviteDashboardComponentBloc extends Bloc<InviteDashboardComponentEvent, I
   final InviteDashboardRepository? inviteDashboardRepository;
   StreamSubscription? _inviteDashboardSubscription;
 
-  Stream<InviteDashboardComponentState> _mapLoadInviteDashboardComponentUpdateToState(String documentId) async* {
+  void _mapLoadInviteDashboardComponentUpdateToState(String documentId) {
     _inviteDashboardSubscription?.cancel();
     _inviteDashboardSubscription = inviteDashboardRepository!.listenTo(documentId, (value) {
-      if (value != null) add(InviteDashboardComponentUpdated(value: value));
+      if (value != null) {
+        add(InviteDashboardComponentUpdated(value: value));
+      }
     });
   }
 
-  InviteDashboardComponentBloc({ this.inviteDashboardRepository }): super(InviteDashboardComponentUninitialized());
-
-  @override
-  Stream<InviteDashboardComponentState> mapEventToState(InviteDashboardComponentEvent event) async* {
-    final currentState = state;
-    if (event is FetchInviteDashboardComponent) {
-      yield* _mapLoadInviteDashboardComponentUpdateToState(event.id!);
-    } else if (event is InviteDashboardComponentUpdated) {
-      yield InviteDashboardComponentLoaded(value: event.value);
-    }
+  InviteDashboardComponentBloc({ this.inviteDashboardRepository }): super(InviteDashboardComponentUninitialized()) {
+    on <FetchInviteDashboardComponent> ((event, emit) {
+      _mapLoadInviteDashboardComponentUpdateToState(event.id!);
+    });
+    on <InviteDashboardComponentUpdated> ((event, emit) {
+      emit(InviteDashboardComponentLoaded(value: event.value));
+    });
   }
 
   @override

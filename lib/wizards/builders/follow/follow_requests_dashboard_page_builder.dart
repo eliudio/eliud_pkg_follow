@@ -32,7 +32,7 @@ class FollowRequestsDashboardPageBuilder extends SingleComponentPageBuilder {
   static FollowRequestsDashboardModel _dashboardModel(String feedMenuPageId, AppModel app, String uniqueId, String componentIdentifier) {
     return FollowRequestsDashboardModel(
       documentID: constructDocumentId(uniqueId: uniqueId, documentId: componentIdentifier),
-      appId: app.documentID!,
+      appId: app.documentID,
       description: "Follow requests",
       memberActions: ProfileAndFeedToAction.getMemberActionModels(app, feedMenuPageId),
       conditions: StorageConditionsModel(
@@ -42,7 +42,7 @@ class FollowRequestsDashboardPageBuilder extends SingleComponentPageBuilder {
   }
 
   static Future<FollowRequestsDashboardModel> setupDashboard(String feedMenuPageId, AppModel app, String uniqueId, String componentIdentifier) async {
-    return await followRequestsDashboardRepository(appId: app.documentID!)!
+    return await followRequestsDashboardRepository(appId: app.documentID)!
         .add(_dashboardModel(feedMenuPageId, app, uniqueId, componentIdentifier));
   }
 

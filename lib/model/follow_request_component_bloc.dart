@@ -27,23 +27,22 @@ class FollowRequestComponentBloc extends Bloc<FollowRequestComponentEvent, Follo
   final FollowRequestRepository? followRequestRepository;
   StreamSubscription? _followRequestSubscription;
 
-  Stream<FollowRequestComponentState> _mapLoadFollowRequestComponentUpdateToState(String documentId) async* {
+  void _mapLoadFollowRequestComponentUpdateToState(String documentId) {
     _followRequestSubscription?.cancel();
     _followRequestSubscription = followRequestRepository!.listenTo(documentId, (value) {
-      if (value != null) add(FollowRequestComponentUpdated(value: value));
+      if (value != null) {
+        add(FollowRequestComponentUpdated(value: value));
+      }
     });
   }
 
-  FollowRequestComponentBloc({ this.followRequestRepository }): super(FollowRequestComponentUninitialized());
-
-  @override
-  Stream<FollowRequestComponentState> mapEventToState(FollowRequestComponentEvent event) async* {
-    final currentState = state;
-    if (event is FetchFollowRequestComponent) {
-      yield* _mapLoadFollowRequestComponentUpdateToState(event.id!);
-    } else if (event is FollowRequestComponentUpdated) {
-      yield FollowRequestComponentLoaded(value: event.value);
-    }
+  FollowRequestComponentBloc({ this.followRequestRepository }): super(FollowRequestComponentUninitialized()) {
+    on <FetchFollowRequestComponent> ((event, emit) {
+      _mapLoadFollowRequestComponentUpdateToState(event.id!);
+    });
+    on <FollowRequestComponentUpdated> ((event, emit) {
+      emit(FollowRequestComponentLoaded(value: event.value));
+    });
   }
 
   @override

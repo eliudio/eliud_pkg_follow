@@ -30,7 +30,7 @@ class FollowingDashboardEntity {
   final List<MemberActionEntity>? memberActions;
   final StorageConditionsEntity? conditions;
 
-  FollowingDashboardEntity({this.appId, this.description, this.view, this.memberActions, this.conditions, });
+  FollowingDashboardEntity({required this.appId, this.description, this.view, this.memberActions, this.conditions, });
 
 
   List<Object?> get props => [appId, description, view, memberActions, conditions, ];

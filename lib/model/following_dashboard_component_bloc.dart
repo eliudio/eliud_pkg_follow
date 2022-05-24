@@ -26,23 +26,22 @@ class FollowingDashboardComponentBloc extends Bloc<FollowingDashboardComponentEv
   final FollowingDashboardRepository? followingDashboardRepository;
   StreamSubscription? _followingDashboardSubscription;
 
-  Stream<FollowingDashboardComponentState> _mapLoadFollowingDashboardComponentUpdateToState(String documentId) async* {
+  void _mapLoadFollowingDashboardComponentUpdateToState(String documentId) {
     _followingDashboardSubscription?.cancel();
     _followingDashboardSubscription = followingDashboardRepository!.listenTo(documentId, (value) {
-      if (value != null) add(FollowingDashboardComponentUpdated(value: value));
+      if (value != null) {
+        add(FollowingDashboardComponentUpdated(value: value));
+      }
     });
   }
 
-  FollowingDashboardComponentBloc({ this.followingDashboardRepository }): super(FollowingDashboardComponentUninitialized());
-
-  @override
-  Stream<FollowingDashboardComponentState> mapEventToState(FollowingDashboardComponentEvent event) async* {
-    final currentState = state;
-    if (event is FetchFollowingDashboardComponent) {
-      yield* _mapLoadFollowingDashboardComponentUpdateToState(event.id!);
-    } else if (event is FollowingDashboardComponentUpdated) {
-      yield FollowingDashboardComponentLoaded(value: event.value);
-    }
+  FollowingDashboardComponentBloc({ this.followingDashboardRepository }): super(FollowingDashboardComponentUninitialized()) {
+    on <FetchFollowingDashboardComponent> ((event, emit) {
+      _mapLoadFollowingDashboardComponentUpdateToState(event.id!);
+    });
+    on <FollowingDashboardComponentUpdated> ((event, emit) {
+      emit(FollowingDashboardComponentLoaded(value: event.value));
+    });
   }
 
   @override

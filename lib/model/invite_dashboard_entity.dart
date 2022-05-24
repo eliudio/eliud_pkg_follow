@@ -29,7 +29,7 @@ class InviteDashboardEntity {
   final List<MemberActionEntity>? memberActions;
   final StorageConditionsEntity? conditions;
 
-  InviteDashboardEntity({this.appId, this.description, this.memberActions, this.conditions, });
+  InviteDashboardEntity({required this.appId, this.description, this.memberActions, this.conditions, });
 
 
   List<Object?> get props => [appId, description, memberActions, conditions, ];

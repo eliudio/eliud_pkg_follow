@@ -38,9 +38,47 @@ class FollowingDashboardListBloc extends Bloc<FollowingDashboardListEvent, Follo
   FollowingDashboardListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required FollowingDashboardRepository followingDashboardRepository, this.followingDashboardLimit = 5})
       : assert(followingDashboardRepository != null),
         _followingDashboardRepository = followingDashboardRepository,
-        super(FollowingDashboardListLoading());
+        super(FollowingDashboardListLoading()) {
+    on <LoadFollowingDashboardList> ((event, emit) {
+      if ((detailed == null) || (!detailed!)) {
+        _mapLoadFollowingDashboardListToState();
+      } else {
+        _mapLoadFollowingDashboardListWithDetailsToState();
+      }
+    });
+    
+    on <NewPage> ((event, emit) {
+      pages = pages + 1; // it doesn't matter so much if we increase pages beyond the end
+      _mapLoadFollowingDashboardListWithDetailsToState();
+    });
+    
+    on <FollowingDashboardChangeQuery> ((event, emit) {
+      eliudQuery = event.newQuery;
+      if ((detailed == null) || (!detailed!)) {
+        _mapLoadFollowingDashboardListToState();
+      } else {
+        _mapLoadFollowingDashboardListWithDetailsToState();
+      }
+    });
+      
+    on <AddFollowingDashboardList> ((event, emit) async {
+      await _mapAddFollowingDashboardListToState(event);
+    });
+    
+    on <UpdateFollowingDashboardList> ((event, emit) async {
+      await _mapUpdateFollowingDashboardListToState(event);
+    });
+    
+    on <DeleteFollowingDashboardList> ((event, emit) async {
+      await _mapDeleteFollowingDashboardListToState(event);
+    });
+    
+    on <FollowingDashboardListUpdated> ((event, emit) {
+      emit(_mapFollowingDashboardListUpdatedToState(event));
+    });
+  }
 
-  Stream<FollowingDashboardListState> _mapLoadFollowingDashboardListToState() async* {
+  Future<void> _mapLoadFollowingDashboardListToState() async {
     int amountNow =  (state is FollowingDashboardListLoaded) ? (state as FollowingDashboardListLoaded).values!.length : 0;
     _followingDashboardsListSubscription?.cancel();
     _followingDashboardsListSubscription = _followingDashboardRepository.listen(
@@ -52,7 +90,7 @@ class FollowingDashboardListBloc extends Bloc<FollowingDashboardListEvent, Follo
     );
   }
 
-  Stream<FollowingDashboardListState> _mapLoadFollowingDashboardListWithDetailsToState() async* {
+  Future<void> _mapLoadFollowingDashboardListWithDetailsToState() async {
     int amountNow =  (state is FollowingDashboardListLoaded) ? (state as FollowingDashboardListLoaded).values!.length : 0;
     _followingDashboardsListSubscription?.cancel();
     _followingDashboardsListSubscription = _followingDashboardRepository.listenWithDetails(
@@ -64,58 +102,29 @@ class FollowingDashboardListBloc extends Bloc<FollowingDashboardListEvent, Follo
     );
   }
 
-  Stream<FollowingDashboardListState> _mapAddFollowingDashboardListToState(AddFollowingDashboardList event) async* {
+  Future<void> _mapAddFollowingDashboardListToState(AddFollowingDashboardList event) async {
     var value = event.value;
-    if (value != null) 
-      _followingDashboardRepository.add(value);
-  }
-
-  Stream<FollowingDashboardListState> _mapUpdateFollowingDashboardListToState(UpdateFollowingDashboardList event) async* {
-    var value = event.value;
-    if (value != null) 
-      _followingDashboardRepository.update(value);
-  }
-
-  Stream<FollowingDashboardListState> _mapDeleteFollowingDashboardListToState(DeleteFollowingDashboardList event) async* {
-    var value = event.value;
-    if (value != null) 
-      _followingDashboardRepository.delete(value);
-  }
-
-  Stream<FollowingDashboardListState> _mapFollowingDashboardListUpdatedToState(
-      FollowingDashboardListUpdated event) async* {
-    yield FollowingDashboardListLoaded(values: event.value, mightHaveMore: event.mightHaveMore);
-  }
-
-  @override
-  Stream<FollowingDashboardListState> mapEventToState(FollowingDashboardListEvent event) async* {
-    if (event is LoadFollowingDashboardList) {
-      if ((detailed == null) || (!detailed!)) {
-        yield* _mapLoadFollowingDashboardListToState();
-      } else {
-        yield* _mapLoadFollowingDashboardListWithDetailsToState();
-      }
-    }
-    if (event is NewPage) {
-      pages = pages + 1; // it doesn't matter so much if we increase pages beyond the end
-      yield* _mapLoadFollowingDashboardListWithDetailsToState();
-    } else if (event is FollowingDashboardChangeQuery) {
-      eliudQuery = event.newQuery;
-      if ((detailed == null) || (!detailed!)) {
-        yield* _mapLoadFollowingDashboardListToState();
-      } else {
-        yield* _mapLoadFollowingDashboardListWithDetailsToState();
-      }
-    } else if (event is AddFollowingDashboardList) {
-      yield* _mapAddFollowingDashboardListToState(event);
-    } else if (event is UpdateFollowingDashboardList) {
-      yield* _mapUpdateFollowingDashboardListToState(event);
-    } else if (event is DeleteFollowingDashboardList) {
-      yield* _mapDeleteFollowingDashboardListToState(event);
-    } else if (event is FollowingDashboardListUpdated) {
-      yield* _mapFollowingDashboardListUpdatedToState(event);
+    if (value != null) {
+      await _followingDashboardRepository.add(value);
     }
   }
+
+  Future<void> _mapUpdateFollowingDashboardListToState(UpdateFollowingDashboardList event) async {
+    var value = event.value;
+    if (value != null) {
+      await _followingDashboardRepository.update(value);
+    }
+  }
+
+  Future<void> _mapDeleteFollowingDashboardListToState(DeleteFollowingDashboardList event) async {
+    var value = event.value;
+    if (value != null) {
+      await _followingDashboardRepository.delete(value);
+    }
+  }
+
+  FollowingDashboardListLoaded _mapFollowingDashboardListUpdatedToState(
+      FollowingDashboardListUpdated event) => FollowingDashboardListLoaded(values: event.value, mightHaveMore: event.mightHaveMore);
 
   @override
   Future<void> close() {

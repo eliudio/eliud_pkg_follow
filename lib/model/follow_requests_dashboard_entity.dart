@@ -29,7 +29,7 @@ class FollowRequestsDashboardEntity {
   final List<MemberActionEntity>? memberActions;
   final StorageConditionsEntity? conditions;
 
-  FollowRequestsDashboardEntity({this.appId, this.description, this.memberActions, this.conditions, });
+  FollowRequestsDashboardEntity({required this.appId, this.description, this.memberActions, this.conditions, });
 
 
   List<Object?> get props => [appId, description, memberActions, conditions, ];

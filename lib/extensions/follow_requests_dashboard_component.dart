@@ -41,7 +41,7 @@ class FollowRequestsDashboardComponentConstructorDefault
 
   @override
   Future<dynamic> getModel({required AppModel app, required String id}) async =>
-      await followRequestsDashboardRepository(appId: app.documentID!)!.get(id);
+      await followRequestsDashboardRepository(appId: app.documentID)!.get(id);
 }
 
 class FollowRequestsDashboardComponent
@@ -55,14 +55,14 @@ class FollowRequestsDashboardComponent
     return BlocBuilder<AccessBloc, AccessState>(
         builder: (context, accessState) {
       if (accessState is AccessDetermined) {
-        var appId = app.documentID!;
+        var appId = app.documentID;
         return topicContainer(app, context, children: [
           BlocProvider<FollowRequestListBloc>(
               create: (context) => FollowRequestListBloc(
                     detailed: true,
                     eliudQuery: FollowPackage.getOpenFollowRequestsQuery(
                         appId,
-                        accessState.getMember()!.documentID!),
+                        accessState.getMember()!.documentID),
                     followRequestRepository:
                         followRequestRepository(appId: appId)!,
                   )..add(LoadFollowRequestList()),
@@ -108,8 +108,8 @@ class FollowRequestsDashboardItem extends StatelessWidget {
   Widget build(BuildContext context) {
     if (value == null) return Text("Value is null");
     if (value!.follower == null) return Text("Follower is null");
-    var followerId = value!.follower!.documentID!;
-    var theFuture = memberPublicInfoRepository(appId: app.documentID!)!.get(followerId);
+    var followerId = value!.follower!.documentID;
+    var theFuture = memberPublicInfoRepository(appId: app.documentID)!.get(followerId);
     return FutureBuilder<MemberPublicInfoModel?>(
         future: theFuture,
         builder: (context, snapshot) {
@@ -131,7 +131,7 @@ class FollowRequestsDashboardItem extends StatelessWidget {
                     'Follow request',
                     () => openOptions(context),
                     dashboardModel.memberActions,
-                    value!.documentID!,
+                    value!.documentID,
                   );
                 },
                 trailing: Container(
@@ -154,7 +154,7 @@ class FollowRequestsDashboardItem extends StatelessWidget {
             value!.follower!.name == null
         ? 'unkown'
         : value!.follower!.name;
-    openAckNackDialog(app, context, app.documentID! + '/_followinvitation',
+    openAckNackDialog(app, context, app.documentID + '/_followinvitation',
         title: 'Follow Request',
         ackButtonLabel: 'Accept',
         nackButtonLabel: 'Reject',
@@ -174,13 +174,13 @@ class FollowRequestsDashboardItem extends StatelessWidget {
     Navigator.pop(context);
     if (value != null) {
       value!.status = FollowRequestStatus.FollowRequestAccepted;
-      await followRequestRepository(appId: app.documentID!)!.update(value!);
+      await followRequestRepository(appId: app.documentID)!.update(value!);
 
       if ((value!.followed != null) && (value!.follower != null)) {
-        await followingRepository(appId: app.documentID!)!.add(FollowingModel(
+        await followingRepository(appId: app.documentID)!.add(FollowingModel(
             documentID: FollowerHelper.getKey(
-                value!.followed!.documentID!, value!.follower!.documentID!),
-            appId: app.documentID!,
+                value!.followed!.documentID, value!.follower!.documentID),
+            appId: app.documentID,
             followed: value!.followed!,
             follower: value!.follower!));
       }
@@ -191,7 +191,7 @@ class FollowRequestsDashboardItem extends StatelessWidget {
     Navigator.pop(context);
     if (value != null) {
       value!.status = FollowRequestStatus.FollowRequestDenied;
-      await followRequestRepository(appId: app.documentID!)!.update(value!);
+      await followRequestRepository(appId: app.documentID)!.update(value!);
     }
   }
 }

@@ -15,6 +15,7 @@
 
 import 'package:eliud_core/tools/common_tools.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eliud_core/core/base/model_base.dart';
 
 import 'package:eliud_core/model/repository_export.dart';
 import 'package:eliud_core/model/abstract_repository_singleton.dart';
@@ -48,18 +49,18 @@ FollowRequestStatus toFollowRequestStatus(int? index) {
 }
 
 
-class FollowRequestModel {
+class FollowRequestModel implements ModelBase, WithAppId {
 
   // Member request ID - Member response ID
-  String? documentID;
+  String documentID;
 
   // This is the identifier of the app to which this belongs
-  String? appId;
+  String appId;
   MemberPublicInfoModel? follower;
   MemberPublicInfoModel? followed;
   FollowRequestStatus? status;
 
-  FollowRequestModel({this.documentID, this.appId, this.follower, this.followed, this.status, })  {
+  FollowRequestModel({required this.documentID, required this.appId, this.follower, this.followed, this.status, })  {
     assert(documentID != null);
   }
 
@@ -100,7 +101,7 @@ class FollowRequestModel {
     var counter = 0;
     return FollowRequestModel(
           documentID: documentID, 
-          appId: entity.appId, 
+          appId: entity.appId ?? '', 
           status: toFollowRequestStatus(entity.status), 
     );
   }
@@ -133,7 +134,7 @@ class FollowRequestModel {
     var counter = 0;
     return FollowRequestModel(
           documentID: documentID, 
-          appId: entity.appId, 
+          appId: entity.appId ?? '', 
           follower: followerHolder, 
           followed: followedHolder, 
           status: toFollowRequestStatus(entity.status), 

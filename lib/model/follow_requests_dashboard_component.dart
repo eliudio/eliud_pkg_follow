@@ -39,7 +39,7 @@ abstract class AbstractFollowRequestsDashboardComponent extends StatelessWidget 
   Widget build(BuildContext context) {
     return BlocProvider<FollowRequestsDashboardComponentBloc> (
           create: (context) => FollowRequestsDashboardComponentBloc(
-            followRequestsDashboardRepository: followRequestsDashboardRepository(appId: app.documentID!)!)
+            followRequestsDashboardRepository: followRequestsDashboardRepository(appId: app.documentID)!)
         ..add(FetchFollowRequestsDashboardComponent(id: followRequestsDashboardId)),
       child: _followRequestsDashboardBlockBuilder(context),
     );

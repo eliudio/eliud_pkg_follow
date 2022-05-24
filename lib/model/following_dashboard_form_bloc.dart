@@ -55,7 +55,7 @@ class FollowingDashboardFormBloc extends Bloc<FollowingDashboardFormEvent, Follo
   Stream<FollowingDashboardFormState> mapEventToState(FollowingDashboardFormEvent event) async* {
     final currentState = state;
     if (currentState is FollowingDashboardFormUninitialized) {
-      if (event is InitialiseNewFollowingDashboardFormEvent) {
+      on <InitialiseNewFollowingDashboardFormEvent> ((event, emit) {
         FollowingDashboardFormLoaded loaded = FollowingDashboardFormLoaded(value: FollowingDashboardModel(
                                                documentID: "",
                                  appId: "",
@@ -63,64 +63,54 @@ class FollowingDashboardFormBloc extends Bloc<FollowingDashboardFormEvent, Follo
                                  memberActions: [],
 
         ));
-        yield loaded;
-        return;
-
-      }
+        emit(loaded);
+      });
 
 
       if (event is InitialiseFollowingDashboardFormEvent) {
         // Need to re-retrieve the document from the repository so that I get all associated types
         FollowingDashboardFormLoaded loaded = FollowingDashboardFormLoaded(value: await followingDashboardRepository(appId: appId)!.get(event.value!.documentID));
-        yield loaded;
-        return;
+        emit(loaded);
       } else if (event is InitialiseFollowingDashboardFormNoLoadEvent) {
         FollowingDashboardFormLoaded loaded = FollowingDashboardFormLoaded(value: event.value);
-        yield loaded;
-        return;
+        emit(loaded);
       }
     } else if (currentState is FollowingDashboardFormInitialized) {
       FollowingDashboardModel? newValue = null;
-      if (event is ChangedFollowingDashboardDocumentID) {
+      on <ChangedFollowingDashboardDocumentID> ((event, emit) async {
         newValue = currentState.value!.copyWith(documentID: event.value);
         if (formAction == FormAction.AddAction) {
-          yield* _isDocumentIDValid(event.value, newValue).asStream();
+          emit(await _isDocumentIDValid(event.value, newValue!));
         } else {
-          yield SubmittableFollowingDashboardForm(value: newValue);
+          emit(SubmittableFollowingDashboardForm(value: newValue));
         }
 
-        return;
-      }
-      if (event is ChangedFollowingDashboardAppId) {
+      });
+      on <ChangedFollowingDashboardAppId> ((event, emit) async {
         newValue = currentState.value!.copyWith(appId: event.value);
-        yield SubmittableFollowingDashboardForm(value: newValue);
+        emit(SubmittableFollowingDashboardForm(value: newValue));
 
-        return;
-      }
-      if (event is ChangedFollowingDashboardDescription) {
+      });
+      on <ChangedFollowingDashboardDescription> ((event, emit) async {
         newValue = currentState.value!.copyWith(description: event.value);
-        yield SubmittableFollowingDashboardForm(value: newValue);
+        emit(SubmittableFollowingDashboardForm(value: newValue));
 
-        return;
-      }
-      if (event is ChangedFollowingDashboardView) {
+      });
+      on <ChangedFollowingDashboardView> ((event, emit) async {
         newValue = currentState.value!.copyWith(view: event.value);
-        yield SubmittableFollowingDashboardForm(value: newValue);
+        emit(SubmittableFollowingDashboardForm(value: newValue));
 
-        return;
-      }
-      if (event is ChangedFollowingDashboardMemberActions) {
+      });
+      on <ChangedFollowingDashboardMemberActions> ((event, emit) async {
         newValue = currentState.value!.copyWith(memberActions: event.value);
-        yield SubmittableFollowingDashboardForm(value: newValue);
+        emit(SubmittableFollowingDashboardForm(value: newValue));
 
-        return;
-      }
-      if (event is ChangedFollowingDashboardConditions) {
+      });
+      on <ChangedFollowingDashboardConditions> ((event, emit) async {
         newValue = currentState.value!.copyWith(conditions: event.value);
-        yield SubmittableFollowingDashboardForm(value: newValue);
+        emit(SubmittableFollowingDashboardForm(value: newValue));
 
-        return;
-      }
+      });
     }
   }
 

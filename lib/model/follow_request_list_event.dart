@@ -77,7 +77,7 @@ class FollowRequestListUpdated extends FollowRequestListEvent {
 }
 
 class FollowRequestChangeQuery extends FollowRequestListEvent {
-  final EliudQuery newQuery;
+  final EliudQuery? newQuery;
 
   const FollowRequestChangeQuery({ required this.newQuery });
 

@@ -15,6 +15,7 @@
 
 import 'package:eliud_core/tools/common_tools.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eliud_core/core/base/model_base.dart';
 
 import 'package:eliud_core/model/repository_export.dart';
 import 'package:eliud_core/model/abstract_repository_singleton.dart';
@@ -35,17 +36,17 @@ import 'package:eliud_core/tools/random.dart';
 
 
 
-class FollowingModel {
+class FollowingModel implements ModelBase, WithAppId {
 
   // Member response ID - Member request ID
-  String? documentID;
+  String documentID;
 
   // This is the identifier of the app to which this belongs
-  String? appId;
+  String appId;
   MemberPublicInfoModel? follower;
   MemberPublicInfoModel? followed;
 
-  FollowingModel({this.documentID, this.appId, this.follower, this.followed, })  {
+  FollowingModel({required this.documentID, required this.appId, this.follower, this.followed, })  {
     assert(documentID != null);
   }
 
@@ -84,7 +85,7 @@ class FollowingModel {
     var counter = 0;
     return FollowingModel(
           documentID: documentID, 
-          appId: entity.appId, 
+          appId: entity.appId ?? '', 
     );
   }
 
@@ -116,7 +117,7 @@ class FollowingModel {
     var counter = 0;
     return FollowingModel(
           documentID: documentID, 
-          appId: entity.appId, 
+          appId: entity.appId ?? '', 
           follower: followerHolder, 
           followed: followedHolder, 
     );

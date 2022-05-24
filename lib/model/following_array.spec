@@ -23,6 +23,7 @@
   "fields": [
     {
       "fieldName": "documentID",
+      "required": true,
       "remark": "Member ID",
       "displayName": "Document ID",
       "fieldType": "String",
@@ -31,6 +32,7 @@
     },
     {
       "fieldName": "appId",
+      "required": true,
       "displayName": "App Identifier",
       "remark": "This is the identifier of the app to which this belongs",
       "fieldType": "String",

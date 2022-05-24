@@ -79,7 +79,7 @@ class FollowingDashboardForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var accessState = AccessBloc.getState(context);
-    var appId = app.documentID!;
+    var appId = app.documentID;
     if (formAction == FormAction.ShowData) {
       return BlocProvider<FollowingDashboardFormBloc >(
             create: (context) => FollowingDashboardFormBloc(appId,
@@ -198,11 +198,11 @@ class _MyFollowingDashboardFormState extends State<MyFollowingDashboardForm> {
 
         children.add(
 
-                  StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().radioListTile(widget.app, context, 0, _viewSelectedRadioTile, 'Followers', 'Followers', !accessState.memberIsOwner(widget.app.documentID!) ? null : (dynamic val) => setSelectionView(val))
+                  StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().radioListTile(widget.app, context, 0, _viewSelectedRadioTile, 'Followers', 'Followers', !accessState.memberIsOwner(widget.app.documentID) ? null : (dynamic val) => setSelectionView(val))
           );
         children.add(
 
-                  StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().radioListTile(widget.app, context, 0, _viewSelectedRadioTile, 'Following', 'Following', !accessState.memberIsOwner(widget.app.documentID!) ? null : (dynamic val) => setSelectionView(val))
+                  StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().radioListTile(widget.app, context, 0, _viewSelectedRadioTile, 'Following', 'Following', !accessState.memberIsOwner(widget.app.documentID) ? null : (dynamic val) => setSelectionView(val))
           );
 
 
@@ -342,7 +342,7 @@ class _MyFollowingDashboardFormState extends State<MyFollowingDashboardForm> {
   }
 
   bool _readOnly(AccessState accessState, FollowingDashboardFormInitialized state) {
-    return (formAction == FormAction.ShowData) || (formAction == FormAction.ShowPreloadedData) || (!accessState.memberIsOwner(widget.app.documentID!));
+    return (formAction == FormAction.ShowData) || (formAction == FormAction.ShowPreloadedData) || (!accessState.memberIsOwner(widget.app.documentID));
   }
   
 

@@ -32,7 +32,7 @@ class FollowersDashboardPageBuilder extends SingleComponentPageBuilder {
   static FollowingDashboardModel _dashboardModel(String feedMenuPageId, AppModel app, String uniqueId, String componentIdentifier) {
     return FollowingDashboardModel(
       documentID: constructDocumentId(uniqueId: uniqueId, documentId: componentIdentifier),
-      appId: app.documentID!,
+      appId: app.documentID,
       description: 'Followers dashboard',
       view:  FollowingView.Followers,
       memberActions: ProfileAndFeedToAction.getMemberActionModels(app, feedMenuPageId),
@@ -43,7 +43,7 @@ class FollowersDashboardPageBuilder extends SingleComponentPageBuilder {
   }
 
   static Future<FollowingDashboardModel> setupDashboard(String feedMenuPageId, AppModel app, String uniqueId, String componentIdentifier) async {
-    return await followingDashboardRepository(appId: app.documentID!)!
+    return await followingDashboardRepository(appId: app.documentID)!
         .add(_dashboardModel(feedMenuPageId, app, uniqueId, componentIdentifier));
   }
   Future<PageModel> run(

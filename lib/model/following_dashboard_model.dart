@@ -16,6 +16,7 @@
 import 'package:collection/collection.dart';
 import 'package:eliud_core/tools/common_tools.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eliud_core/core/base/model_base.dart';
 
 import 'package:eliud_core/model/repository_export.dart';
 import 'package:eliud_core/model/abstract_repository_singleton.dart';
@@ -52,11 +53,11 @@ FollowingView toFollowingView(int? index) {
 }
 
 
-class FollowingDashboardModel {
-  String? documentID;
+class FollowingDashboardModel implements ModelBase, WithAppId {
+  String documentID;
 
   // This is the identifier of the app to which this belongs
-  String? appId;
+  String appId;
   String? description;
   FollowingView? view;
 
@@ -64,7 +65,7 @@ class FollowingDashboardModel {
   List<MemberActionModel>? memberActions;
   StorageConditionsModel? conditions;
 
-  FollowingDashboardModel({this.documentID, this.appId, this.description, this.view, this.memberActions, this.conditions, })  {
+  FollowingDashboardModel({required this.documentID, required this.appId, this.description, this.view, this.memberActions, this.conditions, })  {
     assert(documentID != null);
   }
 
@@ -111,7 +112,7 @@ class FollowingDashboardModel {
     var counter = 0;
     return FollowingDashboardModel(
           documentID: documentID, 
-          appId: entity.appId, 
+          appId: entity.appId ?? '', 
           description: entity.description, 
           view: toFollowingView(entity.view), 
           memberActions: 
@@ -132,7 +133,7 @@ class FollowingDashboardModel {
     var counter = 0;
     return FollowingDashboardModel(
           documentID: documentID, 
-          appId: entity.appId, 
+          appId: entity.appId ?? '', 
           description: entity.description, 
           view: toFollowingView(entity.view), 
           memberActions: 

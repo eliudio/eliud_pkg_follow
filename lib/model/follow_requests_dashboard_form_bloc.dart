@@ -55,7 +55,7 @@ class FollowRequestsDashboardFormBloc extends Bloc<FollowRequestsDashboardFormEv
   Stream<FollowRequestsDashboardFormState> mapEventToState(FollowRequestsDashboardFormEvent event) async* {
     final currentState = state;
     if (currentState is FollowRequestsDashboardFormUninitialized) {
-      if (event is InitialiseNewFollowRequestsDashboardFormEvent) {
+      on <InitialiseNewFollowRequestsDashboardFormEvent> ((event, emit) {
         FollowRequestsDashboardFormLoaded loaded = FollowRequestsDashboardFormLoaded(value: FollowRequestsDashboardModel(
                                                documentID: "",
                                  appId: "",
@@ -63,58 +63,49 @@ class FollowRequestsDashboardFormBloc extends Bloc<FollowRequestsDashboardFormEv
                                  memberActions: [],
 
         ));
-        yield loaded;
-        return;
-
-      }
+        emit(loaded);
+      });
 
 
       if (event is InitialiseFollowRequestsDashboardFormEvent) {
         // Need to re-retrieve the document from the repository so that I get all associated types
         FollowRequestsDashboardFormLoaded loaded = FollowRequestsDashboardFormLoaded(value: await followRequestsDashboardRepository(appId: appId)!.get(event.value!.documentID));
-        yield loaded;
-        return;
+        emit(loaded);
       } else if (event is InitialiseFollowRequestsDashboardFormNoLoadEvent) {
         FollowRequestsDashboardFormLoaded loaded = FollowRequestsDashboardFormLoaded(value: event.value);
-        yield loaded;
-        return;
+        emit(loaded);
       }
     } else if (currentState is FollowRequestsDashboardFormInitialized) {
       FollowRequestsDashboardModel? newValue = null;
-      if (event is ChangedFollowRequestsDashboardDocumentID) {
+      on <ChangedFollowRequestsDashboardDocumentID> ((event, emit) async {
         newValue = currentState.value!.copyWith(documentID: event.value);
         if (formAction == FormAction.AddAction) {
-          yield* _isDocumentIDValid(event.value, newValue).asStream();
+          emit(await _isDocumentIDValid(event.value, newValue!));
         } else {
-          yield SubmittableFollowRequestsDashboardForm(value: newValue);
+          emit(SubmittableFollowRequestsDashboardForm(value: newValue));
         }
 
-        return;
-      }
-      if (event is ChangedFollowRequestsDashboardAppId) {
+      });
+      on <ChangedFollowRequestsDashboardAppId> ((event, emit) async {
         newValue = currentState.value!.copyWith(appId: event.value);
-        yield SubmittableFollowRequestsDashboardForm(value: newValue);
+        emit(SubmittableFollowRequestsDashboardForm(value: newValue));
 
-        return;
-      }
-      if (event is ChangedFollowRequestsDashboardDescription) {
+      });
+      on <ChangedFollowRequestsDashboardDescription> ((event, emit) async {
         newValue = currentState.value!.copyWith(description: event.value);
-        yield SubmittableFollowRequestsDashboardForm(value: newValue);
+        emit(SubmittableFollowRequestsDashboardForm(value: newValue));
 
-        return;
-      }
-      if (event is ChangedFollowRequestsDashboardMemberActions) {
+      });
+      on <ChangedFollowRequestsDashboardMemberActions> ((event, emit) async {
         newValue = currentState.value!.copyWith(memberActions: event.value);
-        yield SubmittableFollowRequestsDashboardForm(value: newValue);
+        emit(SubmittableFollowRequestsDashboardForm(value: newValue));
 
-        return;
-      }
-      if (event is ChangedFollowRequestsDashboardConditions) {
+      });
+      on <ChangedFollowRequestsDashboardConditions> ((event, emit) async {
         newValue = currentState.value!.copyWith(conditions: event.value);
-        yield SubmittableFollowRequestsDashboardForm(value: newValue);
+        emit(SubmittableFollowRequestsDashboardForm(value: newValue));
 
-        return;
-      }
+      });
     }
   }
 

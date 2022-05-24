@@ -58,11 +58,11 @@ class FollowingDashboardComponentEditorConstructor
   void updateComponentWithID(AppModel app, BuildContext context, String id,
       EditorFeedback feedback) async {
     var followingDashboard =
-        await followingDashboardRepository(appId: app.documentID!)!.get(id);
+        await followingDashboardRepository(appId: app.documentID)!.get(id);
     if (followingDashboard != null) {
       _openIt(app, context, false, followingDashboard, feedback);
     } else {
-      openErrorDialog(app, context, app.documentID! + '/_error',
+      openErrorDialog(app, context, app.documentID + '/_error',
           title: 'Error',
           errorMessage: 'Cannot find following dashboard with id $id');
     }
@@ -73,7 +73,7 @@ class FollowingDashboardComponentEditorConstructor
     openComplexDialog(
       app,
       context,
-      app.documentID! + '/followingdashboard',
+      app.documentID + '/followingdashboard',
       title: create
           ? 'Create Following Dashboard'
           : 'Update Following Dashboard',
@@ -81,7 +81,7 @@ class FollowingDashboardComponentEditorConstructor
       widthFraction: .9,
       child: BlocProvider<FollowingDashboardBloc>(
           create: (context) => FollowingDashboardBloc(
-                app.documentID!,
+                app.documentID,
                 /*create,
             */
                 feedback,
@@ -144,7 +144,7 @@ class _FollowingDashboardComponentEditorState
                         getListTile(context, widget.app,
                             leading: Icon(Icons.vpn_key),
                             title: text(widget.app, context,
-                                followingDashboardState.model.documentID!)),
+                                followingDashboardState.model.documentID)),
                         getListTile(context, widget.app,
                             leading: Icon(Icons.description),
                             title: dialogField(
@@ -307,7 +307,7 @@ class _FollowingDashboardComponentEditorState
     openFlexibleDialog(
       widget.app,
       context,
-      widget.app.documentID! + '/_memberaction',
+      widget.app.documentID + '/_memberaction',
       includeHeading: false,
       widthFraction: .8,
       child: MemberActionModelWidget.getIt(

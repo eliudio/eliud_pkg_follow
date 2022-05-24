@@ -38,9 +38,47 @@ class InviteDashboardListBloc extends Bloc<InviteDashboardListEvent, InviteDashb
   InviteDashboardListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required InviteDashboardRepository inviteDashboardRepository, this.inviteDashboardLimit = 5})
       : assert(inviteDashboardRepository != null),
         _inviteDashboardRepository = inviteDashboardRepository,
-        super(InviteDashboardListLoading());
+        super(InviteDashboardListLoading()) {
+    on <LoadInviteDashboardList> ((event, emit) {
+      if ((detailed == null) || (!detailed!)) {
+        _mapLoadInviteDashboardListToState();
+      } else {
+        _mapLoadInviteDashboardListWithDetailsToState();
+      }
+    });
+    
+    on <NewPage> ((event, emit) {
+      pages = pages + 1; // it doesn't matter so much if we increase pages beyond the end
+      _mapLoadInviteDashboardListWithDetailsToState();
+    });
+    
+    on <InviteDashboardChangeQuery> ((event, emit) {
+      eliudQuery = event.newQuery;
+      if ((detailed == null) || (!detailed!)) {
+        _mapLoadInviteDashboardListToState();
+      } else {
+        _mapLoadInviteDashboardListWithDetailsToState();
+      }
+    });
+      
+    on <AddInviteDashboardList> ((event, emit) async {
+      await _mapAddInviteDashboardListToState(event);
+    });
+    
+    on <UpdateInviteDashboardList> ((event, emit) async {
+      await _mapUpdateInviteDashboardListToState(event);
+    });
+    
+    on <DeleteInviteDashboardList> ((event, emit) async {
+      await _mapDeleteInviteDashboardListToState(event);
+    });
+    
+    on <InviteDashboardListUpdated> ((event, emit) {
+      emit(_mapInviteDashboardListUpdatedToState(event));
+    });
+  }
 
-  Stream<InviteDashboardListState> _mapLoadInviteDashboardListToState() async* {
+  Future<void> _mapLoadInviteDashboardListToState() async {
     int amountNow =  (state is InviteDashboardListLoaded) ? (state as InviteDashboardListLoaded).values!.length : 0;
     _inviteDashboardsListSubscription?.cancel();
     _inviteDashboardsListSubscription = _inviteDashboardRepository.listen(
@@ -52,7 +90,7 @@ class InviteDashboardListBloc extends Bloc<InviteDashboardListEvent, InviteDashb
     );
   }
 
-  Stream<InviteDashboardListState> _mapLoadInviteDashboardListWithDetailsToState() async* {
+  Future<void> _mapLoadInviteDashboardListWithDetailsToState() async {
     int amountNow =  (state is InviteDashboardListLoaded) ? (state as InviteDashboardListLoaded).values!.length : 0;
     _inviteDashboardsListSubscription?.cancel();
     _inviteDashboardsListSubscription = _inviteDashboardRepository.listenWithDetails(
@@ -64,58 +102,29 @@ class InviteDashboardListBloc extends Bloc<InviteDashboardListEvent, InviteDashb
     );
   }
 
-  Stream<InviteDashboardListState> _mapAddInviteDashboardListToState(AddInviteDashboardList event) async* {
+  Future<void> _mapAddInviteDashboardListToState(AddInviteDashboardList event) async {
     var value = event.value;
-    if (value != null) 
-      _inviteDashboardRepository.add(value);
-  }
-
-  Stream<InviteDashboardListState> _mapUpdateInviteDashboardListToState(UpdateInviteDashboardList event) async* {
-    var value = event.value;
-    if (value != null) 
-      _inviteDashboardRepository.update(value);
-  }
-
-  Stream<InviteDashboardListState> _mapDeleteInviteDashboardListToState(DeleteInviteDashboardList event) async* {
-    var value = event.value;
-    if (value != null) 
-      _inviteDashboardRepository.delete(value);
-  }
-
-  Stream<InviteDashboardListState> _mapInviteDashboardListUpdatedToState(
-      InviteDashboardListUpdated event) async* {
-    yield InviteDashboardListLoaded(values: event.value, mightHaveMore: event.mightHaveMore);
-  }
-
-  @override
-  Stream<InviteDashboardListState> mapEventToState(InviteDashboardListEvent event) async* {
-    if (event is LoadInviteDashboardList) {
-      if ((detailed == null) || (!detailed!)) {
-        yield* _mapLoadInviteDashboardListToState();
-      } else {
-        yield* _mapLoadInviteDashboardListWithDetailsToState();
-      }
-    }
-    if (event is NewPage) {
-      pages = pages + 1; // it doesn't matter so much if we increase pages beyond the end
-      yield* _mapLoadInviteDashboardListWithDetailsToState();
-    } else if (event is InviteDashboardChangeQuery) {
-      eliudQuery = event.newQuery;
-      if ((detailed == null) || (!detailed!)) {
-        yield* _mapLoadInviteDashboardListToState();
-      } else {
-        yield* _mapLoadInviteDashboardListWithDetailsToState();
-      }
-    } else if (event is AddInviteDashboardList) {
-      yield* _mapAddInviteDashboardListToState(event);
-    } else if (event is UpdateInviteDashboardList) {
-      yield* _mapUpdateInviteDashboardListToState(event);
-    } else if (event is DeleteInviteDashboardList) {
-      yield* _mapDeleteInviteDashboardListToState(event);
-    } else if (event is InviteDashboardListUpdated) {
-      yield* _mapInviteDashboardListUpdatedToState(event);
+    if (value != null) {
+      await _inviteDashboardRepository.add(value);
     }
   }
+
+  Future<void> _mapUpdateInviteDashboardListToState(UpdateInviteDashboardList event) async {
+    var value = event.value;
+    if (value != null) {
+      await _inviteDashboardRepository.update(value);
+    }
+  }
+
+  Future<void> _mapDeleteInviteDashboardListToState(DeleteInviteDashboardList event) async {
+    var value = event.value;
+    if (value != null) {
+      await _inviteDashboardRepository.delete(value);
+    }
+  }
+
+  InviteDashboardListLoaded _mapInviteDashboardListUpdatedToState(
+      InviteDashboardListUpdated event) => InviteDashboardListLoaded(values: event.value, mightHaveMore: event.mightHaveMore);
 
   @override
   Future<void> close() {

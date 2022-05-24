@@ -77,7 +77,7 @@ class InviteDashboardListUpdated extends InviteDashboardListEvent {
 }
 
 class InviteDashboardChangeQuery extends InviteDashboardListEvent {
-  final EliudQuery newQuery;
+  final EliudQuery? newQuery;
 
   const InviteDashboardChangeQuery({ required this.newQuery });
 
