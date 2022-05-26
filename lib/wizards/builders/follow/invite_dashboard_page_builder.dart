@@ -52,6 +52,6 @@ class InviteDashboardPageBuilder extends SingleComponentPageBuilder {
     return await doIt(
         componentName: AbstractInviteDashboardComponent.componentName,
         componentIdentifier: componentIdentifier,
-        title: "Find Friends");
+        title: "Find Friends", description: "Find Friends");
   }
 }

@@ -53,6 +53,7 @@ class FollowRequestsDashboardPageBuilder extends SingleComponentPageBuilder {
     return await doIt(
         componentName: AbstractFollowRequestsDashboardComponent.componentName,
         componentIdentifier: componentIdentifier,
-        title: "Follower requests");
+        title: "Follower requests",
+        description: "Follower requests");
   }
 }
