@@ -156,7 +156,7 @@ class FollowRequestListWidgetState extends State<FollowRequestListWidget> {
             onDismissed: (direction) {
               BlocProvider.of<FollowRequestListBloc>(context)
                   .add(DeleteFollowRequestList(value: value));
-              Scaffold.of(context).showSnackBar(DeleteSnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(DeleteSnackBar(
                 message: "FollowRequest " + value.documentID,
                 onUndo: () => BlocProvider.of<FollowRequestListBloc>(context)
                     .add(AddFollowRequestList(value: value)),
@@ -168,7 +168,7 @@ class FollowRequestListWidgetState extends State<FollowRequestListWidget> {
                               value: BlocProvider.of<FollowRequestListBloc>(context),
                               child: getForm(value, FormAction.UpdateAction))));
                       if (removedItem != null) {
-                        Scaffold.of(context).showSnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(
                           DeleteSnackBar(
                         message: "FollowRequest " + value.documentID,
                             onUndo: () => BlocProvider.of<FollowRequestListBloc>(context)

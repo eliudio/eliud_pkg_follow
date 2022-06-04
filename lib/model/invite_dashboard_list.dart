@@ -156,7 +156,7 @@ class InviteDashboardListWidgetState extends State<InviteDashboardListWidget> {
             onDismissed: (direction) {
               BlocProvider.of<InviteDashboardListBloc>(context)
                   .add(DeleteInviteDashboardList(value: value));
-              Scaffold.of(context).showSnackBar(DeleteSnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(DeleteSnackBar(
                 message: "InviteDashboard " + value.documentID,
                 onUndo: () => BlocProvider.of<InviteDashboardListBloc>(context)
                     .add(AddInviteDashboardList(value: value)),
@@ -168,7 +168,7 @@ class InviteDashboardListWidgetState extends State<InviteDashboardListWidget> {
                               value: BlocProvider.of<InviteDashboardListBloc>(context),
                               child: getForm(value, FormAction.UpdateAction))));
                       if (removedItem != null) {
-                        Scaffold.of(context).showSnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(
                           DeleteSnackBar(
                         message: "InviteDashboard " + value.documentID,
                             onUndo: () => BlocProvider.of<InviteDashboardListBloc>(context)

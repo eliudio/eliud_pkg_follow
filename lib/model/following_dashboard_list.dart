@@ -156,7 +156,7 @@ class FollowingDashboardListWidgetState extends State<FollowingDashboardListWidg
             onDismissed: (direction) {
               BlocProvider.of<FollowingDashboardListBloc>(context)
                   .add(DeleteFollowingDashboardList(value: value));
-              Scaffold.of(context).showSnackBar(DeleteSnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(DeleteSnackBar(
                 message: "FollowingDashboard " + value.documentID,
                 onUndo: () => BlocProvider.of<FollowingDashboardListBloc>(context)
                     .add(AddFollowingDashboardList(value: value)),
@@ -168,7 +168,7 @@ class FollowingDashboardListWidgetState extends State<FollowingDashboardListWidg
                               value: BlocProvider.of<FollowingDashboardListBloc>(context),
                               child: getForm(value, FormAction.UpdateAction))));
                       if (removedItem != null) {
-                        Scaffold.of(context).showSnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(
                           DeleteSnackBar(
                         message: "FollowingDashboard " + value.documentID,
                             onUndo: () => BlocProvider.of<FollowingDashboardListBloc>(context)
