@@ -66,6 +66,10 @@ class FollowingArrayModel implements ModelBase, WithAppId {
           appId == other.appId &&
           ListEquality().equals(followers, other.followers);
 
+  String toJsonString({String? appId}) {
+    return toEntity(appId: appId).toJsonString();
+  }
+
   @override
   String toString() {
     String followersCsv = (followers == null) ? '' : followers!.join(', ');

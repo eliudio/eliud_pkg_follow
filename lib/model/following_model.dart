@@ -67,6 +67,10 @@ class FollowingModel implements ModelBase, WithAppId {
           follower == other.follower &&
           followed == other.followed;
 
+  String toJsonString({String? appId}) {
+    return toEntity(appId: appId).toJsonString();
+  }
+
   @override
   String toString() {
     return 'FollowingModel{documentID: $documentID, appId: $appId, follower: $follower, followed: $followed}';

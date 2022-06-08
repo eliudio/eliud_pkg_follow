@@ -88,6 +88,10 @@ class FollowingDashboardModel implements ModelBase, WithAppId {
           ListEquality().equals(memberActions, other.memberActions) &&
           conditions == other.conditions;
 
+  String toJsonString({String? appId}) {
+    return toEntity(appId: appId).toJsonString();
+  }
+
   @override
   String toString() {
     String memberActionsCsv = (memberActions == null) ? '' : memberActions!.join(', ');
