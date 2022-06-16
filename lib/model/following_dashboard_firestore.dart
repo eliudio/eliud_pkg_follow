@@ -40,6 +40,14 @@ import 'package:eliud_core/tools/firestore/firestore_tools.dart';
 import 'package:eliud_core/tools/common_tools.dart';
 
 class FollowingDashboardFirestore implements FollowingDashboardRepository {
+  Future<FollowingDashboardEntity> addEntity(String documentID, FollowingDashboardEntity value) {
+    return FollowingDashboardCollection.doc(documentID).set(value.toDocument()).then((_) => value);
+  }
+
+  Future<FollowingDashboardEntity> updateEntity(String documentID, FollowingDashboardEntity value) {
+    return FollowingDashboardCollection.doc(documentID).update(value.toDocument()).then((_) => value);
+  }
+
   Future<FollowingDashboardModel> add(FollowingDashboardModel value) {
     return FollowingDashboardCollection.doc(value.documentID).set(value.toEntity(appId: appId).toDocument()).then((_) => value);
   }
@@ -58,6 +66,21 @@ class FollowingDashboardFirestore implements FollowingDashboardRepository {
 
   Future<FollowingDashboardModel?> _populateDocPlus(DocumentSnapshot value) async {
     return FollowingDashboardModel.fromEntityPlus(value.id, FollowingDashboardEntity.fromMap(value.data()), appId: appId);  }
+
+  Future<FollowingDashboardEntity?> getEntity(String? id, {Function(Exception)? onError}) async {
+    try {
+      var collection = FollowingDashboardCollection.doc(id);
+      var doc = await collection.get();
+      return FollowingDashboardEntity.fromMap(doc.data());
+    } on Exception catch(e) {
+      if (onError != null) {
+        onError(e);
+      } else {
+        print("Error whilst retrieving FollowingDashboard with id $id");
+        print("Exceptoin: $e");
+      }
+    };
+  }
 
   Future<FollowingDashboardModel?> get(String? id, {Function(Exception)? onError}) async {
     try {

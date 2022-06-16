@@ -38,6 +38,8 @@ typedef FollowingModelTrigger(List<FollowingModel?> list);
 typedef FollowingChanged(FollowingModel? value);
 
 abstract class FollowingRepository extends RepositoryBase<FollowingModel> {
+  Future<FollowingEntity> addEntity(String documentID, FollowingEntity value);
+  Future<FollowingEntity> updateEntity(String documentID, FollowingEntity value);
   Future<FollowingModel> add(FollowingModel value);
   Future<void> delete(FollowingModel value);
   Future<FollowingModel?> get(String? id, { Function(Exception)? onError });

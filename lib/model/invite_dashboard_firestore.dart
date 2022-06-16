@@ -40,6 +40,14 @@ import 'package:eliud_core/tools/firestore/firestore_tools.dart';
 import 'package:eliud_core/tools/common_tools.dart';
 
 class InviteDashboardFirestore implements InviteDashboardRepository {
+  Future<InviteDashboardEntity> addEntity(String documentID, InviteDashboardEntity value) {
+    return InviteDashboardCollection.doc(documentID).set(value.toDocument()).then((_) => value);
+  }
+
+  Future<InviteDashboardEntity> updateEntity(String documentID, InviteDashboardEntity value) {
+    return InviteDashboardCollection.doc(documentID).update(value.toDocument()).then((_) => value);
+  }
+
   Future<InviteDashboardModel> add(InviteDashboardModel value) {
     return InviteDashboardCollection.doc(value.documentID).set(value.toEntity(appId: appId).toDocument()).then((_) => value);
   }
@@ -58,6 +66,21 @@ class InviteDashboardFirestore implements InviteDashboardRepository {
 
   Future<InviteDashboardModel?> _populateDocPlus(DocumentSnapshot value) async {
     return InviteDashboardModel.fromEntityPlus(value.id, InviteDashboardEntity.fromMap(value.data()), appId: appId);  }
+
+  Future<InviteDashboardEntity?> getEntity(String? id, {Function(Exception)? onError}) async {
+    try {
+      var collection = InviteDashboardCollection.doc(id);
+      var doc = await collection.get();
+      return InviteDashboardEntity.fromMap(doc.data());
+    } on Exception catch(e) {
+      if (onError != null) {
+        onError(e);
+      } else {
+        print("Error whilst retrieving InviteDashboard with id $id");
+        print("Exceptoin: $e");
+      }
+    };
+  }
 
   Future<InviteDashboardModel?> get(String? id, {Function(Exception)? onError}) async {
     try {

@@ -47,6 +47,14 @@ class FollowingCache implements FollowingRepository {
     });
   }
 
+  Future<FollowingEntity> addEntity(String documentID, FollowingEntity value) {
+    return reference.addEntity(documentID, value);
+  }
+
+  Future<FollowingEntity> updateEntity(String documentID, FollowingEntity value) {
+    return reference.updateEntity(documentID, value);
+  }
+
   Future<void> delete(FollowingModel value){
     fullCache.remove(value.documentID);
     reference.delete(value);

@@ -52,6 +52,14 @@ class InviteDashboardCache implements InviteDashboardRepository {
     });
   }
 
+  Future<InviteDashboardEntity> addEntity(String documentID, InviteDashboardEntity value) {
+    return reference.addEntity(documentID, value);
+  }
+
+  Future<InviteDashboardEntity> updateEntity(String documentID, InviteDashboardEntity value) {
+    return reference.updateEntity(documentID, value);
+  }
+
   Future<void> delete(InviteDashboardModel value){
     fullCache.remove(value.documentID);
     reference.delete(value);

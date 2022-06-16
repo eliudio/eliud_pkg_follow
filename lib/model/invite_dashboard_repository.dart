@@ -42,6 +42,8 @@ typedef InviteDashboardModelTrigger(List<InviteDashboardModel?> list);
 typedef InviteDashboardChanged(InviteDashboardModel? value);
 
 abstract class InviteDashboardRepository extends RepositoryBase<InviteDashboardModel> {
+  Future<InviteDashboardEntity> addEntity(String documentID, InviteDashboardEntity value);
+  Future<InviteDashboardEntity> updateEntity(String documentID, InviteDashboardEntity value);
   Future<InviteDashboardModel> add(InviteDashboardModel value);
   Future<void> delete(InviteDashboardModel value);
   Future<InviteDashboardModel?> get(String? id, { Function(Exception)? onError });

@@ -36,6 +36,14 @@ import 'package:eliud_core/tools/firestore/firestore_tools.dart';
 import 'package:eliud_core/tools/common_tools.dart';
 
 class FollowRequestFirestore implements FollowRequestRepository {
+  Future<FollowRequestEntity> addEntity(String documentID, FollowRequestEntity value) {
+    return FollowRequestCollection.doc(documentID).set(value.toDocument()).then((_) => value);
+  }
+
+  Future<FollowRequestEntity> updateEntity(String documentID, FollowRequestEntity value) {
+    return FollowRequestCollection.doc(documentID).update(value.toDocument()).then((_) => value);
+  }
+
   Future<FollowRequestModel> add(FollowRequestModel value) {
     return FollowRequestCollection.doc(value.documentID).set(value.toEntity(appId: appId).toDocument()).then((_) => value);
   }
@@ -54,6 +62,21 @@ class FollowRequestFirestore implements FollowRequestRepository {
 
   Future<FollowRequestModel?> _populateDocPlus(DocumentSnapshot value) async {
     return FollowRequestModel.fromEntityPlus(value.id, FollowRequestEntity.fromMap(value.data()), appId: appId);  }
+
+  Future<FollowRequestEntity?> getEntity(String? id, {Function(Exception)? onError}) async {
+    try {
+      var collection = FollowRequestCollection.doc(id);
+      var doc = await collection.get();
+      return FollowRequestEntity.fromMap(doc.data());
+    } on Exception catch(e) {
+      if (onError != null) {
+        onError(e);
+      } else {
+        print("Error whilst retrieving FollowRequest with id $id");
+        print("Exceptoin: $e");
+      }
+    };
+  }
 
   Future<FollowRequestModel?> get(String? id, {Function(Exception)? onError}) async {
     try {

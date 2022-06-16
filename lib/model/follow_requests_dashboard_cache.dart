@@ -52,6 +52,14 @@ class FollowRequestsDashboardCache implements FollowRequestsDashboardRepository 
     });
   }
 
+  Future<FollowRequestsDashboardEntity> addEntity(String documentID, FollowRequestsDashboardEntity value) {
+    return reference.addEntity(documentID, value);
+  }
+
+  Future<FollowRequestsDashboardEntity> updateEntity(String documentID, FollowRequestsDashboardEntity value) {
+    return reference.updateEntity(documentID, value);
+  }
+
   Future<void> delete(FollowRequestsDashboardModel value){
     fullCache.remove(value.documentID);
     reference.delete(value);

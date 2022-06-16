@@ -36,6 +36,14 @@ import 'package:eliud_core/tools/firestore/firestore_tools.dart';
 import 'package:eliud_core/tools/common_tools.dart';
 
 class FollowingFirestore implements FollowingRepository {
+  Future<FollowingEntity> addEntity(String documentID, FollowingEntity value) {
+    return FollowingCollection.doc(documentID).set(value.toDocument()).then((_) => value);
+  }
+
+  Future<FollowingEntity> updateEntity(String documentID, FollowingEntity value) {
+    return FollowingCollection.doc(documentID).update(value.toDocument()).then((_) => value);
+  }
+
   Future<FollowingModel> add(FollowingModel value) {
     return FollowingCollection.doc(value.documentID).set(value.toEntity(appId: appId).toDocument()).then((_) => value);
   }
@@ -54,6 +62,21 @@ class FollowingFirestore implements FollowingRepository {
 
   Future<FollowingModel?> _populateDocPlus(DocumentSnapshot value) async {
     return FollowingModel.fromEntityPlus(value.id, FollowingEntity.fromMap(value.data()), appId: appId);  }
+
+  Future<FollowingEntity?> getEntity(String? id, {Function(Exception)? onError}) async {
+    try {
+      var collection = FollowingCollection.doc(id);
+      var doc = await collection.get();
+      return FollowingEntity.fromMap(doc.data());
+    } on Exception catch(e) {
+      if (onError != null) {
+        onError(e);
+      } else {
+        print("Error whilst retrieving Following with id $id");
+        print("Exceptoin: $e");
+      }
+    };
+  }
 
   Future<FollowingModel?> get(String? id, {Function(Exception)? onError}) async {
     try {

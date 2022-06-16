@@ -42,6 +42,8 @@ typedef FollowRequestsDashboardModelTrigger(List<FollowRequestsDashboardModel?> 
 typedef FollowRequestsDashboardChanged(FollowRequestsDashboardModel? value);
 
 abstract class FollowRequestsDashboardRepository extends RepositoryBase<FollowRequestsDashboardModel> {
+  Future<FollowRequestsDashboardEntity> addEntity(String documentID, FollowRequestsDashboardEntity value);
+  Future<FollowRequestsDashboardEntity> updateEntity(String documentID, FollowRequestsDashboardEntity value);
   Future<FollowRequestsDashboardModel> add(FollowRequestsDashboardModel value);
   Future<void> delete(FollowRequestsDashboardModel value);
   Future<FollowRequestsDashboardModel?> get(String? id, { Function(Exception)? onError });

@@ -52,6 +52,14 @@ class FollowingDashboardCache implements FollowingDashboardRepository {
     });
   }
 
+  Future<FollowingDashboardEntity> addEntity(String documentID, FollowingDashboardEntity value) {
+    return reference.addEntity(documentID, value);
+  }
+
+  Future<FollowingDashboardEntity> updateEntity(String documentID, FollowingDashboardEntity value) {
+    return reference.updateEntity(documentID, value);
+  }
+
   Future<void> delete(FollowingDashboardModel value){
     fullCache.remove(value.documentID);
     reference.delete(value);
