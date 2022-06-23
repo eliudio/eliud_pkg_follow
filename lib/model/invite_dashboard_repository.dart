@@ -41,7 +41,7 @@ import 'package:eliud_core/core/base/repository_base.dart';
 typedef InviteDashboardModelTrigger(List<InviteDashboardModel?> list);
 typedef InviteDashboardChanged(InviteDashboardModel? value);
 
-abstract class InviteDashboardRepository extends RepositoryBase<InviteDashboardModel> {
+abstract class InviteDashboardRepository extends RepositoryBase<InviteDashboardModel, InviteDashboardEntity> {
   Future<InviteDashboardEntity> addEntity(String documentID, InviteDashboardEntity value);
   Future<InviteDashboardEntity> updateEntity(String documentID, InviteDashboardEntity value);
   Future<InviteDashboardModel> add(InviteDashboardModel value);

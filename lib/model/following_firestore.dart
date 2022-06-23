@@ -36,6 +36,11 @@ import 'package:eliud_core/tools/firestore/firestore_tools.dart';
 import 'package:eliud_core/tools/common_tools.dart';
 
 class FollowingFirestore implements FollowingRepository {
+  @override
+  FollowingEntity? fromMap(Object? o) {
+    return FollowingEntity.fromMap(o);
+  }
+
   Future<FollowingEntity> addEntity(String documentID, FollowingEntity value) {
     return FollowingCollection.doc(documentID).set(value.toDocument()).then((_) => value);
   }

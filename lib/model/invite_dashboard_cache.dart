@@ -120,6 +120,16 @@ class InviteDashboardCache implements InviteDashboardRepository {
     });
   }
 
+  @override
+  Future<InviteDashboardEntity?> getEntity(String? id, {Function(Exception p1)? onError}) {
+    return reference.getEntity(id, onError: onError);
+  }
+
+  @override
+  InviteDashboardEntity? fromMap(Object? o) {
+    return reference.fromMap(o);
+  }
+
   Future<void> deleteAll() {
     return reference.deleteAll();
   }

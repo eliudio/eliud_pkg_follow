@@ -120,6 +120,16 @@ class FollowingDashboardCache implements FollowingDashboardRepository {
     });
   }
 
+  @override
+  Future<FollowingDashboardEntity?> getEntity(String? id, {Function(Exception p1)? onError}) {
+    return reference.getEntity(id, onError: onError);
+  }
+
+  @override
+  FollowingDashboardEntity? fromMap(Object? o) {
+    return reference.fromMap(o);
+  }
+
   Future<void> deleteAll() {
     return reference.deleteAll();
   }

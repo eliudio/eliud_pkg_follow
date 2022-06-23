@@ -37,7 +37,7 @@ import 'package:eliud_core/core/base/repository_base.dart';
 typedef FollowingModelTrigger(List<FollowingModel?> list);
 typedef FollowingChanged(FollowingModel? value);
 
-abstract class FollowingRepository extends RepositoryBase<FollowingModel> {
+abstract class FollowingRepository extends RepositoryBase<FollowingModel, FollowingEntity> {
   Future<FollowingEntity> addEntity(String documentID, FollowingEntity value);
   Future<FollowingEntity> updateEntity(String documentID, FollowingEntity value);
   Future<FollowingModel> add(FollowingModel value);

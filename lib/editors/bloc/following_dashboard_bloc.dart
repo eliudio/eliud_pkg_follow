@@ -10,7 +10,9 @@ import 'package:eliud_pkg_etc/model/member_action_model.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/following_dashboard_model.dart';
 
-class FollowingDashboardBloc extends ExtEditorBaseBloc<FollowingDashboardModel, MemberActionModel> {
+import '../../model/following_dashboard_entity.dart';
+
+class FollowingDashboardBloc extends ExtEditorBaseBloc<FollowingDashboardModel, MemberActionModel, FollowingDashboardEntity> {
 
   FollowingDashboardBloc(String appId, EditorFeedback feedback)
       : super(appId, followingDashboardRepository(appId: appId)!, feedback);

@@ -41,7 +41,7 @@ import 'package:eliud_core/core/base/repository_base.dart';
 typedef FollowRequestsDashboardModelTrigger(List<FollowRequestsDashboardModel?> list);
 typedef FollowRequestsDashboardChanged(FollowRequestsDashboardModel? value);
 
-abstract class FollowRequestsDashboardRepository extends RepositoryBase<FollowRequestsDashboardModel> {
+abstract class FollowRequestsDashboardRepository extends RepositoryBase<FollowRequestsDashboardModel, FollowRequestsDashboardEntity> {
   Future<FollowRequestsDashboardEntity> addEntity(String documentID, FollowRequestsDashboardEntity value);
   Future<FollowRequestsDashboardEntity> updateEntity(String documentID, FollowRequestsDashboardEntity value);
   Future<FollowRequestsDashboardModel> add(FollowRequestsDashboardModel value);

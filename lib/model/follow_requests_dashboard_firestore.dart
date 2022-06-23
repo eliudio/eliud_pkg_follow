@@ -40,6 +40,11 @@ import 'package:eliud_core/tools/firestore/firestore_tools.dart';
 import 'package:eliud_core/tools/common_tools.dart';
 
 class FollowRequestsDashboardFirestore implements FollowRequestsDashboardRepository {
+  @override
+  FollowRequestsDashboardEntity? fromMap(Object? o) {
+    return FollowRequestsDashboardEntity.fromMap(o);
+  }
+
   Future<FollowRequestsDashboardEntity> addEntity(String documentID, FollowRequestsDashboardEntity value) {
     return FollowRequestsDashboardCollection.doc(documentID).set(value.toDocument()).then((_) => value);
   }

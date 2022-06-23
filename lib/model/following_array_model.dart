@@ -19,6 +19,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eliud_core/core/base/model_base.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:eliud_core/model/app_model.dart';
 
 import 'package:eliud_core/model/repository_export.dart';
 import 'package:eliud_core/model/abstract_repository_singleton.dart';
@@ -69,20 +70,15 @@ class FollowingArrayModel implements ModelBase, WithAppId {
           ListEquality().equals(followers, other.followers);
 
   @override
-  Future<String> toRichJsonString({String? appId}) async {
-    var document = toEntity(appId: appId).toDocument();
-    document['documentID'] = documentID;
-    return jsonEncode(document);
-  }
-
-  @override
   String toString() {
     String followersCsv = (followers == null) ? '' : followers!.join(', ');
 
     return 'FollowingArrayModel{documentID: $documentID, appId: $appId, followers: String[] { $followersCsv }}';
   }
 
-  FollowingArrayEntity toEntity({String? appId}) {
+  FollowingArrayEntity toEntity({String? appId, List<ModelBase>? referencesCollector}) {
+    if (referencesCollector != null) {
+    }
     return FollowingArrayEntity(
           appId: (appId != null) ? appId : null, 
           followers: (followers != null) ? followers : null, 
