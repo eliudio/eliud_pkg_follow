@@ -53,6 +53,9 @@ FollowRequestStatus toFollowRequestStatus(int? index) {
 
 
 class FollowRequestModel implements ModelBase, WithAppId {
+  static const String packageName = 'eliud_pkg_follow';
+  static const String id = 'FollowRequest';
+
 
   // Member request ID - Member response ID
   String documentID;
@@ -90,10 +93,10 @@ class FollowRequestModel implements ModelBase, WithAppId {
     return 'FollowRequestModel{documentID: $documentID, appId: $appId, follower: $follower, followed: $followed, status: $status}';
   }
 
-  FollowRequestEntity toEntity({String? appId, List<ModelBase>? referencesCollector}) {
+  FollowRequestEntity toEntity({String? appId, Set<ModelReference>? referencesCollector}) {
     if (referencesCollector != null) {
-      if (follower != null) referencesCollector.add(follower!);
-      if (followed != null) referencesCollector.add(followed!);
+      if (follower != null) referencesCollector.add(ModelReference(MemberPublicInfoModel.packageName, MemberPublicInfoModel.id, follower!));
+      if (followed != null) referencesCollector.add(ModelReference(MemberPublicInfoModel.packageName, MemberPublicInfoModel.id, followed!));
     }
     return FollowRequestEntity(
           appId: (appId != null) ? appId : null, 

@@ -45,6 +45,9 @@ import 'package:eliud_core/tools/random.dart';
 
 
 class InviteDashboardModel implements ModelBase, WithAppId {
+  static const String packageName = 'eliud_pkg_follow';
+  static const String id = 'InviteDashboard';
+
   String documentID;
 
   // This is the identifier of the app to which this belongs
@@ -84,7 +87,7 @@ class InviteDashboardModel implements ModelBase, WithAppId {
     return 'InviteDashboardModel{documentID: $documentID, appId: $appId, description: $description, memberActions: MemberAction[] { $memberActionsCsv }, conditions: $conditions}';
   }
 
-  InviteDashboardEntity toEntity({String? appId, List<ModelBase>? referencesCollector}) {
+  InviteDashboardEntity toEntity({String? appId, Set<ModelReference>? referencesCollector}) {
     if (referencesCollector != null) {
     }
     return InviteDashboardEntity(

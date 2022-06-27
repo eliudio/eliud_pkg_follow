@@ -57,6 +57,9 @@ FollowingView toFollowingView(int? index) {
 
 
 class FollowingDashboardModel implements ModelBase, WithAppId {
+  static const String packageName = 'eliud_pkg_follow';
+  static const String id = 'FollowingDashboard';
+
   String documentID;
 
   // This is the identifier of the app to which this belongs
@@ -98,7 +101,7 @@ class FollowingDashboardModel implements ModelBase, WithAppId {
     return 'FollowingDashboardModel{documentID: $documentID, appId: $appId, description: $description, view: $view, memberActions: MemberAction[] { $memberActionsCsv }, conditions: $conditions}';
   }
 
-  FollowingDashboardEntity toEntity({String? appId, List<ModelBase>? referencesCollector}) {
+  FollowingDashboardEntity toEntity({String? appId, Set<ModelReference>? referencesCollector}) {
     if (referencesCollector != null) {
     }
     return FollowingDashboardEntity(

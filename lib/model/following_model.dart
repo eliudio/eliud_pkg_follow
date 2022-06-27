@@ -40,6 +40,9 @@ import 'package:eliud_core/tools/random.dart';
 
 
 class FollowingModel implements ModelBase, WithAppId {
+  static const String packageName = 'eliud_pkg_follow';
+  static const String id = 'Following';
+
 
   // Member response ID - Member request ID
   String documentID;
@@ -75,10 +78,10 @@ class FollowingModel implements ModelBase, WithAppId {
     return 'FollowingModel{documentID: $documentID, appId: $appId, follower: $follower, followed: $followed}';
   }
 
-  FollowingEntity toEntity({String? appId, List<ModelBase>? referencesCollector}) {
+  FollowingEntity toEntity({String? appId, Set<ModelReference>? referencesCollector}) {
     if (referencesCollector != null) {
-      if (follower != null) referencesCollector.add(follower!);
-      if (followed != null) referencesCollector.add(followed!);
+      if (follower != null) referencesCollector.add(ModelReference(MemberPublicInfoModel.packageName, MemberPublicInfoModel.id, follower!));
+      if (followed != null) referencesCollector.add(ModelReference(MemberPublicInfoModel.packageName, MemberPublicInfoModel.id, followed!));
     }
     return FollowingEntity(
           appId: (appId != null) ? appId : null, 

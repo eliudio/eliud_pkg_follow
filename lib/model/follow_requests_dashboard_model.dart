@@ -45,6 +45,9 @@ import 'package:eliud_core/tools/random.dart';
 
 
 class FollowRequestsDashboardModel implements ModelBase, WithAppId {
+  static const String packageName = 'eliud_pkg_follow';
+  static const String id = 'FollowRequestsDashboard';
+
   String documentID;
 
   // This is the identifier of the app to which this belongs
@@ -84,7 +87,7 @@ class FollowRequestsDashboardModel implements ModelBase, WithAppId {
     return 'FollowRequestsDashboardModel{documentID: $documentID, appId: $appId, description: $description, memberActions: MemberAction[] { $memberActionsCsv }, conditions: $conditions}';
   }
 
-  FollowRequestsDashboardEntity toEntity({String? appId, List<ModelBase>? referencesCollector}) {
+  FollowRequestsDashboardEntity toEntity({String? appId, Set<ModelReference>? referencesCollector}) {
     if (referencesCollector != null) {
     }
     return FollowRequestsDashboardEntity(
