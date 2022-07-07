@@ -87,7 +87,7 @@ class InviteDashboardModel implements ModelBase, WithAppId {
     return 'InviteDashboardModel{documentID: $documentID, appId: $appId, description: $description, memberActions: MemberAction[] { $memberActionsCsv }, conditions: $conditions}';
   }
 
-  InviteDashboardEntity toEntity({String? appId, Set<ModelReference>? referencesCollector}) {
+  InviteDashboardEntity toEntity({String? appId, List<ModelReference>? referencesCollector}) {
     if (referencesCollector != null) {
     }
     return InviteDashboardEntity(

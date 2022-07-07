@@ -78,7 +78,7 @@ class FollowingModel implements ModelBase, WithAppId {
     return 'FollowingModel{documentID: $documentID, appId: $appId, follower: $follower, followed: $followed}';
   }
 
-  FollowingEntity toEntity({String? appId, Set<ModelReference>? referencesCollector}) {
+  FollowingEntity toEntity({String? appId, List<ModelReference>? referencesCollector}) {
     if (referencesCollector != null) {
       if (follower != null) referencesCollector.add(ModelReference(MemberPublicInfoModel.packageName, MemberPublicInfoModel.id, follower!));
       if (followed != null) referencesCollector.add(ModelReference(MemberPublicInfoModel.packageName, MemberPublicInfoModel.id, followed!));

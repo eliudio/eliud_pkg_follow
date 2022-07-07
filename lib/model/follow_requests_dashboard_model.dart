@@ -87,7 +87,7 @@ class FollowRequestsDashboardModel implements ModelBase, WithAppId {
     return 'FollowRequestsDashboardModel{documentID: $documentID, appId: $appId, description: $description, memberActions: MemberAction[] { $memberActionsCsv }, conditions: $conditions}';
   }
 
-  FollowRequestsDashboardEntity toEntity({String? appId, Set<ModelReference>? referencesCollector}) {
+  FollowRequestsDashboardEntity toEntity({String? appId, List<ModelReference>? referencesCollector}) {
     if (referencesCollector != null) {
     }
     return FollowRequestsDashboardEntity(

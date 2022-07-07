@@ -79,7 +79,7 @@ class FollowingArrayModel implements ModelBase, WithAppId {
     return 'FollowingArrayModel{documentID: $documentID, appId: $appId, followers: String[] { $followersCsv }}';
   }
 
-  FollowingArrayEntity toEntity({String? appId, Set<ModelReference>? referencesCollector}) {
+  FollowingArrayEntity toEntity({String? appId, List<ModelReference>? referencesCollector}) {
     if (referencesCollector != null) {
     }
     return FollowingArrayEntity(
