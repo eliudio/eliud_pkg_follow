@@ -46,7 +46,7 @@ import 'package:eliud_core/tools/random.dart';
 
 class FollowRequestsDashboardModel implements ModelBase, WithAppId {
   static const String packageName = 'eliud_pkg_follow';
-  static const String id = 'FollowRequestsDashboard';
+  static const String id = 'followRequestsDashboards';
 
   String documentID;
 

@@ -50,6 +50,11 @@ class ComponentRegistry {
       ComponentSpec('followRequestsDashboards', FollowRequestsDashboardComponentConstructorDefault(), FollowRequestsDashboardComponentSelector(), FollowRequestsDashboardComponentEditorConstructor(), ({String? appId}) => followRequestsDashboardRepository(appId: appId)! ), 
       ComponentSpec('inviteDashboards', InviteDashboardComponentConstructorDefault(), InviteDashboardComponentSelector(), InviteDashboardComponentEditorConstructor(), ({String? appId}) => inviteDashboardRepository(appId: appId)! ), 
     ]);
+      Registry.registry()!.registerRetrieveRepository('eliud_pkg_follow', 'followings', ({String? appId}) => followingRepository(appId: appId)!);
+      Registry.registry()!.registerRetrieveRepository('eliud_pkg_follow', 'followingDashboards', ({String? appId}) => followingDashboardRepository(appId: appId)!);
+      Registry.registry()!.registerRetrieveRepository('eliud_pkg_follow', 'followRequests', ({String? appId}) => followRequestRepository(appId: appId)!);
+      Registry.registry()!.registerRetrieveRepository('eliud_pkg_follow', 'followRequestsDashboards', ({String? appId}) => followRequestsDashboardRepository(appId: appId)!);
+      Registry.registry()!.registerRetrieveRepository('eliud_pkg_follow', 'inviteDashboards', ({String? appId}) => inviteDashboardRepository(appId: appId)!);
 
   }
 }

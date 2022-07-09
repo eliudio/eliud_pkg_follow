@@ -46,7 +46,7 @@ import 'package:eliud_core/tools/random.dart';
 
 class InviteDashboardModel implements ModelBase, WithAppId {
   static const String packageName = 'eliud_pkg_follow';
-  static const String id = 'InviteDashboard';
+  static const String id = 'inviteDashboards';
 
   String documentID;
 

@@ -58,7 +58,7 @@ FollowingView toFollowingView(int? index) {
 
 class FollowingDashboardModel implements ModelBase, WithAppId {
   static const String packageName = 'eliud_pkg_follow';
-  static const String id = 'FollowingDashboard';
+  static const String id = 'followingDashboards';
 
   String documentID;
 

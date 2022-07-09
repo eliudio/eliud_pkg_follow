@@ -54,7 +54,7 @@ FollowRequestStatus toFollowRequestStatus(int? index) {
 
 class FollowRequestModel implements ModelBase, WithAppId {
   static const String packageName = 'eliud_pkg_follow';
-  static const String id = 'FollowRequest';
+  static const String id = 'followRequests';
 
 
   // Member request ID - Member response ID

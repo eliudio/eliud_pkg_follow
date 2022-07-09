@@ -42,7 +42,7 @@ import 'package:eliud_core/tools/random.dart';
 
 class FollowingArrayModel implements ModelBase, WithAppId {
   static const String packageName = 'eliud_pkg_follow';
-  static const String id = 'FollowingArray';
+  static const String id = 'followingArrays';
 
 
   // Member ID
