@@ -87,16 +87,25 @@ class InviteDashboardModel implements ModelBase, WithAppId {
     return 'InviteDashboardModel{documentID: $documentID, appId: $appId, description: $description, memberActions: MemberAction[] { $memberActionsCsv }, conditions: $conditions}';
   }
 
-  InviteDashboardEntity toEntity({String? appId, List<ModelReference>? referencesCollector}) {
-    if (referencesCollector != null) {
+  Future<List<ModelReference>> collectReferences({String? appId}) async {
+    List<ModelReference> referencesCollector = [];
+    if (memberActions != null) {
+      for (var item in memberActions!) {
+        referencesCollector.addAll(await item.collectReferences(appId: appId));
+      }
     }
+    if (conditions != null) referencesCollector.addAll(await conditions!.collectReferences(appId: appId));
+    return referencesCollector;
+  }
+
+  InviteDashboardEntity toEntity({String? appId}) {
     return InviteDashboardEntity(
           appId: (appId != null) ? appId : null, 
           description: (description != null) ? description : null, 
           memberActions: (memberActions != null) ? memberActions
-            !.map((item) => item.toEntity(appId: appId, referencesCollector: referencesCollector))
+            !.map((item) => item.toEntity(appId: appId))
             .toList() : null, 
-          conditions: (conditions != null) ? conditions!.toEntity(appId: appId, referencesCollector: referencesCollector) : null, 
+          conditions: (conditions != null) ? conditions!.toEntity(appId: appId) : null, 
     );
   }
 

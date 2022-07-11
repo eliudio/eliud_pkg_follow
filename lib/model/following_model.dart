@@ -78,11 +78,20 @@ class FollowingModel implements ModelBase, WithAppId {
     return 'FollowingModel{documentID: $documentID, appId: $appId, follower: $follower, followed: $followed}';
   }
 
-  FollowingEntity toEntity({String? appId, List<ModelReference>? referencesCollector}) {
-    if (referencesCollector != null) {
-      if (follower != null) referencesCollector.add(ModelReference(MemberPublicInfoModel.packageName, MemberPublicInfoModel.id, follower!));
-      if (followed != null) referencesCollector.add(ModelReference(MemberPublicInfoModel.packageName, MemberPublicInfoModel.id, followed!));
+  Future<List<ModelReference>> collectReferences({String? appId}) async {
+    List<ModelReference> referencesCollector = [];
+    if (follower != null) {
+      referencesCollector.add(ModelReference(MemberPublicInfoModel.packageName, MemberPublicInfoModel.id, follower!));
     }
+    if (followed != null) {
+      referencesCollector.add(ModelReference(MemberPublicInfoModel.packageName, MemberPublicInfoModel.id, followed!));
+    }
+    if (follower != null) referencesCollector.addAll(await follower!.collectReferences(appId: appId));
+    if (followed != null) referencesCollector.addAll(await followed!.collectReferences(appId: appId));
+    return referencesCollector;
+  }
+
+  FollowingEntity toEntity({String? appId}) {
     return FollowingEntity(
           appId: (appId != null) ? appId : null, 
           followerId: (follower != null) ? follower!.documentID : null, 

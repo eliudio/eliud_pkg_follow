@@ -101,17 +101,26 @@ class FollowingDashboardModel implements ModelBase, WithAppId {
     return 'FollowingDashboardModel{documentID: $documentID, appId: $appId, description: $description, view: $view, memberActions: MemberAction[] { $memberActionsCsv }, conditions: $conditions}';
   }
 
-  FollowingDashboardEntity toEntity({String? appId, List<ModelReference>? referencesCollector}) {
-    if (referencesCollector != null) {
+  Future<List<ModelReference>> collectReferences({String? appId}) async {
+    List<ModelReference> referencesCollector = [];
+    if (memberActions != null) {
+      for (var item in memberActions!) {
+        referencesCollector.addAll(await item.collectReferences(appId: appId));
+      }
     }
+    if (conditions != null) referencesCollector.addAll(await conditions!.collectReferences(appId: appId));
+    return referencesCollector;
+  }
+
+  FollowingDashboardEntity toEntity({String? appId}) {
     return FollowingDashboardEntity(
           appId: (appId != null) ? appId : null, 
           description: (description != null) ? description : null, 
           view: (view != null) ? view!.index : null, 
           memberActions: (memberActions != null) ? memberActions
-            !.map((item) => item.toEntity(appId: appId, referencesCollector: referencesCollector))
+            !.map((item) => item.toEntity(appId: appId))
             .toList() : null, 
-          conditions: (conditions != null) ? conditions!.toEntity(appId: appId, referencesCollector: referencesCollector) : null, 
+          conditions: (conditions != null) ? conditions!.toEntity(appId: appId) : null, 
     );
   }
 
