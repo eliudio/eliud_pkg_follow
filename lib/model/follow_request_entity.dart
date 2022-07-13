@@ -31,7 +31,9 @@ class FollowRequestEntity implements EntityBase {
 
   FollowRequestEntity({required this.appId, this.followerId, this.followedId, this.status, });
 
-
+  FollowRequestEntity copyWith({String? documentID, String? appId, String? followerId, String? followedId, int? status, }) {
+    return FollowRequestEntity(appId : appId ?? this.appId, followerId : followerId ?? this.followerId, followedId : followedId ?? this.followedId, status : status ?? this.status, );
+  }
   List<Object?> get props => [appId, followerId, followedId, status, ];
 
   @override
@@ -62,6 +64,12 @@ class FollowRequestEntity implements EntityBase {
     if (status != null) theDocument["status"] = status;
       else theDocument["status"] = null;
     return theDocument;
+  }
+
+  @override
+  FollowRequestEntity switchAppId({required String newAppId}) {
+    var newEntity = copyWith(appId: newAppId);
+    return newEntity;
   }
 
   static FollowRequestEntity? fromJsonString(String json) {

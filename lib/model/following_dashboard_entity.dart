@@ -33,7 +33,9 @@ class FollowingDashboardEntity implements EntityBase {
 
   FollowingDashboardEntity({required this.appId, this.description, this.view, this.memberActions, this.conditions, });
 
-
+  FollowingDashboardEntity copyWith({String? documentID, String? appId, String? description, int? view, List<MemberActionEntity>? memberActions, StorageConditionsEntity? conditions, }) {
+    return FollowingDashboardEntity(appId : appId ?? this.appId, description : description ?? this.description, view : view ?? this.view, memberActions : memberActions ?? this.memberActions, conditions : conditions ?? this.conditions, );
+  }
   List<Object?> get props => [appId, description, view, memberActions, conditions, ];
 
   @override
@@ -89,6 +91,12 @@ class FollowingDashboardEntity implements EntityBase {
     if (conditions != null) theDocument["conditions"] = conditionsMap;
       else theDocument["conditions"] = null;
     return theDocument;
+  }
+
+  @override
+  FollowingDashboardEntity switchAppId({required String newAppId}) {
+    var newEntity = copyWith(appId: newAppId);
+    return newEntity;
   }
 
   static FollowingDashboardEntity? fromJsonString(String json) {

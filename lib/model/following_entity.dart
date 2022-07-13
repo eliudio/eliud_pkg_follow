@@ -30,7 +30,9 @@ class FollowingEntity implements EntityBase {
 
   FollowingEntity({required this.appId, this.followerId, this.followedId, });
 
-
+  FollowingEntity copyWith({String? documentID, String? appId, String? followerId, String? followedId, }) {
+    return FollowingEntity(appId : appId ?? this.appId, followerId : followerId ?? this.followerId, followedId : followedId ?? this.followedId, );
+  }
   List<Object?> get props => [appId, followerId, followedId, ];
 
   @override
@@ -58,6 +60,12 @@ class FollowingEntity implements EntityBase {
     if (followedId != null) theDocument["followedId"] = followedId;
       else theDocument["followedId"] = null;
     return theDocument;
+  }
+
+  @override
+  FollowingEntity switchAppId({required String newAppId}) {
+    var newEntity = copyWith(appId: newAppId);
+    return newEntity;
   }
 
   static FollowingEntity? fromJsonString(String json) {

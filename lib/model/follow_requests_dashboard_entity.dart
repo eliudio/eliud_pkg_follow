@@ -32,7 +32,9 @@ class FollowRequestsDashboardEntity implements EntityBase {
 
   FollowRequestsDashboardEntity({required this.appId, this.description, this.memberActions, this.conditions, });
 
-
+  FollowRequestsDashboardEntity copyWith({String? documentID, String? appId, String? description, List<MemberActionEntity>? memberActions, StorageConditionsEntity? conditions, }) {
+    return FollowRequestsDashboardEntity(appId : appId ?? this.appId, description : description ?? this.description, memberActions : memberActions ?? this.memberActions, conditions : conditions ?? this.conditions, );
+  }
   List<Object?> get props => [appId, description, memberActions, conditions, ];
 
   @override
@@ -85,6 +87,12 @@ class FollowRequestsDashboardEntity implements EntityBase {
     if (conditions != null) theDocument["conditions"] = conditionsMap;
       else theDocument["conditions"] = null;
     return theDocument;
+  }
+
+  @override
+  FollowRequestsDashboardEntity switchAppId({required String newAppId}) {
+    var newEntity = copyWith(appId: newAppId);
+    return newEntity;
   }
 
   static FollowRequestsDashboardEntity? fromJsonString(String json) {

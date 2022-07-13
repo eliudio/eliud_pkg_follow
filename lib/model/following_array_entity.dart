@@ -29,7 +29,9 @@ class FollowingArrayEntity implements EntityBase {
 
   FollowingArrayEntity({required this.appId, this.followers, });
 
-
+  FollowingArrayEntity copyWith({String? documentID, String? appId, List<String>? followers, }) {
+    return FollowingArrayEntity(appId : appId ?? this.appId, followers : followers ?? this.followers, );
+  }
   List<Object?> get props => [appId, followers, ];
 
   @override
@@ -56,6 +58,12 @@ class FollowingArrayEntity implements EntityBase {
     if (followers != null) theDocument["followers"] = followers!.toList();
       else theDocument["followers"] = null;
     return theDocument;
+  }
+
+  @override
+  FollowingArrayEntity switchAppId({required String newAppId}) {
+    var newEntity = copyWith(appId: newAppId);
+    return newEntity;
   }
 
   static FollowingArrayEntity? fromJsonString(String json) {
