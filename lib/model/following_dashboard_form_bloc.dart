@@ -50,11 +50,7 @@ class FollowingDashboardFormBloc extends Bloc<FollowingDashboardFormEvent, Follo
   final FormAction? formAction;
   final String? appId;
 
-  FollowingDashboardFormBloc(this.appId, { this.formAction }): super(FollowingDashboardFormUninitialized());
-  @override
-  Stream<FollowingDashboardFormState> mapEventToState(FollowingDashboardFormEvent event) async* {
-    final currentState = state;
-    if (currentState is FollowingDashboardFormUninitialized) {
+  FollowingDashboardFormBloc(this.appId, { this.formAction }): super(FollowingDashboardFormUninitialized()) {
       on <InitialiseNewFollowingDashboardFormEvent> ((event, emit) {
         FollowingDashboardFormLoaded loaded = FollowingDashboardFormLoaded(value: FollowingDashboardModel(
                                                documentID: "",
@@ -67,17 +63,19 @@ class FollowingDashboardFormBloc extends Bloc<FollowingDashboardFormEvent, Follo
       });
 
 
-      if (event is InitialiseFollowingDashboardFormEvent) {
+      on <InitialiseFollowingDashboardFormEvent> ((event, emit) async {
         // Need to re-retrieve the document from the repository so that I get all associated types
         FollowingDashboardFormLoaded loaded = FollowingDashboardFormLoaded(value: await followingDashboardRepository(appId: appId)!.get(event.value!.documentID));
         emit(loaded);
-      } else if (event is InitialiseFollowingDashboardFormNoLoadEvent) {
+      });
+      on <InitialiseFollowingDashboardFormNoLoadEvent> ((event, emit) async {
         FollowingDashboardFormLoaded loaded = FollowingDashboardFormLoaded(value: event.value);
         emit(loaded);
-      }
-    } else if (currentState is FollowingDashboardFormInitialized) {
+      });
       FollowingDashboardModel? newValue = null;
       on <ChangedFollowingDashboardDocumentID> ((event, emit) async {
+      if (state is FollowingDashboardFormInitialized) {
+        final currentState = state as FollowingDashboardFormInitialized;
         newValue = currentState.value!.copyWith(documentID: event.value);
         if (formAction == FormAction.AddAction) {
           emit(await _isDocumentIDValid(event.value, newValue!));
@@ -85,33 +83,48 @@ class FollowingDashboardFormBloc extends Bloc<FollowingDashboardFormEvent, Follo
           emit(SubmittableFollowingDashboardForm(value: newValue));
         }
 
+      }
       });
       on <ChangedFollowingDashboardAppId> ((event, emit) async {
+      if (state is FollowingDashboardFormInitialized) {
+        final currentState = state as FollowingDashboardFormInitialized;
         newValue = currentState.value!.copyWith(appId: event.value);
         emit(SubmittableFollowingDashboardForm(value: newValue));
 
+      }
       });
       on <ChangedFollowingDashboardDescription> ((event, emit) async {
+      if (state is FollowingDashboardFormInitialized) {
+        final currentState = state as FollowingDashboardFormInitialized;
         newValue = currentState.value!.copyWith(description: event.value);
         emit(SubmittableFollowingDashboardForm(value: newValue));
 
+      }
       });
       on <ChangedFollowingDashboardView> ((event, emit) async {
+      if (state is FollowingDashboardFormInitialized) {
+        final currentState = state as FollowingDashboardFormInitialized;
         newValue = currentState.value!.copyWith(view: event.value);
         emit(SubmittableFollowingDashboardForm(value: newValue));
 
+      }
       });
       on <ChangedFollowingDashboardMemberActions> ((event, emit) async {
+      if (state is FollowingDashboardFormInitialized) {
+        final currentState = state as FollowingDashboardFormInitialized;
         newValue = currentState.value!.copyWith(memberActions: event.value);
         emit(SubmittableFollowingDashboardForm(value: newValue));
 
+      }
       });
       on <ChangedFollowingDashboardConditions> ((event, emit) async {
+      if (state is FollowingDashboardFormInitialized) {
+        final currentState = state as FollowingDashboardFormInitialized;
         newValue = currentState.value!.copyWith(conditions: event.value);
         emit(SubmittableFollowingDashboardForm(value: newValue));
 
+      }
       });
-    }
   }
 
 

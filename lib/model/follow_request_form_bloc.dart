@@ -46,11 +46,7 @@ class FollowRequestFormBloc extends Bloc<FollowRequestFormEvent, FollowRequestFo
   final FormAction? formAction;
   final String? appId;
 
-  FollowRequestFormBloc(this.appId, { this.formAction }): super(FollowRequestFormUninitialized());
-  @override
-  Stream<FollowRequestFormState> mapEventToState(FollowRequestFormEvent event) async* {
-    final currentState = state;
-    if (currentState is FollowRequestFormUninitialized) {
+  FollowRequestFormBloc(this.appId, { this.formAction }): super(FollowRequestFormUninitialized()) {
       on <InitialiseNewFollowRequestFormEvent> ((event, emit) {
         FollowRequestFormLoaded loaded = FollowRequestFormLoaded(value: FollowRequestModel(
                                                documentID: "",
@@ -61,17 +57,19 @@ class FollowRequestFormBloc extends Bloc<FollowRequestFormEvent, FollowRequestFo
       });
 
 
-      if (event is InitialiseFollowRequestFormEvent) {
+      on <InitialiseFollowRequestFormEvent> ((event, emit) async {
         // Need to re-retrieve the document from the repository so that I get all associated types
         FollowRequestFormLoaded loaded = FollowRequestFormLoaded(value: await followRequestRepository(appId: appId)!.get(event.value!.documentID));
         emit(loaded);
-      } else if (event is InitialiseFollowRequestFormNoLoadEvent) {
+      });
+      on <InitialiseFollowRequestFormNoLoadEvent> ((event, emit) async {
         FollowRequestFormLoaded loaded = FollowRequestFormLoaded(value: event.value);
         emit(loaded);
-      }
-    } else if (currentState is FollowRequestFormInitialized) {
+      });
       FollowRequestModel? newValue = null;
       on <ChangedFollowRequestDocumentID> ((event, emit) async {
+      if (state is FollowRequestFormInitialized) {
+        final currentState = state as FollowRequestFormInitialized;
         newValue = currentState.value!.copyWith(documentID: event.value);
         if (formAction == FormAction.AddAction) {
           emit(await _isDocumentIDValid(event.value, newValue!));
@@ -79,25 +77,34 @@ class FollowRequestFormBloc extends Bloc<FollowRequestFormEvent, FollowRequestFo
           emit(SubmittableFollowRequestForm(value: newValue));
         }
 
+      }
       });
       on <ChangedFollowRequestFollower> ((event, emit) async {
+      if (state is FollowRequestFormInitialized) {
+        final currentState = state as FollowRequestFormInitialized;
         if (event.value != null)
           newValue = currentState.value!.copyWith(follower: await memberPublicInfoRepository(appId: appId)!.get(event.value));
         emit(SubmittableFollowRequestForm(value: newValue));
 
+      }
       });
       on <ChangedFollowRequestFollowed> ((event, emit) async {
+      if (state is FollowRequestFormInitialized) {
+        final currentState = state as FollowRequestFormInitialized;
         if (event.value != null)
           newValue = currentState.value!.copyWith(followed: await memberPublicInfoRepository(appId: appId)!.get(event.value));
         emit(SubmittableFollowRequestForm(value: newValue));
 
+      }
       });
       on <ChangedFollowRequestStatus> ((event, emit) async {
+      if (state is FollowRequestFormInitialized) {
+        final currentState = state as FollowRequestFormInitialized;
         newValue = currentState.value!.copyWith(status: event.value);
         emit(SubmittableFollowRequestForm(value: newValue));
 
+      }
       });
-    }
   }
 
 

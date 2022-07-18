@@ -46,11 +46,7 @@ class FollowingFormBloc extends Bloc<FollowingFormEvent, FollowingFormState> {
   final FormAction? formAction;
   final String? appId;
 
-  FollowingFormBloc(this.appId, { this.formAction }): super(FollowingFormUninitialized());
-  @override
-  Stream<FollowingFormState> mapEventToState(FollowingFormEvent event) async* {
-    final currentState = state;
-    if (currentState is FollowingFormUninitialized) {
+  FollowingFormBloc(this.appId, { this.formAction }): super(FollowingFormUninitialized()) {
       on <InitialiseNewFollowingFormEvent> ((event, emit) {
         FollowingFormLoaded loaded = FollowingFormLoaded(value: FollowingModel(
                                                documentID: "",
@@ -61,17 +57,19 @@ class FollowingFormBloc extends Bloc<FollowingFormEvent, FollowingFormState> {
       });
 
 
-      if (event is InitialiseFollowingFormEvent) {
+      on <InitialiseFollowingFormEvent> ((event, emit) async {
         // Need to re-retrieve the document from the repository so that I get all associated types
         FollowingFormLoaded loaded = FollowingFormLoaded(value: await followingRepository(appId: appId)!.get(event.value!.documentID));
         emit(loaded);
-      } else if (event is InitialiseFollowingFormNoLoadEvent) {
+      });
+      on <InitialiseFollowingFormNoLoadEvent> ((event, emit) async {
         FollowingFormLoaded loaded = FollowingFormLoaded(value: event.value);
         emit(loaded);
-      }
-    } else if (currentState is FollowingFormInitialized) {
+      });
       FollowingModel? newValue = null;
       on <ChangedFollowingDocumentID> ((event, emit) async {
+      if (state is FollowingFormInitialized) {
+        final currentState = state as FollowingFormInitialized;
         newValue = currentState.value!.copyWith(documentID: event.value);
         if (formAction == FormAction.AddAction) {
           emit(await _isDocumentIDValid(event.value, newValue!));
@@ -79,20 +77,26 @@ class FollowingFormBloc extends Bloc<FollowingFormEvent, FollowingFormState> {
           emit(SubmittableFollowingForm(value: newValue));
         }
 
+      }
       });
       on <ChangedFollowingFollower> ((event, emit) async {
+      if (state is FollowingFormInitialized) {
+        final currentState = state as FollowingFormInitialized;
         if (event.value != null)
           newValue = currentState.value!.copyWith(follower: await memberPublicInfoRepository(appId: appId)!.get(event.value));
         emit(SubmittableFollowingForm(value: newValue));
 
+      }
       });
       on <ChangedFollowingFollowed> ((event, emit) async {
+      if (state is FollowingFormInitialized) {
+        final currentState = state as FollowingFormInitialized;
         if (event.value != null)
           newValue = currentState.value!.copyWith(followed: await memberPublicInfoRepository(appId: appId)!.get(event.value));
         emit(SubmittableFollowingForm(value: newValue));
 
+      }
       });
-    }
   }
 
 
