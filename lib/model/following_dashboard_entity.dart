@@ -15,6 +15,7 @@
 
 import 'dart:collection';
 import 'dart:convert';
+import 'package:eliud_core/tools/random.dart';
 import 'abstract_repository_singleton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eliud_core/core/base/entity_base.dart';
@@ -45,7 +46,7 @@ class FollowingDashboardEntity implements EntityBase {
     return 'FollowingDashboardEntity{appId: $appId, description: $description, view: $view, memberActions: MemberAction[] { $memberActionsCsv }, conditions: $conditions}';
   }
 
-  static FollowingDashboardEntity? fromMap(Object? o) {
+  static FollowingDashboardEntity? fromMap(Object? o, {Map<String, String>? newDocumentIds}) {
     if (o == null) return null;
     var map = o as Map<String, dynamic>;
 
@@ -55,12 +56,12 @@ class FollowingDashboardEntity implements EntityBase {
     if (memberActionsFromMap != null)
       memberActionsList = (map['memberActions'] as List<dynamic>)
         .map((dynamic item) =>
-        MemberActionEntity.fromMap(item as Map)!)
+        MemberActionEntity.fromMap(item as Map, newDocumentIds: newDocumentIds)!)
         .toList();
     var conditionsFromMap;
     conditionsFromMap = map['conditions'];
     if (conditionsFromMap != null)
-      conditionsFromMap = StorageConditionsEntity.fromMap(conditionsFromMap);
+      conditionsFromMap = StorageConditionsEntity.fromMap(conditionsFromMap, newDocumentIds: newDocumentIds);
 
     return FollowingDashboardEntity(
       appId: map['appId'], 
@@ -99,9 +100,9 @@ class FollowingDashboardEntity implements EntityBase {
     return newEntity;
   }
 
-  static FollowingDashboardEntity? fromJsonString(String json) {
+  static FollowingDashboardEntity? fromJsonString(String json, {Map<String, String>? newDocumentIds}) {
     Map<String, dynamic>? generationSpecificationMap = jsonDecode(json);
-    return fromMap(generationSpecificationMap);
+    return fromMap(generationSpecificationMap, newDocumentIds: newDocumentIds);
   }
 
   String toJsonString() {

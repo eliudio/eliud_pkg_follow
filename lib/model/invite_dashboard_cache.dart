@@ -126,8 +126,8 @@ class InviteDashboardCache implements InviteDashboardRepository {
   }
 
   @override
-  InviteDashboardEntity? fromMap(Object? o) {
-    return reference.fromMap(o);
+  InviteDashboardEntity? fromMap(Object? o, {Map<String, String>? newDocumentIds}) {
+    return reference.fromMap(o, newDocumentIds: newDocumentIds);
   }
 
   Future<void> deleteAll() {

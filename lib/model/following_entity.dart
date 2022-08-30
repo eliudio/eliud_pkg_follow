@@ -15,6 +15,7 @@
 
 import 'dart:collection';
 import 'dart:convert';
+import 'package:eliud_core/tools/random.dart';
 import 'abstract_repository_singleton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eliud_core/core/base/entity_base.dart';
@@ -40,7 +41,7 @@ class FollowingEntity implements EntityBase {
     return 'FollowingEntity{appId: $appId, followerId: $followerId, followedId: $followedId}';
   }
 
-  static FollowingEntity? fromMap(Object? o) {
+  static FollowingEntity? fromMap(Object? o, {Map<String, String>? newDocumentIds}) {
     if (o == null) return null;
     var map = o as Map<String, dynamic>;
 
@@ -68,9 +69,9 @@ class FollowingEntity implements EntityBase {
     return newEntity;
   }
 
-  static FollowingEntity? fromJsonString(String json) {
+  static FollowingEntity? fromJsonString(String json, {Map<String, String>? newDocumentIds}) {
     Map<String, dynamic>? generationSpecificationMap = jsonDecode(json);
-    return fromMap(generationSpecificationMap);
+    return fromMap(generationSpecificationMap, newDocumentIds: newDocumentIds);
   }
 
   String toJsonString() {

@@ -41,8 +41,8 @@ import 'package:eliud_core/tools/common_tools.dart';
 
 class FollowRequestsDashboardFirestore implements FollowRequestsDashboardRepository {
   @override
-  FollowRequestsDashboardEntity? fromMap(Object? o) {
-    return FollowRequestsDashboardEntity.fromMap(o);
+  FollowRequestsDashboardEntity? fromMap(Object? o, {Map<String, String>? newDocumentIds}) {
+    return FollowRequestsDashboardEntity.fromMap(o, newDocumentIds: newDocumentIds);
   }
 
   Future<FollowRequestsDashboardEntity> addEntity(String documentID, FollowRequestsDashboardEntity value) {

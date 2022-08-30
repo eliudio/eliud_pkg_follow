@@ -41,8 +41,8 @@ import 'package:eliud_core/tools/common_tools.dart';
 
 class InviteDashboardFirestore implements InviteDashboardRepository {
   @override
-  InviteDashboardEntity? fromMap(Object? o) {
-    return InviteDashboardEntity.fromMap(o);
+  InviteDashboardEntity? fromMap(Object? o, {Map<String, String>? newDocumentIds}) {
+    return InviteDashboardEntity.fromMap(o, newDocumentIds: newDocumentIds);
   }
 
   Future<InviteDashboardEntity> addEntity(String documentID, InviteDashboardEntity value) {

@@ -121,8 +121,8 @@ class FollowingCache implements FollowingRepository {
   }
 
   @override
-  FollowingEntity? fromMap(Object? o) {
-    return reference.fromMap(o);
+  FollowingEntity? fromMap(Object? o, {Map<String, String>? newDocumentIds}) {
+    return reference.fromMap(o, newDocumentIds: newDocumentIds);
   }
 
   Future<void> deleteAll() {
