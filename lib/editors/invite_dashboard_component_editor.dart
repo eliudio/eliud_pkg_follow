@@ -311,4 +311,26 @@ class _InviteDashboardComponentEditorState
           privilegeContainer),
     );
   }
+
+
+  @override
+  Future<InviteDashboardModel> revalidateModel(AppModel app, model) async {
+    if (model != null) {
+      var myModel = model as InviteDashboardModel;
+      if (model.memberActions != null) {
+        List<MemberActionModel> newMemberActions = [];
+        for (MemberActionModel mam in myModel.memberActions!) {
+          if (mam.action != null) {
+            newMemberActions.add(
+                mam.copyWith(action: mam.action!.copyWith(app)));
+          } else {
+            newMemberActions.add(mam);
+          }
+        }
+        var newModel = myModel.copyWith(memberActions: newMemberActions);
+        return newModel;
+      }
+    }
+    return model;
+  }
 }
