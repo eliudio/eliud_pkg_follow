@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 
 import 'model/component_registry.dart';
 
+FollowPackage getFollowPackage() => FollowMobilePackage();
+
 class FollowMobilePackage extends FollowPackage {
 
   @override

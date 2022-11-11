@@ -12,6 +12,10 @@ import 'model/follow_request_model.dart';
 import 'model/abstract_repository_singleton.dart';
 import 'model/repository_singleton.dart';
 
+import 'package:eliud_pkg_follow/follow_package_stub.dart'
+if (dart.library.io) 'follow_mobile_package.dart'
+if (dart.library.html) 'follow_web_package.dart';
+
 abstract class FollowPackage extends Package {
   FollowPackage() : super('eliud_pkg_follow');
 
@@ -84,4 +88,6 @@ abstract class FollowPackage extends Package {
 
   @override
   List<MemberCollectionInfo> getMemberCollectionInfo() => AbstractRepositorySingleton.collections;
+
+  static FollowPackage instance() => getFollowPackage();
 }
