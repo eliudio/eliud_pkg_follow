@@ -17,6 +17,7 @@ import 'package:eliud_core/tools/random.dart';
 import 'package:eliud_core/tools/screen_size.dart';
 import 'package:eliud_core/tools/widgets/condition_simple_widget.dart';
 import 'package:eliud_core/tools/widgets/header_widget.dart';
+import 'package:eliud_pkg_etc/model/member_action_entity.dart';
 import 'package:eliud_pkg_etc/model/member_action_model.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_model.dart';
@@ -25,6 +26,7 @@ import 'package:eliud_core/core/blocs/access/access_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eliud_pkg_etc/editors/widgets/member_action_model_widget.dart';
 
+import '../model/invite_dashboard_entity.dart';
 import 'bloc/invite_dashboard_bloc.dart';
 
 class InviteDashboardComponentEditorConstructor
@@ -314,23 +316,23 @@ class _InviteDashboardComponentEditorState
 
 
   @override
-  Future<InviteDashboardModel> revalidateModel(AppModel app, model) async {
-    if (model != null) {
-      var myModel = model as InviteDashboardModel;
-      if (model.memberActions != null) {
-        List<MemberActionModel> newMemberActions = [];
-        for (MemberActionModel mam in myModel.memberActions!) {
+  Future<InviteDashboardEntity> revalidateEntity(AppModel app, entity) async {
+    if (entity != null) {
+      var myEntity = entity as InviteDashboardEntity;
+      if (entity.memberActions != null) {
+        List<MemberActionEntity> newMemberActions = [];
+        for (MemberActionEntity mam in myEntity.memberActions!) {
           if (mam.action != null) {
             newMemberActions.add(
-                mam.copyWith(action: mam.action!.copyWith(app)));
+                mam.copyWith(action: mam.action!.copyWith(appId: app.documentID)));
           } else {
             newMemberActions.add(mam);
           }
         }
-        var newModel = myModel.copyWith(memberActions: newMemberActions);
-        return newModel;
+        var newEntity = myEntity.copyWith(memberActions: newMemberActions);
+        return newEntity;
       }
     }
-    return model;
+    return entity;
   }
 }
