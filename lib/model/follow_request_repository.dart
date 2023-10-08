@@ -36,6 +36,7 @@ import 'package:eliud_core/core/base/repository_base.dart';
 
 typedef FollowRequestModelTrigger(List<FollowRequestModel?> list);
 typedef FollowRequestChanged(FollowRequestModel? value);
+typedef FollowRequestErrorHandler(o, e);
 
 abstract class FollowRequestRepository extends RepositoryBase<FollowRequestModel, FollowRequestEntity> {
   Future<FollowRequestEntity> addEntity(String documentID, FollowRequestEntity value);
@@ -52,7 +53,7 @@ abstract class FollowRequestRepository extends RepositoryBase<FollowRequestModel
 
   StreamSubscription<List<FollowRequestModel?>> listen(FollowRequestModelTrigger trigger, {String? orderBy, bool? descending, Object? startAfter, int? limit, int? privilegeLevel, EliudQuery? eliudQuery });
   StreamSubscription<List<FollowRequestModel?>> listenWithDetails(FollowRequestModelTrigger trigger, {String? orderBy, bool? descending, Object? startAfter, int? limit, int? privilegeLevel, EliudQuery? eliudQuery });
-  StreamSubscription<FollowRequestModel?> listenTo(String documentId, FollowRequestChanged changed);
+  StreamSubscription<FollowRequestModel?> listenTo(String documentId, FollowRequestChanged changed, {FollowRequestErrorHandler? errorHandler});
   void flush();
   
   String? timeStampToString(dynamic timeStamp);

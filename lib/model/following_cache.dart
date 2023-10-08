@@ -140,13 +140,13 @@ class FollowingCache implements FollowingRepository {
   }
 
   @override
-  StreamSubscription<FollowingModel?> listenTo(String documentId, FollowingChanged changed) {
+  StreamSubscription<FollowingModel?> listenTo(String documentId, FollowingChanged changed, {FollowingErrorHandler? errorHandler}) {
     return reference.listenTo(documentId, ((value) {
       if (value != null) {
         fullCache[value.documentID] = value;
       }
       changed(value);
-    }));
+    }), errorHandler: errorHandler);
   }
 
   static Future<FollowingModel> refreshRelations(FollowingModel model) async {

@@ -40,6 +40,7 @@ import 'package:eliud_core/core/base/repository_base.dart';
 
 typedef FollowingDashboardModelTrigger(List<FollowingDashboardModel?> list);
 typedef FollowingDashboardChanged(FollowingDashboardModel? value);
+typedef FollowingDashboardErrorHandler(o, e);
 
 abstract class FollowingDashboardRepository extends RepositoryBase<FollowingDashboardModel, FollowingDashboardEntity> {
   Future<FollowingDashboardEntity> addEntity(String documentID, FollowingDashboardEntity value);
@@ -56,7 +57,7 @@ abstract class FollowingDashboardRepository extends RepositoryBase<FollowingDash
 
   StreamSubscription<List<FollowingDashboardModel?>> listen(FollowingDashboardModelTrigger trigger, {String? orderBy, bool? descending, Object? startAfter, int? limit, int? privilegeLevel, EliudQuery? eliudQuery });
   StreamSubscription<List<FollowingDashboardModel?>> listenWithDetails(FollowingDashboardModelTrigger trigger, {String? orderBy, bool? descending, Object? startAfter, int? limit, int? privilegeLevel, EliudQuery? eliudQuery });
-  StreamSubscription<FollowingDashboardModel?> listenTo(String documentId, FollowingDashboardChanged changed);
+  StreamSubscription<FollowingDashboardModel?> listenTo(String documentId, FollowingDashboardChanged changed, {FollowingDashboardErrorHandler? errorHandler});
   void flush();
   
   String? timeStampToString(dynamic timeStamp);

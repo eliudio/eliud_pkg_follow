@@ -145,13 +145,13 @@ class FollowRequestsDashboardCache implements FollowRequestsDashboardRepository 
   }
 
   @override
-  StreamSubscription<FollowRequestsDashboardModel?> listenTo(String documentId, FollowRequestsDashboardChanged changed) {
+  StreamSubscription<FollowRequestsDashboardModel?> listenTo(String documentId, FollowRequestsDashboardChanged changed, {FollowRequestsDashboardErrorHandler? errorHandler}) {
     return reference.listenTo(documentId, ((value) {
       if (value != null) {
         fullCache[value.documentID] = value;
       }
       changed(value);
-    }));
+    }), errorHandler: errorHandler);
   }
 
   static Future<FollowRequestsDashboardModel> refreshRelations(FollowRequestsDashboardModel model) async {

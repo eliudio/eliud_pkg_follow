@@ -131,15 +131,21 @@ class InviteDashboardFirestore implements InviteDashboardRepository {
   }
 
   @override
-  StreamSubscription<InviteDashboardModel?> listenTo(String documentId, InviteDashboardChanged changed) {
+  StreamSubscription<InviteDashboardModel?> listenTo(String documentId, InviteDashboardChanged changed, {InviteDashboardErrorHandler? errorHandler}) {
     var stream = InviteDashboardCollection.doc(documentId)
         .snapshots()
         .asyncMap((data) {
       return _populateDocPlus(data);
     });
-    return stream.listen((value) {
+    var theStream = stream.listen((value) {
       changed(value);
     });
+    theStream.onError((theException, theStacktrace) {
+      if (errorHandler != null) {
+        errorHandler(theException, theStacktrace);
+      }
+    });
+    return theStream;
   }
 
   Stream<List<InviteDashboardModel?>> values({String? orderBy, bool? descending, Object? startAfter, int? limit, SetLastDoc? setLastDoc, int? privilegeLevel, EliudQuery? eliudQuery }) {
