@@ -3,16 +3,16 @@ name: eliud_pkg_follow
 description: Eliud package for members following members
 homepage: https://eliud.io
 repository: https://github.com/eliudio/eliud_pkg_follow
-version: 1.0.2+4
+version: 1.0.2+5
 environment:
   sdk: '>=2.17.0 <4.0.0'
   flutter: '>=3.0.0'
 dependencies:
   flutter:
     sdk: flutter
-  eliud_core: ^1.0.19+3
-  eliud_pkg_etc: ^1.0.1+22
-  eliud_pkg_notifications: ^1.0.1+22
+  eliud_core: ^1.0.20+1
+  eliud_pkg_etc: ^1.0.1+23
+  eliud_pkg_notifications: ^1.0.1+23
   bloc: ^8.1.0
   flutter_bloc: ^8.1.2
   transparent_image: ^2.0.0
