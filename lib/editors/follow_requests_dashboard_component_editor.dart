@@ -25,7 +25,6 @@ import 'package:eliud_core/core/blocs/access/access_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eliud_pkg_etc/editors/widgets/member_action_model_widget.dart';
 
-import '../model/follow_request_model.dart';
 import 'bloc/follow_requests_dashboard_bloc.dart';
 
 class FollowRequestsDashboardComponentEditorConstructor

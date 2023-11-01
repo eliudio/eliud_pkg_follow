@@ -15,7 +15,6 @@
 
 
 import 'package:eliud_core/tools/component/component_constructor.dart';
-import 'package:eliud_core/core/blocs/access/access_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eliud_core/tools/query/query_tools.dart';
@@ -28,97 +27,32 @@ import 'package:eliud_pkg_follow/model/following_list.dart';
 import 'package:eliud_pkg_follow/model/following_dropdown_button.dart';
 import 'package:eliud_pkg_follow/model/following_list_event.dart';
 
-import 'package:eliud_core/model/repository_export.dart';
-import 'package:eliud_core/model/abstract_repository_singleton.dart';
-import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
-import 'package:eliud_pkg_follow/model/repository_export.dart';
 import 'package:eliud_core/model/model_export.dart';
-import '../tools/bespoke_models.dart';
-import 'package:eliud_pkg_follow/model/model_export.dart';
-import 'package:eliud_core/model/entity_export.dart';
-import '../tools/bespoke_entities.dart';
-import 'package:eliud_pkg_follow/model/entity_export.dart';
 
 import 'package:eliud_pkg_follow/model/following_dashboard_list_bloc.dart';
 import 'package:eliud_pkg_follow/model/following_dashboard_list.dart';
 import 'package:eliud_pkg_follow/model/following_dashboard_dropdown_button.dart';
 import 'package:eliud_pkg_follow/model/following_dashboard_list_event.dart';
 
-import 'package:eliud_core/model/repository_export.dart';
-import 'package:eliud_core/model/abstract_repository_singleton.dart';
-import 'package:eliud_pkg_etc/model/repository_export.dart';
-import 'package:eliud_pkg_etc/model/abstract_repository_singleton.dart';
-import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
-import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
-import 'package:eliud_pkg_follow/model/repository_export.dart';
-import 'package:eliud_core/model/model_export.dart';
-import 'package:eliud_pkg_etc/model/model_export.dart';
-import '../tools/bespoke_models.dart';
-import 'package:eliud_pkg_follow/model/model_export.dart';
-import 'package:eliud_core/model/entity_export.dart';
-import 'package:eliud_pkg_etc/model/entity_export.dart';
-import '../tools/bespoke_entities.dart';
-import 'package:eliud_pkg_follow/model/entity_export.dart';
 
 import 'package:eliud_pkg_follow/model/follow_request_list_bloc.dart';
 import 'package:eliud_pkg_follow/model/follow_request_list.dart';
 import 'package:eliud_pkg_follow/model/follow_request_dropdown_button.dart';
 import 'package:eliud_pkg_follow/model/follow_request_list_event.dart';
 
-import 'package:eliud_core/model/repository_export.dart';
-import 'package:eliud_core/model/abstract_repository_singleton.dart';
-import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
-import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
-import 'package:eliud_pkg_follow/model/repository_export.dart';
-import 'package:eliud_core/model/model_export.dart';
-import '../tools/bespoke_models.dart';
-import 'package:eliud_pkg_follow/model/model_export.dart';
-import 'package:eliud_core/model/entity_export.dart';
-import '../tools/bespoke_entities.dart';
-import 'package:eliud_pkg_follow/model/entity_export.dart';
 
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_list_bloc.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_list.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_dropdown_button.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_list_event.dart';
 
-import 'package:eliud_core/model/repository_export.dart';
-import 'package:eliud_core/model/abstract_repository_singleton.dart';
-import 'package:eliud_pkg_etc/model/repository_export.dart';
-import 'package:eliud_pkg_etc/model/abstract_repository_singleton.dart';
-import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
-import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
-import 'package:eliud_pkg_follow/model/repository_export.dart';
-import 'package:eliud_core/model/model_export.dart';
-import 'package:eliud_pkg_etc/model/model_export.dart';
-import '../tools/bespoke_models.dart';
-import 'package:eliud_pkg_follow/model/model_export.dart';
-import 'package:eliud_core/model/entity_export.dart';
-import 'package:eliud_pkg_etc/model/entity_export.dart';
-import '../tools/bespoke_entities.dart';
-import 'package:eliud_pkg_follow/model/entity_export.dart';
 
 import 'package:eliud_pkg_follow/model/invite_dashboard_list_bloc.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_list.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_dropdown_button.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_list_event.dart';
 
-import 'package:eliud_core/model/repository_export.dart';
-import 'package:eliud_core/model/abstract_repository_singleton.dart';
-import 'package:eliud_pkg_etc/model/repository_export.dart';
-import 'package:eliud_pkg_etc/model/abstract_repository_singleton.dart';
-import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
-import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
-import 'package:eliud_pkg_follow/model/repository_export.dart';
-import 'package:eliud_core/model/model_export.dart';
-import 'package:eliud_pkg_etc/model/model_export.dart';
-import '../tools/bespoke_models.dart';
-import 'package:eliud_pkg_follow/model/model_export.dart';
-import 'package:eliud_core/model/entity_export.dart';
-import 'package:eliud_pkg_etc/model/entity_export.dart';
-import '../tools/bespoke_entities.dart';
-import 'package:eliud_pkg_follow/model/entity_export.dart';
 
 class ListComponentFactory implements ComponentConstructor {
   Widget? createNew({Key? key, required AppModel app,  required String id, int? privilegeLevel, Map<String, dynamic>? parameters}) {

@@ -14,33 +14,16 @@
 */
 
 import 'package:collection/collection.dart';
-import 'package:eliud_core/tools/common_tools.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eliud_core/core/base/model_base.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:eliud_core/model/app_model.dart';
 
-import 'package:eliud_core/model/repository_export.dart';
-import 'package:eliud_core/model/abstract_repository_singleton.dart';
-import 'package:eliud_pkg_etc/model/repository_export.dart';
-import 'package:eliud_pkg_etc/model/abstract_repository_singleton.dart';
-import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
-import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
-import 'package:eliud_pkg_follow/model/repository_export.dart';
 import 'package:eliud_core/model/model_export.dart';
 import 'package:eliud_pkg_etc/model/model_export.dart';
-import '../tools/bespoke_models.dart';
-import 'package:eliud_pkg_follow/model/model_export.dart';
-import 'package:eliud_core/model/entity_export.dart';
-import 'package:eliud_pkg_etc/model/entity_export.dart';
-import '../tools/bespoke_entities.dart';
 import 'package:eliud_pkg_follow/model/entity_export.dart';
 
 
 import 'package:eliud_pkg_follow/model/following_dashboard_entity.dart';
 
-import 'package:eliud_core/tools/random.dart';
 
 enum FollowingView {
   Followers, Following, Unknown
@@ -71,9 +54,7 @@ class FollowingDashboardModel implements ModelBase, WithAppId {
   List<MemberActionModel>? memberActions;
   StorageConditionsModel? conditions;
 
-  FollowingDashboardModel({required this.documentID, required this.appId, this.description, this.view, this.memberActions, this.conditions, })  {
-    assert(documentID != null);
-  }
+  FollowingDashboardModel({required this.documentID, required this.appId, this.description, this.view, this.memberActions, this.conditions, });
 
   FollowingDashboardModel copyWith({String? documentID, String? appId, String? description, FollowingView? view, List<MemberActionModel>? memberActions, StorageConditionsModel? conditions, }) {
     return FollowingDashboardModel(documentID: documentID ?? this.documentID, appId: appId ?? this.appId, description: description ?? this.description, view: view ?? this.view, memberActions: memberActions ?? this.memberActions, conditions: conditions ?? this.conditions, );

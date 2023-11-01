@@ -1,7 +1,6 @@
 import 'package:eliud_core/core/blocs/access/access_bloc.dart';
 import 'package:eliud_core/core/blocs/access/state/access_determined.dart';
 import 'package:eliud_core/core/blocs/access/state/access_state.dart';
-import 'package:eliud_core/core/widgets/alert_widget.dart';
 import 'package:eliud_core/model/app_model.dart';
 import 'package:eliud_core/model/background_model.dart';
 import 'package:eliud_core/model/member_model.dart';
@@ -15,7 +14,6 @@ import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/follow_request_model.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_component.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_model.dart';
-import 'package:eliud_pkg_follow/model/invite_dashboard_repository.dart';
 import 'package:eliud_pkg_follow/tools/follower_helper.dart';
 import 'package:eliud_core/model/abstract_repository_singleton.dart';
 import 'package:eliud_core/model/member_public_info_list.dart';
@@ -25,7 +23,6 @@ import 'package:eliud_core/model/member_public_info_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:flutter/cupertino.dart';
 
 /* List (public) members and allow to (try to) follow
  * Steel from Membership

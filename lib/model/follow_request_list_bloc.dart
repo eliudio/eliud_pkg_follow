@@ -15,16 +15,20 @@
 
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 
 import 'package:eliud_pkg_follow/model/follow_request_repository.dart';
 import 'package:eliud_pkg_follow/model/follow_request_list_event.dart';
 import 'package:eliud_pkg_follow/model/follow_request_list_state.dart';
 import 'package:eliud_core/tools/query/query_tools.dart';
 
+import 'follow_request_model.dart';
+
+typedef List<FollowRequestModel?> FilterFollowRequestModels(List<FollowRequestModel?> values);
+
 
 
 class FollowRequestListBloc extends Bloc<FollowRequestListEvent, FollowRequestListState> {
+  final FilterFollowRequestModels? filter;
   final FollowRequestRepository _followRequestRepository;
   StreamSubscription? _followRequestsListSubscription;
   EliudQuery? eliudQuery;
@@ -35,9 +39,8 @@ class FollowRequestListBloc extends Bloc<FollowRequestListEvent, FollowRequestLi
   final bool? detailed;
   final int followRequestLimit;
 
-  FollowRequestListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required FollowRequestRepository followRequestRepository, this.followRequestLimit = 5})
-      : assert(followRequestRepository != null),
-        _followRequestRepository = followRequestRepository,
+  FollowRequestListBloc({this.filter, this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required FollowRequestRepository followRequestRepository, this.followRequestLimit = 5})
+      : _followRequestRepository = followRequestRepository,
         super(FollowRequestListLoading()) {
     on <LoadFollowRequestList> ((event, emit) {
       if ((detailed == null) || (!detailed!)) {
@@ -78,11 +81,19 @@ class FollowRequestListBloc extends Bloc<FollowRequestListEvent, FollowRequestLi
     });
   }
 
+  List<FollowRequestModel?> _filter(List<FollowRequestModel?> original) {
+    if (filter != null) {
+      return filter!(original);
+    } else {
+      return original;
+    }
+  }
+
   Future<void> _mapLoadFollowRequestListToState() async {
     int amountNow =  (state is FollowRequestListLoaded) ? (state as FollowRequestListLoaded).values!.length : 0;
     _followRequestsListSubscription?.cancel();
     _followRequestsListSubscription = _followRequestRepository.listen(
-          (list) => add(FollowRequestListUpdated(value: list, mightHaveMore: amountNow != list.length)),
+          (list) => add(FollowRequestListUpdated(value: _filter(list), mightHaveMore: amountNow != list.length)),
       orderBy: orderBy,
       descending: descending,
       eliudQuery: eliudQuery,
@@ -94,7 +105,7 @@ class FollowRequestListBloc extends Bloc<FollowRequestListEvent, FollowRequestLi
     int amountNow =  (state is FollowRequestListLoaded) ? (state as FollowRequestListLoaded).values!.length : 0;
     _followRequestsListSubscription?.cancel();
     _followRequestsListSubscription = _followRequestRepository.listenWithDetails(
-            (list) => add(FollowRequestListUpdated(value: list, mightHaveMore: amountNow != list.length)),
+            (list) => add(FollowRequestListUpdated(value: _filter(list), mightHaveMore: amountNow != list.length)),
         orderBy: orderBy,
         descending: descending,
         eliudQuery: eliudQuery,

@@ -1,7 +1,6 @@
 import 'package:eliud_pkg_follow/follow_package.dart';
 import 'package:flutter/foundation.dart';
 
-import 'model/component_registry.dart';
 
 FollowPackage getFollowPackage() => FollowMobilePackage();
 

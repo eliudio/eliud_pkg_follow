@@ -15,16 +15,20 @@
 
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 
 import 'package:eliud_pkg_follow/model/invite_dashboard_repository.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_list_event.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_list_state.dart';
 import 'package:eliud_core/tools/query/query_tools.dart';
 
+import 'invite_dashboard_model.dart';
+
+typedef List<InviteDashboardModel?> FilterInviteDashboardModels(List<InviteDashboardModel?> values);
+
 
 
 class InviteDashboardListBloc extends Bloc<InviteDashboardListEvent, InviteDashboardListState> {
+  final FilterInviteDashboardModels? filter;
   final InviteDashboardRepository _inviteDashboardRepository;
   StreamSubscription? _inviteDashboardsListSubscription;
   EliudQuery? eliudQuery;
@@ -35,9 +39,8 @@ class InviteDashboardListBloc extends Bloc<InviteDashboardListEvent, InviteDashb
   final bool? detailed;
   final int inviteDashboardLimit;
 
-  InviteDashboardListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required InviteDashboardRepository inviteDashboardRepository, this.inviteDashboardLimit = 5})
-      : assert(inviteDashboardRepository != null),
-        _inviteDashboardRepository = inviteDashboardRepository,
+  InviteDashboardListBloc({this.filter, this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required InviteDashboardRepository inviteDashboardRepository, this.inviteDashboardLimit = 5})
+      : _inviteDashboardRepository = inviteDashboardRepository,
         super(InviteDashboardListLoading()) {
     on <LoadInviteDashboardList> ((event, emit) {
       if ((detailed == null) || (!detailed!)) {
@@ -78,11 +81,19 @@ class InviteDashboardListBloc extends Bloc<InviteDashboardListEvent, InviteDashb
     });
   }
 
+  List<InviteDashboardModel?> _filter(List<InviteDashboardModel?> original) {
+    if (filter != null) {
+      return filter!(original);
+    } else {
+      return original;
+    }
+  }
+
   Future<void> _mapLoadInviteDashboardListToState() async {
     int amountNow =  (state is InviteDashboardListLoaded) ? (state as InviteDashboardListLoaded).values!.length : 0;
     _inviteDashboardsListSubscription?.cancel();
     _inviteDashboardsListSubscription = _inviteDashboardRepository.listen(
-          (list) => add(InviteDashboardListUpdated(value: list, mightHaveMore: amountNow != list.length)),
+          (list) => add(InviteDashboardListUpdated(value: _filter(list), mightHaveMore: amountNow != list.length)),
       orderBy: orderBy,
       descending: descending,
       eliudQuery: eliudQuery,
@@ -94,7 +105,7 @@ class InviteDashboardListBloc extends Bloc<InviteDashboardListEvent, InviteDashb
     int amountNow =  (state is InviteDashboardListLoaded) ? (state as InviteDashboardListLoaded).values!.length : 0;
     _inviteDashboardsListSubscription?.cancel();
     _inviteDashboardsListSubscription = _inviteDashboardRepository.listenWithDetails(
-            (list) => add(InviteDashboardListUpdated(value: list, mightHaveMore: amountNow != list.length)),
+            (list) => add(InviteDashboardListUpdated(value: _filter(list), mightHaveMore: amountNow != list.length)),
         orderBy: orderBy,
         descending: descending,
         eliudQuery: eliudQuery,

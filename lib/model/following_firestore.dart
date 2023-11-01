@@ -16,16 +16,8 @@
 import 'package:eliud_pkg_follow/model/following_repository.dart';
 
 
-import 'package:eliud_core/model/repository_export.dart';
-import 'package:eliud_core/model/abstract_repository_singleton.dart';
-import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
-import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/repository_export.dart';
-import 'package:eliud_core/model/model_export.dart';
-import '../tools/bespoke_models.dart';
 import 'package:eliud_pkg_follow/model/model_export.dart';
-import 'package:eliud_core/model/entity_export.dart';
-import '../tools/bespoke_entities.dart';
 import 'package:eliud_pkg_follow/model/entity_export.dart';
 
 
@@ -80,7 +72,8 @@ class FollowingFirestore implements FollowingRepository {
         print("Error whilst retrieving Following with id $id");
         print("Exceptoin: $e");
       }
-    };
+    }
+return null;
   }
 
   Future<FollowingModel?> get(String? id, {Function(Exception)? onError}) async {
@@ -95,7 +88,8 @@ class FollowingFirestore implements FollowingRepository {
         print("Error whilst retrieving Following with id $id");
         print("Exceptoin: $e");
       }
-    };
+    }
+return null;
   }
 
   StreamSubscription<List<FollowingModel?>> listen(FollowingModelTrigger trigger, {String? orderBy, bool? descending, Object? startAfter, int? limit, int? privilegeLevel, EliudQuery? eliudQuery}) {

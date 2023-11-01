@@ -32,8 +32,6 @@ import '../model/invite_dashboard_firestore.dart';
 import '../model/invite_dashboard_repository.dart';
 import '../model/invite_dashboard_cache.dart';
 
-import '../model/following_model.dart';
-import '../model/follow_request_model.dart';
 
 class RepositorySingleton extends AbstractRepositorySingleton {
     var _followingRepository = HashMap<String, FollowingRepository>();

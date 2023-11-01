@@ -13,7 +13,6 @@ import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_notifications/notifications_package.dart';
 import 'model/component_registry.dart';
 import 'model/follow_request_model.dart';
-import 'model/abstract_repository_singleton.dart';
 import 'model/repository_singleton.dart';
 
 import 'package:eliud_pkg_follow/follow_package_stub.dart'

@@ -16,11 +16,9 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 
-import 'package:eliud_pkg_follow/model/follow_request_model.dart';
 import 'package:eliud_pkg_follow/model/follow_request_component_event.dart';
 import 'package:eliud_pkg_follow/model/follow_request_component_state.dart';
 import 'package:eliud_pkg_follow/model/follow_request_repository.dart';
-import 'package:flutter/services.dart';
 
 
 class FollowRequestComponentBloc extends Bloc<FollowRequestComponentEvent, FollowRequestComponentState> {

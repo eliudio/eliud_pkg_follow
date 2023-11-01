@@ -19,23 +19,10 @@ import 'package:eliud_core/tools/common_tools.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_model.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_repository.dart';
 
-import 'package:eliud_core/model/repository_export.dart';
-import 'package:eliud_core/model/abstract_repository_singleton.dart';
-import 'package:eliud_pkg_etc/model/repository_export.dart';
-import 'package:eliud_pkg_etc/model/abstract_repository_singleton.dart';
-import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
-import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/repository_export.dart';
-import 'package:eliud_core/model/cache_export.dart';
 import 'package:eliud_pkg_etc/model/cache_export.dart';
-import 'package:eliud_pkg_follow/model/cache_export.dart';
-import 'package:eliud_core/model/model_export.dart';
 import 'package:eliud_pkg_etc/model/model_export.dart';
-import '../tools/bespoke_models.dart';
 import 'package:eliud_pkg_follow/model/model_export.dart';
-import 'package:eliud_core/model/entity_export.dart';
-import 'package:eliud_pkg_etc/model/entity_export.dart';
-import '../tools/bespoke_entities.dart';
 import 'package:eliud_pkg_follow/model/entity_export.dart';
 
 class FollowRequestsDashboardCache implements FollowRequestsDashboardRepository {
@@ -158,7 +145,7 @@ class FollowRequestsDashboardCache implements FollowRequestsDashboardRepository 
 
     List<MemberActionModel>? memberActionsHolder;
     if (model.memberActions != null) {
-      memberActionsHolder = List<MemberActionModel>.from(await Future.wait(await model.memberActions!.map((element) async {
+      memberActionsHolder = List<MemberActionModel>.from(await Future.wait(model.memberActions!.map((element) async {
         return await MemberActionCache.refreshRelations(element);
       }))).toList();
     }

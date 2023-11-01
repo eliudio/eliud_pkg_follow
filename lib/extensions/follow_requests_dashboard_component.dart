@@ -20,7 +20,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eliud_pkg_follow/model/following_model.dart';
 import 'package:eliud_pkg_follow/tools/follower_helper.dart';
 import 'package:eliud_core/model/member_public_info_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:eliud_core/model/abstract_repository_singleton.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../follow_package.dart';

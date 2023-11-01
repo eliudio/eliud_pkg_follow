@@ -15,16 +15,20 @@
 
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_repository.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_list_event.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_list_state.dart';
 import 'package:eliud_core/tools/query/query_tools.dart';
 
+import 'follow_requests_dashboard_model.dart';
+
+typedef List<FollowRequestsDashboardModel?> FilterFollowRequestsDashboardModels(List<FollowRequestsDashboardModel?> values);
+
 
 
 class FollowRequestsDashboardListBloc extends Bloc<FollowRequestsDashboardListEvent, FollowRequestsDashboardListState> {
+  final FilterFollowRequestsDashboardModels? filter;
   final FollowRequestsDashboardRepository _followRequestsDashboardRepository;
   StreamSubscription? _followRequestsDashboardsListSubscription;
   EliudQuery? eliudQuery;
@@ -35,9 +39,8 @@ class FollowRequestsDashboardListBloc extends Bloc<FollowRequestsDashboardListEv
   final bool? detailed;
   final int followRequestsDashboardLimit;
 
-  FollowRequestsDashboardListBloc({this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required FollowRequestsDashboardRepository followRequestsDashboardRepository, this.followRequestsDashboardLimit = 5})
-      : assert(followRequestsDashboardRepository != null),
-        _followRequestsDashboardRepository = followRequestsDashboardRepository,
+  FollowRequestsDashboardListBloc({this.filter, this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required FollowRequestsDashboardRepository followRequestsDashboardRepository, this.followRequestsDashboardLimit = 5})
+      : _followRequestsDashboardRepository = followRequestsDashboardRepository,
         super(FollowRequestsDashboardListLoading()) {
     on <LoadFollowRequestsDashboardList> ((event, emit) {
       if ((detailed == null) || (!detailed!)) {
@@ -78,11 +81,19 @@ class FollowRequestsDashboardListBloc extends Bloc<FollowRequestsDashboardListEv
     });
   }
 
+  List<FollowRequestsDashboardModel?> _filter(List<FollowRequestsDashboardModel?> original) {
+    if (filter != null) {
+      return filter!(original);
+    } else {
+      return original;
+    }
+  }
+
   Future<void> _mapLoadFollowRequestsDashboardListToState() async {
     int amountNow =  (state is FollowRequestsDashboardListLoaded) ? (state as FollowRequestsDashboardListLoaded).values!.length : 0;
     _followRequestsDashboardsListSubscription?.cancel();
     _followRequestsDashboardsListSubscription = _followRequestsDashboardRepository.listen(
-          (list) => add(FollowRequestsDashboardListUpdated(value: list, mightHaveMore: amountNow != list.length)),
+          (list) => add(FollowRequestsDashboardListUpdated(value: _filter(list), mightHaveMore: amountNow != list.length)),
       orderBy: orderBy,
       descending: descending,
       eliudQuery: eliudQuery,
@@ -94,7 +105,7 @@ class FollowRequestsDashboardListBloc extends Bloc<FollowRequestsDashboardListEv
     int amountNow =  (state is FollowRequestsDashboardListLoaded) ? (state as FollowRequestsDashboardListLoaded).values!.length : 0;
     _followRequestsDashboardsListSubscription?.cancel();
     _followRequestsDashboardsListSubscription = _followRequestsDashboardRepository.listenWithDetails(
-            (list) => add(FollowRequestsDashboardListUpdated(value: list, mightHaveMore: amountNow != list.length)),
+            (list) => add(FollowRequestsDashboardListUpdated(value: _filter(list), mightHaveMore: amountNow != list.length)),
         orderBy: orderBy,
         descending: descending,
         eliudQuery: eliudQuery,

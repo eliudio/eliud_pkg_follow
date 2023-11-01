@@ -16,11 +16,9 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 
-import 'package:eliud_pkg_follow/model/follow_requests_dashboard_model.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_component_event.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_component_state.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_repository.dart';
-import 'package:flutter/services.dart';
 
 class FollowRequestsDashboardComponentBloc extends Bloc<FollowRequestsDashboardComponentEvent, FollowRequestsDashboardComponentState> {
   final FollowRequestsDashboardRepository? followRequestsDashboardRepository;

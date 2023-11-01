@@ -1,11 +1,6 @@
 import 'package:eliud_core/core/wizards/builders/single_component_page_builder.dart';
-import 'package:eliud_core/core/wizards/registry/registry.dart';
 import 'package:eliud_core/core/wizards/tools/documentIdentifier.dart';
-import 'package:eliud_core/model/app_bar_model.dart';
-import 'package:eliud_core/model/drawer_model.dart';
-import 'package:eliud_core/model/home_menu_model.dart';
 import 'package:eliud_core/model/model_export.dart';
-import 'package:eliud_core/model/page_model.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_component.dart';
 import 'package:eliud_pkg_follow/model/model_export.dart';

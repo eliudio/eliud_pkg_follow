@@ -13,29 +13,15 @@
 
 */
 
-import 'package:eliud_core/tools/common_tools.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eliud_core/core/base/model_base.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:eliud_core/model/app_model.dart';
 
-import 'package:eliud_core/model/repository_export.dart';
 import 'package:eliud_core/model/abstract_repository_singleton.dart';
-import 'package:eliud_core/tools/main_abstract_repository_singleton.dart';
-import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
-import 'package:eliud_pkg_follow/model/repository_export.dart';
 import 'package:eliud_core/model/model_export.dart';
-import '../tools/bespoke_models.dart';
-import 'package:eliud_pkg_follow/model/model_export.dart';
-import 'package:eliud_core/model/entity_export.dart';
-import '../tools/bespoke_entities.dart';
 import 'package:eliud_pkg_follow/model/entity_export.dart';
 
 
 import 'package:eliud_pkg_follow/model/following_entity.dart';
 
-import 'package:eliud_core/tools/random.dart';
 
 
 
@@ -52,9 +38,7 @@ class FollowingModel implements ModelBase, WithAppId {
   MemberPublicInfoModel? follower;
   MemberPublicInfoModel? followed;
 
-  FollowingModel({required this.documentID, required this.appId, this.follower, this.followed, })  {
-    assert(documentID != null);
-  }
+  FollowingModel({required this.documentID, required this.appId, this.follower, this.followed, });
 
   FollowingModel copyWith({String? documentID, String? appId, MemberPublicInfoModel? follower, MemberPublicInfoModel? followed, }) {
     return FollowingModel(documentID: documentID ?? this.documentID, appId: appId ?? this.appId, follower: follower ?? this.follower, followed: followed ?? this.followed, );

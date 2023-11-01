@@ -28,7 +28,6 @@ import 'follow_requests_dashboard_component_selector.dart';
 import '../extensions/invite_dashboard_component.dart';
 import '../editors/invite_dashboard_component_editor.dart';
 import 'invite_dashboard_component_selector.dart';
-import 'package:eliud_pkg_follow/model/internal_component.dart';
 
 
 
