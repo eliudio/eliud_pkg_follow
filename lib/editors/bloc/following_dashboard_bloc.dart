@@ -8,13 +8,14 @@ import 'package:eliud_pkg_follow/model/following_dashboard_model.dart';
 
 import '../../model/following_dashboard_entity.dart';
 
-class FollowingDashboardBloc extends ExtEditorBaseBloc<FollowingDashboardModel, MemberActionModel, FollowingDashboardEntity> {
-
+class FollowingDashboardBloc extends ExtEditorBaseBloc<FollowingDashboardModel,
+    MemberActionModel, FollowingDashboardEntity> {
   FollowingDashboardBloc(String appId, EditorFeedback feedback)
       : super(appId, followingDashboardRepository(appId: appId)!, feedback);
 
   @override
-  FollowingDashboardModel addItem(FollowingDashboardModel model, MemberActionModel newItem) {
+  FollowingDashboardModel addItem(
+      FollowingDashboardModel model, MemberActionModel newItem) {
     List<MemberActionModel> newItems = model.memberActions == null
         ? []
         : model.memberActions!.map((e) => e).toList();
@@ -24,7 +25,8 @@ class FollowingDashboardBloc extends ExtEditorBaseBloc<FollowingDashboardModel, 
   }
 
   @override
-  FollowingDashboardModel deleteItem(FollowingDashboardModel model, MemberActionModel deleteItem) {
+  FollowingDashboardModel deleteItem(
+      FollowingDashboardModel model, MemberActionModel deleteItem) {
     var newItems = <MemberActionModel>[];
     for (var item in model.memberActions!) {
       if (item != deleteItem) {
@@ -46,16 +48,16 @@ class FollowingDashboardBloc extends ExtEditorBaseBloc<FollowingDashboardModel, 
   }
 
   @override
-  FollowingDashboardModel setDefaultValues(FollowingDashboardModel t, StorageConditionsModel conditions) {
-    return t.copyWith(
-        conditions: t.conditions ?? conditions);
+  FollowingDashboardModel setDefaultValues(
+      FollowingDashboardModel t, StorageConditionsModel conditions) {
+    return t.copyWith(conditions: t.conditions ?? conditions);
   }
 
   @override
-  FollowingDashboardModel updateItem(FollowingDashboardModel model, MemberActionModel oldItem, MemberActionModel newItem) {
-    List<MemberActionModel> currentItems = model.memberActions == null
-        ? []
-        : model.memberActions!;
+  FollowingDashboardModel updateItem(FollowingDashboardModel model,
+      MemberActionModel oldItem, MemberActionModel newItem) {
+    List<MemberActionModel> currentItems =
+        model.memberActions == null ? [] : model.memberActions!;
     var index = currentItems.indexOf(oldItem);
     if (index != -1) {
       var newItems = currentItems.map((e) => e).toList();
@@ -63,7 +65,7 @@ class FollowingDashboardBloc extends ExtEditorBaseBloc<FollowingDashboardModel, 
       var newModel = model.copyWith(memberActions: newItems);
       return newModel;
     } else {
-      throw Exception("Could not find " + oldItem.toString());
+      throw Exception("Could not find $oldItem");
     }
   }
 
@@ -71,5 +73,4 @@ class FollowingDashboardBloc extends ExtEditorBaseBloc<FollowingDashboardModel, 
   List<MemberActionModel> copyOf(List<MemberActionModel> ts) {
     return ts.map((e) => e).toList();
   }
-
 }

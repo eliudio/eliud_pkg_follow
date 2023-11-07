@@ -8,13 +8,14 @@ import 'package:eliud_pkg_follow/model/invite_dashboard_model.dart';
 
 import '../../model/invite_dashboard_entity.dart';
 
-class InviteDashboardBloc extends ExtEditorBaseBloc<InviteDashboardModel, MemberActionModel, InviteDashboardEntity> {
-
+class InviteDashboardBloc extends ExtEditorBaseBloc<InviteDashboardModel,
+    MemberActionModel, InviteDashboardEntity> {
   InviteDashboardBloc(String appId, EditorFeedback feedback)
       : super(appId, inviteDashboardRepository(appId: appId)!, feedback);
 
   @override
-  InviteDashboardModel addItem(InviteDashboardModel model, MemberActionModel newItem) {
+  InviteDashboardModel addItem(
+      InviteDashboardModel model, MemberActionModel newItem) {
     List<MemberActionModel> newItems = model.memberActions == null
         ? []
         : model.memberActions!.map((e) => e).toList();
@@ -24,7 +25,8 @@ class InviteDashboardBloc extends ExtEditorBaseBloc<InviteDashboardModel, Member
   }
 
   @override
-  InviteDashboardModel deleteItem(InviteDashboardModel model, MemberActionModel deleteItem) {
+  InviteDashboardModel deleteItem(
+      InviteDashboardModel model, MemberActionModel deleteItem) {
     var newItems = <MemberActionModel>[];
     for (var item in model.memberActions!) {
       if (item != deleteItem) {
@@ -46,16 +48,16 @@ class InviteDashboardBloc extends ExtEditorBaseBloc<InviteDashboardModel, Member
   }
 
   @override
-  InviteDashboardModel setDefaultValues(InviteDashboardModel t, StorageConditionsModel conditions) {
-    return t.copyWith(
-        conditions: t.conditions ?? conditions);
+  InviteDashboardModel setDefaultValues(
+      InviteDashboardModel t, StorageConditionsModel conditions) {
+    return t.copyWith(conditions: t.conditions ?? conditions);
   }
 
   @override
-  InviteDashboardModel updateItem(InviteDashboardModel model, MemberActionModel oldItem, MemberActionModel newItem) {
-    List<MemberActionModel> currentItems = model.memberActions == null
-        ? []
-        : model.memberActions!;
+  InviteDashboardModel updateItem(InviteDashboardModel model,
+      MemberActionModel oldItem, MemberActionModel newItem) {
+    List<MemberActionModel> currentItems =
+        model.memberActions == null ? [] : model.memberActions!;
     var index = currentItems.indexOf(oldItem);
     if (index != -1) {
       var newItems = currentItems.map((e) => e).toList();
@@ -63,7 +65,7 @@ class InviteDashboardBloc extends ExtEditorBaseBloc<InviteDashboardModel, Member
       var newModel = model.copyWith(memberActions: newItems);
       return newModel;
     } else {
-      throw Exception("Could not find " + oldItem.toString());
+      throw Exception("Could not find $oldItem");
     }
   }
 
@@ -71,5 +73,4 @@ class InviteDashboardBloc extends ExtEditorBaseBloc<InviteDashboardModel, Member
   List<MemberActionModel> copyOf(List<MemberActionModel> ts) {
     return ts.map((e) => e).toList();
   }
-
 }

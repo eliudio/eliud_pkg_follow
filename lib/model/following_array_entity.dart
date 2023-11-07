@@ -21,12 +21,26 @@ class FollowingArrayEntity implements EntityBase {
   final String? appId;
   final List<String>? followers;
 
-  FollowingArrayEntity({required this.appId, this.followers, });
+  FollowingArrayEntity({
+    required this.appId,
+    this.followers,
+  });
 
-  FollowingArrayEntity copyWith({String? documentID, String? appId, List<String>? followers, }) {
-    return FollowingArrayEntity(appId : appId ?? this.appId, followers : followers ?? this.followers, );
+  FollowingArrayEntity copyWith({
+    String? documentID,
+    String? appId,
+    List<String>? followers,
+  }) {
+    return FollowingArrayEntity(
+      appId: appId ?? this.appId,
+      followers: followers ?? this.followers,
+    );
   }
-  List<Object?> get props => [appId, followers, ];
+
+  List<Object?> get props => [
+        appId,
+        followers,
+      ];
 
   @override
   String toString() {
@@ -35,22 +49,30 @@ class FollowingArrayEntity implements EntityBase {
     return 'FollowingArrayEntity{appId: $appId, followers: String[] { $followersCsv }}';
   }
 
-  static FollowingArrayEntity? fromMap(Object? o, {Map<String, String>? newDocumentIds}) {
+  static FollowingArrayEntity? fromMap(Object? o,
+      {Map<String, String>? newDocumentIds}) {
     if (o == null) return null;
     var map = o as Map<String, dynamic>;
 
     return FollowingArrayEntity(
-      appId: map['appId'], 
-      followers: map['followers'] == null ? null : List.from(map['followers']), 
+      appId: map['appId'],
+      followers: map['followers'] == null ? null : List.from(map['followers']),
     );
   }
 
+  @override
   Map<String, Object?> toDocument() {
     Map<String, Object?> theDocument = HashMap();
-    if (appId != null) theDocument["appId"] = appId;
-      else theDocument["appId"] = null;
-    if (followers != null) theDocument["followers"] = followers!.toList();
-      else theDocument["followers"] = null;
+    if (appId != null) {
+      theDocument["appId"] = appId;
+    } else {
+      theDocument["appId"] = null;
+    }
+    if (followers != null) {
+      theDocument["followers"] = followers!.toList();
+    } else {
+      theDocument["followers"] = null;
+    }
     return theDocument;
   }
 
@@ -60,7 +82,8 @@ class FollowingArrayEntity implements EntityBase {
     return newEntity;
   }
 
-  static FollowingArrayEntity? fromJsonString(String json, {Map<String, String>? newDocumentIds}) {
+  static FollowingArrayEntity? fromJsonString(String json,
+      {Map<String, String>? newDocumentIds}) {
     Map<String, dynamic>? generationSpecificationMap = jsonDecode(json);
     return fromMap(generationSpecificationMap, newDocumentIds: newDocumentIds);
   }
@@ -69,9 +92,9 @@ class FollowingArrayEntity implements EntityBase {
     return jsonEncode(toDocument());
   }
 
-  Future<Map<String, Object?>> enrichedDocument(Map<String, Object?> theDocument) async {
+  @override
+  Future<Map<String, Object?>> enrichedDocument(
+      Map<String, Object?> theDocument) async {
     return theDocument;
   }
-
 }
-

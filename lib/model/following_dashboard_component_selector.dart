@@ -33,20 +33,21 @@ import 'following_dashboard_model.dart';
 
 class FollowingDashboardComponentSelector extends ComponentSelector {
   @override
-  Widget createSelectWidget(BuildContext context, AppModel app, int privilegeLevel, double height,
-      SelectComponent selected, editorConstructor) {
+  Widget createSelectWidget(BuildContext context, AppModel app,
+      int privilegeLevel, double height, SelectComponent selected, editor) {
     var appId = app.documentID;
     return BlocProvider<FollowingDashboardListBloc>(
-          create: (context) => FollowingDashboardListBloc(
-          eliudQuery: getComponentSelectorQuery(0, app.documentID),
-          followingDashboardRepository:
-              followingDashboardRepository(appId: appId)!,
-          )..add(LoadFollowingDashboardList()),
-      child: SelectFollowingDashboardWidget(app: app,
+      create: (context) => FollowingDashboardListBloc(
+        eliudQuery: getComponentSelectorQuery(0, app.documentID),
+        followingDashboardRepository:
+            followingDashboardRepository(appId: appId)!,
+      )..add(LoadFollowingDashboardList()),
+      child: SelectFollowingDashboardWidget(
+          app: app,
           height: height,
           containerPrivilege: privilegeLevel,
           selected: selected,
-          editorConstructor: editorConstructor),
+          editorConstructor: editor),
     );
   }
 }
@@ -59,21 +60,22 @@ class SelectFollowingDashboardWidget extends StatefulWidget {
   final ComponentEditorConstructor editorConstructor;
 
   const SelectFollowingDashboardWidget(
-      {Key? key,
+      {super.key,
       required this.app,
       required this.containerPrivilege,
       required this.height,
       required this.selected,
-      required this.editorConstructor})
-      : super(key: key);
+      required this.editorConstructor});
 
   @override
-  _SelectFollowingDashboardWidgetState createState() {
+  State<SelectFollowingDashboardWidget> createState() {
     return _SelectFollowingDashboardWidgetState();
   }
 }
 
-class _SelectFollowingDashboardWidgetState extends State<SelectFollowingDashboardWidget> with TickerProviderStateMixin {
+class _SelectFollowingDashboardWidgetState
+    extends State<SelectFollowingDashboardWidget>
+    with TickerProviderStateMixin {
   TabController? _privilegeTabController;
   final List<String> _privilegeItems = ['No', 'L1', 'L2', 'Owner'];
   final int _initialPrivilege = 0;
@@ -81,9 +83,9 @@ class _SelectFollowingDashboardWidgetState extends State<SelectFollowingDashboar
 
   @override
   void initState() {
-    var _privilegeASize = _privilegeItems.length;
+    var privilegeASize = _privilegeItems.length;
     _privilegeTabController =
-        TabController(vsync: this, length: _privilegeASize);
+        TabController(vsync: this, length: privilegeASize);
     _privilegeTabController!.addListener(_handlePrivilegeTabSelection);
     _privilegeTabController!.index = _initialPrivilege;
 
@@ -101,14 +103,16 @@ class _SelectFollowingDashboardWidgetState extends State<SelectFollowingDashboar
   void _handlePrivilegeTabSelection() {
     if ((_privilegeTabController != null) &&
         (_privilegeTabController!.indexIsChanging)) {
-        _currentPrivilege = _privilegeTabController!.index;
-        BlocProvider.of<FollowingDashboardListBloc>(context).add(
-            FollowingDashboardChangeQuery(newQuery: getComponentSelectorQuery(_currentPrivilege, widget.app.documentID)));
+      _currentPrivilege = _privilegeTabController!.index;
+      BlocProvider.of<FollowingDashboardListBloc>(context).add(
+          FollowingDashboardChangeQuery(
+              newQuery: getComponentSelectorQuery(
+                  _currentPrivilege, widget.app.documentID)));
     }
   }
 
   Widget theList(BuildContext context, List<FollowingDashboardModel?> values) {
-    var app = widget.app; 
+    var app = widget.app;
     return ListView.builder(
         shrinkWrap: true,
         physics: ScrollPhysics(),
@@ -136,10 +140,13 @@ class _SelectFollowingDashboardWidgetState extends State<SelectFollowingDashboar
                     if (selectedValue == 1) {
                       widget.selected(value.documentID);
                     } else if (selectedValue == 2) {
-                      widget.editorConstructor.updateComponent(widget.app, context, value, (_, __) {});
+                      widget.editorConstructor.updateComponent(
+                          widget.app, context, value, (_, __) {});
                     }
                   }),
-              title: value.description != null ? Center(child: text(app, context, value.description!)) : value.documentID != null ? Center(child: text(app, context, value.documentID)) : Container(),
+              title: value.description != null
+                  ? Center(child: text(app, context, value.description!))
+                  : Center(child: text(app, context, value.documentID)),
               subtitle: null,
             );
           } else {
@@ -156,7 +163,13 @@ class _SelectFollowingDashboardWidgetState extends State<SelectFollowingDashboar
       var newPrivilegeItems = <Widget>[];
       int i = 0;
       for (var privilegeItem in _privilegeItems) {
-        newPrivilegeItems.add(Wrap(children: [(i <= widget.containerPrivilege) ? Icon(Icons.check) : Icon(Icons.close), Container(width: 2), text(widget.app, context, privilegeItem)]));
+        newPrivilegeItems.add(Wrap(children: [
+          (i <= widget.containerPrivilege)
+              ? Icon(Icons.check)
+              : Icon(Icons.close),
+          Container(width: 2),
+          text(widget.app, context, privilegeItem)
+        ]));
         i++;
       }
       children.add(tabBar2(widget.app, context,
@@ -170,16 +183,18 @@ class _SelectFollowingDashboardWidgetState extends State<SelectFollowingDashboar
             )));
       } else {
         children.add(Container(
-            height: max(30, widget.height - 101),
-            ));
+          height: max(30, widget.height - 101),
+        ));
       }
       children.add(Column(children: [
         divider(widget.app, context),
         Center(
-            child: iconButton(widget.app, 
+            child: iconButton(
+          widget.app,
           context,
           onPressed: () {
-            widget.editorConstructor.createNewComponent(widget.app, context, (_, __) {});
+            widget.editorConstructor
+                .createNewComponent(widget.app, context, (_, __) {});
           },
           icon: Icon(Icons.add),
         ))
@@ -189,6 +204,3 @@ class _SelectFollowingDashboardWidgetState extends State<SelectFollowingDashboar
     });
   }
 }
-
-
-

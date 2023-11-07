@@ -49,7 +49,7 @@
       "group": "general",
       "fieldType": "enum",
       "enumName": "FollowingView",
-      "enumValues" : [ "Followers", "Following" ]
+      "enumValues" : [ "followers", "following" ]
     },
     {
       "fieldName": "memberActions",
@@ -84,7 +84,7 @@
     }
  ],
   "listFields": {
-    "title": "value.description != null ? Center(child: text(app, context, value.description!)) : value.documentID != null ? Center(child: text(app, context, value.documentID)) : Container()"
+    "title": "value.description != null ? Center(child: text(app, context, value.description!)) : Center(child: text(app, context, value.documentID))"
 
   },
   "depends": ["eliud_core", "eliud_pkg_etc" ]

@@ -20,24 +20,27 @@ import 'package:eliud_pkg_follow/model/invite_dashboard_component_event.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_component_state.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_repository.dart';
 
-class InviteDashboardComponentBloc extends Bloc<InviteDashboardComponentEvent, InviteDashboardComponentState> {
+class InviteDashboardComponentBloc
+    extends Bloc<InviteDashboardComponentEvent, InviteDashboardComponentState> {
   final InviteDashboardRepository? inviteDashboardRepository;
   StreamSubscription? _inviteDashboardSubscription;
 
   void _mapLoadInviteDashboardComponentUpdateToState(String documentId) {
     _inviteDashboardSubscription?.cancel();
-    _inviteDashboardSubscription = inviteDashboardRepository!.listenTo(documentId, (value) {
+    _inviteDashboardSubscription =
+        inviteDashboardRepository!.listenTo(documentId, (value) {
       if (value != null) {
         add(InviteDashboardComponentUpdated(value: value));
       }
     });
   }
 
-  InviteDashboardComponentBloc({ this.inviteDashboardRepository }): super(InviteDashboardComponentUninitialized()) {
-    on <FetchInviteDashboardComponent> ((event, emit) {
+  InviteDashboardComponentBloc({this.inviteDashboardRepository})
+      : super(InviteDashboardComponentUninitialized()) {
+    on<FetchInviteDashboardComponent>((event, emit) {
       _mapLoadInviteDashboardComponentUpdateToState(event.id!);
     });
-    on <InviteDashboardComponentUpdated> ((event, emit) {
+    on<InviteDashboardComponentUpdated>((event, emit) {
       emit(InviteDashboardComponentLoaded(value: event.value));
     });
   }
@@ -47,6 +50,4 @@ class InviteDashboardComponentBloc extends Bloc<InviteDashboardComponentEvent, I
     _inviteDashboardSubscription?.cancel();
     return super.close();
   }
-
 }
-

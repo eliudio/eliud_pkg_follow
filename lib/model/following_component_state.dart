@@ -27,7 +27,7 @@ class FollowingComponentUninitialized extends FollowingComponentState {}
 
 class FollowingComponentError extends FollowingComponentState {
   final String? message;
-  FollowingComponentError({ this.message });
+  FollowingComponentError({this.message});
 }
 
 class FollowingComponentPermissionDenied extends FollowingComponentState {
@@ -37,10 +37,10 @@ class FollowingComponentPermissionDenied extends FollowingComponentState {
 class FollowingComponentLoaded extends FollowingComponentState {
   final FollowingModel value;
 
-  const FollowingComponentLoaded({ required this.value });
+  const FollowingComponentLoaded({required this.value});
 
-  FollowingComponentLoaded copyWith({ FollowingModel? copyThis }) {
-    return FollowingComponentLoaded(value: copyThis ?? this.value);
+  FollowingComponentLoaded copyWith({FollowingModel? copyThis}) {
+    return FollowingComponentLoaded(value: copyThis ?? value);
   }
 
   @override
@@ -49,4 +49,3 @@ class FollowingComponentLoaded extends FollowingComponentState {
   @override
   String toString() => 'FollowingComponentLoaded { value: $value }';
 }
-

@@ -50,7 +50,7 @@ class InviteDashboardComponentEditorConstructor
           description: 'Invite Dashboard',
           conditions: StorageConditionsModel(
               privilegeLevelRequired:
-                  PrivilegeLevelRequiredSimple.NoPrivilegeRequiredSimple),
+                  PrivilegeLevelRequiredSimple.noPrivilegeRequiredSimple),
         ),
         feedback);
   }
@@ -63,7 +63,7 @@ class InviteDashboardComponentEditorConstructor
     if (inviteDashboard != null) {
       _openIt(app, context, false, inviteDashboard, feedback);
     } else {
-      openErrorDialog(app, context, app.documentID + '/_error',
+      openErrorDialog(app, context, '${app.documentID}/_error',
           title: 'Error',
           errorMessage: 'Cannot find invite dashboard with id $id');
     }
@@ -74,10 +74,8 @@ class InviteDashboardComponentEditorConstructor
     openComplexDialog(
       app,
       context,
-      app.documentID + '/invitedashboard',
-      title: create
-          ? 'Create Invite Dashboard'
-          : 'Update Invite Dashboard',
+      '${app.documentID}/invitedashboard',
+      title: create ? 'Create Invite Dashboard' : 'Update Invite Dashboard',
       includeHeading: false,
       widthFraction: .9,
       child: BlocProvider<InviteDashboardBloc>(
@@ -98,13 +96,12 @@ class InviteDashboardComponentEditor extends StatefulWidget {
   final AppModel app;
 
   const InviteDashboardComponentEditor({
-    Key? key,
+    super.key,
     required this.app,
-  }) : super(key: key);
+  });
 
   @override
-  State<StatefulWidget> createState() =>
-      _InviteDashboardComponentEditorState();
+  State<StatefulWidget> createState() => _InviteDashboardComponentEditorState();
 }
 
 class _InviteDashboardComponentEditorState
@@ -127,9 +124,8 @@ class _InviteDashboardComponentEditorState
                     app: widget.app,
                     title: 'InviteDashboard',
                     okAction: () async {
-                      await BlocProvider.of<InviteDashboardBloc>(context)
-                          .save(ExtEditorBaseApplyChanges<
-                                  InviteDashboardModel>(
+                      await BlocProvider.of<InviteDashboardBloc>(context).save(
+                          ExtEditorBaseApplyChanges<InviteDashboardModel>(
                               model: inviteDashboardState.model));
                       return true;
                     },
@@ -154,8 +150,7 @@ class _InviteDashboardComponentEditorState
                               initialValue:
                                   inviteDashboardState.model.description,
                               valueChanged: (value) {
-                                inviteDashboardState.model.description =
-                                    value;
+                                inviteDashboardState.model.description = value;
                               },
                               maxLines: 1,
                               decoration: const InputDecoration(
@@ -214,18 +209,19 @@ class _InviteDashboardComponentEditorState
                     context,
                     widget.app,
                     title: text(widget.app, context,
-                        (value.text ?? '?') + ' ' + (value.description ?? '?')),
-                    trailing: popupMenuButton<int>(
-                      widget.app, context,
+                        '${value.text ?? '?'} ${value.description ?? '?'}'),
+                    trailing: popupMenuButton<int>(widget.app, context,
                         child: Icon(Icons.more_vert),
                         itemBuilder: (context) => [
                               popupMenuItem(
-                                widget.app, context,
+                                widget.app,
+                                context,
                                 value: 1,
                                 label: 'Update',
                               ),
                               popupMenuItem(
-                                widget.app, context,
+                                widget.app,
+                                context,
                                 value: 2,
                                 label: 'Delete',
                               ),
@@ -249,8 +245,8 @@ class _InviteDashboardComponentEditorState
                                     : state.model.conditions!
                                         .privilegeLevelRequired!.index);
                           } else if (selectedValue == 2) {
-                            BlocProvider.of<InviteDashboardBloc>(context)
-                                .add(DeleteItemEvent<InviteDashboardModel,
+                            BlocProvider.of<InviteDashboardBloc>(context).add(
+                                DeleteItemEvent<InviteDashboardModel,
                                     MemberActionModel>(itemModel: value));
                           }
                         }),
@@ -299,7 +295,7 @@ class _InviteDashboardComponentEditorState
     openFlexibleDialog(
       widget.app,
       context,
-      widget.app.documentID + '/_memberaction',
+      '${widget.app.documentID}/_memberaction',
       includeHeading: false,
       widthFraction: .8,
       child: MemberActionModelWidget.getIt(
@@ -314,8 +310,6 @@ class _InviteDashboardComponentEditorState
     );
   }
 
-
-  @override
   Future<InviteDashboardEntity> revalidateEntity(AppModel app, entity) async {
     if (entity != null) {
       var myEntity = entity as InviteDashboardEntity;
@@ -323,8 +317,8 @@ class _InviteDashboardComponentEditorState
         List<MemberActionEntity> newMemberActions = [];
         for (MemberActionEntity mam in myEntity.memberActions!) {
           if (mam.action != null) {
-            newMemberActions.add(
-                mam.copyWith(action: mam.action!.copyWith(appId: app.documentID)));
+            newMemberActions.add(mam.copyWith(
+                action: mam.action!.copyWith(appId: app.documentID)));
           } else {
             newMemberActions.add(mam);
           }

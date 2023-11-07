@@ -13,14 +13,12 @@
 
 */
 
-
 import 'package:eliud_core/tools/component/component_constructor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eliud_core/tools/query/query_tools.dart';
 
 import 'package:eliud_core/tools/has_fab.dart';
-
 
 import 'package:eliud_pkg_follow/model/following_list_bloc.dart';
 import 'package:eliud_pkg_follow/model/following_list.dart';
@@ -35,27 +33,29 @@ import 'package:eliud_pkg_follow/model/following_dashboard_list.dart';
 import 'package:eliud_pkg_follow/model/following_dashboard_dropdown_button.dart';
 import 'package:eliud_pkg_follow/model/following_dashboard_list_event.dart';
 
-
 import 'package:eliud_pkg_follow/model/follow_request_list_bloc.dart';
 import 'package:eliud_pkg_follow/model/follow_request_list.dart';
 import 'package:eliud_pkg_follow/model/follow_request_dropdown_button.dart';
 import 'package:eliud_pkg_follow/model/follow_request_list_event.dart';
-
 
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_list_bloc.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_list.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_dropdown_button.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_list_event.dart';
 
-
 import 'package:eliud_pkg_follow/model/invite_dashboard_list_bloc.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_list.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_dropdown_button.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_list_event.dart';
 
-
 class ListComponentFactory implements ComponentConstructor {
-  Widget? createNew({Key? key, required AppModel app,  required String id, int? privilegeLevel, Map<String, dynamic>? parameters}) {
+  @override
+  Widget? createNew(
+      {Key? key,
+      required AppModel app,
+      required String id,
+      int? privilegeLevel,
+      Map<String, dynamic>? parameters}) {
     return ListComponent(app: app, componentId: id);
   }
 
@@ -65,8 +65,7 @@ class ListComponentFactory implements ComponentConstructor {
   }
 }
 
-
-typedef DropdownButtonChanged(String? value, int? privilegeLevel);
+typedef DropdownButtonChanged = Function(String? value, int? privilegeLevel);
 
 class DropdownButtonComponentFactory implements ComponentDropDown {
   @override
@@ -74,9 +73,8 @@ class DropdownButtonComponentFactory implements ComponentDropDown {
     return null;
   }
 
-
+  @override
   bool supports(String id) {
-
     if (id == "followings") return true;
     if (id == "followingDashboards") return true;
     if (id == "followRequests") return true;
@@ -85,36 +83,78 @@ class DropdownButtonComponentFactory implements ComponentDropDown {
     return false;
   }
 
-  Widget createNew({Key? key, required AppModel app, required String id, int? privilegeLevel, Map<String, dynamic>? parameters, String? value, DropdownButtonChanged? trigger, bool? optional}) {
+  @override
+  Widget createNew(
+      {Key? key,
+      required AppModel app,
+      required String id,
+      int? privilegeLevel,
+      Map<String, dynamic>? parameters,
+      String? value,
+      DropdownButtonChanged? trigger,
+      bool? optional}) {
+    if (id == "followings") {
+      return DropdownButtonComponent(
+          app: app,
+          componentId: id,
+          value: value,
+          privilegeLevel: privilegeLevel,
+          trigger: trigger,
+          optional: optional);
+    }
 
-    if (id == "followings")
-      return DropdownButtonComponent(app: app, componentId: id, value: value, privilegeLevel: privilegeLevel, trigger: trigger, optional: optional);
+    if (id == "followingDashboards") {
+      return DropdownButtonComponent(
+          app: app,
+          componentId: id,
+          value: value,
+          privilegeLevel: privilegeLevel,
+          trigger: trigger,
+          optional: optional);
+    }
 
-    if (id == "followingDashboards")
-      return DropdownButtonComponent(app: app, componentId: id, value: value, privilegeLevel: privilegeLevel, trigger: trigger, optional: optional);
+    if (id == "followRequests") {
+      return DropdownButtonComponent(
+          app: app,
+          componentId: id,
+          value: value,
+          privilegeLevel: privilegeLevel,
+          trigger: trigger,
+          optional: optional);
+    }
 
-    if (id == "followRequests")
-      return DropdownButtonComponent(app: app, componentId: id, value: value, privilegeLevel: privilegeLevel, trigger: trigger, optional: optional);
+    if (id == "followRequestsDashboards") {
+      return DropdownButtonComponent(
+          app: app,
+          componentId: id,
+          value: value,
+          privilegeLevel: privilegeLevel,
+          trigger: trigger,
+          optional: optional);
+    }
 
-    if (id == "followRequestsDashboards")
-      return DropdownButtonComponent(app: app, componentId: id, value: value, privilegeLevel: privilegeLevel, trigger: trigger, optional: optional);
-
-    if (id == "inviteDashboards")
-      return DropdownButtonComponent(app: app, componentId: id, value: value, privilegeLevel: privilegeLevel, trigger: trigger, optional: optional);
+    if (id == "inviteDashboards") {
+      return DropdownButtonComponent(
+          app: app,
+          componentId: id,
+          value: value,
+          privilegeLevel: privilegeLevel,
+          trigger: trigger,
+          optional: optional);
+    }
 
     return Text("Id $id not found");
   }
 }
 
-
 class ListComponent extends StatelessWidget with HasFab {
   final AppModel app;
   final String? componentId;
-  Widget? widget;
-  int? privilegeLevel;
+  final Widget? widget;
+  final int? privilegeLevel;
 
   @override
-  Widget? fab(BuildContext context){
+  Widget? fab(BuildContext context) {
     if ((widget != null) && (widget is HasFab)) {
       HasFab hasFab = widget as HasFab;
       return hasFab.fab(context);
@@ -122,27 +162,46 @@ class ListComponent extends StatelessWidget with HasFab {
     return null;
   }
 
-  ListComponent({required this.app, this.privilegeLevel, this.componentId}) {
-    initWidget();
-  }
+  ListComponent({required this.app, this.privilegeLevel, this.componentId})
+      : widget = getWidget(componentId, app);
 
   @override
   Widget build(BuildContext context) {
-
-    if (componentId == 'followings') return _followingBuild(context);
-    if (componentId == 'followingDashboards') return _followingDashboardBuild(context);
-    if (componentId == 'followRequests') return _followRequestBuild(context);
-    if (componentId == 'followRequestsDashboards') return _followRequestsDashboardBuild(context);
-    if (componentId == 'inviteDashboards') return _inviteDashboardBuild(context);
+    if (componentId == 'followings') {
+      return _followingBuild(context);
+    }
+    if (componentId == 'followingDashboards') {
+      return _followingDashboardBuild(context);
+    }
+    if (componentId == 'followRequests') {
+      return _followRequestBuild(context);
+    }
+    if (componentId == 'followRequestsDashboards') {
+      return _followRequestsDashboardBuild(context);
+    }
+    if (componentId == 'inviteDashboards') {
+      return _inviteDashboardBuild(context);
+    }
     return Text('Component with componentId == $componentId not found');
   }
 
-  void initWidget() {
-    if (componentId == 'followings') widget = FollowingListWidget(app: app);
-    if (componentId == 'followingDashboards') widget = FollowingDashboardListWidget(app: app);
-    if (componentId == 'followRequests') widget = FollowRequestListWidget(app: app);
-    if (componentId == 'followRequestsDashboards') widget = FollowRequestsDashboardListWidget(app: app);
-    if (componentId == 'inviteDashboards') widget = InviteDashboardListWidget(app: app);
+  static Widget getWidget(String? componentId, AppModel app) {
+    if (componentId == 'followings') {
+      return FollowingListWidget(app: app);
+    }
+    if (componentId == 'followingDashboards') {
+      return FollowingDashboardListWidget(app: app);
+    }
+    if (componentId == 'followRequests') {
+      return FollowRequestListWidget(app: app);
+    }
+    if (componentId == 'followRequestsDashboards') {
+      return FollowRequestsDashboardListWidget(app: app);
+    }
+    if (componentId == 'inviteDashboards') {
+      return InviteDashboardListWidget(app: app);
+    }
+    return Container();
   }
 
   Widget _followingBuild(BuildContext context) {
@@ -151,9 +210,10 @@ class ListComponent extends StatelessWidget with HasFab {
         BlocProvider<FollowingListBloc>(
           create: (context) => FollowingListBloc(
             eliudQuery: EliudQuery(theConditions: [
-              EliudQueryCondition('conditions.privilegeLevelRequired', isEqualTo: privilegeLevel ?? 0),
-              EliudQueryCondition('appId', isEqualTo: app.documentID),]
-            ),
+              EliudQueryCondition('conditions.privilegeLevelRequired',
+                  isEqualTo: privilegeLevel ?? 0),
+              EliudQueryCondition('appId', isEqualTo: app.documentID),
+            ]),
             followingRepository: followingRepository(appId: app.documentID)!,
           )..add(LoadFollowingList()),
         )
@@ -168,10 +228,12 @@ class ListComponent extends StatelessWidget with HasFab {
         BlocProvider<FollowingDashboardListBloc>(
           create: (context) => FollowingDashboardListBloc(
             eliudQuery: EliudQuery(theConditions: [
-              EliudQueryCondition('conditions.privilegeLevelRequired', isEqualTo: privilegeLevel ?? 0),
-              EliudQueryCondition('appId', isEqualTo: app.documentID),]
-            ),
-            followingDashboardRepository: followingDashboardRepository(appId: app.documentID)!,
+              EliudQueryCondition('conditions.privilegeLevelRequired',
+                  isEqualTo: privilegeLevel ?? 0),
+              EliudQueryCondition('appId', isEqualTo: app.documentID),
+            ]),
+            followingDashboardRepository:
+                followingDashboardRepository(appId: app.documentID)!,
           )..add(LoadFollowingDashboardList()),
         )
       ],
@@ -185,10 +247,12 @@ class ListComponent extends StatelessWidget with HasFab {
         BlocProvider<FollowRequestListBloc>(
           create: (context) => FollowRequestListBloc(
             eliudQuery: EliudQuery(theConditions: [
-              EliudQueryCondition('conditions.privilegeLevelRequired', isEqualTo: privilegeLevel ?? 0),
-              EliudQueryCondition('appId', isEqualTo: app.documentID),]
-            ),
-            followRequestRepository: followRequestRepository(appId: app.documentID)!,
+              EliudQueryCondition('conditions.privilegeLevelRequired',
+                  isEqualTo: privilegeLevel ?? 0),
+              EliudQueryCondition('appId', isEqualTo: app.documentID),
+            ]),
+            followRequestRepository:
+                followRequestRepository(appId: app.documentID)!,
           )..add(LoadFollowRequestList()),
         )
       ],
@@ -202,10 +266,12 @@ class ListComponent extends StatelessWidget with HasFab {
         BlocProvider<FollowRequestsDashboardListBloc>(
           create: (context) => FollowRequestsDashboardListBloc(
             eliudQuery: EliudQuery(theConditions: [
-              EliudQueryCondition('conditions.privilegeLevelRequired', isEqualTo: privilegeLevel ?? 0),
-              EliudQueryCondition('appId', isEqualTo: app.documentID),]
-            ),
-            followRequestsDashboardRepository: followRequestsDashboardRepository(appId: app.documentID)!,
+              EliudQueryCondition('conditions.privilegeLevelRequired',
+                  isEqualTo: privilegeLevel ?? 0),
+              EliudQueryCondition('appId', isEqualTo: app.documentID),
+            ]),
+            followRequestsDashboardRepository:
+                followRequestsDashboardRepository(appId: app.documentID)!,
           )..add(LoadFollowRequestsDashboardList()),
         )
       ],
@@ -219,21 +285,21 @@ class ListComponent extends StatelessWidget with HasFab {
         BlocProvider<InviteDashboardListBloc>(
           create: (context) => InviteDashboardListBloc(
             eliudQuery: EliudQuery(theConditions: [
-              EliudQueryCondition('conditions.privilegeLevelRequired', isEqualTo: privilegeLevel ?? 0),
-              EliudQueryCondition('appId', isEqualTo: app.documentID),]
-            ),
-            inviteDashboardRepository: inviteDashboardRepository(appId: app.documentID)!,
+              EliudQueryCondition('conditions.privilegeLevelRequired',
+                  isEqualTo: privilegeLevel ?? 0),
+              EliudQueryCondition('appId', isEqualTo: app.documentID),
+            ]),
+            inviteDashboardRepository:
+                inviteDashboardRepository(appId: app.documentID)!,
           )..add(LoadInviteDashboardList()),
         )
       ],
       child: widget!,
     );
   }
-
 }
 
-
-typedef Changed(String? value, int? privilegeLevel);
+typedef Changed = Function(String? value, int? privilegeLevel);
 
 class DropdownButtonComponent extends StatelessWidget {
   final AppModel app;
@@ -241,21 +307,35 @@ class DropdownButtonComponent extends StatelessWidget {
   final String? value;
   final Changed? trigger;
   final bool? optional;
-  int? privilegeLevel;
+  final int? privilegeLevel;
 
-  DropdownButtonComponent({required this.app, this.componentId, this.privilegeLevel, this.value, this.trigger, this.optional});
+  DropdownButtonComponent(
+      {required this.app,
+      this.componentId,
+      this.privilegeLevel,
+      this.value,
+      this.trigger,
+      this.optional});
 
   @override
   Widget build(BuildContext context) {
-
-    if (componentId == 'followings') return _followingBuild(context);
-    if (componentId == 'followingDashboards') return _followingDashboardBuild(context);
-    if (componentId == 'followRequests') return _followRequestBuild(context);
-    if (componentId == 'followRequestsDashboards') return _followRequestsDashboardBuild(context);
-    if (componentId == 'inviteDashboards') return _inviteDashboardBuild(context);
+    if (componentId == 'followings') {
+      return _followingBuild(context);
+    }
+    if (componentId == 'followingDashboards') {
+      return _followingDashboardBuild(context);
+    }
+    if (componentId == 'followRequests') {
+      return _followRequestBuild(context);
+    }
+    if (componentId == 'followRequestsDashboards') {
+      return _followRequestsDashboardBuild(context);
+    }
+    if (componentId == 'inviteDashboards') {
+      return _inviteDashboardBuild(context);
+    }
     return Text('Component with componentId == $componentId not found');
   }
-
 
   Widget _followingBuild(BuildContext context) {
     return MultiBlocProvider(
@@ -263,14 +343,20 @@ class DropdownButtonComponent extends StatelessWidget {
         BlocProvider<FollowingListBloc>(
           create: (context) => FollowingListBloc(
             eliudQuery: EliudQuery(theConditions: [
-              EliudQueryCondition('conditions.privilegeLevelRequired', isEqualTo: privilegeLevel ?? 0),
-              EliudQueryCondition('appId', isEqualTo: app.documentID),]
-            ),
+              EliudQueryCondition('conditions.privilegeLevelRequired',
+                  isEqualTo: privilegeLevel ?? 0),
+              EliudQueryCondition('appId', isEqualTo: app.documentID),
+            ]),
             followingRepository: followingRepository(appId: app.documentID)!,
           )..add(LoadFollowingList()),
         )
       ],
-      child: FollowingDropdownButtonWidget(app: app, value: value, privilegeLevel: privilegeLevel, trigger: trigger, optional: optional),
+      child: FollowingDropdownButtonWidget(
+          app: app,
+          value: value,
+          privilegeLevel: privilegeLevel,
+          trigger: trigger,
+          optional: optional),
     );
   }
 
@@ -280,14 +366,21 @@ class DropdownButtonComponent extends StatelessWidget {
         BlocProvider<FollowingDashboardListBloc>(
           create: (context) => FollowingDashboardListBloc(
             eliudQuery: EliudQuery(theConditions: [
-              EliudQueryCondition('conditions.privilegeLevelRequired', isEqualTo: privilegeLevel ?? 0),
-              EliudQueryCondition('appId', isEqualTo: app.documentID),]
-            ),
-            followingDashboardRepository: followingDashboardRepository(appId: app.documentID)!,
+              EliudQueryCondition('conditions.privilegeLevelRequired',
+                  isEqualTo: privilegeLevel ?? 0),
+              EliudQueryCondition('appId', isEqualTo: app.documentID),
+            ]),
+            followingDashboardRepository:
+                followingDashboardRepository(appId: app.documentID)!,
           )..add(LoadFollowingDashboardList()),
         )
       ],
-      child: FollowingDashboardDropdownButtonWidget(app: app, value: value, privilegeLevel: privilegeLevel, trigger: trigger, optional: optional),
+      child: FollowingDashboardDropdownButtonWidget(
+          app: app,
+          value: value,
+          privilegeLevel: privilegeLevel,
+          trigger: trigger,
+          optional: optional),
     );
   }
 
@@ -297,14 +390,21 @@ class DropdownButtonComponent extends StatelessWidget {
         BlocProvider<FollowRequestListBloc>(
           create: (context) => FollowRequestListBloc(
             eliudQuery: EliudQuery(theConditions: [
-              EliudQueryCondition('conditions.privilegeLevelRequired', isEqualTo: privilegeLevel ?? 0),
-              EliudQueryCondition('appId', isEqualTo: app.documentID),]
-            ),
-            followRequestRepository: followRequestRepository(appId: app.documentID)!,
+              EliudQueryCondition('conditions.privilegeLevelRequired',
+                  isEqualTo: privilegeLevel ?? 0),
+              EliudQueryCondition('appId', isEqualTo: app.documentID),
+            ]),
+            followRequestRepository:
+                followRequestRepository(appId: app.documentID)!,
           )..add(LoadFollowRequestList()),
         )
       ],
-      child: FollowRequestDropdownButtonWidget(app: app, value: value, privilegeLevel: privilegeLevel, trigger: trigger, optional: optional),
+      child: FollowRequestDropdownButtonWidget(
+          app: app,
+          value: value,
+          privilegeLevel: privilegeLevel,
+          trigger: trigger,
+          optional: optional),
     );
   }
 
@@ -314,14 +414,21 @@ class DropdownButtonComponent extends StatelessWidget {
         BlocProvider<FollowRequestsDashboardListBloc>(
           create: (context) => FollowRequestsDashboardListBloc(
             eliudQuery: EliudQuery(theConditions: [
-              EliudQueryCondition('conditions.privilegeLevelRequired', isEqualTo: privilegeLevel ?? 0),
-              EliudQueryCondition('appId', isEqualTo: app.documentID),]
-            ),
-            followRequestsDashboardRepository: followRequestsDashboardRepository(appId: app.documentID)!,
+              EliudQueryCondition('conditions.privilegeLevelRequired',
+                  isEqualTo: privilegeLevel ?? 0),
+              EliudQueryCondition('appId', isEqualTo: app.documentID),
+            ]),
+            followRequestsDashboardRepository:
+                followRequestsDashboardRepository(appId: app.documentID)!,
           )..add(LoadFollowRequestsDashboardList()),
         )
       ],
-      child: FollowRequestsDashboardDropdownButtonWidget(app: app, value: value, privilegeLevel: privilegeLevel, trigger: trigger, optional: optional),
+      child: FollowRequestsDashboardDropdownButtonWidget(
+          app: app,
+          value: value,
+          privilegeLevel: privilegeLevel,
+          trigger: trigger,
+          optional: optional),
     );
   }
 
@@ -331,17 +438,21 @@ class DropdownButtonComponent extends StatelessWidget {
         BlocProvider<InviteDashboardListBloc>(
           create: (context) => InviteDashboardListBloc(
             eliudQuery: EliudQuery(theConditions: [
-              EliudQueryCondition('conditions.privilegeLevelRequired', isEqualTo: privilegeLevel ?? 0),
-              EliudQueryCondition('appId', isEqualTo: app.documentID),]
-            ),
-            inviteDashboardRepository: inviteDashboardRepository(appId: app.documentID)!,
+              EliudQueryCondition('conditions.privilegeLevelRequired',
+                  isEqualTo: privilegeLevel ?? 0),
+              EliudQueryCondition('appId', isEqualTo: app.documentID),
+            ]),
+            inviteDashboardRepository:
+                inviteDashboardRepository(appId: app.documentID)!,
           )..add(LoadInviteDashboardList()),
         )
       ],
-      child: InviteDashboardDropdownButtonWidget(app: app, value: value, privilegeLevel: privilegeLevel, trigger: trigger, optional: optional),
+      child: InviteDashboardDropdownButtonWidget(
+          app: app,
+          value: value,
+          privilegeLevel: privilegeLevel,
+          trigger: trigger,
+          optional: optional),
     );
   }
-
 }
-
-

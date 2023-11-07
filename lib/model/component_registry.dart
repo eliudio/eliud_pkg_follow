@@ -13,7 +13,6 @@
 
 */
 
-
 import '../model/internal_component.dart';
 import 'package:eliud_core/core/registry.dart';
 import 'package:eliud_core/tools/component/component_spec.dart';
@@ -29,33 +28,73 @@ import '../extensions/invite_dashboard_component.dart';
 import '../editors/invite_dashboard_component_editor.dart';
 import 'invite_dashboard_component_selector.dart';
 
-
-
-
 class ComponentRegistry {
-
   void init() {
-    Registry.registry()!.addInternalComponents('eliud_pkg_follow', ["followings", "followingDashboards", "followRequests", "followRequestsDashboards", "inviteDashboards", ]);
-
-    Registry.registry()!.register(componentName: "eliud_pkg_follow_internalWidgets", componentConstructor: ListComponentFactory());
-    Registry.registry()!.addDropDownSupporter("followingDashboards", DropdownButtonComponentFactory());
-    Registry.registry()!.register(componentName: "followingDashboards", componentConstructor: FollowingDashboardComponentConstructorDefault());
-    Registry.registry()!.addDropDownSupporter("followRequestsDashboards", DropdownButtonComponentFactory());
-    Registry.registry()!.register(componentName: "followRequestsDashboards", componentConstructor: FollowRequestsDashboardComponentConstructorDefault());
-    Registry.registry()!.addDropDownSupporter("inviteDashboards", DropdownButtonComponentFactory());
-    Registry.registry()!.register(componentName: "inviteDashboards", componentConstructor: InviteDashboardComponentConstructorDefault());
-    Registry.registry()!.addComponentSpec('eliud_pkg_follow', 'follow', [
-      ComponentSpec('followingDashboards', FollowingDashboardComponentConstructorDefault(), FollowingDashboardComponentSelector(), FollowingDashboardComponentEditorConstructor(), ({String? appId}) => followingDashboardRepository(appId: appId)! ), 
-      ComponentSpec('followRequestsDashboards', FollowRequestsDashboardComponentConstructorDefault(), FollowRequestsDashboardComponentSelector(), FollowRequestsDashboardComponentEditorConstructor(), ({String? appId}) => followRequestsDashboardRepository(appId: appId)! ), 
-      ComponentSpec('inviteDashboards', InviteDashboardComponentConstructorDefault(), InviteDashboardComponentSelector(), InviteDashboardComponentEditorConstructor(), ({String? appId}) => inviteDashboardRepository(appId: appId)! ), 
+    Registry.registry()!.addInternalComponents('eliud_pkg_follow', [
+      "followings",
+      "followingDashboards",
+      "followRequests",
+      "followRequestsDashboards",
+      "inviteDashboards",
     ]);
-      Registry.registry()!.registerRetrieveRepository('eliud_pkg_follow', 'followings', ({String? appId}) => followingRepository(appId: appId)!);
-      Registry.registry()!.registerRetrieveRepository('eliud_pkg_follow', 'followingDashboards', ({String? appId}) => followingDashboardRepository(appId: appId)!);
-      Registry.registry()!.registerRetrieveRepository('eliud_pkg_follow', 'followRequests', ({String? appId}) => followRequestRepository(appId: appId)!);
-      Registry.registry()!.registerRetrieveRepository('eliud_pkg_follow', 'followRequestsDashboards', ({String? appId}) => followRequestsDashboardRepository(appId: appId)!);
-      Registry.registry()!.registerRetrieveRepository('eliud_pkg_follow', 'inviteDashboards', ({String? appId}) => inviteDashboardRepository(appId: appId)!);
 
+    Registry.registry()!.register(
+        componentName: "eliud_pkg_follow_internalWidgets",
+        componentConstructor: ListComponentFactory());
+    Registry.registry()!.addDropDownSupporter(
+        "followingDashboards", DropdownButtonComponentFactory());
+    Registry.registry()!.register(
+        componentName: "followingDashboards",
+        componentConstructor: FollowingDashboardComponentConstructorDefault());
+    Registry.registry()!.addDropDownSupporter(
+        "followRequestsDashboards", DropdownButtonComponentFactory());
+    Registry.registry()!.register(
+        componentName: "followRequestsDashboards",
+        componentConstructor:
+            FollowRequestsDashboardComponentConstructorDefault());
+    Registry.registry()!.addDropDownSupporter(
+        "inviteDashboards", DropdownButtonComponentFactory());
+    Registry.registry()!.register(
+        componentName: "inviteDashboards",
+        componentConstructor: InviteDashboardComponentConstructorDefault());
+    Registry.registry()!.addComponentSpec('eliud_pkg_follow', 'follow', [
+      ComponentSpec(
+          'followingDashboards',
+          FollowingDashboardComponentConstructorDefault(),
+          FollowingDashboardComponentSelector(),
+          FollowingDashboardComponentEditorConstructor(),
+          ({String? appId}) => followingDashboardRepository(appId: appId)!),
+      ComponentSpec(
+          'followRequestsDashboards',
+          FollowRequestsDashboardComponentConstructorDefault(),
+          FollowRequestsDashboardComponentSelector(),
+          FollowRequestsDashboardComponentEditorConstructor(),
+          ({String? appId}) =>
+              followRequestsDashboardRepository(appId: appId)!),
+      ComponentSpec(
+          'inviteDashboards',
+          InviteDashboardComponentConstructorDefault(),
+          InviteDashboardComponentSelector(),
+          InviteDashboardComponentEditorConstructor(),
+          ({String? appId}) => inviteDashboardRepository(appId: appId)!),
+    ]);
+    Registry.registry()!.registerRetrieveRepository('eliud_pkg_follow',
+        'followings', ({String? appId}) => followingRepository(appId: appId)!);
+    Registry.registry()!.registerRetrieveRepository(
+        'eliud_pkg_follow',
+        'followingDashboards',
+        ({String? appId}) => followingDashboardRepository(appId: appId)!);
+    Registry.registry()!.registerRetrieveRepository(
+        'eliud_pkg_follow',
+        'followRequests',
+        ({String? appId}) => followRequestRepository(appId: appId)!);
+    Registry.registry()!.registerRetrieveRepository(
+        'eliud_pkg_follow',
+        'followRequestsDashboards',
+        ({String? appId}) => followRequestsDashboardRepository(appId: appId)!);
+    Registry.registry()!.registerRetrieveRepository(
+        'eliud_pkg_follow',
+        'inviteDashboards',
+        ({String? appId}) => inviteDashboardRepository(appId: appId)!);
   }
 }
-
-

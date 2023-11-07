@@ -59,7 +59,7 @@
       "group": "general",
       "fieldType": "enum",
       "enumName": "FollowRequestStatus",
-      "enumValues" : [ "FollowRequestPending", "FollowRequestAccepted", "FollowRequestDenied" ]
+      "enumValues" : [ "followRequestPending", "followRequestAccepted", "followRequestDenied" ]
     }
   ],
   "groups": [
@@ -69,7 +69,7 @@
     }
   ],
   "listFields": {
-    "title": "value.documentID != null ? Center(child: StyleRegistry.registry().styleWithApp(app).frontEndStyle().textStyle().text(app, context, value.documentID)) : Container()",
+    "title": "Center(child: StyleRegistry.registry().styleWithApp(app).frontEndStyle().textStyle().text(app, context, value.documentID))",
     "subTitle": "value.follower!.name != null ? Center(child: StyleRegistry.registry().styleWithApp(app).frontEndStyle().textStyle().text(app, context, value.follower!.name!)) : Container()"
   },
   "depends": ["eliud_core"]

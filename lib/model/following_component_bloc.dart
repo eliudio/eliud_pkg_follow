@@ -20,8 +20,8 @@ import 'package:eliud_pkg_follow/model/following_component_event.dart';
 import 'package:eliud_pkg_follow/model/following_component_state.dart';
 import 'package:eliud_pkg_follow/model/following_repository.dart';
 
-
-class FollowingComponentBloc extends Bloc<FollowingComponentEvent, FollowingComponentState> {
+class FollowingComponentBloc
+    extends Bloc<FollowingComponentEvent, FollowingComponentState> {
   final FollowingRepository? followingRepository;
   StreamSubscription? _followingSubscription;
 
@@ -34,11 +34,12 @@ class FollowingComponentBloc extends Bloc<FollowingComponentEvent, FollowingComp
     });
   }
 
-  FollowingComponentBloc({ this.followingRepository }): super(FollowingComponentUninitialized()) {
-    on <FetchFollowingComponent> ((event, emit) {
+  FollowingComponentBloc({this.followingRepository})
+      : super(FollowingComponentUninitialized()) {
+    on<FetchFollowingComponent>((event, emit) {
       _mapLoadFollowingComponentUpdateToState(event.id!);
     });
-    on <FollowingComponentUpdated> ((event, emit) {
+    on<FollowingComponentUpdated>((event, emit) {
       emit(FollowingComponentLoaded(value: event.value));
     });
   }
@@ -48,6 +49,4 @@ class FollowingComponentBloc extends Bloc<FollowingComponentEvent, FollowingComp
     _followingSubscription?.cancel();
     return super.close();
   }
-
 }
-

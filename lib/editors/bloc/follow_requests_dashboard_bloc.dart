@@ -8,13 +8,17 @@ import 'package:eliud_pkg_follow/model/follow_requests_dashboard_model.dart';
 
 import '../../model/follow_requests_dashboard_entity.dart';
 
-class FollowRequestsDashboardBloc extends ExtEditorBaseBloc<FollowRequestsDashboardModel, MemberActionModel, FollowRequestsDashboardEntity> {
-
+class FollowRequestsDashboardBloc extends ExtEditorBaseBloc<
+    FollowRequestsDashboardModel,
+    MemberActionModel,
+    FollowRequestsDashboardEntity> {
   FollowRequestsDashboardBloc(String appId, EditorFeedback feedback)
-      : super(appId, followRequestsDashboardRepository(appId: appId)!, feedback);
+      : super(
+            appId, followRequestsDashboardRepository(appId: appId)!, feedback);
 
   @override
-  FollowRequestsDashboardModel addItem(FollowRequestsDashboardModel model, MemberActionModel newItem) {
+  FollowRequestsDashboardModel addItem(
+      FollowRequestsDashboardModel model, MemberActionModel newItem) {
     List<MemberActionModel> newItems = model.memberActions == null
         ? []
         : model.memberActions!.map((e) => e).toList();
@@ -24,7 +28,8 @@ class FollowRequestsDashboardBloc extends ExtEditorBaseBloc<FollowRequestsDashbo
   }
 
   @override
-  FollowRequestsDashboardModel deleteItem(FollowRequestsDashboardModel model, MemberActionModel deleteItem) {
+  FollowRequestsDashboardModel deleteItem(
+      FollowRequestsDashboardModel model, MemberActionModel deleteItem) {
     var newItems = <MemberActionModel>[];
     for (var item in model.memberActions!) {
       if (item != deleteItem) {
@@ -45,19 +50,20 @@ class FollowRequestsDashboardBloc extends ExtEditorBaseBloc<FollowRequestsDashbo
   }
 
   @override
-  FollowRequestsDashboardModel setDefaultValues(FollowRequestsDashboardModel t, StorageConditionsModel conditions) {
+  FollowRequestsDashboardModel setDefaultValues(
+      FollowRequestsDashboardModel t, StorageConditionsModel conditions) {
     return t.copyWith(
         conditions: t.conditions ??
             StorageConditionsModel(
                 privilegeLevelRequired:
-                PrivilegeLevelRequiredSimple.NoPrivilegeRequiredSimple));
+                    PrivilegeLevelRequiredSimple.noPrivilegeRequiredSimple));
   }
 
   @override
-  FollowRequestsDashboardModel updateItem(FollowRequestsDashboardModel model, MemberActionModel oldItem, MemberActionModel newItem) {
-    List<MemberActionModel> currentItems = model.memberActions == null
-        ? []
-        : model.memberActions!;
+  FollowRequestsDashboardModel updateItem(FollowRequestsDashboardModel model,
+      MemberActionModel oldItem, MemberActionModel newItem) {
+    List<MemberActionModel> currentItems =
+        model.memberActions == null ? [] : model.memberActions!;
     var index = currentItems.indexOf(oldItem);
     if (index != -1) {
       var newItems = currentItems.map((e) => e).toList();
@@ -65,7 +71,7 @@ class FollowRequestsDashboardBloc extends ExtEditorBaseBloc<FollowRequestsDashbo
       var newModel = model.copyWith(memberActions: newItems);
       return newModel;
     } else {
-      throw Exception("Could not find " + oldItem.toString());
+      throw Exception("Could not find $oldItem");
     }
   }
 
@@ -73,5 +79,4 @@ class FollowRequestsDashboardBloc extends ExtEditorBaseBloc<FollowRequestsDashbo
   List<MemberActionModel> copyOf(List<MemberActionModel> ts) {
     return ts.map((e) => e).toList();
   }
-
 }

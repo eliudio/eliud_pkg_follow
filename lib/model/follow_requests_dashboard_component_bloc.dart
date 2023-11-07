@@ -20,24 +20,29 @@ import 'package:eliud_pkg_follow/model/follow_requests_dashboard_component_event
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_component_state.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_repository.dart';
 
-class FollowRequestsDashboardComponentBloc extends Bloc<FollowRequestsDashboardComponentEvent, FollowRequestsDashboardComponentState> {
+class FollowRequestsDashboardComponentBloc extends Bloc<
+    FollowRequestsDashboardComponentEvent,
+    FollowRequestsDashboardComponentState> {
   final FollowRequestsDashboardRepository? followRequestsDashboardRepository;
   StreamSubscription? _followRequestsDashboardSubscription;
 
-  void _mapLoadFollowRequestsDashboardComponentUpdateToState(String documentId) {
+  void _mapLoadFollowRequestsDashboardComponentUpdateToState(
+      String documentId) {
     _followRequestsDashboardSubscription?.cancel();
-    _followRequestsDashboardSubscription = followRequestsDashboardRepository!.listenTo(documentId, (value) {
+    _followRequestsDashboardSubscription =
+        followRequestsDashboardRepository!.listenTo(documentId, (value) {
       if (value != null) {
         add(FollowRequestsDashboardComponentUpdated(value: value));
       }
     });
   }
 
-  FollowRequestsDashboardComponentBloc({ this.followRequestsDashboardRepository }): super(FollowRequestsDashboardComponentUninitialized()) {
-    on <FetchFollowRequestsDashboardComponent> ((event, emit) {
+  FollowRequestsDashboardComponentBloc({this.followRequestsDashboardRepository})
+      : super(FollowRequestsDashboardComponentUninitialized()) {
+    on<FetchFollowRequestsDashboardComponent>((event, emit) {
       _mapLoadFollowRequestsDashboardComponentUpdateToState(event.id!);
     });
-    on <FollowRequestsDashboardComponentUpdated> ((event, emit) {
+    on<FollowRequestsDashboardComponentUpdated>((event, emit) {
       emit(FollowRequestsDashboardComponentLoaded(value: event.value));
     });
   }
@@ -47,6 +52,4 @@ class FollowRequestsDashboardComponentBloc extends Bloc<FollowRequestsDashboardC
     _followRequestsDashboardSubscription?.cancel();
     return super.close();
   }
-
 }
-

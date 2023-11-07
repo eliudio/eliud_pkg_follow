@@ -30,10 +30,10 @@ class NewPage extends FollowingListEvent {}
 class AddFollowingList extends FollowingListEvent {
   final FollowingModel? value;
 
-  const AddFollowingList({ this.value });
+  const AddFollowingList({this.value});
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   @override
   String toString() => 'AddFollowingList{ value: $value }';
@@ -42,10 +42,10 @@ class AddFollowingList extends FollowingListEvent {
 class UpdateFollowingList extends FollowingListEvent {
   final FollowingModel? value;
 
-  const UpdateFollowingList({ this.value });
+  const UpdateFollowingList({this.value});
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   @override
   String toString() => 'UpdateFollowingList{ value: $value }';
@@ -54,10 +54,10 @@ class UpdateFollowingList extends FollowingListEvent {
 class DeleteFollowingList extends FollowingListEvent {
   final FollowingModel? value;
 
-  const DeleteFollowingList({ this.value });
+  const DeleteFollowingList({this.value});
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   @override
   String toString() => 'DeleteFollowingList{ value: $value }';
@@ -67,24 +67,24 @@ class FollowingListUpdated extends FollowingListEvent {
   final List<FollowingModel?>? value;
   final bool? mightHaveMore;
 
-  const FollowingListUpdated({ this.value, this.mightHaveMore });
+  const FollowingListUpdated({this.value, this.mightHaveMore});
 
   @override
-  List<Object?> get props => [ value, mightHaveMore ];
+  List<Object?> get props => [value, mightHaveMore];
 
   @override
-  String toString() => 'FollowingListUpdated{ value: $value, mightHaveMore: $mightHaveMore }';
+  String toString() =>
+      'FollowingListUpdated{ value: $value, mightHaveMore: $mightHaveMore }';
 }
 
 class FollowingChangeQuery extends FollowingListEvent {
   final EliudQuery? newQuery;
 
-  const FollowingChangeQuery({ required this.newQuery });
+  const FollowingChangeQuery({required this.newQuery});
 
   @override
-  List<Object?> get props => [ newQuery ];
+  List<Object?> get props => [newQuery];
 
   @override
   String toString() => 'FollowingChangeQuery{ value: $newQuery }';
 }
-

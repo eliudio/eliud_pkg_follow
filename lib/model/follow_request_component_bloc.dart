@@ -20,25 +20,27 @@ import 'package:eliud_pkg_follow/model/follow_request_component_event.dart';
 import 'package:eliud_pkg_follow/model/follow_request_component_state.dart';
 import 'package:eliud_pkg_follow/model/follow_request_repository.dart';
 
-
-class FollowRequestComponentBloc extends Bloc<FollowRequestComponentEvent, FollowRequestComponentState> {
+class FollowRequestComponentBloc
+    extends Bloc<FollowRequestComponentEvent, FollowRequestComponentState> {
   final FollowRequestRepository? followRequestRepository;
   StreamSubscription? _followRequestSubscription;
 
   void _mapLoadFollowRequestComponentUpdateToState(String documentId) {
     _followRequestSubscription?.cancel();
-    _followRequestSubscription = followRequestRepository!.listenTo(documentId, (value) {
+    _followRequestSubscription =
+        followRequestRepository!.listenTo(documentId, (value) {
       if (value != null) {
         add(FollowRequestComponentUpdated(value: value));
       }
     });
   }
 
-  FollowRequestComponentBloc({ this.followRequestRepository }): super(FollowRequestComponentUninitialized()) {
-    on <FetchFollowRequestComponent> ((event, emit) {
+  FollowRequestComponentBloc({this.followRequestRepository})
+      : super(FollowRequestComponentUninitialized()) {
+    on<FetchFollowRequestComponent>((event, emit) {
       _mapLoadFollowRequestComponentUpdateToState(event.id!);
     });
-    on <FollowRequestComponentUpdated> ((event, emit) {
+    on<FollowRequestComponentUpdated>((event, emit) {
       emit(FollowRequestComponentLoaded(value: event.value));
     });
   }
@@ -48,6 +50,4 @@ class FollowRequestComponentBloc extends Bloc<FollowRequestComponentEvent, Follo
     _followRequestSubscription?.cancel();
     return super.close();
   }
-
 }
-

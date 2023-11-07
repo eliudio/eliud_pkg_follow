@@ -21,31 +21,29 @@ import 'package:eliud_core/model/model_export.dart';
 import 'package:eliud_pkg_etc/model/model_export.dart';
 import 'package:eliud_pkg_follow/model/entity_export.dart';
 
-
 import 'package:eliud_pkg_follow/model/following_dashboard_entity.dart';
 
-
-enum FollowingView {
-  Followers, Following, Unknown
-}
-
+enum FollowingView { followers, following, unknown }
 
 FollowingView toFollowingView(int? index) {
   switch (index) {
-    case 0: return FollowingView.Followers;
-    case 1: return FollowingView.Following;
+    case 0:
+      return FollowingView.followers;
+    case 1:
+      return FollowingView.following;
   }
-  return FollowingView.Unknown;
+  return FollowingView.unknown;
 }
-
 
 class FollowingDashboardModel implements ModelBase, WithAppId {
   static const String packageName = 'eliud_pkg_follow';
   static const String id = 'followingDashboards';
 
+  @override
   String documentID;
 
   // This is the identifier of the app to which this belongs
+  @override
   String appId;
   String? description;
   FollowingView? view;
@@ -54,20 +52,48 @@ class FollowingDashboardModel implements ModelBase, WithAppId {
   List<MemberActionModel>? memberActions;
   StorageConditionsModel? conditions;
 
-  FollowingDashboardModel({required this.documentID, required this.appId, this.description, this.view, this.memberActions, this.conditions, });
+  FollowingDashboardModel({
+    required this.documentID,
+    required this.appId,
+    this.description,
+    this.view,
+    this.memberActions,
+    this.conditions,
+  });
 
-  FollowingDashboardModel copyWith({String? documentID, String? appId, String? description, FollowingView? view, List<MemberActionModel>? memberActions, StorageConditionsModel? conditions, }) {
-    return FollowingDashboardModel(documentID: documentID ?? this.documentID, appId: appId ?? this.appId, description: description ?? this.description, view: view ?? this.view, memberActions: memberActions ?? this.memberActions, conditions: conditions ?? this.conditions, );
+  @override
+  FollowingDashboardModel copyWith({
+    String? documentID,
+    String? appId,
+    String? description,
+    FollowingView? view,
+    List<MemberActionModel>? memberActions,
+    StorageConditionsModel? conditions,
+  }) {
+    return FollowingDashboardModel(
+      documentID: documentID ?? this.documentID,
+      appId: appId ?? this.appId,
+      description: description ?? this.description,
+      view: view ?? this.view,
+      memberActions: memberActions ?? this.memberActions,
+      conditions: conditions ?? this.conditions,
+    );
   }
 
   @override
-  int get hashCode => documentID.hashCode ^ appId.hashCode ^ description.hashCode ^ view.hashCode ^ memberActions.hashCode ^ conditions.hashCode;
+  int get hashCode =>
+      documentID.hashCode ^
+      appId.hashCode ^
+      description.hashCode ^
+      view.hashCode ^
+      memberActions.hashCode ^
+      conditions.hashCode;
 
   @override
   bool operator ==(Object other) =>
-          identical(this, other) ||
-          other is FollowingDashboardModel &&
-          runtimeType == other.runtimeType && 
+      identical(this, other) ||
+      other is FollowingDashboardModel &&
+          runtimeType == other.runtimeType &&
           documentID == other.documentID &&
           appId == other.appId &&
           description == other.description &&
@@ -77,11 +103,13 @@ class FollowingDashboardModel implements ModelBase, WithAppId {
 
   @override
   String toString() {
-    String memberActionsCsv = (memberActions == null) ? '' : memberActions!.join(', ');
+    String memberActionsCsv =
+        (memberActions == null) ? '' : memberActions!.join(', ');
 
     return 'FollowingDashboardModel{documentID: $documentID, appId: $appId, description: $description, view: $view, memberActions: MemberAction[] { $memberActionsCsv }, conditions: $conditions}';
   }
 
+  @override
   Future<List<ModelReference>> collectReferences({String? appId}) async {
     List<ModelReference> referencesCollector = [];
     if (memberActions != null) {
@@ -89,61 +117,68 @@ class FollowingDashboardModel implements ModelBase, WithAppId {
         referencesCollector.addAll(await item.collectReferences(appId: appId));
       }
     }
-    if (conditions != null) referencesCollector.addAll(await conditions!.collectReferences(appId: appId));
+    if (conditions != null) {
+      referencesCollector
+          .addAll(await conditions!.collectReferences(appId: appId));
+    }
     return referencesCollector;
   }
 
+  @override
   FollowingDashboardEntity toEntity({String? appId}) {
     return FollowingDashboardEntity(
-          appId: (appId != null) ? appId : null, 
-          description: (description != null) ? description : null, 
-          view: (view != null) ? view!.index : null, 
-          memberActions: (memberActions != null) ? memberActions
-            !.map((item) => item.toEntity(appId: appId))
-            .toList() : null, 
-          conditions: (conditions != null) ? conditions!.toEntity(appId: appId) : null, 
+      appId: appId,
+      description: (description != null) ? description : null,
+      view: (view != null) ? view!.index : null,
+      memberActions: (memberActions != null)
+          ? memberActions!.map((item) => item.toEntity(appId: appId)).toList()
+          : null,
+      conditions:
+          (conditions != null) ? conditions!.toEntity(appId: appId) : null,
     );
   }
 
-  static Future<FollowingDashboardModel?> fromEntity(String documentID, FollowingDashboardEntity? entity) async {
+  static Future<FollowingDashboardModel?> fromEntity(
+      String documentID, FollowingDashboardEntity? entity) async {
     if (entity == null) return null;
     var counter = 0;
     return FollowingDashboardModel(
-          documentID: documentID, 
-          appId: entity.appId ?? '', 
-          description: entity.description, 
-          view: toFollowingView(entity.view), 
-          memberActions: 
-            entity.memberActions == null ? null : List<MemberActionModel>.from(await Future.wait(entity. memberActions
-            !.map((item) {
-            counter++;
+      documentID: documentID,
+      appId: entity.appId ?? '',
+      description: entity.description,
+      view: toFollowingView(entity.view),
+      memberActions: entity.memberActions == null
+          ? null
+          : List<MemberActionModel>.from(
+              await Future.wait(entity.memberActions!.map((item) {
+              counter++;
               return MemberActionModel.fromEntity(counter.toString(), item);
-            })
-            .toList())), 
-          conditions: 
-            await StorageConditionsModel.fromEntity(entity.conditions), 
+            }).toList())),
+      conditions: await StorageConditionsModel.fromEntity(entity.conditions),
     );
   }
 
-  static Future<FollowingDashboardModel?> fromEntityPlus(String documentID, FollowingDashboardEntity? entity, { String? appId}) async {
+  static Future<FollowingDashboardModel?> fromEntityPlus(
+      String documentID, FollowingDashboardEntity? entity,
+      {String? appId}) async {
     if (entity == null) return null;
 
     var counter = 0;
     return FollowingDashboardModel(
-          documentID: documentID, 
-          appId: entity.appId ?? '', 
-          description: entity.description, 
-          view: toFollowingView(entity.view), 
-          memberActions: 
-            entity. memberActions == null ? null : List<MemberActionModel>.from(await Future.wait(entity. memberActions
-            !.map((item) {
-            counter++;
-            return MemberActionModel.fromEntityPlus(counter.toString(), item, appId: appId);})
-            .toList())), 
-          conditions: 
-            await StorageConditionsModel.fromEntityPlus(entity.conditions, appId: appId), 
+      documentID: documentID,
+      appId: entity.appId ?? '',
+      description: entity.description,
+      view: toFollowingView(entity.view),
+      memberActions: entity.memberActions == null
+          ? null
+          : List<MemberActionModel>.from(
+              await Future.wait(entity.memberActions!.map((item) {
+              counter++;
+              return MemberActionModel.fromEntityPlus(counter.toString(), item,
+                  appId: appId);
+            }).toList())),
+      conditions: await StorageConditionsModel.fromEntityPlus(entity.conditions,
+          appId: appId),
     );
   }
-
 }
-

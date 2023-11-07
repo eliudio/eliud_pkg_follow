@@ -31,7 +31,10 @@ class FollowingDashboardComponentConstructorDefault
     implements ComponentConstructor {
   @override
   Widget createNew(
-      {Key? key, required AppModel app, required String id, Map<String, dynamic>? parameters}) {
+      {Key? key,
+      required AppModel app,
+      required String id,
+      Map<String, dynamic>? parameters}) {
     return FollowingDashboardComponent(key: key, app: app, id: id);
   }
 
@@ -41,13 +44,13 @@ class FollowingDashboardComponentConstructorDefault
 }
 
 class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
-  FollowingDashboardComponent({Key? key, required AppModel app, required String id})
-      : super(key: key, app: app, followingDashboardId: id);
+  FollowingDashboardComponent(
+      {super.key, required super.app, required String id})
+      : super(followingDashboardId: id);
 
   @override
-  Widget yourWidget(
-      BuildContext context, FollowingDashboardModel? dashboardModel) {
-    if (dashboardModel == null) return Text("Not dashboard");
+  Widget yourWidget(BuildContext context, FollowingDashboardModel? value) {
+    if (value == null) return Text("Not dashboard");
     return BlocBuilder<AccessBloc, AccessState>(
         builder: (context, accessState) {
       if (accessState is AccessDetermined) {
@@ -57,21 +60,19 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
         return topicContainer(app, context, children: [
           BlocProvider<FollowingListBloc>(
               create: (context) => FollowingListBloc(
-                    eliudQuery: getQuery(dashboardModel, member),
+                    eliudQuery: getQuery(value, member),
                     detailed: true,
-                    followingRepository:
-                        followingRepository(appId: appId)!,
+                    followingRepository: followingRepository(appId: appId)!,
                   )..add(LoadFollowingList()),
-              child: simpleTopicContainer(app,
+              child: simpleTopicContainer(
+                app,
                 context,
                 children: ([
                   FollowingListWidget(
-                    app: app,
+                      app: app,
                       readOnly: true,
-                      widgetProvider: (value) =>
-                          widgetProvider(app, value!, dashboardModel),
-                      listBackground:
-                          BackgroundModel())
+                      widgetProvider: (v) => widgetProvider(app, v!, value),
+                      listBackground: BackgroundModel())
                 ]),
               ))
         ]);
@@ -83,11 +84,11 @@ class FollowingDashboardComponent extends AbstractFollowingDashboardComponent {
 
   static EliudQuery? getQuery(
       FollowingDashboardModel followingDashboardModel, MemberModel member) {
-    if (followingDashboardModel.view == FollowingView.Followers) {
+    if (followingDashboardModel.view == FollowingView.followers) {
       return EliudQuery(theConditions: [
         EliudQueryCondition('followedId', isEqualTo: member.documentID),
       ]);
-    } else if (followingDashboardModel.view == FollowingView.Following) {
+    } else if (followingDashboardModel.view == FollowingView.following) {
       return EliudQuery(theConditions: [
         EliudQueryCondition('followerId', isEqualTo: member.documentID),
       ]);
@@ -112,12 +113,12 @@ class FollowingDashboardItem extends StatelessWidget {
   final FollowingDashboardModel dashboardModel;
 
   FollowingDashboardItem({
-    Key? key,
+    super.key,
     this.followingView,
     required this.value,
     required this.app,
     required this.dashboardModel,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -129,11 +130,11 @@ class FollowingDashboardItem extends StatelessWidget {
           if (snapshot.hasData) {
             var data = snapshot.data;
 */
-    var data = followingView == FollowingView.Followers
+    var data = followingView == FollowingView.followers
         ? value!.follower
         : value!.followed;
-    var photo;
-    var name;
+    Widget photo;
+    String? name;
     if (data == null) {
       photo = Text("No photo provided");
       name = "No name";
@@ -142,16 +143,17 @@ class FollowingDashboardItem extends StatelessWidget {
         placeholder: kTransparentImage,
         image: data.photoURL!,
       );
-      name = data.name;
+      name = data.name ?? "?";
     }
-    var memberId = followingView == FollowingView.Followers
+    var memberId = followingView == FollowingView.followers
         ? value!.follower!.documentID
         : value!.followed!.documentID;
     return ListTile(
         onTap: () {
-          MemberPopupMenu.showPopupMenuWithAllActions(app,
+          MemberPopupMenu.showPopupMenuWithAllActions(
+            app,
             context,
-            followingView == FollowingView.Followers
+            followingView == FollowingView.followers
                 ? 'Remove follower'
                 : 'Unfollow member',
             () => openOptions(app, context),
@@ -175,28 +177,20 @@ class FollowingDashboardItem extends StatelessWidget {
   }
 
   void openOptions(AppModel app, BuildContext context) {
-    var title;
-    var message;
-    if (followingView == FollowingView.Followers) {
+    String title;
+    String message;
+    if (followingView == FollowingView.followers) {
       title = 'Reject follower?';
-      message = 'Would you like to reject ' +
-          ((value == null) ||
-                  (value!.follower == null) ||
-                  (value!.follower!.name == null)
-              ? value!.follower!.name!
-              : '');
+      message =
+          'Would you like to reject ${(value == null) || (value!.follower == null) || (value!.follower!.name == null) ? value!.follower!.name! : ''}';
     } else {
       title = 'Unfollow this person?';
-      message = "Would you like to unfollow " +
-          ((value == null) ||
-                  (value!.followed == null) ||
-                  (value!.followed!.name == null)
-              ? value!.followed!.name!
-              : '');
+      message =
+          "Would you like to unfollow ${(value == null) || (value!.followed == null) || (value!.followed!.name == null) ? value!.followed!.name! : ''}";
     }
 
-    openAckNackDialog(app, context, app.documentID + '/follow', title: title, message: message,
-        onSelection: (selectedValue) async {
+    openAckNackDialog(app, context, '${app.documentID}/follow',
+        title: title, message: message, onSelection: (selectedValue) async {
       Navigator.pop(context);
       if (selectedValue == 0) {
         await followingRepository(appId: app.documentID)!.delete(value!);

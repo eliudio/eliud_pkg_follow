@@ -23,24 +23,26 @@ abstract class InviteDashboardComponentState extends Equatable {
   List<Object?> get props => [];
 }
 
-class InviteDashboardComponentUninitialized extends InviteDashboardComponentState {}
+class InviteDashboardComponentUninitialized
+    extends InviteDashboardComponentState {}
 
 class InviteDashboardComponentError extends InviteDashboardComponentState {
   final String? message;
-  InviteDashboardComponentError({ this.message });
+  InviteDashboardComponentError({this.message});
 }
 
-class InviteDashboardComponentPermissionDenied extends InviteDashboardComponentState {
+class InviteDashboardComponentPermissionDenied
+    extends InviteDashboardComponentState {
   InviteDashboardComponentPermissionDenied();
 }
 
 class InviteDashboardComponentLoaded extends InviteDashboardComponentState {
   final InviteDashboardModel value;
 
-  const InviteDashboardComponentLoaded({ required this.value });
+  const InviteDashboardComponentLoaded({required this.value});
 
-  InviteDashboardComponentLoaded copyWith({ InviteDashboardModel? copyThis }) {
-    return InviteDashboardComponentLoaded(value: copyThis ?? this.value);
+  InviteDashboardComponentLoaded copyWith({InviteDashboardModel? copyThis}) {
+    return InviteDashboardComponentLoaded(value: copyThis ?? value);
   }
 
   @override
@@ -49,4 +51,3 @@ class InviteDashboardComponentLoaded extends InviteDashboardComponentState {
   @override
   String toString() => 'InviteDashboardComponentLoaded { value: $value }';
 }
-

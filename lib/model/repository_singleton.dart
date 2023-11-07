@@ -32,33 +32,70 @@ import '../model/invite_dashboard_firestore.dart';
 import '../model/invite_dashboard_repository.dart';
 import '../model/invite_dashboard_cache.dart';
 
-
 class RepositorySingleton extends AbstractRepositorySingleton {
-    var _followingRepository = HashMap<String, FollowingRepository>();
-    var _followingDashboardRepository = HashMap<String, FollowingDashboardRepository>();
-    var _followRequestRepository = HashMap<String, FollowRequestRepository>();
-    var _followRequestsDashboardRepository = HashMap<String, FollowRequestsDashboardRepository>();
-    var _inviteDashboardRepository = HashMap<String, InviteDashboardRepository>();
+  final _followingRepository = HashMap<String, FollowingRepository>();
+  final _followingDashboardRepository =
+      HashMap<String, FollowingDashboardRepository>();
+  final _followRequestRepository = HashMap<String, FollowRequestRepository>();
+  final _followRequestsDashboardRepository =
+      HashMap<String, FollowRequestsDashboardRepository>();
+  final _inviteDashboardRepository =
+      HashMap<String, InviteDashboardRepository>();
 
-    FollowingRepository? followingRepository(String? appId) {
-      if ((appId != null) && (_followingRepository[appId] == null)) _followingRepository[appId] = FollowingCache(FollowingFirestore(() => appRepository()!.getSubCollection(appId, 'following'), appId));
-      return _followingRepository[appId];
+  @override
+  FollowingRepository? followingRepository(String? appId) {
+    if ((appId != null) && (_followingRepository[appId] == null)) {
+      _followingRepository[appId] = FollowingCache(FollowingFirestore(
+          () => appRepository()!.getSubCollection(appId, 'following'), appId));
     }
-    FollowingDashboardRepository? followingDashboardRepository(String? appId) {
-      if ((appId != null) && (_followingDashboardRepository[appId] == null)) _followingDashboardRepository[appId] = FollowingDashboardCache(FollowingDashboardFirestore(() => appRepository()!.getSubCollection(appId, 'followingdashboard'), appId));
-      return _followingDashboardRepository[appId];
-    }
-    FollowRequestRepository? followRequestRepository(String? appId) {
-      if ((appId != null) && (_followRequestRepository[appId] == null)) _followRequestRepository[appId] = FollowRequestCache(FollowRequestFirestore(() => appRepository()!.getSubCollection(appId, 'followrequest'), appId));
-      return _followRequestRepository[appId];
-    }
-    FollowRequestsDashboardRepository? followRequestsDashboardRepository(String? appId) {
-      if ((appId != null) && (_followRequestsDashboardRepository[appId] == null)) _followRequestsDashboardRepository[appId] = FollowRequestsDashboardCache(FollowRequestsDashboardFirestore(() => appRepository()!.getSubCollection(appId, 'followrequestsdashboard'), appId));
-      return _followRequestsDashboardRepository[appId];
-    }
-    InviteDashboardRepository? inviteDashboardRepository(String? appId) {
-      if ((appId != null) && (_inviteDashboardRepository[appId] == null)) _inviteDashboardRepository[appId] = InviteDashboardCache(InviteDashboardFirestore(() => appRepository()!.getSubCollection(appId, 'invitedashboard'), appId));
-      return _inviteDashboardRepository[appId];
-    }
+    return _followingRepository[appId];
+  }
 
+  @override
+  FollowingDashboardRepository? followingDashboardRepository(String? appId) {
+    if ((appId != null) && (_followingDashboardRepository[appId] == null)) {
+      _followingDashboardRepository[appId] = FollowingDashboardCache(
+          FollowingDashboardFirestore(
+              () => appRepository()!
+                  .getSubCollection(appId, 'followingdashboard'),
+              appId));
+    }
+    return _followingDashboardRepository[appId];
+  }
+
+  @override
+  FollowRequestRepository? followRequestRepository(String? appId) {
+    if ((appId != null) && (_followRequestRepository[appId] == null)) {
+      _followRequestRepository[appId] = FollowRequestCache(
+          FollowRequestFirestore(
+              () => appRepository()!.getSubCollection(appId, 'followrequest'),
+              appId));
+    }
+    return _followRequestRepository[appId];
+  }
+
+  @override
+  FollowRequestsDashboardRepository? followRequestsDashboardRepository(
+      String? appId) {
+    if ((appId != null) &&
+        (_followRequestsDashboardRepository[appId] == null)) {
+      _followRequestsDashboardRepository[appId] = FollowRequestsDashboardCache(
+          FollowRequestsDashboardFirestore(
+              () => appRepository()!
+                  .getSubCollection(appId, 'followrequestsdashboard'),
+              appId));
+    }
+    return _followRequestsDashboardRepository[appId];
+  }
+
+  @override
+  InviteDashboardRepository? inviteDashboardRepository(String? appId) {
+    if ((appId != null) && (_inviteDashboardRepository[appId] == null)) {
+      _inviteDashboardRepository[appId] = InviteDashboardCache(
+          InviteDashboardFirestore(
+              () => appRepository()!.getSubCollection(appId, 'invitedashboard'),
+              appId));
+    }
+    return _inviteDashboardRepository[appId];
+  }
 }

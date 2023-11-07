@@ -21,16 +21,16 @@ abstract class FollowRequestsDashboardComponentEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class FetchFollowRequestsDashboardComponent extends FollowRequestsDashboardComponentEvent {
+class FetchFollowRequestsDashboardComponent
+    extends FollowRequestsDashboardComponentEvent {
   final String? id;
 
-  FetchFollowRequestsDashboardComponent({ this.id });
+  FetchFollowRequestsDashboardComponent({this.id});
 }
 
-class FollowRequestsDashboardComponentUpdated extends FollowRequestsDashboardComponentEvent {
+class FollowRequestsDashboardComponentUpdated
+    extends FollowRequestsDashboardComponentEvent {
   final FollowRequestsDashboardModel value;
 
-  FollowRequestsDashboardComponentUpdated({ required this.value });
+  FollowRequestsDashboardComponentUpdated({required this.value});
 }
-
-

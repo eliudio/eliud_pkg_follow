@@ -19,28 +19,38 @@ import 'package:eliud_core/core/base/model_base.dart';
 
 import 'package:eliud_pkg_follow/model/entity_export.dart';
 
-
 import 'package:eliud_pkg_follow/model/following_array_entity.dart';
-
-
-
 
 class FollowingArrayModel implements ModelBase, WithAppId {
   static const String packageName = 'eliud_pkg_follow';
   static const String id = 'followingArrays';
 
-
   // Member ID
+  @override
   String documentID;
 
   // This is the identifier of the app to which this belongs
+  @override
   String appId;
   List<String>? followers;
 
-  FollowingArrayModel({required this.documentID, required this.appId, this.followers, });
+  FollowingArrayModel({
+    required this.documentID,
+    required this.appId,
+    this.followers,
+  });
 
-  FollowingArrayModel copyWith({String? documentID, String? appId, List<String>? followers, }) {
-    return FollowingArrayModel(documentID: documentID ?? this.documentID, appId: appId ?? this.appId, followers: followers ?? this.followers, );
+  @override
+  FollowingArrayModel copyWith({
+    String? documentID,
+    String? appId,
+    List<String>? followers,
+  }) {
+    return FollowingArrayModel(
+      documentID: documentID ?? this.documentID,
+      appId: appId ?? this.appId,
+      followers: followers ?? this.followers,
+    );
   }
 
   @override
@@ -48,9 +58,9 @@ class FollowingArrayModel implements ModelBase, WithAppId {
 
   @override
   bool operator ==(Object other) =>
-          identical(this, other) ||
-          other is FollowingArrayModel &&
-          runtimeType == other.runtimeType && 
+      identical(this, other) ||
+      other is FollowingArrayModel &&
+          runtimeType == other.runtimeType &&
           documentID == other.documentID &&
           appId == other.appId &&
           ListEquality().equals(followers, other.followers);
@@ -62,38 +72,39 @@ class FollowingArrayModel implements ModelBase, WithAppId {
     return 'FollowingArrayModel{documentID: $documentID, appId: $appId, followers: String[] { $followersCsv }}';
   }
 
+  @override
   Future<List<ModelReference>> collectReferences({String? appId}) async {
     List<ModelReference> referencesCollector = [];
     return referencesCollector;
   }
 
+  @override
   FollowingArrayEntity toEntity({String? appId}) {
     return FollowingArrayEntity(
-          appId: (appId != null) ? appId : null, 
-          followers: (followers != null) ? followers : null, 
+      appId: appId,
+      followers: (followers != null) ? followers : null,
     );
   }
 
-  static Future<FollowingArrayModel?> fromEntity(String documentID, FollowingArrayEntity? entity) async {
+  static Future<FollowingArrayModel?> fromEntity(
+      String documentID, FollowingArrayEntity? entity) async {
     if (entity == null) return null;
-    var counter = 0;
     return FollowingArrayModel(
-          documentID: documentID, 
-          appId: entity.appId ?? '', 
-          followers: entity.followers, 
+      documentID: documentID,
+      appId: entity.appId ?? '',
+      followers: entity.followers,
     );
   }
 
-  static Future<FollowingArrayModel?> fromEntityPlus(String documentID, FollowingArrayEntity? entity, { String? appId}) async {
+  static Future<FollowingArrayModel?> fromEntityPlus(
+      String documentID, FollowingArrayEntity? entity,
+      {String? appId}) async {
     if (entity == null) return null;
 
-    var counter = 0;
     return FollowingArrayModel(
-          documentID: documentID, 
-          appId: entity.appId ?? '', 
-          followers: entity.followers, 
+      documentID: documentID,
+      appId: entity.appId ?? '',
+      followers: entity.followers,
     );
   }
-
 }
-

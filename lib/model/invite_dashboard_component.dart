@@ -13,7 +13,6 @@
 
 */
 
-
 import 'package:eliud_pkg_follow/model/invite_dashboard_component_bloc.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_component_event.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_model.dart';
@@ -31,20 +30,23 @@ abstract class AbstractInviteDashboardComponent extends StatelessWidget {
   final AppModel app;
   final String inviteDashboardId;
 
-  AbstractInviteDashboardComponent({Key? key, required this.app, required this.inviteDashboardId}): super(key: key);
+  AbstractInviteDashboardComponent(
+      {super.key, required this.app, required this.inviteDashboardId});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<InviteDashboardComponentBloc> (
-          create: (context) => InviteDashboardComponentBloc(
-            inviteDashboardRepository: inviteDashboardRepository(appId: app.documentID)!)
+    return BlocProvider<InviteDashboardComponentBloc>(
+      create: (context) => InviteDashboardComponentBloc(
+          inviteDashboardRepository:
+              inviteDashboardRepository(appId: app.documentID)!)
         ..add(FetchInviteDashboardComponent(id: inviteDashboardId)),
       child: _inviteDashboardBlockBuilder(context),
     );
   }
 
   Widget _inviteDashboardBlockBuilder(BuildContext context) {
-    return BlocBuilder<InviteDashboardComponentBloc, InviteDashboardComponentState>(builder: (context, state) {
+    return BlocBuilder<InviteDashboardComponentBloc,
+        InviteDashboardComponentState>(builder: (context, state) {
       if (state is InviteDashboardComponentLoaded) {
         return yourWidget(context, state.value);
       } else if (state is InviteDashboardComponentPermissionDenied) {
@@ -57,7 +59,11 @@ abstract class AbstractInviteDashboardComponent extends StatelessWidget {
         return AlertWidget(app: app, title: 'Error', content: state.message);
       } else {
         return Center(
-          child: StyleRegistry.registry().styleWithApp(app).frontEndStyle().progressIndicatorStyle().progressIndicator(app, context),
+          child: StyleRegistry.registry()
+              .styleWithApp(app)
+              .frontEndStyle()
+              .progressIndicatorStyle()
+              .progressIndicator(app, context),
         );
       }
     });
@@ -65,4 +71,3 @@ abstract class AbstractInviteDashboardComponent extends StatelessWidget {
 
   Widget yourWidget(BuildContext context, InviteDashboardModel value);
 }
-

@@ -47,7 +47,7 @@ class FollowRequestsDashboardComponentEditorConstructor
           documentID: newRandomKey(),
           conditions: StorageConditionsModel(
               privilegeLevelRequired:
-                  PrivilegeLevelRequiredSimple.NoPrivilegeRequiredSimple),
+                  PrivilegeLevelRequiredSimple.noPrivilegeRequiredSimple),
         ),
         feedback);
   }
@@ -60,7 +60,7 @@ class FollowRequestsDashboardComponentEditorConstructor
     if (followRequestsDashboard != null) {
       _openIt(app, context, false, followRequestsDashboard, feedback);
     } else {
-      openErrorDialog(app, context, app.documentID + '/_error',
+      openErrorDialog(app, context, '${app.documentID}/_error',
           title: 'Error',
           errorMessage: 'Cannot find followRequests dashboard with id $id');
     }
@@ -71,7 +71,7 @@ class FollowRequestsDashboardComponentEditorConstructor
     openComplexDialog(
       app,
       context,
-      app.documentID + '/followRequestsdashboard',
+      '${app.documentID}/followRequestsdashboard',
       title: create
           ? 'Create FollowRequests Dashboard'
           : 'Update FollowRequests Dashboard',
@@ -83,7 +83,8 @@ class FollowRequestsDashboardComponentEditorConstructor
                 /*create,
             */
                 feedback,
-              )..add(ExtEditorBaseInitialise<FollowRequestsDashboardModel>(model)),
+              )..add(
+                  ExtEditorBaseInitialise<FollowRequestsDashboardModel>(model)),
           child: FollowRequestsDashboardComponentEditor(
             app: app,
           )),
@@ -95,9 +96,9 @@ class FollowRequestsDashboardComponentEditor extends StatefulWidget {
   final AppModel app;
 
   const FollowRequestsDashboardComponentEditor({
-    Key? key,
+    super.key,
     required this.app,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() =>
@@ -114,8 +115,8 @@ class _FollowRequestsDashboardComponentEditorState
         return BlocBuilder<FollowRequestsDashboardBloc,
                 ExtEditorBaseState<FollowRequestsDashboardModel>>(
             builder: (ppContext, followRequestsDashboardState) {
-          if (followRequestsDashboardState
-              is ExtEditorBaseInitialised<FollowRequestsDashboardModel, dynamic>) {
+          if (followRequestsDashboardState is ExtEditorBaseInitialised<
+              FollowRequestsDashboardModel, dynamic>) {
             return ListView(
                 shrinkWrap: true,
                 physics: ScrollPhysics(),
@@ -124,7 +125,8 @@ class _FollowRequestsDashboardComponentEditorState
                     app: widget.app,
                     title: 'FollowRequestsDashboard',
                     okAction: () async {
-                      await BlocProvider.of<FollowRequestsDashboardBloc>(context)
+                      await BlocProvider.of<FollowRequestsDashboardBloc>(
+                              context)
                           .save(ExtEditorBaseApplyChanges<
                                   FollowRequestsDashboardModel>(
                               model: followRequestsDashboardState.model));
@@ -148,8 +150,8 @@ class _FollowRequestsDashboardComponentEditorState
                             title: dialogField(
                               widget.app,
                               context,
-                              initialValue:
-                                  followRequestsDashboardState.model.description,
+                              initialValue: followRequestsDashboardState
+                                  .model.description,
                               valueChanged: (value) {
                                 followRequestsDashboardState.model.description =
                                     value;
@@ -177,7 +179,8 @@ class _FollowRequestsDashboardComponentEditorState
                             leading: Icon(Icons.security),
                             title: ConditionsSimpleWidget(
                               app: widget.app,
-                              value: followRequestsDashboardState.model.conditions!,
+                              value: followRequestsDashboardState
+                                  .model.conditions!,
                             )),
                       ]),
                 ]);
@@ -211,18 +214,19 @@ class _FollowRequestsDashboardComponentEditorState
                     context,
                     widget.app,
                     title: text(widget.app, context,
-                        (value.text ?? '?') + ' ' + (value.description ?? '?')),
-                    trailing: popupMenuButton<int>(
-                      widget.app, context,
+                        '${value.text ?? '?'} ${value.description ?? '?'}'),
+                    trailing: popupMenuButton<int>(widget.app, context,
                         child: Icon(Icons.more_vert),
                         itemBuilder: (context) => [
                               popupMenuItem(
-                                widget.app, context,
+                                widget.app,
+                                context,
                                 value: 1,
                                 label: 'Update',
                               ),
                               popupMenuItem(
-                                widget.app, context,
+                                widget.app,
+                                context,
                                 value: 2,
                                 label: 'Delete',
                               ),
@@ -231,13 +235,12 @@ class _FollowRequestsDashboardComponentEditorState
                           if (selectedValue == 1) {
                             open(
                                 value,
-                                (newItem) =>
-                                    BlocProvider.of<FollowRequestsDashboardBloc>(
-                                            context)
-                                        .add(UpdateItemEvent<
-                                                FollowRequestsDashboardModel,
-                                                MemberActionModel>(
-                                            oldItem: value, newItem: newItem)),
+                                (newItem) => BlocProvider.of<
+                                        FollowRequestsDashboardBloc>(context)
+                                    .add(UpdateItemEvent<
+                                            FollowRequestsDashboardModel,
+                                            MemberActionModel>(
+                                        oldItem: value, newItem: newItem)),
                                 ((state.model.conditions == null) ||
                                         (state.model.conditions!
                                                 .privilegeLevelRequired ==
@@ -246,8 +249,10 @@ class _FollowRequestsDashboardComponentEditorState
                                     : state.model.conditions!
                                         .privilegeLevelRequired!.index);
                           } else if (selectedValue == 2) {
-                            BlocProvider.of<FollowRequestsDashboardBloc>(context)
-                                .add(DeleteItemEvent<FollowRequestsDashboardModel,
+                            BlocProvider.of<FollowRequestsDashboardBloc>(
+                                    context)
+                                .add(DeleteItemEvent<
+                                    FollowRequestsDashboardModel,
                                     MemberActionModel>(itemModel: value));
                           }
                         }),
@@ -274,8 +279,9 @@ class _FollowRequestsDashboardComponentEditorState
                     description: 'new action',
                     action: null,
                   ),
-                  (newItem) => BlocProvider.of<FollowRequestsDashboardBloc>(context)
-                      .add(AddItemEvent(itemModel: newItem)),
+                  (newItem) =>
+                      BlocProvider.of<FollowRequestsDashboardBloc>(context)
+                          .add(AddItemEvent(itemModel: newItem)),
                   ((state.model.conditions == null) ||
                           (state.model.conditions!.privilegeLevelRequired ==
                               null))
@@ -296,7 +302,7 @@ class _FollowRequestsDashboardComponentEditorState
     openFlexibleDialog(
       widget.app,
       context,
-      widget.app.documentID + '/_memberaction',
+      '${widget.app.documentID}/_memberaction',
       includeHeading: false,
       widthFraction: .8,
       child: MemberActionModelWidget.getIt(

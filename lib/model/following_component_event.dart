@@ -24,13 +24,11 @@ abstract class FollowingComponentEvent extends Equatable {
 class FetchFollowingComponent extends FollowingComponentEvent {
   final String? id;
 
-  FetchFollowingComponent({ this.id });
+  FetchFollowingComponent({this.id});
 }
 
 class FollowingComponentUpdated extends FollowingComponentEvent {
   final FollowingModel value;
 
-  FollowingComponentUpdated({ required this.value });
+  FollowingComponentUpdated({required this.value});
 }
-
-

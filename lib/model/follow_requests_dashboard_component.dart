@@ -13,7 +13,6 @@
 
 */
 
-
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_component_bloc.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_component_event.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_model.dart';
@@ -26,25 +25,30 @@ import 'abstract_repository_singleton.dart';
 import 'package:eliud_core/core/widgets/alert_widget.dart';
 import 'package:eliud_core/model/app_model.dart';
 
-abstract class AbstractFollowRequestsDashboardComponent extends StatelessWidget {
+abstract class AbstractFollowRequestsDashboardComponent
+    extends StatelessWidget {
   static String componentName = "followRequestsDashboards";
   final AppModel app;
   final String followRequestsDashboardId;
 
-  AbstractFollowRequestsDashboardComponent({Key? key, required this.app, required this.followRequestsDashboardId}): super(key: key);
+  AbstractFollowRequestsDashboardComponent(
+      {super.key, required this.app, required this.followRequestsDashboardId});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<FollowRequestsDashboardComponentBloc> (
-          create: (context) => FollowRequestsDashboardComponentBloc(
-            followRequestsDashboardRepository: followRequestsDashboardRepository(appId: app.documentID)!)
-        ..add(FetchFollowRequestsDashboardComponent(id: followRequestsDashboardId)),
+    return BlocProvider<FollowRequestsDashboardComponentBloc>(
+      create: (context) => FollowRequestsDashboardComponentBloc(
+          followRequestsDashboardRepository:
+              followRequestsDashboardRepository(appId: app.documentID)!)
+        ..add(FetchFollowRequestsDashboardComponent(
+            id: followRequestsDashboardId)),
       child: _followRequestsDashboardBlockBuilder(context),
     );
   }
 
   Widget _followRequestsDashboardBlockBuilder(BuildContext context) {
-    return BlocBuilder<FollowRequestsDashboardComponentBloc, FollowRequestsDashboardComponentState>(builder: (context, state) {
+    return BlocBuilder<FollowRequestsDashboardComponentBloc,
+        FollowRequestsDashboardComponentState>(builder: (context, state) {
       if (state is FollowRequestsDashboardComponentLoaded) {
         return yourWidget(context, state.value);
       } else if (state is FollowRequestsDashboardComponentPermissionDenied) {
@@ -57,7 +61,11 @@ abstract class AbstractFollowRequestsDashboardComponent extends StatelessWidget 
         return AlertWidget(app: app, title: 'Error', content: state.message);
       } else {
         return Center(
-          child: StyleRegistry.registry().styleWithApp(app).frontEndStyle().progressIndicatorStyle().progressIndicator(app, context),
+          child: StyleRegistry.registry()
+              .styleWithApp(app)
+              .frontEndStyle()
+              .progressIndicatorStyle()
+              .progressIndicator(app, context),
         );
       }
     });
@@ -65,4 +73,3 @@ abstract class AbstractFollowRequestsDashboardComponent extends StatelessWidget 
 
   Widget yourWidget(BuildContext context, FollowRequestsDashboardModel value);
 }
-

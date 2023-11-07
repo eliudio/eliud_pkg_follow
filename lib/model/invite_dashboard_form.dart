@@ -23,10 +23,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eliud_core/style/style_registry.dart';
 
-
-
-
-
 import 'package:eliud_core/tools/enums.dart';
 
 import 'package:eliud_pkg_etc/model/embedded_component.dart';
@@ -40,63 +36,78 @@ import 'package:eliud_pkg_follow/model/invite_dashboard_form_bloc.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_form_event.dart';
 import 'package:eliud_pkg_follow/model/invite_dashboard_form_state.dart';
 
-
 class InviteDashboardForm extends StatelessWidget {
   final AppModel app;
-  FormAction formAction;
-  InviteDashboardModel? value;
-  ActionModel? submitAction;
+  final FormAction formAction;
+  final InviteDashboardModel? value;
+  final ActionModel? submitAction;
 
-  InviteDashboardForm({Key? key, required this.app, required this.formAction, required this.value, this.submitAction}) : super(key: key);
+  InviteDashboardForm(
+      {super.key,
+      required this.app,
+      required this.formAction,
+      required this.value,
+      this.submitAction});
 
+  /// Build the InviteDashboardForm
   @override
   Widget build(BuildContext context) {
-    var accessState = AccessBloc.getState(context);
+    //var accessState = AccessBloc.getState(context);
     var appId = app.documentID;
-    if (formAction == FormAction.ShowData) {
-      return BlocProvider<InviteDashboardFormBloc >(
-            create: (context) => InviteDashboardFormBloc(appId,
-                                       formAction: formAction,
-
-                                                )..add(InitialiseInviteDashboardFormEvent(value: value)),
-  
-        child: MyInviteDashboardForm(app:app, submitAction: submitAction, formAction: formAction),
-          );
-    } if (formAction == FormAction.ShowPreloadedData) {
-      return BlocProvider<InviteDashboardFormBloc >(
-            create: (context) => InviteDashboardFormBloc(appId,
-                                       formAction: formAction,
-
-                                                )..add(InitialiseInviteDashboardFormNoLoadEvent(value: value)),
-  
-        child: MyInviteDashboardForm(app:app, submitAction: submitAction, formAction: formAction),
-          );
+    if (formAction == FormAction.showData) {
+      return BlocProvider<InviteDashboardFormBloc>(
+        create: (context) => InviteDashboardFormBloc(
+          appId,
+          formAction: formAction,
+        )..add(InitialiseInviteDashboardFormEvent(value: value)),
+        child: MyInviteDashboardForm(
+            app: app, submitAction: submitAction, formAction: formAction),
+      );
+    }
+    if (formAction == FormAction.showPreloadedData) {
+      return BlocProvider<InviteDashboardFormBloc>(
+        create: (context) => InviteDashboardFormBloc(
+          appId,
+          formAction: formAction,
+        )..add(InitialiseInviteDashboardFormNoLoadEvent(value: value)),
+        child: MyInviteDashboardForm(
+            app: app, submitAction: submitAction, formAction: formAction),
+      );
     } else {
       return Scaffold(
-        appBar: StyleRegistry.registry().styleWithApp(app).adminFormStyle().appBarWithString(app, context, title: formAction == FormAction.UpdateAction ? 'Update InviteDashboard' : 'Add InviteDashboard'),
-        body: BlocProvider<InviteDashboardFormBloc >(
-            create: (context) => InviteDashboardFormBloc(appId,
-                                       formAction: formAction,
-
-                                                )..add((formAction == FormAction.UpdateAction ? InitialiseInviteDashboardFormEvent(value: value) : InitialiseNewInviteDashboardFormEvent())),
-  
-        child: MyInviteDashboardForm(app: app, submitAction: submitAction, formAction: formAction),
+          appBar: StyleRegistry.registry()
+              .styleWithApp(app)
+              .adminFormStyle()
+              .appBarWithString(app, context,
+                  title: formAction == FormAction.updateAction
+                      ? 'Update InviteDashboard'
+                      : 'Add InviteDashboard'),
+          body: BlocProvider<InviteDashboardFormBloc>(
+            create: (context) => InviteDashboardFormBloc(
+              appId,
+              formAction: formAction,
+            )..add((formAction == FormAction.updateAction
+                ? InitialiseInviteDashboardFormEvent(value: value)
+                : InitialiseNewInviteDashboardFormEvent())),
+            child: MyInviteDashboardForm(
+                app: app, submitAction: submitAction, formAction: formAction),
           ));
     }
   }
 }
-
 
 class MyInviteDashboardForm extends StatefulWidget {
   final AppModel app;
   final FormAction? formAction;
   final ActionModel? submitAction;
 
-  MyInviteDashboardForm({required this.app, this.formAction, this.submitAction});
+  MyInviteDashboardForm(
+      {required this.app, this.formAction, this.submitAction});
 
-  _MyInviteDashboardFormState createState() => _MyInviteDashboardFormState(this.formAction);
+  @override
+  State<MyInviteDashboardForm> createState() =>
+      _MyInviteDashboardFormState(formAction);
 }
-
 
 class _MyInviteDashboardFormState extends State<MyInviteDashboardForm> {
   final FormAction? formAction;
@@ -105,7 +116,6 @@ class _MyInviteDashboardFormState extends State<MyInviteDashboardForm> {
   final TextEditingController _documentIDController = TextEditingController();
   final TextEditingController _appIdController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-
 
   _MyInviteDashboardFormState(this.formAction);
 
@@ -121,165 +131,219 @@ class _MyInviteDashboardFormState extends State<MyInviteDashboardForm> {
   @override
   Widget build(BuildContext context) {
     var accessState = AccessBloc.getState(context);
-    return BlocBuilder<InviteDashboardFormBloc, InviteDashboardFormState>(builder: (context, state) {
-      if (state is InviteDashboardFormUninitialized) return Center(
-        child: StyleRegistry.registry().styleWithApp(widget.app).adminListStyle().progressIndicator(widget.app, context),
-      );
+    return BlocBuilder<InviteDashboardFormBloc, InviteDashboardFormState>(
+        builder: (context, state) {
+      if (state is InviteDashboardFormUninitialized) {
+        return Center(
+          child: StyleRegistry.registry()
+              .styleWithApp(widget.app)
+              .adminListStyle()
+              .progressIndicator(widget.app, context),
+        );
+      }
 
       if (state is InviteDashboardFormLoaded) {
-        if (state.value!.documentID != null)
-          _documentIDController.text = state.value!.documentID.toString();
-        else
-          _documentIDController.text = "";
-        if (state.value!.appId != null)
-          _appIdController.text = state.value!.appId.toString();
-        else
-          _appIdController.text = "";
-        if (state.value!.description != null)
-          _descriptionController.text = state.value!.description.toString();
-        else
-          _descriptionController.text = "";
+        _documentIDController.text = state.value!.documentID.toString();
+        _appIdController.text = state.value!.appId.toString();
+        _descriptionController.text = state.value!.description.toString();
       }
       if (state is InviteDashboardFormInitialized) {
         List<Widget> children = [];
-         children.add(Container(
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                  child: StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().groupTitle(widget.app, context, 'General')
-                ));
+        children.add(Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+            child: StyleRegistry.registry()
+                .styleWithApp(widget.app)
+                .adminFormStyle()
+                .groupTitle(widget.app, context, 'General')));
 
-        children.add(
+        children.add(StyleRegistry.registry()
+            .styleWithApp(widget.app)
+            .adminFormStyle()
+            .textFormField(widget.app, context,
+                labelText: 'Document ID',
+                icon: Icons.vpn_key,
+                readOnly: (formAction == FormAction.updateAction),
+                textEditingController: _documentIDController,
+                keyboardType: TextInputType.text,
+                validator: (_) => state is DocumentIDInviteDashboardFormError
+                    ? state.message
+                    : null,
+                hintText: null));
 
-                  StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().textFormField(widget.app, context, labelText: 'Document ID', icon: Icons.vpn_key, readOnly: (formAction == FormAction.UpdateAction), textEditingController: _documentIDController, keyboardType: TextInputType.text, validator: (_) => state is DocumentIDInviteDashboardFormError ? state.message : null, hintText: null)
-          );
+        children.add(StyleRegistry.registry()
+            .styleWithApp(widget.app)
+            .adminFormStyle()
+            .textFormField(widget.app, context,
+                labelText: 'App Identifier',
+                icon: Icons.text_format,
+                readOnly: _readOnly(accessState, state),
+                textEditingController: _appIdController,
+                keyboardType: TextInputType.text,
+                validator: (_) => state is AppIdInviteDashboardFormError
+                    ? state.message
+                    : null,
+                hintText: 'field.remark'));
 
-        children.add(
-
-                  StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().textFormField(widget.app, context, labelText: 'App Identifier', icon: Icons.text_format, readOnly: _readOnly(accessState, state), textEditingController: _appIdController, keyboardType: TextInputType.text, validator: (_) => state is AppIdInviteDashboardFormError ? state.message : null, hintText: 'field.remark')
-          );
-
-        children.add(
-
-                  StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().textFormField(widget.app, context, labelText: 'Description', icon: Icons.text_format, readOnly: _readOnly(accessState, state), textEditingController: _descriptionController, keyboardType: TextInputType.text, validator: (_) => state is DescriptionInviteDashboardFormError ? state.message : null, hintText: null)
-          );
-
-
-        children.add(Container(height: 20.0));
-        children.add(StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().divider(widget.app, context));
-
-
-         children.add(Container(
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                  child: StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().groupTitle(widget.app, context, 'Conditions')
-                ));
-
-
-
-        children.add(Container(height: 20.0));
-        children.add(StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().divider(widget.app, context));
-
-
-         children.add(Container(
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                  child: StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().groupTitle(widget.app, context, 'Extra Member Actions')
-                ));
-
-        children.add(
-
-                new Container(
-                    height: (fullScreenHeight(context) / 2.5), 
-                    child: memberActionsList(widget.app, context, state.value!.memberActions, _onMemberActionsChanged)
-                )
-          );
-
+        children.add(StyleRegistry.registry()
+            .styleWithApp(widget.app)
+            .adminFormStyle()
+            .textFormField(widget.app, context,
+                labelText: 'Description',
+                icon: Icons.text_format,
+                readOnly: _readOnly(accessState, state),
+                textEditingController: _descriptionController,
+                keyboardType: TextInputType.text,
+                validator: (_) => state is DescriptionInviteDashboardFormError
+                    ? state.message
+                    : null,
+                hintText: null));
 
         children.add(Container(height: 20.0));
-        children.add(StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().divider(widget.app, context));
+        children.add(StyleRegistry.registry()
+            .styleWithApp(widget.app)
+            .adminFormStyle()
+            .divider(widget.app, context));
 
-
-         children.add(Container(
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                  child: StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().groupTitle(widget.app, context, 'Open Profile Action')
-                ));
-
+        children.add(Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+            child: StyleRegistry.registry()
+                .styleWithApp(widget.app)
+                .adminFormStyle()
+                .groupTitle(widget.app, context, 'Conditions')));
 
         children.add(Container(height: 20.0));
-        children.add(StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().divider(widget.app, context));
+        children.add(StyleRegistry.registry()
+            .styleWithApp(widget.app)
+            .adminFormStyle()
+            .divider(widget.app, context));
 
+        children.add(Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+            child: StyleRegistry.registry()
+                .styleWithApp(widget.app)
+                .adminFormStyle()
+                .groupTitle(widget.app, context, 'Extra Member Actions')));
 
-        if ((formAction != FormAction.ShowData) && (formAction != FormAction.ShowPreloadedData))
-          children.add(StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().button(widget.app, context, label: 'Submit',
-                  onPressed: _readOnly(accessState, state) ? null : () {
-                    if (state is InviteDashboardFormError) {
-                      return null;
-                    } else {
-                      if (formAction == FormAction.UpdateAction) {
-                        BlocProvider.of<InviteDashboardListBloc>(context).add(
-                          UpdateInviteDashboardList(value: state.value!.copyWith(
-                              documentID: state.value!.documentID, 
-                              appId: state.value!.appId, 
-                              description: state.value!.description, 
-                              memberActions: state.value!.memberActions, 
-                              conditions: state.value!.conditions, 
-                        )));
-                      } else {
-                        BlocProvider.of<InviteDashboardListBloc>(context).add(
-                          AddInviteDashboardList(value: InviteDashboardModel(
-                              documentID: state.value!.documentID, 
-                              appId: state.value!.appId, 
-                              description: state.value!.description, 
-                              memberActions: state.value!.memberActions, 
-                              conditions: state.value!.conditions, 
-                          )));
-                      }
-                      if (widget.submitAction != null) {
-                        eliudrouter.Router.navigateTo(context, widget.submitAction!);
-                      } else {
-                        Navigator.pop(context);
-                      }
-                    }
-                  },
-                ));
+        children.add(Container(
+            height: (fullScreenHeight(context) / 2.5),
+            child: memberActionsList(widget.app, context,
+                state.value!.memberActions, _onMemberActionsChanged)));
 
-        return StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().container(widget.app, context, Form(
-            child: ListView(
-              padding: const EdgeInsets.all(8),
-              physics: ((formAction == FormAction.ShowData) || (formAction == FormAction.ShowPreloadedData)) ? NeverScrollableScrollPhysics() : null,
-              shrinkWrap: ((formAction == FormAction.ShowData) || (formAction == FormAction.ShowPreloadedData)),
-              children: children
-            ),
-          ), formAction!
-        );
+        children.add(Container(height: 20.0));
+        children.add(StyleRegistry.registry()
+            .styleWithApp(widget.app)
+            .adminFormStyle()
+            .divider(widget.app, context));
+
+        children.add(Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+            child: StyleRegistry.registry()
+                .styleWithApp(widget.app)
+                .adminFormStyle()
+                .groupTitle(widget.app, context, 'Open Profile Action')));
+
+        children.add(Container(height: 20.0));
+        children.add(StyleRegistry.registry()
+            .styleWithApp(widget.app)
+            .adminFormStyle()
+            .divider(widget.app, context));
+
+        if ((formAction != FormAction.showData) &&
+            (formAction != FormAction.showPreloadedData)) {
+          children.add(StyleRegistry.registry()
+              .styleWithApp(widget.app)
+              .adminFormStyle()
+              .button(
+                widget.app,
+                context,
+                label: 'Submit',
+                onPressed: _readOnly(accessState, state)
+                    ? null
+                    : () {
+                        if (state is InviteDashboardFormError) {
+                          return;
+                        } else {
+                          if (formAction == FormAction.updateAction) {
+                            BlocProvider.of<InviteDashboardListBloc>(context)
+                                .add(UpdateInviteDashboardList(
+                                    value: state.value!.copyWith(
+                              documentID: state.value!.documentID,
+                              appId: state.value!.appId,
+                              description: state.value!.description,
+                              memberActions: state.value!.memberActions,
+                              conditions: state.value!.conditions,
+                            )));
+                          } else {
+                            BlocProvider.of<InviteDashboardListBloc>(context)
+                                .add(AddInviteDashboardList(
+                                    value: InviteDashboardModel(
+                              documentID: state.value!.documentID,
+                              appId: state.value!.appId,
+                              description: state.value!.description,
+                              memberActions: state.value!.memberActions,
+                              conditions: state.value!.conditions,
+                            )));
+                          }
+                          if (widget.submitAction != null) {
+                            eliudrouter.Router.navigateTo(
+                                context, widget.submitAction!);
+                          } else {
+                            Navigator.pop(context);
+                          }
+                        }
+                      },
+              ));
+        }
+
+        return StyleRegistry.registry()
+            .styleWithApp(widget.app)
+            .adminFormStyle()
+            .container(
+                widget.app,
+                context,
+                Form(
+                  child: ListView(
+                      padding: const EdgeInsets.all(8),
+                      physics: ((formAction == FormAction.showData) ||
+                              (formAction == FormAction.showPreloadedData))
+                          ? NeverScrollableScrollPhysics()
+                          : null,
+                      shrinkWrap: ((formAction == FormAction.showData) ||
+                          (formAction == FormAction.showPreloadedData)),
+                      children: children),
+                ),
+                formAction!);
       } else {
-        return StyleRegistry.registry().styleWithApp(widget.app).adminListStyle().progressIndicator(widget.app, context);
+        return StyleRegistry.registry()
+            .styleWithApp(widget.app)
+            .adminListStyle()
+            .progressIndicator(widget.app, context);
       }
     });
   }
 
   void _onDocumentIDChanged() {
-    _myFormBloc.add(ChangedInviteDashboardDocumentID(value: _documentIDController.text));
+    _myFormBloc.add(
+        ChangedInviteDashboardDocumentID(value: _documentIDController.text));
   }
-
 
   void _onAppIdChanged() {
     _myFormBloc.add(ChangedInviteDashboardAppId(value: _appIdController.text));
   }
 
-
   void _onDescriptionChanged() {
-    _myFormBloc.add(ChangedInviteDashboardDescription(value: _descriptionController.text));
+    _myFormBloc.add(
+        ChangedInviteDashboardDescription(value: _descriptionController.text));
   }
-
 
   void _onMemberActionsChanged(value) {
     _myFormBloc.add(ChangedInviteDashboardMemberActions(value: value));
     setState(() {});
   }
-
-
 
   @override
   void dispose() {
@@ -289,12 +353,11 @@ class _MyInviteDashboardFormState extends State<MyInviteDashboardForm> {
     super.dispose();
   }
 
-  bool _readOnly(AccessState accessState, InviteDashboardFormInitialized state) {
-    return (formAction == FormAction.ShowData) || (formAction == FormAction.ShowPreloadedData) || (!accessState.memberIsOwner(widget.app.documentID));
+  /// Is the form read-only?
+  bool _readOnly(
+      AccessState accessState, InviteDashboardFormInitialized state) {
+    return (formAction == FormAction.showData) ||
+        (formAction == FormAction.showPreloadedData) ||
+        (!accessState.memberIsOwner(widget.app.documentID));
   }
-  
-
 }
-
-
-

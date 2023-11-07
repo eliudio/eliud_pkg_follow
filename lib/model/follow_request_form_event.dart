@@ -17,7 +17,6 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:eliud_pkg_follow/model/model_export.dart';
 
-
 @immutable
 abstract class FollowRequestFormEvent extends Equatable {
   const FollowRequestFormEvent();
@@ -26,15 +25,13 @@ abstract class FollowRequestFormEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class InitialiseNewFollowRequestFormEvent extends FollowRequestFormEvent {
-}
-
+class InitialiseNewFollowRequestFormEvent extends FollowRequestFormEvent {}
 
 class InitialiseFollowRequestFormEvent extends FollowRequestFormEvent {
   final FollowRequestModel? value;
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   InitialiseFollowRequestFormEvent({this.value});
 }
@@ -43,7 +40,7 @@ class InitialiseFollowRequestFormNoLoadEvent extends FollowRequestFormEvent {
   final FollowRequestModel? value;
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   InitialiseFollowRequestFormNoLoadEvent({this.value});
 }
@@ -54,7 +51,7 @@ class ChangedFollowRequestDocumentID extends FollowRequestFormEvent {
   ChangedFollowRequestDocumentID({this.value});
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   @override
   String toString() => 'ChangedFollowRequestDocumentID{ value: $value }';
@@ -66,7 +63,7 @@ class ChangedFollowRequestAppId extends FollowRequestFormEvent {
   ChangedFollowRequestAppId({this.value});
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   @override
   String toString() => 'ChangedFollowRequestAppId{ value: $value }';
@@ -78,7 +75,7 @@ class ChangedFollowRequestFollower extends FollowRequestFormEvent {
   ChangedFollowRequestFollower({this.value});
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   @override
   String toString() => 'ChangedFollowRequestFollower{ value: $value }';
@@ -90,7 +87,7 @@ class ChangedFollowRequestFollowed extends FollowRequestFormEvent {
   ChangedFollowRequestFollowed({this.value});
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   @override
   String toString() => 'ChangedFollowRequestFollowed{ value: $value }';
@@ -102,9 +99,8 @@ class ChangedFollowRequestStatus extends FollowRequestFormEvent {
   ChangedFollowRequestStatus({this.value});
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   @override
   String toString() => 'ChangedFollowRequestStatus{ value: $value }';
 }
-

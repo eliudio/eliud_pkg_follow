@@ -23,11 +23,12 @@ import 'package:eliud_core/tools/query/query_tools.dart';
 
 import 'follow_requests_dashboard_model.dart';
 
-typedef List<FollowRequestsDashboardModel?> FilterFollowRequestsDashboardModels(List<FollowRequestsDashboardModel?> values);
+typedef FilterFollowRequestsDashboardModels
+    = List<FollowRequestsDashboardModel?> Function(
+        List<FollowRequestsDashboardModel?> values);
 
-
-
-class FollowRequestsDashboardListBloc extends Bloc<FollowRequestsDashboardListEvent, FollowRequestsDashboardListState> {
+class FollowRequestsDashboardListBloc extends Bloc<
+    FollowRequestsDashboardListEvent, FollowRequestsDashboardListState> {
   final FilterFollowRequestsDashboardModels? filter;
   final FollowRequestsDashboardRepository _followRequestsDashboardRepository;
   StreamSubscription? _followRequestsDashboardsListSubscription;
@@ -39,23 +40,33 @@ class FollowRequestsDashboardListBloc extends Bloc<FollowRequestsDashboardListEv
   final bool? detailed;
   final int followRequestsDashboardLimit;
 
-  FollowRequestsDashboardListBloc({this.filter, this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required FollowRequestsDashboardRepository followRequestsDashboardRepository, this.followRequestsDashboardLimit = 5})
+  FollowRequestsDashboardListBloc(
+      {this.filter,
+      this.paged,
+      this.orderBy,
+      this.descending,
+      this.detailed,
+      this.eliudQuery,
+      required FollowRequestsDashboardRepository
+          followRequestsDashboardRepository,
+      this.followRequestsDashboardLimit = 5})
       : _followRequestsDashboardRepository = followRequestsDashboardRepository,
         super(FollowRequestsDashboardListLoading()) {
-    on <LoadFollowRequestsDashboardList> ((event, emit) {
+    on<LoadFollowRequestsDashboardList>((event, emit) {
       if ((detailed == null) || (!detailed!)) {
         _mapLoadFollowRequestsDashboardListToState();
       } else {
         _mapLoadFollowRequestsDashboardListWithDetailsToState();
       }
     });
-    
-    on <NewPage> ((event, emit) {
-      pages = pages + 1; // it doesn't matter so much if we increase pages beyond the end
+
+    on<NewPage>((event, emit) {
+      pages = pages +
+          1; // it doesn't matter so much if we increase pages beyond the end
       _mapLoadFollowRequestsDashboardListWithDetailsToState();
     });
-    
-    on <FollowRequestsDashboardChangeQuery> ((event, emit) {
+
+    on<FollowRequestsDashboardChangeQuery>((event, emit) {
       eliudQuery = event.newQuery;
       if ((detailed == null) || (!detailed!)) {
         _mapLoadFollowRequestsDashboardListToState();
@@ -63,25 +74,26 @@ class FollowRequestsDashboardListBloc extends Bloc<FollowRequestsDashboardListEv
         _mapLoadFollowRequestsDashboardListWithDetailsToState();
       }
     });
-      
-    on <AddFollowRequestsDashboardList> ((event, emit) async {
+
+    on<AddFollowRequestsDashboardList>((event, emit) async {
       await _mapAddFollowRequestsDashboardListToState(event);
     });
-    
-    on <UpdateFollowRequestsDashboardList> ((event, emit) async {
+
+    on<UpdateFollowRequestsDashboardList>((event, emit) async {
       await _mapUpdateFollowRequestsDashboardListToState(event);
     });
-    
-    on <DeleteFollowRequestsDashboardList> ((event, emit) async {
+
+    on<DeleteFollowRequestsDashboardList>((event, emit) async {
       await _mapDeleteFollowRequestsDashboardListToState(event);
     });
-    
-    on <FollowRequestsDashboardListUpdated> ((event, emit) {
+
+    on<FollowRequestsDashboardListUpdated>((event, emit) {
       emit(_mapFollowRequestsDashboardListUpdatedToState(event));
     });
   }
 
-  List<FollowRequestsDashboardModel?> _filter(List<FollowRequestsDashboardModel?> original) {
+  List<FollowRequestsDashboardModel?> _filter(
+      List<FollowRequestsDashboardModel?> original) {
     if (filter != null) {
       return filter!(original);
     } else {
@@ -90,52 +102,68 @@ class FollowRequestsDashboardListBloc extends Bloc<FollowRequestsDashboardListEv
   }
 
   Future<void> _mapLoadFollowRequestsDashboardListToState() async {
-    int amountNow =  (state is FollowRequestsDashboardListLoaded) ? (state as FollowRequestsDashboardListLoaded).values!.length : 0;
+    int amountNow = (state is FollowRequestsDashboardListLoaded)
+        ? (state as FollowRequestsDashboardListLoaded).values!.length
+        : 0;
     _followRequestsDashboardsListSubscription?.cancel();
-    _followRequestsDashboardsListSubscription = _followRequestsDashboardRepository.listen(
-          (list) => add(FollowRequestsDashboardListUpdated(value: _filter(list), mightHaveMore: amountNow != list.length)),
-      orderBy: orderBy,
-      descending: descending,
-      eliudQuery: eliudQuery,
-      limit: ((paged != null) && paged!) ? pages * followRequestsDashboardLimit : null
-    );
+    _followRequestsDashboardsListSubscription =
+        _followRequestsDashboardRepository.listen(
+            (list) => add(FollowRequestsDashboardListUpdated(
+                value: _filter(list), mightHaveMore: amountNow != list.length)),
+            orderBy: orderBy,
+            descending: descending,
+            eliudQuery: eliudQuery,
+            limit: ((paged != null) && paged!)
+                ? pages * followRequestsDashboardLimit
+                : null);
   }
 
   Future<void> _mapLoadFollowRequestsDashboardListWithDetailsToState() async {
-    int amountNow =  (state is FollowRequestsDashboardListLoaded) ? (state as FollowRequestsDashboardListLoaded).values!.length : 0;
+    int amountNow = (state is FollowRequestsDashboardListLoaded)
+        ? (state as FollowRequestsDashboardListLoaded).values!.length
+        : 0;
     _followRequestsDashboardsListSubscription?.cancel();
-    _followRequestsDashboardsListSubscription = _followRequestsDashboardRepository.listenWithDetails(
-            (list) => add(FollowRequestsDashboardListUpdated(value: _filter(list), mightHaveMore: amountNow != list.length)),
-        orderBy: orderBy,
-        descending: descending,
-        eliudQuery: eliudQuery,
-        limit: ((paged != null) && paged!) ? pages * followRequestsDashboardLimit : null
-    );
+    _followRequestsDashboardsListSubscription =
+        _followRequestsDashboardRepository.listenWithDetails(
+            (list) => add(FollowRequestsDashboardListUpdated(
+                value: _filter(list), mightHaveMore: amountNow != list.length)),
+            orderBy: orderBy,
+            descending: descending,
+            eliudQuery: eliudQuery,
+            limit: ((paged != null) && paged!)
+                ? pages * followRequestsDashboardLimit
+                : null);
   }
 
-  Future<void> _mapAddFollowRequestsDashboardListToState(AddFollowRequestsDashboardList event) async {
+  Future<void> _mapAddFollowRequestsDashboardListToState(
+      AddFollowRequestsDashboardList event) async {
     var value = event.value;
     if (value != null) {
       await _followRequestsDashboardRepository.add(value);
     }
   }
 
-  Future<void> _mapUpdateFollowRequestsDashboardListToState(UpdateFollowRequestsDashboardList event) async {
+  Future<void> _mapUpdateFollowRequestsDashboardListToState(
+      UpdateFollowRequestsDashboardList event) async {
     var value = event.value;
     if (value != null) {
       await _followRequestsDashboardRepository.update(value);
     }
   }
 
-  Future<void> _mapDeleteFollowRequestsDashboardListToState(DeleteFollowRequestsDashboardList event) async {
+  Future<void> _mapDeleteFollowRequestsDashboardListToState(
+      DeleteFollowRequestsDashboardList event) async {
     var value = event.value;
     if (value != null) {
       await _followRequestsDashboardRepository.delete(value);
     }
   }
 
-  FollowRequestsDashboardListLoaded _mapFollowRequestsDashboardListUpdatedToState(
-      FollowRequestsDashboardListUpdated event) => FollowRequestsDashboardListLoaded(values: event.value, mightHaveMore: event.mightHaveMore);
+  FollowRequestsDashboardListLoaded
+      _mapFollowRequestsDashboardListUpdatedToState(
+              FollowRequestsDashboardListUpdated event) =>
+          FollowRequestsDashboardListLoaded(
+              values: event.value, mightHaveMore: event.mightHaveMore);
 
   @override
   Future<void> close() {
@@ -143,5 +171,3 @@ class FollowRequestsDashboardListBloc extends Bloc<FollowRequestsDashboardListEv
     return super.close();
   }
 }
-
-

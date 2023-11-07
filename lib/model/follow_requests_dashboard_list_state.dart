@@ -24,27 +24,33 @@ abstract class FollowRequestsDashboardListState extends Equatable {
   List<Object?> get props => [];
 }
 
-class FollowRequestsDashboardListLoading extends FollowRequestsDashboardListState {}
+class FollowRequestsDashboardListLoading
+    extends FollowRequestsDashboardListState {}
 
-class FollowRequestsDashboardListLoaded extends FollowRequestsDashboardListState {
+class FollowRequestsDashboardListLoaded
+    extends FollowRequestsDashboardListState {
   final List<FollowRequestsDashboardModel?>? values;
   final bool? mightHaveMore;
 
-  const FollowRequestsDashboardListLoaded({this.mightHaveMore, this.values = const []});
+  const FollowRequestsDashboardListLoaded(
+      {this.mightHaveMore, this.values = const []});
 
   @override
-  List<Object?> get props => [ values, mightHaveMore ];
+  List<Object?> get props => [values, mightHaveMore];
 
   @override
   String toString() => 'FollowRequestsDashboardListLoaded { values: $values }';
 
   @override
-  bool operator ==(Object other) => 
-          other is FollowRequestsDashboardListLoaded &&
-              runtimeType == other.runtimeType &&
-              ListEquality().equals(values, other.values) &&
-              mightHaveMore == other.mightHaveMore;
+  bool operator ==(Object other) =>
+      other is FollowRequestsDashboardListLoaded &&
+      runtimeType == other.runtimeType &&
+      ListEquality().equals(values, other.values) &&
+      mightHaveMore == other.mightHaveMore;
+
+  @override
+  int get hashCode => values.hashCode ^ mightHaveMore.hashCode;
 }
 
-class FollowRequestsDashboardNotLoaded extends FollowRequestsDashboardListState {}
-
+class FollowRequestsDashboardNotLoaded
+    extends FollowRequestsDashboardListState {}

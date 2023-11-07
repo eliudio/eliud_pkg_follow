@@ -16,62 +16,70 @@ import 'model/follow_request_model.dart';
 import 'model/repository_singleton.dart';
 
 import 'package:eliud_pkg_follow/follow_package_stub.dart'
-if (dart.library.io) 'follow_mobile_package.dart'
-if (dart.library.html) 'follow_web_package.dart';
+    if (dart.library.io) 'follow_mobile_package.dart'
+    if (dart.library.html) 'follow_web_package.dart';
 
 abstract class FollowPackage extends Package {
   FollowPackage() : super('eliud_pkg_follow');
 
-  static final String CONDITION_MEMBER_HAS_OPEN_REQUESTS = 'Has Open Follow Requests';
-  Map<String, bool?> stateCONDITION_MEMBER_HAS_OPEN_REQUESTS = {};
-  Map<String, StreamSubscription<List<FollowRequestModel?>>> subscription = {};
+  static final String conditionMemberHasOpenRequests =
+      'Has Open Follow Requests';
+  final Map<String, bool?> stateConditionMemberHasOpenRequests = {};
+  final Map<String, StreamSubscription<List<FollowRequestModel?>>>
+      subscription = {};
 
-  static EliudQuery getOpenFollowRequestsQuery(String appId, String assigneeId) {
-    return EliudQuery(
-        theConditions: [
-          EliudQueryCondition('followedId', isEqualTo: assigneeId),
-          EliudQueryCondition('appId', isEqualTo: appId),
-          EliudQueryCondition('status', isEqualTo: FollowRequestStatus.FollowRequestPending.index)
-        ]
-    );
+  static EliudQuery getOpenFollowRequestsQuery(
+      String appId, String assigneeId) {
+    return EliudQuery(theConditions: [
+      EliudQueryCondition('followedId', isEqualTo: assigneeId),
+      EliudQueryCondition('appId', isEqualTo: appId),
+      EliudQueryCondition('status',
+          isEqualTo: FollowRequestStatus.followRequestPending.index)
+    ]);
   }
 
   @override
-  Future<List<PackageConditionDetails>>? getAndSubscribe(AccessBloc accessBloc, AppModel app, MemberModel? member, bool isOwner, bool? isBlocked, PrivilegeLevel? privilegeLevel) {
+  Future<List<PackageConditionDetails>>? getAndSubscribe(
+      AccessBloc accessBloc,
+      AppModel app,
+      MemberModel? member,
+      bool isOwner,
+      bool? isBlocked,
+      PrivilegeLevel? privilegeLevel) {
     String appId = app.documentID;
     subscription[appId]?.cancel();
     if (member != null) {
       final c = Completer<List<PackageConditionDetails>>();
-      subscription[appId] = followRequestRepository(appId: appId)!.listen((list) {
+      subscription[appId] =
+          followRequestRepository(appId: appId)!.listen((list) {
         // If we have a different set of assignments, i.e. it has assignments were before it didn't or vice versa,
         // then we must inform the AccessBloc, so that it can refresh the state
-        var value = list.length > 0;
+        var value = list.isNotEmpty;
         if (!c.isCompleted) {
           // the first time we get this trigger, it's upon entry of the getAndSubscribe. Now we simply return the value
-          stateCONDITION_MEMBER_HAS_OPEN_REQUESTS[appId] = value;
+          stateConditionMemberHasOpenRequests[appId] = value;
           c.complete([
             PackageConditionDetails(
                 packageName: packageName,
-                conditionName: CONDITION_MEMBER_HAS_OPEN_REQUESTS,
+                conditionName: conditionMemberHasOpenRequests,
                 value: value)
           ]);
         } else {
           // subsequent calls we get this trigger, it's when the date has changed. Now add the event to the bloc
-          if (value != stateCONDITION_MEMBER_HAS_OPEN_REQUESTS[appId]) {
-            stateCONDITION_MEMBER_HAS_OPEN_REQUESTS[appId] = value;
+          if (value != stateConditionMemberHasOpenRequests[appId]) {
+            stateConditionMemberHasOpenRequests[appId] = value;
             accessBloc.add(UpdatePackageConditionEvent(
-                app, this, CONDITION_MEMBER_HAS_OPEN_REQUESTS, value));
+                app, this, conditionMemberHasOpenRequests, value));
           }
         }
-      }, eliudQuery: getOpenFollowRequestsQuery(
-          appId, member.documentID));
+      }, eliudQuery: getOpenFollowRequestsQuery(appId, member.documentID));
       return c.future;
     } else {
-      stateCONDITION_MEMBER_HAS_OPEN_REQUESTS[appId] = false;
+      stateConditionMemberHasOpenRequests[appId] = false;
       return Future.value([
         PackageConditionDetails(
             packageName: packageName,
-            conditionName: CONDITION_MEMBER_HAS_OPEN_REQUESTS,
+            conditionName: conditionMemberHasOpenRequests,
             value: false)
       ]);
     }
@@ -79,10 +87,10 @@ abstract class FollowPackage extends Package {
 
   @override
   List<String> retrieveAllPackageConditions() {
-    return [ CONDITION_MEMBER_HAS_OPEN_REQUESTS ];
+    return [conditionMemberHasOpenRequests];
   }
 
- @override
+  @override
   void init() {
     ComponentRegistry().init();
 
@@ -90,13 +98,15 @@ abstract class FollowPackage extends Package {
   }
 
   @override
-  List<MemberCollectionInfo> getMemberCollectionInfo() => AbstractRepositorySingleton.collections;
+  List<MemberCollectionInfo> getMemberCollectionInfo() =>
+      AbstractRepositorySingleton.collections;
 
   static FollowPackage instance() => getFollowPackage();
 
   /*
    * Register depending packages
    */
+  @override
   void registerDependencies(Eliud eliud) {
     eliud.registerPackage(CorePackage.instance());
     eliud.registerPackage(NotificationsPackage.instance());

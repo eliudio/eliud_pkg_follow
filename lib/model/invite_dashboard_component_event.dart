@@ -24,13 +24,11 @@ abstract class InviteDashboardComponentEvent extends Equatable {
 class FetchInviteDashboardComponent extends InviteDashboardComponentEvent {
   final String? id;
 
-  FetchInviteDashboardComponent({ this.id });
+  FetchInviteDashboardComponent({this.id});
 }
 
 class InviteDashboardComponentUpdated extends InviteDashboardComponentEvent {
   final InviteDashboardModel value;
 
-  InviteDashboardComponentUpdated({ required this.value });
+  InviteDashboardComponentUpdated({required this.value});
 }
-
-

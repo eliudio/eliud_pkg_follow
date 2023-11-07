@@ -27,20 +27,21 @@ class FollowRequestComponentUninitialized extends FollowRequestComponentState {}
 
 class FollowRequestComponentError extends FollowRequestComponentState {
   final String? message;
-  FollowRequestComponentError({ this.message });
+  FollowRequestComponentError({this.message});
 }
 
-class FollowRequestComponentPermissionDenied extends FollowRequestComponentState {
+class FollowRequestComponentPermissionDenied
+    extends FollowRequestComponentState {
   FollowRequestComponentPermissionDenied();
 }
 
 class FollowRequestComponentLoaded extends FollowRequestComponentState {
   final FollowRequestModel value;
 
-  const FollowRequestComponentLoaded({ required this.value });
+  const FollowRequestComponentLoaded({required this.value});
 
-  FollowRequestComponentLoaded copyWith({ FollowRequestModel? copyThis }) {
-    return FollowRequestComponentLoaded(value: copyThis ?? this.value);
+  FollowRequestComponentLoaded copyWith({FollowRequestModel? copyThis}) {
+    return FollowRequestComponentLoaded(value: copyThis ?? value);
   }
 
   @override
@@ -49,4 +50,3 @@ class FollowRequestComponentLoaded extends FollowRequestComponentState {
   @override
   String toString() => 'FollowRequestComponentLoaded { value: $value }';
 }
-

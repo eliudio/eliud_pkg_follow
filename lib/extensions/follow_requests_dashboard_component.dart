@@ -34,7 +34,10 @@ class FollowRequestsDashboardComponentConstructorDefault
     implements ComponentConstructor {
   @override
   Widget createNew(
-      {Key? key, required AppModel app, required String id, Map<String, dynamic>? parameters}) {
+      {Key? key,
+      required AppModel app,
+      required String id,
+      Map<String, dynamic>? parameters}) {
     return FollowRequestsDashboardComponent(key: key, app: app, id: id);
   }
 
@@ -45,12 +48,12 @@ class FollowRequestsDashboardComponentConstructorDefault
 
 class FollowRequestsDashboardComponent
     extends AbstractFollowRequestsDashboardComponent {
-  FollowRequestsDashboardComponent({Key? key, required AppModel app, required String id})
-      : super(key: key, app: app, followRequestsDashboardId: id);
+  FollowRequestsDashboardComponent(
+      {super.key, required super.app, required String id})
+      : super(followRequestsDashboardId: id);
 
   @override
-  Widget yourWidget(
-      BuildContext context, FollowRequestsDashboardModel? dashboardModel) {
+  Widget yourWidget(BuildContext context, FollowRequestsDashboardModel? value) {
     return BlocBuilder<AccessBloc, AccessState>(
         builder: (context, accessState) {
       if (accessState is AccessDetermined) {
@@ -60,21 +63,19 @@ class FollowRequestsDashboardComponent
               create: (context) => FollowRequestListBloc(
                     detailed: true,
                     eliudQuery: FollowPackage.getOpenFollowRequestsQuery(
-                        appId,
-                        accessState.getMember()!.documentID),
+                        appId, accessState.getMember()!.documentID),
                     followRequestRepository:
                         followRequestRepository(appId: appId)!,
                   )..add(LoadFollowRequestList()),
-              child: simpleTopicContainer(app,
+              child: simpleTopicContainer(
+                app,
                 context,
                 children: ([
                   FollowRequestListWidget(
-                    app: app,
+                      app: app,
                       readOnly: true,
-                      widgetProvider: (value) =>
-                          widgetProvider(app, value!, dashboardModel!),
-                      listBackground:
-                          BackgroundModel())
+                      widgetProvider: (v) => widgetProvider(app, v!, value!),
+                      listBackground: BackgroundModel())
                 ]),
               ))
         ]);
@@ -97,24 +98,25 @@ class FollowRequestsDashboardItem extends StatelessWidget {
   final FollowRequestsDashboardModel dashboardModel;
 
   FollowRequestsDashboardItem({
-    Key? key,
+    super.key,
     required this.value,
     required this.dashboardModel,
     required this.app,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     if (value == null) return Text("Value is null");
     if (value!.follower == null) return Text("Follower is null");
     var followerId = value!.follower!.documentID;
-    var theFuture = memberPublicInfoRepository(appId: app.documentID)!.get(followerId);
+    var theFuture =
+        memberPublicInfoRepository(appId: app.documentID)!.get(followerId);
     return FutureBuilder<MemberPublicInfoModel?>(
         future: theFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var data = snapshot.data;
-            var photo;
+            Widget photo;
             if (data == null) {
               photo = Text("No photo provided");
             } else {
@@ -125,7 +127,8 @@ class FollowRequestsDashboardItem extends StatelessWidget {
             }
             return ListTile(
                 onTap: () {
-                  MemberPopupMenu.showPopupMenuWithAllActions(app,
+                  MemberPopupMenu.showPopupMenuWithAllActions(
+                    app,
                     context,
                     'Follow request',
                     () => openOptions(context),
@@ -151,15 +154,14 @@ class FollowRequestsDashboardItem extends StatelessWidget {
     var name = value == null ||
             value!.follower == null ||
             value!.follower!.name == null
-        ? 'unkown'
+        ? 'unknown'
         : value!.follower!.name;
-    openAckNackDialog(app, context, app.documentID + '/_followinvitation',
+    openAckNackDialog(app, context, '${app.documentID}/_followinvitation',
         title: 'Follow Request',
         ackButtonLabel: 'Accept',
         nackButtonLabel: 'Reject',
-        message: 'This member ' +
-            name! +
-            ' would like to follow you? Do you accept or reject?',
+        message:
+            'This member ${name!} would like to follow you? Do you accept or reject?',
         onSelection: (value) {
       if (value == 0) {
         _accept(context);
@@ -172,7 +174,7 @@ class FollowRequestsDashboardItem extends StatelessWidget {
   Future<void> _accept(BuildContext context) async {
     Navigator.pop(context);
     if (value != null) {
-      value!.status = FollowRequestStatus.FollowRequestAccepted;
+      value!.status = FollowRequestStatus.followRequestAccepted;
       await followRequestRepository(appId: app.documentID)!.update(value!);
 
       if ((value!.followed != null) && (value!.follower != null)) {
@@ -189,7 +191,7 @@ class FollowRequestsDashboardItem extends StatelessWidget {
   Future<void> _reject(BuildContext context) async {
     Navigator.pop(context);
     if (value != null) {
-      value!.status = FollowRequestStatus.FollowRequestDenied;
+      value!.status = FollowRequestStatus.followRequestDenied;
       await followRequestRepository(appId: app.documentID)!.update(value!);
     }
   }

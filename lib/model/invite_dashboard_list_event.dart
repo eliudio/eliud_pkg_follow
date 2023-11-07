@@ -30,10 +30,10 @@ class NewPage extends InviteDashboardListEvent {}
 class AddInviteDashboardList extends InviteDashboardListEvent {
   final InviteDashboardModel? value;
 
-  const AddInviteDashboardList({ this.value });
+  const AddInviteDashboardList({this.value});
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   @override
   String toString() => 'AddInviteDashboardList{ value: $value }';
@@ -42,10 +42,10 @@ class AddInviteDashboardList extends InviteDashboardListEvent {
 class UpdateInviteDashboardList extends InviteDashboardListEvent {
   final InviteDashboardModel? value;
 
-  const UpdateInviteDashboardList({ this.value });
+  const UpdateInviteDashboardList({this.value});
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   @override
   String toString() => 'UpdateInviteDashboardList{ value: $value }';
@@ -54,10 +54,10 @@ class UpdateInviteDashboardList extends InviteDashboardListEvent {
 class DeleteInviteDashboardList extends InviteDashboardListEvent {
   final InviteDashboardModel? value;
 
-  const DeleteInviteDashboardList({ this.value });
+  const DeleteInviteDashboardList({this.value});
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   @override
   String toString() => 'DeleteInviteDashboardList{ value: $value }';
@@ -67,24 +67,24 @@ class InviteDashboardListUpdated extends InviteDashboardListEvent {
   final List<InviteDashboardModel?>? value;
   final bool? mightHaveMore;
 
-  const InviteDashboardListUpdated({ this.value, this.mightHaveMore });
+  const InviteDashboardListUpdated({this.value, this.mightHaveMore});
 
   @override
-  List<Object?> get props => [ value, mightHaveMore ];
+  List<Object?> get props => [value, mightHaveMore];
 
   @override
-  String toString() => 'InviteDashboardListUpdated{ value: $value, mightHaveMore: $mightHaveMore }';
+  String toString() =>
+      'InviteDashboardListUpdated{ value: $value, mightHaveMore: $mightHaveMore }';
 }
 
 class InviteDashboardChangeQuery extends InviteDashboardListEvent {
   final EliudQuery? newQuery;
 
-  const InviteDashboardChangeQuery({ required this.newQuery });
+  const InviteDashboardChangeQuery({required this.newQuery});
 
   @override
-  List<Object?> get props => [ newQuery ];
+  List<Object?> get props => [newQuery];
 
   @override
   String toString() => 'InviteDashboardChangeQuery{ value: $newQuery }';
 }
-

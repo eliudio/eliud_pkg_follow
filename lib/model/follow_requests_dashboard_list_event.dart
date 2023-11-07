@@ -23,68 +23,73 @@ abstract class FollowRequestsDashboardListEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class LoadFollowRequestsDashboardList extends FollowRequestsDashboardListEvent {}
+class LoadFollowRequestsDashboardList
+    extends FollowRequestsDashboardListEvent {}
 
 class NewPage extends FollowRequestsDashboardListEvent {}
 
 class AddFollowRequestsDashboardList extends FollowRequestsDashboardListEvent {
   final FollowRequestsDashboardModel? value;
 
-  const AddFollowRequestsDashboardList({ this.value });
+  const AddFollowRequestsDashboardList({this.value});
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   @override
   String toString() => 'AddFollowRequestsDashboardList{ value: $value }';
 }
 
-class UpdateFollowRequestsDashboardList extends FollowRequestsDashboardListEvent {
+class UpdateFollowRequestsDashboardList
+    extends FollowRequestsDashboardListEvent {
   final FollowRequestsDashboardModel? value;
 
-  const UpdateFollowRequestsDashboardList({ this.value });
+  const UpdateFollowRequestsDashboardList({this.value});
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   @override
   String toString() => 'UpdateFollowRequestsDashboardList{ value: $value }';
 }
 
-class DeleteFollowRequestsDashboardList extends FollowRequestsDashboardListEvent {
+class DeleteFollowRequestsDashboardList
+    extends FollowRequestsDashboardListEvent {
   final FollowRequestsDashboardModel? value;
 
-  const DeleteFollowRequestsDashboardList({ this.value });
+  const DeleteFollowRequestsDashboardList({this.value});
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   @override
   String toString() => 'DeleteFollowRequestsDashboardList{ value: $value }';
 }
 
-class FollowRequestsDashboardListUpdated extends FollowRequestsDashboardListEvent {
+class FollowRequestsDashboardListUpdated
+    extends FollowRequestsDashboardListEvent {
   final List<FollowRequestsDashboardModel?>? value;
   final bool? mightHaveMore;
 
-  const FollowRequestsDashboardListUpdated({ this.value, this.mightHaveMore });
+  const FollowRequestsDashboardListUpdated({this.value, this.mightHaveMore});
 
   @override
-  List<Object?> get props => [ value, mightHaveMore ];
+  List<Object?> get props => [value, mightHaveMore];
 
   @override
-  String toString() => 'FollowRequestsDashboardListUpdated{ value: $value, mightHaveMore: $mightHaveMore }';
+  String toString() =>
+      'FollowRequestsDashboardListUpdated{ value: $value, mightHaveMore: $mightHaveMore }';
 }
 
-class FollowRequestsDashboardChangeQuery extends FollowRequestsDashboardListEvent {
+class FollowRequestsDashboardChangeQuery
+    extends FollowRequestsDashboardListEvent {
   final EliudQuery? newQuery;
 
-  const FollowRequestsDashboardChangeQuery({ required this.newQuery });
+  const FollowRequestsDashboardChangeQuery({required this.newQuery});
 
   @override
-  List<Object?> get props => [ newQuery ];
+  List<Object?> get props => [newQuery];
 
   @override
   String toString() => 'FollowRequestsDashboardChangeQuery{ value: $newQuery }';
 }
-

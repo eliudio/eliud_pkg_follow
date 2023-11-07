@@ -19,7 +19,6 @@ import 'package:eliud_core/model/model_export.dart';
 import 'package:eliud_pkg_etc/model/model_export.dart';
 import 'package:eliud_pkg_follow/model/model_export.dart';
 
-
 @immutable
 abstract class InviteDashboardFormEvent extends Equatable {
   const InviteDashboardFormEvent();
@@ -28,24 +27,23 @@ abstract class InviteDashboardFormEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class InitialiseNewInviteDashboardFormEvent extends InviteDashboardFormEvent {
-}
-
+class InitialiseNewInviteDashboardFormEvent extends InviteDashboardFormEvent {}
 
 class InitialiseInviteDashboardFormEvent extends InviteDashboardFormEvent {
   final InviteDashboardModel? value;
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   InitialiseInviteDashboardFormEvent({this.value});
 }
 
-class InitialiseInviteDashboardFormNoLoadEvent extends InviteDashboardFormEvent {
+class InitialiseInviteDashboardFormNoLoadEvent
+    extends InviteDashboardFormEvent {
   final InviteDashboardModel? value;
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   InitialiseInviteDashboardFormNoLoadEvent({this.value});
 }
@@ -56,7 +54,7 @@ class ChangedInviteDashboardDocumentID extends InviteDashboardFormEvent {
   ChangedInviteDashboardDocumentID({this.value});
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   @override
   String toString() => 'ChangedInviteDashboardDocumentID{ value: $value }';
@@ -68,7 +66,7 @@ class ChangedInviteDashboardAppId extends InviteDashboardFormEvent {
   ChangedInviteDashboardAppId({this.value});
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   @override
   String toString() => 'ChangedInviteDashboardAppId{ value: $value }';
@@ -80,7 +78,7 @@ class ChangedInviteDashboardDescription extends InviteDashboardFormEvent {
   ChangedInviteDashboardDescription({this.value});
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   @override
   String toString() => 'ChangedInviteDashboardDescription{ value: $value }';
@@ -92,7 +90,7 @@ class ChangedInviteDashboardMemberActions extends InviteDashboardFormEvent {
   ChangedInviteDashboardMemberActions({this.value});
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   @override
   String toString() => 'ChangedInviteDashboardMemberActions{ value: $value }';
@@ -104,9 +102,8 @@ class ChangedInviteDashboardConditions extends InviteDashboardFormEvent {
   ChangedInviteDashboardConditions({this.value});
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   @override
   String toString() => 'ChangedInviteDashboardConditions{ value: $value }';
 }
-

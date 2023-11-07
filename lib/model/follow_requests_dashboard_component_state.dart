@@ -23,30 +23,35 @@ abstract class FollowRequestsDashboardComponentState extends Equatable {
   List<Object?> get props => [];
 }
 
-class FollowRequestsDashboardComponentUninitialized extends FollowRequestsDashboardComponentState {}
+class FollowRequestsDashboardComponentUninitialized
+    extends FollowRequestsDashboardComponentState {}
 
-class FollowRequestsDashboardComponentError extends FollowRequestsDashboardComponentState {
+class FollowRequestsDashboardComponentError
+    extends FollowRequestsDashboardComponentState {
   final String? message;
-  FollowRequestsDashboardComponentError({ this.message });
+  FollowRequestsDashboardComponentError({this.message});
 }
 
-class FollowRequestsDashboardComponentPermissionDenied extends FollowRequestsDashboardComponentState {
+class FollowRequestsDashboardComponentPermissionDenied
+    extends FollowRequestsDashboardComponentState {
   FollowRequestsDashboardComponentPermissionDenied();
 }
 
-class FollowRequestsDashboardComponentLoaded extends FollowRequestsDashboardComponentState {
+class FollowRequestsDashboardComponentLoaded
+    extends FollowRequestsDashboardComponentState {
   final FollowRequestsDashboardModel value;
 
-  const FollowRequestsDashboardComponentLoaded({ required this.value });
+  const FollowRequestsDashboardComponentLoaded({required this.value});
 
-  FollowRequestsDashboardComponentLoaded copyWith({ FollowRequestsDashboardModel? copyThis }) {
-    return FollowRequestsDashboardComponentLoaded(value: copyThis ?? this.value);
+  FollowRequestsDashboardComponentLoaded copyWith(
+      {FollowRequestsDashboardModel? copyThis}) {
+    return FollowRequestsDashboardComponentLoaded(value: copyThis ?? value);
   }
 
   @override
   List<Object?> get props => [value];
 
   @override
-  String toString() => 'FollowRequestsDashboardComponentLoaded { value: $value }';
+  String toString() =>
+      'FollowRequestsDashboardComponentLoaded { value: $value }';
 }
-

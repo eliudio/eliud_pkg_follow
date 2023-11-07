@@ -13,10 +13,8 @@
 
 */
 
-
 import 'package:eliud_core/tools/admin_app_base.dart';
 import '../tools/bespoke_models.dart';
-
 
 import 'package:eliud_core/model/abstract_repository_singleton.dart';
 import 'package:eliud_core/model/model_export.dart';
@@ -30,17 +28,29 @@ class AdminApp extends AdminAppInstallerBase {
   final RgbModel menuItemColor;
   final RgbModel selectedMenuItemColor;
   final RgbModel backgroundColor;
-  
-  AdminApp(this.appId, this._drawer, this._endDrawer, this._appBar, this._homeMenu, this.menuItemColor, this.selectedMenuItemColor, this.backgroundColor);
 
+  /// Construct the AdminApp
+  AdminApp(
+      this.appId,
+      this._drawer,
+      this._endDrawer,
+      this._appBar,
+      this._homeMenu,
+      this.menuItemColor,
+      this.selectedMenuItemColor,
+      this.backgroundColor);
 
+  /// Retrieve the admin pages
   PageModel _followingsPages() {
     List<BodyComponentModel> components = [];
     components.add(BodyComponentModel(
-      documentID: "internalWidget-followings", componentName: "eliud_pkg_follow_internalWidgets", componentId: "followings"));
+        documentID: "internalWidget-followings",
+        componentName: "eliud_pkg_follow_internalWidgets",
+        componentId: "followings"));
     PageModel page = PageModel(
         conditions: StorageConditionsModel(
-          privilegeLevelRequired: PrivilegeLevelRequiredSimple.OwnerPrivilegeRequiredSimple,
+          privilegeLevelRequired:
+              PrivilegeLevelRequiredSimple.ownerPrivilegeRequiredSimple,
         ),
         appId: appId,
         documentID: "eliud_pkg_follow_followings_page",
@@ -51,19 +61,21 @@ class AdminApp extends AdminAppInstallerBase {
         appBar: _appBar,
         homeMenu: _homeMenu,
         bodyComponents: components,
-        layout: PageLayout.OnlyTheFirstComponent
-    );
+        layout: PageLayout.onlyTheFirstComponent);
     return page;
   }
 
-
+  /// Retrieve the admin pages
   PageModel _followingDashboardsPages() {
     List<BodyComponentModel> components = [];
     components.add(BodyComponentModel(
-      documentID: "internalWidget-followingDashboards", componentName: "eliud_pkg_follow_internalWidgets", componentId: "followingDashboards"));
+        documentID: "internalWidget-followingDashboards",
+        componentName: "eliud_pkg_follow_internalWidgets",
+        componentId: "followingDashboards"));
     PageModel page = PageModel(
         conditions: StorageConditionsModel(
-          privilegeLevelRequired: PrivilegeLevelRequiredSimple.OwnerPrivilegeRequiredSimple,
+          privilegeLevelRequired:
+              PrivilegeLevelRequiredSimple.ownerPrivilegeRequiredSimple,
         ),
         appId: appId,
         documentID: "eliud_pkg_follow_followingdashboards_page",
@@ -74,19 +86,21 @@ class AdminApp extends AdminAppInstallerBase {
         appBar: _appBar,
         homeMenu: _homeMenu,
         bodyComponents: components,
-        layout: PageLayout.OnlyTheFirstComponent
-    );
+        layout: PageLayout.onlyTheFirstComponent);
     return page;
   }
 
-
+  /// Retrieve the admin pages
   PageModel _followRequestsPages() {
     List<BodyComponentModel> components = [];
     components.add(BodyComponentModel(
-      documentID: "internalWidget-followRequests", componentName: "eliud_pkg_follow_internalWidgets", componentId: "followRequests"));
+        documentID: "internalWidget-followRequests",
+        componentName: "eliud_pkg_follow_internalWidgets",
+        componentId: "followRequests"));
     PageModel page = PageModel(
         conditions: StorageConditionsModel(
-          privilegeLevelRequired: PrivilegeLevelRequiredSimple.OwnerPrivilegeRequiredSimple,
+          privilegeLevelRequired:
+              PrivilegeLevelRequiredSimple.ownerPrivilegeRequiredSimple,
         ),
         appId: appId,
         documentID: "eliud_pkg_follow_followrequests_page",
@@ -97,19 +111,21 @@ class AdminApp extends AdminAppInstallerBase {
         appBar: _appBar,
         homeMenu: _homeMenu,
         bodyComponents: components,
-        layout: PageLayout.OnlyTheFirstComponent
-    );
+        layout: PageLayout.onlyTheFirstComponent);
     return page;
   }
 
-
+  /// Retrieve the admin pages
   PageModel _followRequestsDashboardsPages() {
     List<BodyComponentModel> components = [];
     components.add(BodyComponentModel(
-      documentID: "internalWidget-followRequestsDashboards", componentName: "eliud_pkg_follow_internalWidgets", componentId: "followRequestsDashboards"));
+        documentID: "internalWidget-followRequestsDashboards",
+        componentName: "eliud_pkg_follow_internalWidgets",
+        componentId: "followRequestsDashboards"));
     PageModel page = PageModel(
         conditions: StorageConditionsModel(
-          privilegeLevelRequired: PrivilegeLevelRequiredSimple.OwnerPrivilegeRequiredSimple,
+          privilegeLevelRequired:
+              PrivilegeLevelRequiredSimple.ownerPrivilegeRequiredSimple,
         ),
         appId: appId,
         documentID: "eliud_pkg_follow_followrequestsdashboards_page",
@@ -120,19 +136,21 @@ class AdminApp extends AdminAppInstallerBase {
         appBar: _appBar,
         homeMenu: _homeMenu,
         bodyComponents: components,
-        layout: PageLayout.OnlyTheFirstComponent
-    );
+        layout: PageLayout.onlyTheFirstComponent);
     return page;
   }
 
-
+  /// Retrieve the admin pages
   PageModel _inviteDashboardsPages() {
     List<BodyComponentModel> components = [];
     components.add(BodyComponentModel(
-      documentID: "internalWidget-inviteDashboards", componentName: "eliud_pkg_follow_internalWidgets", componentId: "inviteDashboards"));
+        documentID: "internalWidget-inviteDashboards",
+        componentName: "eliud_pkg_follow_internalWidgets",
+        componentId: "inviteDashboards"));
     PageModel page = PageModel(
         conditions: StorageConditionsModel(
-          privilegeLevelRequired: PrivilegeLevelRequiredSimple.OwnerPrivilegeRequiredSimple,
+          privilegeLevelRequired:
+              PrivilegeLevelRequiredSimple.ownerPrivilegeRequiredSimple,
         ),
         appId: appId,
         documentID: "eliud_pkg_follow_invitedashboards_page",
@@ -143,108 +161,86 @@ class AdminApp extends AdminAppInstallerBase {
         appBar: _appBar,
         homeMenu: _homeMenu,
         bodyComponents: components,
-        layout: PageLayout.OnlyTheFirstComponent
-    );
+        layout: PageLayout.onlyTheFirstComponent);
     return page;
   }
 
-
   Future<void> _setupAdminPages() {
-
-    return pageRepository(appId: appId)!.add(_followingsPages())
-
-        .then((_) => pageRepository(appId: appId)!.add(_followingDashboardsPages()))
-
+    return pageRepository(appId: appId)!
+        .add(_followingsPages())
+        .then((_) =>
+            pageRepository(appId: appId)!.add(_followingDashboardsPages()))
         .then((_) => pageRepository(appId: appId)!.add(_followRequestsPages()))
-
-        .then((_) => pageRepository(appId: appId)!.add(_followRequestsDashboardsPages()))
-
-        .then((_) => pageRepository(appId: appId)!.add(_inviteDashboardsPages()))
-
-    ;
+        .then((_) =>
+            pageRepository(appId: appId)!.add(_followRequestsDashboardsPages()))
+        .then(
+            (_) => pageRepository(appId: appId)!.add(_inviteDashboardsPages()));
   }
 
+  /// Run the admin, i.e setup all admin pages
   @override
   Future<void> run() async {
     return _setupAdminPages();
   }
-
-
 }
 
 class AdminMenu extends AdminAppMenuInstallerBase {
-
+  /// Construct the admin menu
+  @override
   Future<MenuDefModel> menu(AppModel app) async {
     var menuItems = <MenuItemModel>[];
 
-    menuItems.add(
-      MenuItemModel(
+    menuItems.add(MenuItemModel(
         documentID: "Followings",
         text: "Followings",
         description: "Followings",
         icon: IconModel(codePoint: 0xe88a, fontFamily: "MaterialIcons"),
-        action: GotoPage(app, pageID: "eliud_pkg_follow_followings_page"))
-    );
+        action: GotoPage(app, pageID: "eliud_pkg_follow_followings_page")));
 
-
-    menuItems.add(
-      MenuItemModel(
+    menuItems.add(MenuItemModel(
         documentID: "FollowingDashboards",
         text: "FollowingDashboards",
         description: "FollowingDashboards",
         icon: IconModel(codePoint: 0xe88a, fontFamily: "MaterialIcons"),
-        action: GotoPage(app, pageID: "eliud_pkg_follow_followingdashboards_page"))
-    );
+        action: GotoPage(app,
+            pageID: "eliud_pkg_follow_followingdashboards_page")));
 
-
-    menuItems.add(
-      MenuItemModel(
+    menuItems.add(MenuItemModel(
         documentID: "FollowRequests",
         text: "FollowRequests",
         description: "FollowRequests",
         icon: IconModel(codePoint: 0xe88a, fontFamily: "MaterialIcons"),
-        action: GotoPage(app, pageID: "eliud_pkg_follow_followrequests_page"))
-    );
+        action: GotoPage(app, pageID: "eliud_pkg_follow_followrequests_page")));
 
-
-    menuItems.add(
-      MenuItemModel(
+    menuItems.add(MenuItemModel(
         documentID: "FollowRequestsDashboards",
         text: "FollowRequestsDashboards",
         description: "FollowRequestsDashboards",
         icon: IconModel(codePoint: 0xe88a, fontFamily: "MaterialIcons"),
-        action: GotoPage(app, pageID: "eliud_pkg_follow_followrequestsdashboards_page"))
-    );
+        action: GotoPage(app,
+            pageID: "eliud_pkg_follow_followrequestsdashboards_page")));
 
-
-    menuItems.add(
-      MenuItemModel(
+    menuItems.add(MenuItemModel(
         documentID: "InviteDashboards",
         text: "InviteDashboards",
         description: "InviteDashboards",
         icon: IconModel(codePoint: 0xe88a, fontFamily: "MaterialIcons"),
-        action: GotoPage(app, pageID: "eliud_pkg_follow_invitedashboards_page"))
-    );
-
+        action:
+            GotoPage(app, pageID: "eliud_pkg_follow_invitedashboards_page")));
 
     MenuDefModel menu = MenuDefModel(
-      admin: true,
-      documentID: "eliud_pkg_follow_admin_menu",
-      appId: app.documentID,
-      name: "eliud_pkg_follow",
-      menuItems: menuItems
-    );
+        admin: true,
+        documentID: "eliud_pkg_follow_admin_menu",
+        appId: app.documentID,
+        name: "eliud_pkg_follow",
+        menuItems: menuItems);
     await menuDefRepository(appId: app.documentID)!.add(menu);
     return menu;
   }
 }
 
 class AdminAppWiper extends AdminAppWiperBase {
-
+  /// Delete all admin pages
   @override
-  Future<void> deleteAll(String appId) async {
-  }
-
-
+  Future<void> deleteAll(String appID) async {}
 }
-

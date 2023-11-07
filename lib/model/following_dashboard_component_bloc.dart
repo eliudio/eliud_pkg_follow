@@ -20,24 +20,27 @@ import 'package:eliud_pkg_follow/model/following_dashboard_component_event.dart'
 import 'package:eliud_pkg_follow/model/following_dashboard_component_state.dart';
 import 'package:eliud_pkg_follow/model/following_dashboard_repository.dart';
 
-class FollowingDashboardComponentBloc extends Bloc<FollowingDashboardComponentEvent, FollowingDashboardComponentState> {
+class FollowingDashboardComponentBloc extends Bloc<
+    FollowingDashboardComponentEvent, FollowingDashboardComponentState> {
   final FollowingDashboardRepository? followingDashboardRepository;
   StreamSubscription? _followingDashboardSubscription;
 
   void _mapLoadFollowingDashboardComponentUpdateToState(String documentId) {
     _followingDashboardSubscription?.cancel();
-    _followingDashboardSubscription = followingDashboardRepository!.listenTo(documentId, (value) {
+    _followingDashboardSubscription =
+        followingDashboardRepository!.listenTo(documentId, (value) {
       if (value != null) {
         add(FollowingDashboardComponentUpdated(value: value));
       }
     });
   }
 
-  FollowingDashboardComponentBloc({ this.followingDashboardRepository }): super(FollowingDashboardComponentUninitialized()) {
-    on <FetchFollowingDashboardComponent> ((event, emit) {
+  FollowingDashboardComponentBloc({this.followingDashboardRepository})
+      : super(FollowingDashboardComponentUninitialized()) {
+    on<FetchFollowingDashboardComponent>((event, emit) {
       _mapLoadFollowingDashboardComponentUpdateToState(event.id!);
     });
-    on <FollowingDashboardComponentUpdated> ((event, emit) {
+    on<FollowingDashboardComponentUpdated>((event, emit) {
       emit(FollowingDashboardComponentLoaded(value: event.value));
     });
   }
@@ -47,6 +50,4 @@ class FollowingDashboardComponentBloc extends Bloc<FollowingDashboardComponentEv
     _followingDashboardSubscription?.cancel();
     return super.close();
   }
-
 }
-

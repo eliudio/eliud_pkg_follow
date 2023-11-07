@@ -51,7 +51,7 @@ class FollowingDashboardComponentEditorConstructor
           description: 'Following dashboard',
           conditions: StorageConditionsModel(
               privilegeLevelRequired:
-                  PrivilegeLevelRequiredSimple.NoPrivilegeRequiredSimple),
+                  PrivilegeLevelRequiredSimple.noPrivilegeRequiredSimple),
         ),
         feedback);
   }
@@ -64,7 +64,7 @@ class FollowingDashboardComponentEditorConstructor
     if (followingDashboard != null) {
       _openIt(app, context, false, followingDashboard, feedback);
     } else {
-      openErrorDialog(app, context, app.documentID + '/_error',
+      openErrorDialog(app, context, '${app.documentID}/_error',
           title: 'Error',
           errorMessage: 'Cannot find following dashboard with id $id');
     }
@@ -75,10 +75,9 @@ class FollowingDashboardComponentEditorConstructor
     openComplexDialog(
       app,
       context,
-      app.documentID + '/followingdashboard',
-      title: create
-          ? 'Create Following Dashboard'
-          : 'Update Following Dashboard',
+      '${app.documentID}/followingdashboard',
+      title:
+          create ? 'Create Following Dashboard' : 'Update Following Dashboard',
       includeHeading: false,
       widthFraction: .9,
       child: BlocProvider<FollowingDashboardBloc>(
@@ -95,15 +94,16 @@ class FollowingDashboardComponentEditorConstructor
   }
 
   @override
-  Future<FollowingDashboardEntity> revalidateEntity(AppModel app, entity) async {
+  Future<FollowingDashboardEntity> revalidateEntity(
+      AppModel app, entity) async {
     if (entity != null) {
       var myEntity = entity as FollowingDashboardEntity;
       if (entity.memberActions != null) {
         List<MemberActionEntity> newMemberActions = [];
         for (MemberActionEntity mam in myEntity.memberActions!) {
           if (mam.action != null) {
-            newMemberActions.add(
-                mam.copyWith(action: mam.action!.copyWith(appId: app.documentID)));
+            newMemberActions.add(mam.copyWith(
+                action: mam.action!.copyWith(appId: app.documentID)));
           } else {
             newMemberActions.add(mam);
           }
@@ -120,9 +120,9 @@ class FollowingDashboardComponentEditor extends StatefulWidget {
   final AppModel app;
 
   const FollowingDashboardComponentEditor({
-    Key? key,
+    super.key,
     required this.app,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() =>
@@ -187,12 +187,11 @@ class _FollowingDashboardComponentEditorState
                             )),
                         FollowingViewWidget(
                           app: widget.app,
-                          followingViewCallback:
-                              (FollowingView followingView) {
-                                followingDashboardState.model.view = followingView;
+                          followingViewCallback: (FollowingView followingView) {
+                            followingDashboardState.model.view = followingView;
                           },
                           followingView: followingDashboardState.model.view ??
-                              FollowingView.Following,
+                              FollowingView.following,
                         ),
                       ]),
                   topicContainer(widget.app, context,
@@ -245,18 +244,15 @@ class _FollowingDashboardComponentEditorState
                     context,
                     widget.app,
                     title: text(widget.app, context,
-                        (value.text ?? '?') + ' ' + (value.description ?? '?')),
-                    trailing: popupMenuButton<int>(
-                        widget.app, context,
+                        '${value.text ?? '?'} ${value.description ?? '?'}'),
+                    trailing: popupMenuButton<int>(widget.app, context,
                         child: Icon(Icons.more_vert),
                         itemBuilder: (context) => [
+                              popupMenuItem(widget.app, context,
+                                  value: 1, label: 'Update'),
                               popupMenuItem(
-                                widget.app, context,
-                                value: 1,
-                                label: 'Update'
-                              ),
-                              popupMenuItem(
-                                widget.app, context,
+                                widget.app,
+                                context,
                                 value: 2,
                                 label: 'Delete',
                               ),
@@ -330,7 +326,7 @@ class _FollowingDashboardComponentEditorState
     openFlexibleDialog(
       widget.app,
       context,
-      widget.app.documentID + '/_memberaction',
+      '${widget.app.documentID}/_memberaction',
       includeHeading: false,
       widthFraction: .8,
       child: MemberActionModelWidget.getIt(

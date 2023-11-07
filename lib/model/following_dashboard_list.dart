@@ -34,55 +34,69 @@ import 'package:eliud_pkg_follow/model/following_dashboard_model.dart';
 
 import 'package:eliud_core/model/app_model.dart';
 
-
 import 'following_dashboard_form.dart';
 
-
-typedef FollowingDashboardWidgetProvider(FollowingDashboardModel? value);
+typedef FollowingDashboardWidgetProvider = Function(
+    FollowingDashboardModel? value);
 
 class FollowingDashboardListWidget extends StatefulWidget with HasFab {
-  AppModel app;
-  BackgroundModel? listBackground;
-  FollowingDashboardWidgetProvider? widgetProvider;
-  bool? readOnly;
-  String? form;
-  FollowingDashboardListWidgetState? state;
-  bool? isEmbedded;
+  final AppModel app;
+  final BackgroundModel? listBackground;
+  final FollowingDashboardWidgetProvider? widgetProvider;
+  final bool? readOnly;
+  final String? form;
+  //final FollowingDashboardListWidgetState? state;
+  final bool? isEmbedded;
 
-  FollowingDashboardListWidget({ Key? key, required this.app, this.readOnly, this.form, this.widgetProvider, this.isEmbedded, this.listBackground }): super(key: key);
+  FollowingDashboardListWidget(
+      {super.key,
+      required this.app,
+      this.readOnly,
+      this.form,
+      this.widgetProvider,
+      this.isEmbedded,
+      this.listBackground});
 
   @override
   FollowingDashboardListWidgetState createState() {
-    state ??= FollowingDashboardListWidgetState();
-    return state!;
+    return FollowingDashboardListWidgetState();
   }
 
   @override
   Widget? fab(BuildContext context) {
     if ((readOnly != null) && readOnly!) return null;
-    state ??= FollowingDashboardListWidgetState();
+    var state = FollowingDashboardListWidgetState();
     var accessState = AccessBloc.getState(context);
-    return state!.fab(context, accessState);
+    return state.fab(context, accessState);
   }
 }
 
-class FollowingDashboardListWidgetState extends State<FollowingDashboardListWidget> {
-  @override
+class FollowingDashboardListWidgetState
+    extends State<FollowingDashboardListWidget> {
   Widget? fab(BuildContext aContext, AccessState accessState) {
-    return !accessState.memberIsOwner(widget.app.documentID) 
-      ? null
-      : StyleRegistry.registry().styleWithApp(widget.app).adminListStyle().floatingActionButton(widget.app, context, 'PageFloatBtnTag', Icon(Icons.add),
-      onPressed: () {
-        Navigator.of(context).push(
-          pageRouteBuilder(widget.app, page: BlocProvider.value(
-              value: BlocProvider.of<FollowingDashboardListBloc>(context),
-              child: FollowingDashboardForm(app:widget.app,
-                  value: null,
-                  formAction: FormAction.AddAction)
-          )),
-        );
-      },
-    );
+    return !accessState.memberIsOwner(widget.app.documentID)
+        ? null
+        : StyleRegistry.registry()
+            .styleWithApp(widget.app)
+            .adminListStyle()
+            .floatingActionButton(
+            widget.app,
+            context,
+            'PageFloatBtnTag',
+            Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).push(
+                pageRouteBuilder(widget.app,
+                    page: BlocProvider.value(
+                        value: BlocProvider.of<FollowingDashboardListBloc>(
+                            context),
+                        child: FollowingDashboardForm(
+                            app: widget.app,
+                            value: null,
+                            formAction: FormAction.addAction))),
+              );
+            },
+          );
   }
 
   @override
@@ -90,105 +104,132 @@ class FollowingDashboardListWidgetState extends State<FollowingDashboardListWidg
     return BlocBuilder<AccessBloc, AccessState>(
         builder: (context, accessState) {
       if (accessState is AccessDetermined) {
-        return BlocBuilder<FollowingDashboardListBloc, FollowingDashboardListState>(builder: (context, state) {
+        return BlocBuilder<FollowingDashboardListBloc,
+            FollowingDashboardListState>(builder: (context, state) {
           if (state is FollowingDashboardListLoading) {
-            return StyleRegistry.registry().styleWithApp(widget.app).adminListStyle().progressIndicator(widget.app, context);
+            return StyleRegistry.registry()
+                .styleWithApp(widget.app)
+                .adminListStyle()
+                .progressIndicator(widget.app, context);
           } else if (state is FollowingDashboardListLoaded) {
             final values = state.values;
             if ((widget.isEmbedded != null) && widget.isEmbedded!) {
               var children = <Widget>[];
               children.add(theList(context, values, accessState));
-              children.add(
-                  StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().button(widget.app,
-                      context, label: 'Add',
-                      onPressed: () {
-                        Navigator.of(context).push(
-                                  pageRouteBuilder(widget.app, page: BlocProvider.value(
-                                      value: BlocProvider.of<FollowingDashboardListBloc>(context),
-                                      child: FollowingDashboardForm(app:widget.app,
-                                          value: null,
-                                          formAction: FormAction.AddAction)
-                                  )),
-                                );
-                      },
-                    ));
+              children.add(StyleRegistry.registry()
+                  .styleWithApp(widget.app)
+                  .adminFormStyle()
+                  .button(
+                widget.app,
+                context,
+                label: 'Add',
+                onPressed: () {
+                  Navigator.of(context).push(
+                    pageRouteBuilder(widget.app,
+                        page: BlocProvider.value(
+                            value: BlocProvider.of<FollowingDashboardListBloc>(
+                                context),
+                            child: FollowingDashboardForm(
+                                app: widget.app,
+                                value: null,
+                                formAction: FormAction.addAction))),
+                  );
+                },
+              ));
               return ListView(
-                padding: const EdgeInsets.all(8),
-                physics: ScrollPhysics(),
-                shrinkWrap: true,
-                children: children
-              );
+                  padding: const EdgeInsets.all(8),
+                  physics: ScrollPhysics(),
+                  shrinkWrap: true,
+                  children: children);
             } else {
               return theList(context, values, accessState);
             }
           } else {
-            return StyleRegistry.registry().styleWithApp(widget.app).adminListStyle().progressIndicator(widget.app, context);
+            return StyleRegistry.registry()
+                .styleWithApp(widget.app)
+                .adminListStyle()
+                .progressIndicator(widget.app, context);
           }
         });
       } else {
-        return StyleRegistry.registry().styleWithApp(widget.app).adminListStyle().progressIndicator(widget.app, context);
+        return StyleRegistry.registry()
+            .styleWithApp(widget.app)
+            .adminListStyle()
+            .progressIndicator(widget.app, context);
       }
     });
   }
-  
+
   Widget theList(BuildContext context, values, AccessState accessState) {
     return Container(
-      decoration: widget.listBackground == null ? StyleRegistry.registry().styleWithApp(widget.app).adminListStyle().boxDecorator(widget.app, context, accessState.getMember()) : BoxDecorationHelper.boxDecoration(widget.app, accessState.getMember(), widget.listBackground),
-      child: ListView.separated(
-        separatorBuilder: (context, index) => StyleRegistry.registry().styleWithApp(widget.app).adminListStyle().divider(widget.app, context),
-        shrinkWrap: true,
-        physics: ScrollPhysics(),
-        itemCount: values.length,
-        itemBuilder: (context, index) {
-          final value = values[index];
-          
-          if (widget.widgetProvider != null) return widget.widgetProvider!(value);
+        decoration: widget.listBackground == null
+            ? StyleRegistry.registry()
+                .styleWithApp(widget.app)
+                .adminListStyle()
+                .boxDecorator(widget.app, context, accessState.getMember())
+            : BoxDecorationHelper.boxDecoration(
+                widget.app, accessState.getMember(), widget.listBackground),
+        child: ListView.separated(
+            separatorBuilder: (context, index) => StyleRegistry.registry()
+                .styleWithApp(widget.app)
+                .adminListStyle()
+                .divider(widget.app, context),
+            shrinkWrap: true,
+            physics: ScrollPhysics(),
+            itemCount: values.length,
+            itemBuilder: (context, index) {
+              final value = values[index];
 
-          return FollowingDashboardListItem(app: widget.app,
-            value: value,
+              if (widget.widgetProvider != null) {
+                return widget.widgetProvider!(value);
+              }
+
+              return FollowingDashboardListItem(
+                app: widget.app,
+                value: value,
 //            app: accessState.app,
-            onDismissed: (direction) {
-              BlocProvider.of<FollowingDashboardListBloc>(context)
-                  .add(DeleteFollowingDashboardList(value: value));
-              ScaffoldMessenger.of(context).showSnackBar(DeleteSnackBar(
-                message: "FollowingDashboard " + value.documentID,
-                onUndo: () => BlocProvider.of<FollowingDashboardListBloc>(context)
-                    .add(AddFollowingDashboardList(value: value)),
-              ));
-            },
-            onTap: () async {
-                                   final removedItem = await Navigator.of(context).push(
-                        pageRouteBuilder(widget.app, page: BlocProvider.value(
-                              value: BlocProvider.of<FollowingDashboardListBloc>(context),
-                              child: getForm(value, FormAction.UpdateAction))));
-                      if (removedItem != null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          DeleteSnackBar(
-                        message: "FollowingDashboard " + value.documentID,
-                            onUndo: () => BlocProvider.of<FollowingDashboardListBloc>(context)
+                onDismissed: (direction) {
+                  BlocProvider.of<FollowingDashboardListBloc>(context)
+                      .add(DeleteFollowingDashboardList(value: value));
+                  ScaffoldMessenger.of(context).showSnackBar(DeleteSnackBar(
+                    message: "FollowingDashboard $value.documentID",
+                    onUndo: () =>
+                        BlocProvider.of<FollowingDashboardListBloc>(context)
+                            .add(AddFollowingDashboardList(value: value)),
+                  ));
+                },
+                onTap: () async {
+                  final removedItem = await Navigator.of(context).push(
+                      pageRouteBuilder(widget.app,
+                          page: BlocProvider.value(
+                              value:
+                                  BlocProvider.of<FollowingDashboardListBloc>(
+                                      context),
+                              child: getForm(value, FormAction.updateAction))));
+                  if (removedItem != null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      DeleteSnackBar(
+                        message: "FollowingDashboard $value.documentID",
+                        onUndo: () =>
+                            BlocProvider.of<FollowingDashboardListBloc>(context)
                                 .add(AddFollowingDashboardList(value: value)),
-                          ),
-                        );
-                      }
-
-            },
-          );
-        }
-      ));
+                      ),
+                    );
+                  }
+                },
+              );
+            }));
   }
-  
-  
+
   Widget? getForm(value, action) {
     if (widget.form == null) {
-      return FollowingDashboardForm(app:widget.app, value: value, formAction: action);
+      return FollowingDashboardForm(
+          app: widget.app, value: value, formAction: action);
     } else {
       return null;
     }
   }
-  
-  
 }
-
 
 class FollowingDashboardListItem extends StatelessWidget {
   final AppModel app;
@@ -197,12 +238,12 @@ class FollowingDashboardListItem extends StatelessWidget {
   final FollowingDashboardModel value;
 
   FollowingDashboardListItem({
-    Key? key,
+    super.key,
     required this.app,
     required this.onDismissed,
     required this.onTap,
     required this.value,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -211,9 +252,10 @@ class FollowingDashboardListItem extends StatelessWidget {
       onDismissed: onDismissed,
       child: ListTile(
         onTap: onTap,
-        title: value.description != null ? Center(child: text(app, context, value.description!)) : value.documentID != null ? Center(child: text(app, context, value.documentID)) : Container(),
+        title: value.description != null
+            ? Center(child: text(app, context, value.description!))
+            : Center(child: text(app, context, value.documentID)),
       ),
     );
   }
 }
-

@@ -41,9 +41,9 @@ class InviteDashboardFormInitialized extends InviteDashboardFormState {
   final InviteDashboardModel? value;
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
-  const InviteDashboardFormInitialized({ this.value });
+  const InviteDashboardFormInitialized({this.value});
 }
 
 // Menu has been initialised and hence a menu is available
@@ -51,9 +51,9 @@ abstract class InviteDashboardFormError extends InviteDashboardFormInitialized {
   final String? message;
 
   @override
-  List<Object?> get props => [ message, value ];
+  List<Object?> get props => [message, value];
 
-  const InviteDashboardFormError({this.message, InviteDashboardModel? value }) : super(value: value);
+  const InviteDashboardFormError({this.message, super.value});
 
   @override
   String toString() {
@@ -63,11 +63,12 @@ abstract class InviteDashboardFormError extends InviteDashboardFormInitialized {
     }''';
   }
 }
-class DocumentIDInviteDashboardFormError extends InviteDashboardFormError { 
-  const DocumentIDInviteDashboardFormError({ String? message, InviteDashboardModel? value }): super(message: message, value: value);
+
+class DocumentIDInviteDashboardFormError extends InviteDashboardFormError {
+  const DocumentIDInviteDashboardFormError({super.message, super.value});
 
   @override
-  List<Object?> get props => [ message, value ];
+  List<Object?> get props => [message, value];
 
   @override
   String toString() {
@@ -78,12 +79,11 @@ class DocumentIDInviteDashboardFormError extends InviteDashboardFormError {
   }
 }
 
-
-class AppIdInviteDashboardFormError extends InviteDashboardFormError { 
-  const AppIdInviteDashboardFormError({ String? message, InviteDashboardModel? value }): super(message: message, value: value);
+class AppIdInviteDashboardFormError extends InviteDashboardFormError {
+  const AppIdInviteDashboardFormError({super.message, super.value});
 
   @override
-  List<Object?> get props => [ message, value ];
+  List<Object?> get props => [message, value];
 
   @override
   String toString() {
@@ -94,12 +94,11 @@ class AppIdInviteDashboardFormError extends InviteDashboardFormError {
   }
 }
 
-
-class DescriptionInviteDashboardFormError extends InviteDashboardFormError { 
-  const DescriptionInviteDashboardFormError({ String? message, InviteDashboardModel? value }): super(message: message, value: value);
+class DescriptionInviteDashboardFormError extends InviteDashboardFormError {
+  const DescriptionInviteDashboardFormError({super.message, super.value});
 
   @override
-  List<Object?> get props => [ message, value ];
+  List<Object?> get props => [message, value];
 
   @override
   String toString() {
@@ -110,12 +109,11 @@ class DescriptionInviteDashboardFormError extends InviteDashboardFormError {
   }
 }
 
-
-class MemberActionsInviteDashboardFormError extends InviteDashboardFormError { 
-  const MemberActionsInviteDashboardFormError({ String? message, InviteDashboardModel? value }): super(message: message, value: value);
+class MemberActionsInviteDashboardFormError extends InviteDashboardFormError {
+  const MemberActionsInviteDashboardFormError({super.message, super.value});
 
   @override
-  List<Object?> get props => [ message, value ];
+  List<Object?> get props => [message, value];
 
   @override
   String toString() {
@@ -126,12 +124,11 @@ class MemberActionsInviteDashboardFormError extends InviteDashboardFormError {
   }
 }
 
-
-class ConditionsInviteDashboardFormError extends InviteDashboardFormError { 
-  const ConditionsInviteDashboardFormError({ String? message, InviteDashboardModel? value }): super(message: message, value: value);
+class ConditionsInviteDashboardFormError extends InviteDashboardFormError {
+  const ConditionsInviteDashboardFormError({super.message, super.value});
 
   @override
-  List<Object?> get props => [ message, value ];
+  List<Object?> get props => [message, value];
 
   @override
   String toString() {
@@ -142,12 +139,11 @@ class ConditionsInviteDashboardFormError extends InviteDashboardFormError {
   }
 }
 
-
-class InviteDashboardFormLoaded extends InviteDashboardFormInitialized { 
-  const InviteDashboardFormLoaded({ InviteDashboardModel? value }): super(value: value);
+class InviteDashboardFormLoaded extends InviteDashboardFormInitialized {
+  const InviteDashboardFormLoaded({super.value});
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   @override
   String toString() {
@@ -157,12 +153,11 @@ class InviteDashboardFormLoaded extends InviteDashboardFormInitialized {
   }
 }
 
-
-class SubmittableInviteDashboardForm extends InviteDashboardFormInitialized { 
-  const SubmittableInviteDashboardForm({ InviteDashboardModel? value }): super(value: value);
+class SubmittableInviteDashboardForm extends InviteDashboardFormInitialized {
+  const SubmittableInviteDashboardForm({super.value});
 
   @override
-  List<Object?> get props => [ value ];
+  List<Object?> get props => [value];
 
   @override
   String toString() {
@@ -171,5 +166,3 @@ class SubmittableInviteDashboardForm extends InviteDashboardFormInitialized {
     }''';
   }
 }
-
-

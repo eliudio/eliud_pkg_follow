@@ -23,9 +23,8 @@ import 'package:eliud_core/tools/query/query_tools.dart';
 
 import 'following_model.dart';
 
-typedef List<FollowingModel?> FilterFollowingModels(List<FollowingModel?> values);
-
-
+typedef FilterFollowingModels = List<FollowingModel?> Function(
+    List<FollowingModel?> values);
 
 class FollowingListBloc extends Bloc<FollowingListEvent, FollowingListState> {
   final FilterFollowingModels? filter;
@@ -39,23 +38,32 @@ class FollowingListBloc extends Bloc<FollowingListEvent, FollowingListState> {
   final bool? detailed;
   final int followingLimit;
 
-  FollowingListBloc({this.filter, this.paged, this.orderBy, this.descending, this.detailed, this.eliudQuery, required FollowingRepository followingRepository, this.followingLimit = 5})
+  FollowingListBloc(
+      {this.filter,
+      this.paged,
+      this.orderBy,
+      this.descending,
+      this.detailed,
+      this.eliudQuery,
+      required FollowingRepository followingRepository,
+      this.followingLimit = 5})
       : _followingRepository = followingRepository,
         super(FollowingListLoading()) {
-    on <LoadFollowingList> ((event, emit) {
+    on<LoadFollowingList>((event, emit) {
       if ((detailed == null) || (!detailed!)) {
         _mapLoadFollowingListToState();
       } else {
         _mapLoadFollowingListWithDetailsToState();
       }
     });
-    
-    on <NewPage> ((event, emit) {
-      pages = pages + 1; // it doesn't matter so much if we increase pages beyond the end
+
+    on<NewPage>((event, emit) {
+      pages = pages +
+          1; // it doesn't matter so much if we increase pages beyond the end
       _mapLoadFollowingListWithDetailsToState();
     });
-    
-    on <FollowingChangeQuery> ((event, emit) {
+
+    on<FollowingChangeQuery>((event, emit) {
       eliudQuery = event.newQuery;
       if ((detailed == null) || (!detailed!)) {
         _mapLoadFollowingListToState();
@@ -63,20 +71,20 @@ class FollowingListBloc extends Bloc<FollowingListEvent, FollowingListState> {
         _mapLoadFollowingListWithDetailsToState();
       }
     });
-      
-    on <AddFollowingList> ((event, emit) async {
+
+    on<AddFollowingList>((event, emit) async {
       await _mapAddFollowingListToState(event);
     });
-    
-    on <UpdateFollowingList> ((event, emit) async {
+
+    on<UpdateFollowingList>((event, emit) async {
       await _mapUpdateFollowingListToState(event);
     });
-    
-    on <DeleteFollowingList> ((event, emit) async {
+
+    on<DeleteFollowingList>((event, emit) async {
       await _mapDeleteFollowingListToState(event);
     });
-    
-    on <FollowingListUpdated> ((event, emit) {
+
+    on<FollowingListUpdated>((event, emit) {
       emit(_mapFollowingListUpdatedToState(event));
     });
   }
@@ -90,27 +98,31 @@ class FollowingListBloc extends Bloc<FollowingListEvent, FollowingListState> {
   }
 
   Future<void> _mapLoadFollowingListToState() async {
-    int amountNow =  (state is FollowingListLoaded) ? (state as FollowingListLoaded).values!.length : 0;
+    int amountNow = (state is FollowingListLoaded)
+        ? (state as FollowingListLoaded).values!.length
+        : 0;
     _followingsListSubscription?.cancel();
     _followingsListSubscription = _followingRepository.listen(
-          (list) => add(FollowingListUpdated(value: _filter(list), mightHaveMore: amountNow != list.length)),
-      orderBy: orderBy,
-      descending: descending,
-      eliudQuery: eliudQuery,
-      limit: ((paged != null) && paged!) ? pages * followingLimit : null
-    );
-  }
-
-  Future<void> _mapLoadFollowingListWithDetailsToState() async {
-    int amountNow =  (state is FollowingListLoaded) ? (state as FollowingListLoaded).values!.length : 0;
-    _followingsListSubscription?.cancel();
-    _followingsListSubscription = _followingRepository.listenWithDetails(
-            (list) => add(FollowingListUpdated(value: _filter(list), mightHaveMore: amountNow != list.length)),
+        (list) => add(FollowingListUpdated(
+            value: _filter(list), mightHaveMore: amountNow != list.length)),
         orderBy: orderBy,
         descending: descending,
         eliudQuery: eliudQuery,
-        limit: ((paged != null) && paged!) ? pages * followingLimit : null
-    );
+        limit: ((paged != null) && paged!) ? pages * followingLimit : null);
+  }
+
+  Future<void> _mapLoadFollowingListWithDetailsToState() async {
+    int amountNow = (state is FollowingListLoaded)
+        ? (state as FollowingListLoaded).values!.length
+        : 0;
+    _followingsListSubscription?.cancel();
+    _followingsListSubscription = _followingRepository.listenWithDetails(
+        (list) => add(FollowingListUpdated(
+            value: _filter(list), mightHaveMore: amountNow != list.length)),
+        orderBy: orderBy,
+        descending: descending,
+        eliudQuery: eliudQuery,
+        limit: ((paged != null) && paged!) ? pages * followingLimit : null);
   }
 
   Future<void> _mapAddFollowingListToState(AddFollowingList event) async {
@@ -135,7 +147,9 @@ class FollowingListBloc extends Bloc<FollowingListEvent, FollowingListState> {
   }
 
   FollowingListLoaded _mapFollowingListUpdatedToState(
-      FollowingListUpdated event) => FollowingListLoaded(values: event.value, mightHaveMore: event.mightHaveMore);
+          FollowingListUpdated event) =>
+      FollowingListLoaded(
+          values: event.value, mightHaveMore: event.mightHaveMore);
 
   @override
   Future<void> close() {
@@ -143,5 +157,3 @@ class FollowingListBloc extends Bloc<FollowingListEvent, FollowingListState> {
     return super.close();
   }
 }
-
-

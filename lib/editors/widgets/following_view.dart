@@ -4,19 +4,17 @@ import 'package:eliud_pkg_follow/model/following_dashboard_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-typedef FollowingViewCallback = Function(
-    FollowingView followingView);
+typedef FollowingViewCallback = Function(FollowingView followingView);
 
 class FollowingViewWidget extends StatefulWidget {
-  FollowingViewCallback followingViewCallback;
+  final FollowingViewCallback followingViewCallback;
   final FollowingView followingView;
   final AppModel app;
   FollowingViewWidget(
-      {Key? key,
-        required this.app,
-        required this.followingViewCallback,
-        required this.followingView})
-      : super(key: key);
+      {super.key,
+      required this.app,
+      required this.followingViewCallback,
+      required this.followingView});
 
   @override
   State<StatefulWidget> createState() {
@@ -27,17 +25,22 @@ class FollowingViewWidget extends StatefulWidget {
 class _FollowingViewWidgetState extends State<FollowingViewWidget> {
   int? _heightTypeSelectedRadioTile;
 
+  @override
   void initState() {
     super.initState();
     _heightTypeSelectedRadioTile = widget.followingView.index;
   }
 
-  String heighttTypeLandscapeStringValue(FollowingView? followingView) {
+  String heightTypeLandscapeStringValue(FollowingView? followingView) {
     switch (followingView) {
-      case FollowingView.Followers:
+      case FollowingView.followers:
         return 'Followers';
-      case FollowingView.Following:
+      case FollowingView.following:
         return 'Percentage Following';
+      case FollowingView.unknown:
+        break;
+      case null:
+        break;
     }
     return '?';
   }
@@ -51,7 +54,7 @@ class _FollowingViewWidgetState extends State<FollowingViewWidget> {
 
   Widget getPrivilegeOption(FollowingView? followingView) {
     if (followingView == null) return Text("?");
-    var stringValue = heighttTypeLandscapeStringValue(followingView);
+    var stringValue = heightTypeLandscapeStringValue(followingView);
     return Center(
         child: radioListTile(
             widget.app,
@@ -60,14 +63,14 @@ class _FollowingViewWidgetState extends State<FollowingViewWidget> {
             _heightTypeSelectedRadioTile,
             stringValue,
             null,
-                (dynamic val) => setSelection(val)));
+            (dynamic val) => setSelection(val)));
   }
 
   @override
   Widget build(BuildContext context) {
     return ListView(children: [
-      getPrivilegeOption(FollowingView.Followers),
-      getPrivilegeOption(FollowingView.Following)
+      getPrivilegeOption(FollowingView.followers),
+      getPrivilegeOption(FollowingView.following)
     ], shrinkWrap: true, physics: ScrollPhysics());
   }
 }

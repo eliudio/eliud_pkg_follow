@@ -23,10 +23,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eliud_core/style/style_registry.dart';
 
-
-
-
-
 import 'package:eliud_core/tools/enums.dart';
 
 import 'package:eliud_pkg_etc/model/embedded_component.dart';
@@ -40,72 +36,87 @@ import 'package:eliud_pkg_follow/model/follow_requests_dashboard_form_bloc.dart'
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_form_event.dart';
 import 'package:eliud_pkg_follow/model/follow_requests_dashboard_form_state.dart';
 
-
 class FollowRequestsDashboardForm extends StatelessWidget {
   final AppModel app;
-  FormAction formAction;
-  FollowRequestsDashboardModel? value;
-  ActionModel? submitAction;
+  final FormAction formAction;
+  final FollowRequestsDashboardModel? value;
+  final ActionModel? submitAction;
 
-  FollowRequestsDashboardForm({Key? key, required this.app, required this.formAction, required this.value, this.submitAction}) : super(key: key);
+  FollowRequestsDashboardForm(
+      {super.key,
+      required this.app,
+      required this.formAction,
+      required this.value,
+      this.submitAction});
 
+  /// Build the FollowRequestsDashboardForm
   @override
   Widget build(BuildContext context) {
-    var accessState = AccessBloc.getState(context);
+    //var accessState = AccessBloc.getState(context);
     var appId = app.documentID;
-    if (formAction == FormAction.ShowData) {
-      return BlocProvider<FollowRequestsDashboardFormBloc >(
-            create: (context) => FollowRequestsDashboardFormBloc(appId,
-                                       formAction: formAction,
-
-                                                )..add(InitialiseFollowRequestsDashboardFormEvent(value: value)),
-  
-        child: MyFollowRequestsDashboardForm(app:app, submitAction: submitAction, formAction: formAction),
-          );
-    } if (formAction == FormAction.ShowPreloadedData) {
-      return BlocProvider<FollowRequestsDashboardFormBloc >(
-            create: (context) => FollowRequestsDashboardFormBloc(appId,
-                                       formAction: formAction,
-
-                                                )..add(InitialiseFollowRequestsDashboardFormNoLoadEvent(value: value)),
-  
-        child: MyFollowRequestsDashboardForm(app:app, submitAction: submitAction, formAction: formAction),
-          );
+    if (formAction == FormAction.showData) {
+      return BlocProvider<FollowRequestsDashboardFormBloc>(
+        create: (context) => FollowRequestsDashboardFormBloc(
+          appId,
+          formAction: formAction,
+        )..add(InitialiseFollowRequestsDashboardFormEvent(value: value)),
+        child: MyFollowRequestsDashboardForm(
+            app: app, submitAction: submitAction, formAction: formAction),
+      );
+    }
+    if (formAction == FormAction.showPreloadedData) {
+      return BlocProvider<FollowRequestsDashboardFormBloc>(
+        create: (context) => FollowRequestsDashboardFormBloc(
+          appId,
+          formAction: formAction,
+        )..add(InitialiseFollowRequestsDashboardFormNoLoadEvent(value: value)),
+        child: MyFollowRequestsDashboardForm(
+            app: app, submitAction: submitAction, formAction: formAction),
+      );
     } else {
       return Scaffold(
-        appBar: StyleRegistry.registry().styleWithApp(app).adminFormStyle().appBarWithString(app, context, title: formAction == FormAction.UpdateAction ? 'Update FollowRequestsDashboard' : 'Add FollowRequestsDashboard'),
-        body: BlocProvider<FollowRequestsDashboardFormBloc >(
-            create: (context) => FollowRequestsDashboardFormBloc(appId,
-                                       formAction: formAction,
-
-                                                )..add((formAction == FormAction.UpdateAction ? InitialiseFollowRequestsDashboardFormEvent(value: value) : InitialiseNewFollowRequestsDashboardFormEvent())),
-  
-        child: MyFollowRequestsDashboardForm(app: app, submitAction: submitAction, formAction: formAction),
+          appBar: StyleRegistry.registry()
+              .styleWithApp(app)
+              .adminFormStyle()
+              .appBarWithString(app, context,
+                  title: formAction == FormAction.updateAction
+                      ? 'Update FollowRequestsDashboard'
+                      : 'Add FollowRequestsDashboard'),
+          body: BlocProvider<FollowRequestsDashboardFormBloc>(
+            create: (context) => FollowRequestsDashboardFormBloc(
+              appId,
+              formAction: formAction,
+            )..add((formAction == FormAction.updateAction
+                ? InitialiseFollowRequestsDashboardFormEvent(value: value)
+                : InitialiseNewFollowRequestsDashboardFormEvent())),
+            child: MyFollowRequestsDashboardForm(
+                app: app, submitAction: submitAction, formAction: formAction),
           ));
     }
   }
 }
-
 
 class MyFollowRequestsDashboardForm extends StatefulWidget {
   final AppModel app;
   final FormAction? formAction;
   final ActionModel? submitAction;
 
-  MyFollowRequestsDashboardForm({required this.app, this.formAction, this.submitAction});
+  MyFollowRequestsDashboardForm(
+      {required this.app, this.formAction, this.submitAction});
 
-  _MyFollowRequestsDashboardFormState createState() => _MyFollowRequestsDashboardFormState(this.formAction);
+  @override
+  State<MyFollowRequestsDashboardForm> createState() =>
+      _MyFollowRequestsDashboardFormState(formAction);
 }
 
-
-class _MyFollowRequestsDashboardFormState extends State<MyFollowRequestsDashboardForm> {
+class _MyFollowRequestsDashboardFormState
+    extends State<MyFollowRequestsDashboardForm> {
   final FormAction? formAction;
   late FollowRequestsDashboardFormBloc _myFormBloc;
 
   final TextEditingController _documentIDController = TextEditingController();
   final TextEditingController _appIdController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-
 
   _MyFollowRequestsDashboardFormState(this.formAction);
 
@@ -121,165 +132,224 @@ class _MyFollowRequestsDashboardFormState extends State<MyFollowRequestsDashboar
   @override
   Widget build(BuildContext context) {
     var accessState = AccessBloc.getState(context);
-    return BlocBuilder<FollowRequestsDashboardFormBloc, FollowRequestsDashboardFormState>(builder: (context, state) {
-      if (state is FollowRequestsDashboardFormUninitialized) return Center(
-        child: StyleRegistry.registry().styleWithApp(widget.app).adminListStyle().progressIndicator(widget.app, context),
-      );
+    return BlocBuilder<FollowRequestsDashboardFormBloc,
+        FollowRequestsDashboardFormState>(builder: (context, state) {
+      if (state is FollowRequestsDashboardFormUninitialized) {
+        return Center(
+          child: StyleRegistry.registry()
+              .styleWithApp(widget.app)
+              .adminListStyle()
+              .progressIndicator(widget.app, context),
+        );
+      }
 
       if (state is FollowRequestsDashboardFormLoaded) {
-        if (state.value!.documentID != null)
-          _documentIDController.text = state.value!.documentID.toString();
-        else
-          _documentIDController.text = "";
-        if (state.value!.appId != null)
-          _appIdController.text = state.value!.appId.toString();
-        else
-          _appIdController.text = "";
-        if (state.value!.description != null)
-          _descriptionController.text = state.value!.description.toString();
-        else
-          _descriptionController.text = "";
+        _documentIDController.text = state.value!.documentID.toString();
+        _appIdController.text = state.value!.appId.toString();
+        _descriptionController.text = state.value!.description.toString();
       }
       if (state is FollowRequestsDashboardFormInitialized) {
         List<Widget> children = [];
-         children.add(Container(
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                  child: StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().groupTitle(widget.app, context, 'General')
-                ));
+        children.add(Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+            child: StyleRegistry.registry()
+                .styleWithApp(widget.app)
+                .adminFormStyle()
+                .groupTitle(widget.app, context, 'General')));
 
-        children.add(
+        children.add(StyleRegistry.registry()
+            .styleWithApp(widget.app)
+            .adminFormStyle()
+            .textFormField(widget.app, context,
+                labelText: 'Document ID',
+                icon: Icons.vpn_key,
+                readOnly: (formAction == FormAction.updateAction),
+                textEditingController: _documentIDController,
+                keyboardType: TextInputType.text,
+                validator: (_) =>
+                    state is DocumentIDFollowRequestsDashboardFormError
+                        ? state.message
+                        : null,
+                hintText: null));
 
-                  StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().textFormField(widget.app, context, labelText: 'Document ID', icon: Icons.vpn_key, readOnly: (formAction == FormAction.UpdateAction), textEditingController: _documentIDController, keyboardType: TextInputType.text, validator: (_) => state is DocumentIDFollowRequestsDashboardFormError ? state.message : null, hintText: null)
-          );
+        children.add(StyleRegistry.registry()
+            .styleWithApp(widget.app)
+            .adminFormStyle()
+            .textFormField(widget.app, context,
+                labelText: 'App Identifier',
+                icon: Icons.text_format,
+                readOnly: _readOnly(accessState, state),
+                textEditingController: _appIdController,
+                keyboardType: TextInputType.text,
+                validator: (_) => state is AppIdFollowRequestsDashboardFormError
+                    ? state.message
+                    : null,
+                hintText: 'field.remark'));
 
-        children.add(
-
-                  StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().textFormField(widget.app, context, labelText: 'App Identifier', icon: Icons.text_format, readOnly: _readOnly(accessState, state), textEditingController: _appIdController, keyboardType: TextInputType.text, validator: (_) => state is AppIdFollowRequestsDashboardFormError ? state.message : null, hintText: 'field.remark')
-          );
-
-        children.add(
-
-                  StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().textFormField(widget.app, context, labelText: 'Description', icon: Icons.text_format, readOnly: _readOnly(accessState, state), textEditingController: _descriptionController, keyboardType: TextInputType.text, validator: (_) => state is DescriptionFollowRequestsDashboardFormError ? state.message : null, hintText: null)
-          );
-
-
-        children.add(Container(height: 20.0));
-        children.add(StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().divider(widget.app, context));
-
-
-         children.add(Container(
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                  child: StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().groupTitle(widget.app, context, 'Conditions')
-                ));
-
-
-
-        children.add(Container(height: 20.0));
-        children.add(StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().divider(widget.app, context));
-
-
-         children.add(Container(
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                  child: StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().groupTitle(widget.app, context, 'Extra Member Actions')
-                ));
-
-        children.add(
-
-                new Container(
-                    height: (fullScreenHeight(context) / 2.5), 
-                    child: memberActionsList(widget.app, context, state.value!.memberActions, _onMemberActionsChanged)
-                )
-          );
-
-
-        children.add(Container(height: 20.0));
-        children.add(StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().divider(widget.app, context));
-
-
-         children.add(Container(
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                  child: StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().groupTitle(widget.app, context, 'Open Profile Action')
-                ));
-
+        children.add(StyleRegistry.registry()
+            .styleWithApp(widget.app)
+            .adminFormStyle()
+            .textFormField(widget.app, context,
+                labelText: 'Description',
+                icon: Icons.text_format,
+                readOnly: _readOnly(accessState, state),
+                textEditingController: _descriptionController,
+                keyboardType: TextInputType.text,
+                validator: (_) =>
+                    state is DescriptionFollowRequestsDashboardFormError
+                        ? state.message
+                        : null,
+                hintText: null));
 
         children.add(Container(height: 20.0));
-        children.add(StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().divider(widget.app, context));
+        children.add(StyleRegistry.registry()
+            .styleWithApp(widget.app)
+            .adminFormStyle()
+            .divider(widget.app, context));
 
+        children.add(Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+            child: StyleRegistry.registry()
+                .styleWithApp(widget.app)
+                .adminFormStyle()
+                .groupTitle(widget.app, context, 'Conditions')));
 
-        if ((formAction != FormAction.ShowData) && (formAction != FormAction.ShowPreloadedData))
-          children.add(StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().button(widget.app, context, label: 'Submit',
-                  onPressed: _readOnly(accessState, state) ? null : () {
-                    if (state is FollowRequestsDashboardFormError) {
-                      return null;
-                    } else {
-                      if (formAction == FormAction.UpdateAction) {
-                        BlocProvider.of<FollowRequestsDashboardListBloc>(context).add(
-                          UpdateFollowRequestsDashboardList(value: state.value!.copyWith(
-                              documentID: state.value!.documentID, 
-                              appId: state.value!.appId, 
-                              description: state.value!.description, 
-                              memberActions: state.value!.memberActions, 
-                              conditions: state.value!.conditions, 
-                        )));
-                      } else {
-                        BlocProvider.of<FollowRequestsDashboardListBloc>(context).add(
-                          AddFollowRequestsDashboardList(value: FollowRequestsDashboardModel(
-                              documentID: state.value!.documentID, 
-                              appId: state.value!.appId, 
-                              description: state.value!.description, 
-                              memberActions: state.value!.memberActions, 
-                              conditions: state.value!.conditions, 
-                          )));
-                      }
-                      if (widget.submitAction != null) {
-                        eliudrouter.Router.navigateTo(context, widget.submitAction!);
-                      } else {
-                        Navigator.pop(context);
-                      }
-                    }
-                  },
-                ));
+        children.add(Container(height: 20.0));
+        children.add(StyleRegistry.registry()
+            .styleWithApp(widget.app)
+            .adminFormStyle()
+            .divider(widget.app, context));
 
-        return StyleRegistry.registry().styleWithApp(widget.app).adminFormStyle().container(widget.app, context, Form(
-            child: ListView(
-              padding: const EdgeInsets.all(8),
-              physics: ((formAction == FormAction.ShowData) || (formAction == FormAction.ShowPreloadedData)) ? NeverScrollableScrollPhysics() : null,
-              shrinkWrap: ((formAction == FormAction.ShowData) || (formAction == FormAction.ShowPreloadedData)),
-              children: children
-            ),
-          ), formAction!
-        );
+        children.add(Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+            child: StyleRegistry.registry()
+                .styleWithApp(widget.app)
+                .adminFormStyle()
+                .groupTitle(widget.app, context, 'Extra Member Actions')));
+
+        children.add(Container(
+            height: (fullScreenHeight(context) / 2.5),
+            child: memberActionsList(widget.app, context,
+                state.value!.memberActions, _onMemberActionsChanged)));
+
+        children.add(Container(height: 20.0));
+        children.add(StyleRegistry.registry()
+            .styleWithApp(widget.app)
+            .adminFormStyle()
+            .divider(widget.app, context));
+
+        children.add(Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+            child: StyleRegistry.registry()
+                .styleWithApp(widget.app)
+                .adminFormStyle()
+                .groupTitle(widget.app, context, 'Open Profile Action')));
+
+        children.add(Container(height: 20.0));
+        children.add(StyleRegistry.registry()
+            .styleWithApp(widget.app)
+            .adminFormStyle()
+            .divider(widget.app, context));
+
+        if ((formAction != FormAction.showData) &&
+            (formAction != FormAction.showPreloadedData)) {
+          children.add(StyleRegistry.registry()
+              .styleWithApp(widget.app)
+              .adminFormStyle()
+              .button(
+                widget.app,
+                context,
+                label: 'Submit',
+                onPressed: _readOnly(accessState, state)
+                    ? null
+                    : () {
+                        if (state is FollowRequestsDashboardFormError) {
+                          return;
+                        } else {
+                          if (formAction == FormAction.updateAction) {
+                            BlocProvider.of<FollowRequestsDashboardListBloc>(
+                                    context)
+                                .add(UpdateFollowRequestsDashboardList(
+                                    value: state.value!.copyWith(
+                              documentID: state.value!.documentID,
+                              appId: state.value!.appId,
+                              description: state.value!.description,
+                              memberActions: state.value!.memberActions,
+                              conditions: state.value!.conditions,
+                            )));
+                          } else {
+                            BlocProvider.of<FollowRequestsDashboardListBloc>(
+                                    context)
+                                .add(AddFollowRequestsDashboardList(
+                                    value: FollowRequestsDashboardModel(
+                              documentID: state.value!.documentID,
+                              appId: state.value!.appId,
+                              description: state.value!.description,
+                              memberActions: state.value!.memberActions,
+                              conditions: state.value!.conditions,
+                            )));
+                          }
+                          if (widget.submitAction != null) {
+                            eliudrouter.Router.navigateTo(
+                                context, widget.submitAction!);
+                          } else {
+                            Navigator.pop(context);
+                          }
+                        }
+                      },
+              ));
+        }
+
+        return StyleRegistry.registry()
+            .styleWithApp(widget.app)
+            .adminFormStyle()
+            .container(
+                widget.app,
+                context,
+                Form(
+                  child: ListView(
+                      padding: const EdgeInsets.all(8),
+                      physics: ((formAction == FormAction.showData) ||
+                              (formAction == FormAction.showPreloadedData))
+                          ? NeverScrollableScrollPhysics()
+                          : null,
+                      shrinkWrap: ((formAction == FormAction.showData) ||
+                          (formAction == FormAction.showPreloadedData)),
+                      children: children),
+                ),
+                formAction!);
       } else {
-        return StyleRegistry.registry().styleWithApp(widget.app).adminListStyle().progressIndicator(widget.app, context);
+        return StyleRegistry.registry()
+            .styleWithApp(widget.app)
+            .adminListStyle()
+            .progressIndicator(widget.app, context);
       }
     });
   }
 
   void _onDocumentIDChanged() {
-    _myFormBloc.add(ChangedFollowRequestsDashboardDocumentID(value: _documentIDController.text));
+    _myFormBloc.add(ChangedFollowRequestsDashboardDocumentID(
+        value: _documentIDController.text));
   }
-
 
   void _onAppIdChanged() {
-    _myFormBloc.add(ChangedFollowRequestsDashboardAppId(value: _appIdController.text));
+    _myFormBloc
+        .add(ChangedFollowRequestsDashboardAppId(value: _appIdController.text));
   }
-
 
   void _onDescriptionChanged() {
-    _myFormBloc.add(ChangedFollowRequestsDashboardDescription(value: _descriptionController.text));
+    _myFormBloc.add(ChangedFollowRequestsDashboardDescription(
+        value: _descriptionController.text));
   }
-
 
   void _onMemberActionsChanged(value) {
     _myFormBloc.add(ChangedFollowRequestsDashboardMemberActions(value: value));
     setState(() {});
   }
-
-
 
   @override
   void dispose() {
@@ -289,12 +359,11 @@ class _MyFollowRequestsDashboardFormState extends State<MyFollowRequestsDashboar
     super.dispose();
   }
 
-  bool _readOnly(AccessState accessState, FollowRequestsDashboardFormInitialized state) {
-    return (formAction == FormAction.ShowData) || (formAction == FormAction.ShowPreloadedData) || (!accessState.memberIsOwner(widget.app.documentID));
+  /// Is the form read-only?
+  bool _readOnly(
+      AccessState accessState, FollowRequestsDashboardFormInitialized state) {
+    return (formAction == FormAction.showData) ||
+        (formAction == FormAction.showPreloadedData) ||
+        (!accessState.memberIsOwner(widget.app.documentID));
   }
-  
-
 }
-
-
-

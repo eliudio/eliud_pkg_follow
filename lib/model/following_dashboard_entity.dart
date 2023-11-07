@@ -26,68 +26,112 @@ class FollowingDashboardEntity implements EntityBase {
   final List<MemberActionEntity>? memberActions;
   final StorageConditionsEntity? conditions;
 
-  FollowingDashboardEntity({required this.appId, this.description, this.view, this.memberActions, this.conditions, });
+  FollowingDashboardEntity({
+    required this.appId,
+    this.description,
+    this.view,
+    this.memberActions,
+    this.conditions,
+  });
 
-  FollowingDashboardEntity copyWith({String? documentID, String? appId, String? description, int? view, List<MemberActionEntity>? memberActions, StorageConditionsEntity? conditions, }) {
-    return FollowingDashboardEntity(appId : appId ?? this.appId, description : description ?? this.description, view : view ?? this.view, memberActions : memberActions ?? this.memberActions, conditions : conditions ?? this.conditions, );
+  FollowingDashboardEntity copyWith({
+    String? documentID,
+    String? appId,
+    String? description,
+    int? view,
+    List<MemberActionEntity>? memberActions,
+    StorageConditionsEntity? conditions,
+  }) {
+    return FollowingDashboardEntity(
+      appId: appId ?? this.appId,
+      description: description ?? this.description,
+      view: view ?? this.view,
+      memberActions: memberActions ?? this.memberActions,
+      conditions: conditions ?? this.conditions,
+    );
   }
-  List<Object?> get props => [appId, description, view, memberActions, conditions, ];
+
+  List<Object?> get props => [
+        appId,
+        description,
+        view,
+        memberActions,
+        conditions,
+      ];
 
   @override
   String toString() {
-    String memberActionsCsv = (memberActions == null) ? '' : memberActions!.join(', ');
+    String memberActionsCsv =
+        (memberActions == null) ? '' : memberActions!.join(', ');
 
     return 'FollowingDashboardEntity{appId: $appId, description: $description, view: $view, memberActions: MemberAction[] { $memberActionsCsv }, conditions: $conditions}';
   }
 
-  static FollowingDashboardEntity? fromMap(Object? o, {Map<String, String>? newDocumentIds}) {
+  static FollowingDashboardEntity? fromMap(Object? o,
+      {Map<String, String>? newDocumentIds}) {
     if (o == null) return null;
     var map = o as Map<String, dynamic>;
 
-    var memberActionsFromMap;
-    memberActionsFromMap = map['memberActions'];
+    var memberActionsFromMap = map['memberActions'];
     List<MemberActionEntity> memberActionsList;
     if (memberActionsFromMap != null) {
       memberActionsList = (map['memberActions'] as List<dynamic>)
-        .map((dynamic item) =>
-        MemberActionEntity.fromMap(item as Map, newDocumentIds: newDocumentIds)!)
-        .toList();
+          .map((dynamic item) => MemberActionEntity.fromMap(item as Map,
+              newDocumentIds: newDocumentIds)!)
+          .toList();
     } else {
       memberActionsList = [];
     }
-    var conditionsFromMap;
-    conditionsFromMap = map['conditions'];
-    if (conditionsFromMap != null)
-      conditionsFromMap = StorageConditionsEntity.fromMap(conditionsFromMap, newDocumentIds: newDocumentIds);
+    var conditionsFromMap = map['conditions'];
+    if (conditionsFromMap != null) {
+      conditionsFromMap = StorageConditionsEntity.fromMap(conditionsFromMap,
+          newDocumentIds: newDocumentIds);
+    }
 
     return FollowingDashboardEntity(
-      appId: map['appId'], 
-      description: map['description'], 
-      view: map['view'], 
-      memberActions: memberActionsList, 
-      conditions: conditionsFromMap, 
+      appId: map['appId'],
+      description: map['description'],
+      view: map['view'],
+      memberActions: memberActionsList,
+      conditions: conditionsFromMap,
     );
   }
 
+  @override
   Map<String, Object?> toDocument() {
-    final List<Map<String?, dynamic>>? memberActionsListMap = memberActions != null 
-        ? memberActions!.map((item) => item.toDocument()).toList()
-        : null;
-    final Map<String, dynamic>? conditionsMap = conditions != null 
-        ? conditions!.toDocument()
-        : null;
+    final List<Map<String?, dynamic>>? memberActionsListMap =
+        memberActions != null
+            ? memberActions!.map((item) => item.toDocument()).toList()
+            : null;
+    final Map<String, dynamic>? conditionsMap =
+        conditions != null ? conditions!.toDocument() : null;
 
     Map<String, Object?> theDocument = HashMap();
-    if (appId != null) theDocument["appId"] = appId;
-      else theDocument["appId"] = null;
-    if (description != null) theDocument["description"] = description;
-      else theDocument["description"] = null;
-    if (view != null) theDocument["view"] = view;
-      else theDocument["view"] = null;
-    if (memberActions != null) theDocument["memberActions"] = memberActionsListMap;
-      else theDocument["memberActions"] = null;
-    if (conditions != null) theDocument["conditions"] = conditionsMap;
-      else theDocument["conditions"] = null;
+    if (appId != null) {
+      theDocument["appId"] = appId;
+    } else {
+      theDocument["appId"] = null;
+    }
+    if (description != null) {
+      theDocument["description"] = description;
+    } else {
+      theDocument["description"] = null;
+    }
+    if (view != null) {
+      theDocument["view"] = view;
+    } else {
+      theDocument["view"] = null;
+    }
+    if (memberActions != null) {
+      theDocument["memberActions"] = memberActionsListMap;
+    } else {
+      theDocument["memberActions"] = null;
+    }
+    if (conditions != null) {
+      theDocument["conditions"] = conditionsMap;
+    } else {
+      theDocument["conditions"] = null;
+    }
     return theDocument;
   }
 
@@ -97,7 +141,8 @@ class FollowingDashboardEntity implements EntityBase {
     return newEntity;
   }
 
-  static FollowingDashboardEntity? fromJsonString(String json, {Map<String, String>? newDocumentIds}) {
+  static FollowingDashboardEntity? fromJsonString(String json,
+      {Map<String, String>? newDocumentIds}) {
     Map<String, dynamic>? generationSpecificationMap = jsonDecode(json);
     return fromMap(generationSpecificationMap, newDocumentIds: newDocumentIds);
   }
@@ -106,9 +151,9 @@ class FollowingDashboardEntity implements EntityBase {
     return jsonEncode(toDocument());
   }
 
-  Future<Map<String, Object?>> enrichedDocument(Map<String, Object?> theDocument) async {
+  @override
+  Future<Map<String, Object?>> enrichedDocument(
+      Map<String, Object?> theDocument) async {
     return theDocument;
   }
-
 }
-

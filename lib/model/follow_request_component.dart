@@ -13,7 +13,6 @@
 
 */
 
-
 import 'package:eliud_pkg_follow/model/follow_request_component_bloc.dart';
 import 'package:eliud_pkg_follow/model/follow_request_component_event.dart';
 import 'package:eliud_pkg_follow/model/follow_request_model.dart';
@@ -31,20 +30,23 @@ abstract class AbstractFollowRequestComponent extends StatelessWidget {
   final AppModel app;
   final String followRequestId;
 
-  AbstractFollowRequestComponent({Key? key, required this.app, required this.followRequestId}): super(key: key);
+  AbstractFollowRequestComponent(
+      {super.key, required this.app, required this.followRequestId});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<FollowRequestComponentBloc> (
-          create: (context) => FollowRequestComponentBloc(
-            followRequestRepository: followRequestRepository(appId: app.documentID)!)
+    return BlocProvider<FollowRequestComponentBloc>(
+      create: (context) => FollowRequestComponentBloc(
+          followRequestRepository:
+              followRequestRepository(appId: app.documentID)!)
         ..add(FetchFollowRequestComponent(id: followRequestId)),
       child: _followRequestBlockBuilder(context),
     );
   }
 
   Widget _followRequestBlockBuilder(BuildContext context) {
-    return BlocBuilder<FollowRequestComponentBloc, FollowRequestComponentState>(builder: (context, state) {
+    return BlocBuilder<FollowRequestComponentBloc, FollowRequestComponentState>(
+        builder: (context, state) {
       if (state is FollowRequestComponentLoaded) {
         return yourWidget(context, state.value);
       } else if (state is FollowRequestComponentPermissionDenied) {
@@ -57,7 +59,11 @@ abstract class AbstractFollowRequestComponent extends StatelessWidget {
         return AlertWidget(app: app, title: 'Error', content: state.message);
       } else {
         return Center(
-          child: StyleRegistry.registry().styleWithApp(app).frontEndStyle().progressIndicatorStyle().progressIndicator(app, context),
+          child: StyleRegistry.registry()
+              .styleWithApp(app)
+              .frontEndStyle()
+              .progressIndicatorStyle()
+              .progressIndicator(app, context),
         );
       }
     });
@@ -65,4 +71,3 @@ abstract class AbstractFollowRequestComponent extends StatelessWidget {
 
   Widget yourWidget(BuildContext context, FollowRequestModel value);
 }
-

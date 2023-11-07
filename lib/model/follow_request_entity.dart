@@ -23,40 +23,76 @@ class FollowRequestEntity implements EntityBase {
   final String? followedId;
   final int? status;
 
-  FollowRequestEntity({required this.appId, this.followerId, this.followedId, this.status, });
+  FollowRequestEntity({
+    required this.appId,
+    this.followerId,
+    this.followedId,
+    this.status,
+  });
 
-  FollowRequestEntity copyWith({String? documentID, String? appId, String? followerId, String? followedId, int? status, }) {
-    return FollowRequestEntity(appId : appId ?? this.appId, followerId : followerId ?? this.followerId, followedId : followedId ?? this.followedId, status : status ?? this.status, );
+  FollowRequestEntity copyWith({
+    String? documentID,
+    String? appId,
+    String? followerId,
+    String? followedId,
+    int? status,
+  }) {
+    return FollowRequestEntity(
+      appId: appId ?? this.appId,
+      followerId: followerId ?? this.followerId,
+      followedId: followedId ?? this.followedId,
+      status: status ?? this.status,
+    );
   }
-  List<Object?> get props => [appId, followerId, followedId, status, ];
+
+  List<Object?> get props => [
+        appId,
+        followerId,
+        followedId,
+        status,
+      ];
 
   @override
   String toString() {
     return 'FollowRequestEntity{appId: $appId, followerId: $followerId, followedId: $followedId, status: $status}';
   }
 
-  static FollowRequestEntity? fromMap(Object? o, {Map<String, String>? newDocumentIds}) {
+  static FollowRequestEntity? fromMap(Object? o,
+      {Map<String, String>? newDocumentIds}) {
     if (o == null) return null;
     var map = o as Map<String, dynamic>;
 
     return FollowRequestEntity(
-      appId: map['appId'], 
-      followerId: map['followerId'], 
-      followedId: map['followedId'], 
-      status: map['status'], 
+      appId: map['appId'],
+      followerId: map['followerId'],
+      followedId: map['followedId'],
+      status: map['status'],
     );
   }
 
+  @override
   Map<String, Object?> toDocument() {
     Map<String, Object?> theDocument = HashMap();
-    if (appId != null) theDocument["appId"] = appId;
-      else theDocument["appId"] = null;
-    if (followerId != null) theDocument["followerId"] = followerId;
-      else theDocument["followerId"] = null;
-    if (followedId != null) theDocument["followedId"] = followedId;
-      else theDocument["followedId"] = null;
-    if (status != null) theDocument["status"] = status;
-      else theDocument["status"] = null;
+    if (appId != null) {
+      theDocument["appId"] = appId;
+    } else {
+      theDocument["appId"] = null;
+    }
+    if (followerId != null) {
+      theDocument["followerId"] = followerId;
+    } else {
+      theDocument["followerId"] = null;
+    }
+    if (followedId != null) {
+      theDocument["followedId"] = followedId;
+    } else {
+      theDocument["followedId"] = null;
+    }
+    if (status != null) {
+      theDocument["status"] = status;
+    } else {
+      theDocument["status"] = null;
+    }
     return theDocument;
   }
 
@@ -66,7 +102,8 @@ class FollowRequestEntity implements EntityBase {
     return newEntity;
   }
 
-  static FollowRequestEntity? fromJsonString(String json, {Map<String, String>? newDocumentIds}) {
+  static FollowRequestEntity? fromJsonString(String json,
+      {Map<String, String>? newDocumentIds}) {
     Map<String, dynamic>? generationSpecificationMap = jsonDecode(json);
     return fromMap(generationSpecificationMap, newDocumentIds: newDocumentIds);
   }
@@ -75,9 +112,9 @@ class FollowRequestEntity implements EntityBase {
     return jsonEncode(toDocument());
   }
 
-  Future<Map<String, Object?>> enrichedDocument(Map<String, Object?> theDocument) async {
+  @override
+  Future<Map<String, Object?>> enrichedDocument(
+      Map<String, Object?> theDocument) async {
     return theDocument;
   }
-
 }
-

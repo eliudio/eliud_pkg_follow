@@ -13,7 +13,6 @@
 
 */
 
-
 import 'package:eliud_pkg_follow/model/following_dashboard_component_bloc.dart';
 import 'package:eliud_pkg_follow/model/following_dashboard_component_event.dart';
 import 'package:eliud_pkg_follow/model/following_dashboard_model.dart';
@@ -31,20 +30,23 @@ abstract class AbstractFollowingDashboardComponent extends StatelessWidget {
   final AppModel app;
   final String followingDashboardId;
 
-  AbstractFollowingDashboardComponent({Key? key, required this.app, required this.followingDashboardId}): super(key: key);
+  AbstractFollowingDashboardComponent(
+      {super.key, required this.app, required this.followingDashboardId});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<FollowingDashboardComponentBloc> (
-          create: (context) => FollowingDashboardComponentBloc(
-            followingDashboardRepository: followingDashboardRepository(appId: app.documentID)!)
+    return BlocProvider<FollowingDashboardComponentBloc>(
+      create: (context) => FollowingDashboardComponentBloc(
+          followingDashboardRepository:
+              followingDashboardRepository(appId: app.documentID)!)
         ..add(FetchFollowingDashboardComponent(id: followingDashboardId)),
       child: _followingDashboardBlockBuilder(context),
     );
   }
 
   Widget _followingDashboardBlockBuilder(BuildContext context) {
-    return BlocBuilder<FollowingDashboardComponentBloc, FollowingDashboardComponentState>(builder: (context, state) {
+    return BlocBuilder<FollowingDashboardComponentBloc,
+        FollowingDashboardComponentState>(builder: (context, state) {
       if (state is FollowingDashboardComponentLoaded) {
         return yourWidget(context, state.value);
       } else if (state is FollowingDashboardComponentPermissionDenied) {
@@ -57,7 +59,11 @@ abstract class AbstractFollowingDashboardComponent extends StatelessWidget {
         return AlertWidget(app: app, title: 'Error', content: state.message);
       } else {
         return Center(
-          child: StyleRegistry.registry().styleWithApp(app).frontEndStyle().progressIndicatorStyle().progressIndicator(app, context),
+          child: StyleRegistry.registry()
+              .styleWithApp(app)
+              .frontEndStyle()
+              .progressIndicatorStyle()
+              .progressIndicator(app, context),
         );
       }
     });
@@ -65,4 +71,3 @@ abstract class AbstractFollowingDashboardComponent extends StatelessWidget {
 
   Widget yourWidget(BuildContext context, FollowingDashboardModel value);
 }
-
