@@ -25,14 +25,23 @@ import 'abstract_repository_singleton.dart';
 import 'package:eliud_core/core/widgets/alert_widget.dart';
 import 'package:eliud_core/model/app_model.dart';
 
+/*
+ * AbstractFollowRequestComponent is the base class to extend / implement in case you need to implement a component
+ */
 abstract class AbstractFollowRequestComponent extends StatelessWidget {
   static String componentName = "followRequests";
   final AppModel app;
   final String followRequestId;
 
+  /*
+   * Construct AbstractFollowRequestComponent
+   */
   AbstractFollowRequestComponent(
       {super.key, required this.app, required this.followRequestId});
 
+  /*
+   * build the component
+   */
   @override
   Widget build(BuildContext context) {
     return BlocProvider<FollowRequestComponentBloc>(
@@ -69,5 +78,8 @@ abstract class AbstractFollowRequestComponent extends StatelessWidget {
     });
   }
 
+  /*
+   * Implement this method to provide your widget
+   */
   Widget yourWidget(BuildContext context, FollowRequestModel value);
 }

@@ -60,7 +60,7 @@ class InviteDashboardForm extends StatelessWidget {
           appId,
           formAction: formAction,
         )..add(InitialiseInviteDashboardFormEvent(value: value)),
-        child: MyInviteDashboardForm(
+        child: _MyInviteDashboardForm(
             app: app, submitAction: submitAction, formAction: formAction),
       );
     }
@@ -70,7 +70,7 @@ class InviteDashboardForm extends StatelessWidget {
           appId,
           formAction: formAction,
         )..add(InitialiseInviteDashboardFormNoLoadEvent(value: value)),
-        child: MyInviteDashboardForm(
+        child: _MyInviteDashboardForm(
             app: app, submitAction: submitAction, formAction: formAction),
       );
     } else {
@@ -89,27 +89,27 @@ class InviteDashboardForm extends StatelessWidget {
             )..add((formAction == FormAction.updateAction
                 ? InitialiseInviteDashboardFormEvent(value: value)
                 : InitialiseNewInviteDashboardFormEvent())),
-            child: MyInviteDashboardForm(
+            child: _MyInviteDashboardForm(
                 app: app, submitAction: submitAction, formAction: formAction),
           ));
     }
   }
 }
 
-class MyInviteDashboardForm extends StatefulWidget {
+class _MyInviteDashboardForm extends StatefulWidget {
   final AppModel app;
   final FormAction? formAction;
   final ActionModel? submitAction;
 
-  MyInviteDashboardForm(
+  _MyInviteDashboardForm(
       {required this.app, this.formAction, this.submitAction});
 
   @override
-  State<MyInviteDashboardForm> createState() =>
+  State<_MyInviteDashboardForm> createState() =>
       _MyInviteDashboardFormState(formAction);
 }
 
-class _MyInviteDashboardFormState extends State<MyInviteDashboardForm> {
+class _MyInviteDashboardFormState extends State<_MyInviteDashboardForm> {
   final FormAction? formAction;
   late InviteDashboardFormBloc _myFormBloc;
 

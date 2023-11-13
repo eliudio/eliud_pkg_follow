@@ -33,6 +33,9 @@ typedef FollowRequestChanged = Function(
   int? privilegeLevel,
 );
 
+/* 
+ * FollowRequestDropdownButtonWidget is the drop down widget to allow to select an instance of FollowRequest
+ */
 class FollowRequestDropdownButtonWidget extends StatefulWidget {
   final AppModel app;
   final int? privilegeLevel;
@@ -40,6 +43,9 @@ class FollowRequestDropdownButtonWidget extends StatefulWidget {
   final FollowRequestChanged? trigger;
   final bool? optional;
 
+  /* 
+   * construct a FollowRequestDropdownButtonWidget
+   */
   FollowRequestDropdownButtonWidget(
       {required this.app,
       this.privilegeLevel,
@@ -48,18 +54,21 @@ class FollowRequestDropdownButtonWidget extends StatefulWidget {
       this.optional,
       super.key});
 
+  /* 
+   * create state of FollowRequestDropdownButtonWidget
+   */
   @override
   State<StatefulWidget> createState() {
-    return FollowRequestDropdownButtonWidgetState(value);
+    return _FollowRequestDropdownButtonWidgetState(value);
   }
 }
 
-class FollowRequestDropdownButtonWidgetState
+class _FollowRequestDropdownButtonWidgetState
     extends State<FollowRequestDropdownButtonWidget> {
   FollowRequestListBloc? bloc;
   String? value;
 
-  FollowRequestDropdownButtonWidgetState(this.value);
+  _FollowRequestDropdownButtonWidgetState(this.value);
 
   @override
   void didChangeDependencies() {
@@ -73,7 +82,7 @@ class FollowRequestDropdownButtonWidgetState
     super.dispose();
   }
 
-  List<Widget> widgets(FollowRequestModel value) {
+  List<Widget> _widgets(FollowRequestModel value) {
     var app = widget.app;
     var widgets = <Widget>[];
     widgets.add(Center(
@@ -134,7 +143,7 @@ class FollowRequestDropdownButtonWidgetState
                   height: 100.0,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: widgets(element),
+                    children: _widgets(element),
                   ),
                 )));
           }

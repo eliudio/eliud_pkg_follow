@@ -25,15 +25,24 @@ import 'abstract_repository_singleton.dart';
 import 'package:eliud_core/core/widgets/alert_widget.dart';
 import 'package:eliud_core/model/app_model.dart';
 
+/*
+ * AbstractFollowRequestsDashboardComponent is the base class to extend / implement in case you need to implement a component
+ */
 abstract class AbstractFollowRequestsDashboardComponent
     extends StatelessWidget {
   static String componentName = "followRequestsDashboards";
   final AppModel app;
   final String followRequestsDashboardId;
 
+  /*
+   * Construct AbstractFollowRequestsDashboardComponent
+   */
   AbstractFollowRequestsDashboardComponent(
       {super.key, required this.app, required this.followRequestsDashboardId});
 
+  /*
+   * build the component
+   */
   @override
   Widget build(BuildContext context) {
     return BlocProvider<FollowRequestsDashboardComponentBloc>(
@@ -71,5 +80,8 @@ abstract class AbstractFollowRequestsDashboardComponent
     });
   }
 
+  /*
+   * Implement this method to provide your widget
+   */
   Widget yourWidget(BuildContext context, FollowRequestsDashboardModel value);
 }

@@ -25,8 +25,14 @@ import 'package:eliud_core/tools/query/query_tools.dart';
 import 'package:eliud_core/tools/firestore/firestore_tools.dart';
 import 'package:eliud_core/tools/common_tools.dart';
 
+/* 
+ * FollowRequestsDashboardFirestore is the firestore implementation of FollowRequestsDashboardRepository
+ */
 class FollowRequestsDashboardFirestore
     implements FollowRequestsDashboardRepository {
+  /* 
+   * transform a map into an entity
+   */
   @override
   FollowRequestsDashboardEntity? fromMap(Object? o,
       {Map<String, String>? newDocumentIds}) {
@@ -34,6 +40,9 @@ class FollowRequestsDashboardFirestore
         newDocumentIds: newDocumentIds);
   }
 
+  /* 
+   * add an entity to the repository
+   */
   @override
   Future<FollowRequestsDashboardEntity> addEntity(
       String documentID, FollowRequestsDashboardEntity value) {
@@ -43,6 +52,9 @@ class FollowRequestsDashboardFirestore
         .then((_) => value);
   }
 
+  /* 
+   * Update an entity
+   */
   @override
   Future<FollowRequestsDashboardEntity> updateEntity(
       String documentID, FollowRequestsDashboardEntity value) {
@@ -52,6 +64,9 @@ class FollowRequestsDashboardFirestore
         .then((_) => value);
   }
 
+  /* 
+   * Add a model to the repository
+   */
   @override
   Future<FollowRequestsDashboardModel> add(FollowRequestsDashboardModel value) {
     return followRequestsDashboardCollection
@@ -60,11 +75,17 @@ class FollowRequestsDashboardFirestore
         .then((_) => value);
   }
 
+  /* 
+   * Delete a model
+   */
   @override
   Future<void> delete(FollowRequestsDashboardModel value) {
     return followRequestsDashboardCollection.doc(value.documentID).delete();
   }
 
+  /* 
+   * Update a model
+   */
   @override
   Future<FollowRequestsDashboardModel> update(
       FollowRequestsDashboardModel value) {
@@ -87,6 +108,9 @@ class FollowRequestsDashboardFirestore
         appId: appId);
   }
 
+  /* 
+   * Retrieve an entity from the repository with id
+   */
   @override
   Future<FollowRequestsDashboardEntity?> getEntity(String? id,
       {Function(Exception)? onError}) async {
@@ -105,6 +129,9 @@ class FollowRequestsDashboardFirestore
     return null;
   }
 
+  /* 
+   * Retrieve an model from the repository with id
+   */
   @override
   Future<FollowRequestsDashboardModel?> get(String? id,
       {Function(Exception)? onError}) async {
@@ -123,6 +150,9 @@ class FollowRequestsDashboardFirestore
     return null;
   }
 
+  /* 
+   * Listen to the repository using a query. Retrieve models
+   */
   @override
   StreamSubscription<List<FollowRequestsDashboardModel?>> listen(
       FollowRequestsDashboardModelTrigger trigger,
@@ -154,6 +184,9 @@ class FollowRequestsDashboardFirestore
     });
   }
 
+  /* 
+   * Listen to the repository using a query. Retrieve models and linked models
+   */
   @override
   StreamSubscription<List<FollowRequestsDashboardModel?>> listenWithDetails(
       FollowRequestsDashboardModelTrigger trigger,
@@ -185,6 +218,9 @@ class FollowRequestsDashboardFirestore
     });
   }
 
+  /* 
+   * Listen to 1 document in the repository
+   */
   @override
   StreamSubscription<FollowRequestsDashboardModel?> listenTo(
       String documentId, FollowRequestsDashboardChanged changed,
@@ -206,6 +242,9 @@ class FollowRequestsDashboardFirestore
     return theStream;
   }
 
+  /* 
+   * Retrieve values/models from the repository
+   */
   @override
   Stream<List<FollowRequestsDashboardModel?>> values(
       {String? orderBy,
@@ -236,6 +275,9 @@ class FollowRequestsDashboardFirestore
     return values;
   }
 
+  /* 
+   * Retrieve values/models, including linked models, from the repository
+   */
   @override
   Stream<List<FollowRequestsDashboardModel?>> valuesWithDetails(
       {String? orderBy,
@@ -266,6 +308,9 @@ class FollowRequestsDashboardFirestore
     return values;
   }
 
+  /* 
+   * Retrieve values/models from the repository
+   */
   @override
   Future<List<FollowRequestsDashboardModel?>> valuesList(
       {String? orderBy,
@@ -297,6 +342,9 @@ class FollowRequestsDashboardFirestore
     return values;
   }
 
+  /* 
+   * Retrieve values/models, including linked models, from the repository
+   */
   @override
   Future<List<FollowRequestsDashboardModel?>> valuesListWithDetails(
       {String? orderBy,
@@ -328,9 +376,15 @@ class FollowRequestsDashboardFirestore
     return values;
   }
 
+  /* 
+   * Flush the repository
+   */
   @override
   void flush() {}
 
+  /* 
+   * Delete all entries in the repository
+   */
   @override
   Future<void> deleteAll() {
     return followRequestsDashboardCollection.get().then((snapshot) {
@@ -340,16 +394,25 @@ class FollowRequestsDashboardFirestore
     });
   }
 
+  /* 
+   * Retrieve the subcollection of this repository
+   */
   @override
   dynamic getSubCollection(String documentId, String name) {
     return followRequestsDashboardCollection.doc(documentId).collection(name);
   }
 
+  /* 
+   * Retrieve a timestamp
+   */
   @override
   String? timeStampToString(dynamic timeStamp) {
     return firestoreTimeStampToString(timeStamp);
   }
 
+  /* 
+   * change 1 a fieldvalue for 1 document  
+   */
   @override
   Future<FollowRequestsDashboardModel?> changeValue(
       String documentId, String fieldName, num changeByThisValue) {

@@ -60,7 +60,7 @@ class FollowRequestForm extends StatelessWidget {
           appId,
           formAction: formAction,
         )..add(InitialiseFollowRequestFormEvent(value: value)),
-        child: MyFollowRequestForm(
+        child: _MyFollowRequestForm(
             app: app, submitAction: submitAction, formAction: formAction),
       );
     }
@@ -70,7 +70,7 @@ class FollowRequestForm extends StatelessWidget {
           appId,
           formAction: formAction,
         )..add(InitialiseFollowRequestFormNoLoadEvent(value: value)),
-        child: MyFollowRequestForm(
+        child: _MyFollowRequestForm(
             app: app, submitAction: submitAction, formAction: formAction),
       );
     } else {
@@ -89,26 +89,26 @@ class FollowRequestForm extends StatelessWidget {
             )..add((formAction == FormAction.updateAction
                 ? InitialiseFollowRequestFormEvent(value: value)
                 : InitialiseNewFollowRequestFormEvent())),
-            child: MyFollowRequestForm(
+            child: _MyFollowRequestForm(
                 app: app, submitAction: submitAction, formAction: formAction),
           ));
     }
   }
 }
 
-class MyFollowRequestForm extends StatefulWidget {
+class _MyFollowRequestForm extends StatefulWidget {
   final AppModel app;
   final FormAction? formAction;
   final ActionModel? submitAction;
 
-  MyFollowRequestForm({required this.app, this.formAction, this.submitAction});
+  _MyFollowRequestForm({required this.app, this.formAction, this.submitAction});
 
   @override
-  State<MyFollowRequestForm> createState() =>
+  State<_MyFollowRequestForm> createState() =>
       _MyFollowRequestFormState(formAction);
 }
 
-class _MyFollowRequestFormState extends State<MyFollowRequestForm> {
+class _MyFollowRequestFormState extends State<_MyFollowRequestForm> {
   final FormAction? formAction;
   late FollowRequestFormBloc _myFormBloc;
 

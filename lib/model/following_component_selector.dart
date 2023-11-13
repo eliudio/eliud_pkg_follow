@@ -32,7 +32,13 @@ import 'following_list_event.dart';
 import 'following_list_state.dart';
 import 'following_model.dart';
 
+/* 
+ * FollowingComponentSelector is a component selector for Following, allowing to select a Following component
+ */
 class FollowingComponentSelector extends ComponentSelector {
+  /* 
+   * createSelectWidget creates the widget
+   */
   @override
   Widget createSelectWidget(BuildContext context, AppModel app,
       int privilegeLevel, double height, SelectComponent selected, editor) {
@@ -42,7 +48,7 @@ class FollowingComponentSelector extends ComponentSelector {
         eliudQuery: getComponentSelectorQuery(0, app.documentID),
         followingRepository: followingRepository(appId: appId)!,
       )..add(LoadFollowingList()),
-      child: SelectFollowingWidget(
+      child: _SelectFollowingWidget(
           app: app,
           height: height,
           containerPrivilege: privilegeLevel,
@@ -52,28 +58,30 @@ class FollowingComponentSelector extends ComponentSelector {
   }
 }
 
-class SelectFollowingWidget extends StatefulWidget {
+/* 
+ * _SelectFollowingWidget 
+ */
+class _SelectFollowingWidget extends StatefulWidget {
   final AppModel app;
   final double height;
   final SelectComponent selected;
   final int containerPrivilege;
   final ComponentEditorConstructor editorConstructor;
 
-  const SelectFollowingWidget(
-      {super.key,
-      required this.app,
+  const _SelectFollowingWidget(
+      {required this.app,
       required this.containerPrivilege,
       required this.height,
       required this.selected,
       required this.editorConstructor});
 
   @override
-  State<SelectFollowingWidget> createState() {
+  State<_SelectFollowingWidget> createState() {
     return _SelectFollowingWidgetState();
   }
 }
 
-class _SelectFollowingWidgetState extends State<SelectFollowingWidget>
+class _SelectFollowingWidgetState extends State<_SelectFollowingWidget>
     with TickerProviderStateMixin {
   TabController? _privilegeTabController;
   final List<String> _privilegeItems = ['No', 'L1', 'L2', 'Owner'];

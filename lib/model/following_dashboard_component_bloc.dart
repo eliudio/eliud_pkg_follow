@@ -35,6 +35,9 @@ class FollowingDashboardComponentBloc extends Bloc<
     });
   }
 
+  /*
+   * Construct FollowingDashboardComponentBloc
+   */
   FollowingDashboardComponentBloc({this.followingDashboardRepository})
       : super(FollowingDashboardComponentUninitialized()) {
     on<FetchFollowingDashboardComponent>((event, emit) {
@@ -45,6 +48,9 @@ class FollowingDashboardComponentBloc extends Bloc<
     });
   }
 
+  /*
+   * Close the FollowingDashboardComponentBloc
+   */
   @override
   Future<void> close() {
     _followingDashboardSubscription?.cancel();

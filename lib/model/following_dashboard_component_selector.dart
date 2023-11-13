@@ -31,7 +31,13 @@ import 'following_dashboard_list_event.dart';
 import 'following_dashboard_list_state.dart';
 import 'following_dashboard_model.dart';
 
+/* 
+ * FollowingDashboardComponentSelector is a component selector for FollowingDashboard, allowing to select a FollowingDashboard component
+ */
 class FollowingDashboardComponentSelector extends ComponentSelector {
+  /* 
+   * createSelectWidget creates the widget
+   */
   @override
   Widget createSelectWidget(BuildContext context, AppModel app,
       int privilegeLevel, double height, SelectComponent selected, editor) {
@@ -42,7 +48,7 @@ class FollowingDashboardComponentSelector extends ComponentSelector {
         followingDashboardRepository:
             followingDashboardRepository(appId: appId)!,
       )..add(LoadFollowingDashboardList()),
-      child: SelectFollowingDashboardWidget(
+      child: _SelectFollowingDashboardWidget(
           app: app,
           height: height,
           containerPrivilege: privilegeLevel,
@@ -52,29 +58,31 @@ class FollowingDashboardComponentSelector extends ComponentSelector {
   }
 }
 
-class SelectFollowingDashboardWidget extends StatefulWidget {
+/* 
+ * _SelectFollowingDashboardWidget 
+ */
+class _SelectFollowingDashboardWidget extends StatefulWidget {
   final AppModel app;
   final double height;
   final SelectComponent selected;
   final int containerPrivilege;
   final ComponentEditorConstructor editorConstructor;
 
-  const SelectFollowingDashboardWidget(
-      {super.key,
-      required this.app,
+  const _SelectFollowingDashboardWidget(
+      {required this.app,
       required this.containerPrivilege,
       required this.height,
       required this.selected,
       required this.editorConstructor});
 
   @override
-  State<SelectFollowingDashboardWidget> createState() {
+  State<_SelectFollowingDashboardWidget> createState() {
     return _SelectFollowingDashboardWidgetState();
   }
 }
 
 class _SelectFollowingDashboardWidgetState
-    extends State<SelectFollowingDashboardWidget>
+    extends State<_SelectFollowingDashboardWidget>
     with TickerProviderStateMixin {
   TabController? _privilegeTabController;
   final List<String> _privilegeItems = ['No', 'L1', 'L2', 'Owner'];

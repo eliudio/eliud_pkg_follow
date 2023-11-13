@@ -31,7 +31,13 @@ import 'invite_dashboard_list_event.dart';
 import 'invite_dashboard_list_state.dart';
 import 'invite_dashboard_model.dart';
 
+/* 
+ * InviteDashboardComponentSelector is a component selector for InviteDashboard, allowing to select a InviteDashboard component
+ */
 class InviteDashboardComponentSelector extends ComponentSelector {
+  /* 
+   * createSelectWidget creates the widget
+   */
   @override
   Widget createSelectWidget(BuildContext context, AppModel app,
       int privilegeLevel, double height, SelectComponent selected, editor) {
@@ -41,7 +47,7 @@ class InviteDashboardComponentSelector extends ComponentSelector {
         eliudQuery: getComponentSelectorQuery(0, app.documentID),
         inviteDashboardRepository: inviteDashboardRepository(appId: appId)!,
       )..add(LoadInviteDashboardList()),
-      child: SelectInviteDashboardWidget(
+      child: _SelectInviteDashboardWidget(
           app: app,
           height: height,
           containerPrivilege: privilegeLevel,
@@ -51,29 +57,31 @@ class InviteDashboardComponentSelector extends ComponentSelector {
   }
 }
 
-class SelectInviteDashboardWidget extends StatefulWidget {
+/* 
+ * _SelectInviteDashboardWidget 
+ */
+class _SelectInviteDashboardWidget extends StatefulWidget {
   final AppModel app;
   final double height;
   final SelectComponent selected;
   final int containerPrivilege;
   final ComponentEditorConstructor editorConstructor;
 
-  const SelectInviteDashboardWidget(
-      {super.key,
-      required this.app,
+  const _SelectInviteDashboardWidget(
+      {required this.app,
       required this.containerPrivilege,
       required this.height,
       required this.selected,
       required this.editorConstructor});
 
   @override
-  State<SelectInviteDashboardWidget> createState() {
+  State<_SelectInviteDashboardWidget> createState() {
     return _SelectInviteDashboardWidgetState();
   }
 }
 
 class _SelectInviteDashboardWidgetState
-    extends State<SelectInviteDashboardWidget> with TickerProviderStateMixin {
+    extends State<_SelectInviteDashboardWidget> with TickerProviderStateMixin {
   TabController? _privilegeTabController;
   final List<String> _privilegeItems = ['No', 'L1', 'L2', 'Owner'];
   final int _initialPrivilege = 0;

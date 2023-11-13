@@ -25,12 +25,21 @@ import 'package:eliud_core/tools/query/query_tools.dart';
 import 'package:eliud_core/tools/firestore/firestore_tools.dart';
 import 'package:eliud_core/tools/common_tools.dart';
 
+/* 
+ * FollowingFirestore is the firestore implementation of FollowingRepository
+ */
 class FollowingFirestore implements FollowingRepository {
+  /* 
+   * transform a map into an entity
+   */
   @override
   FollowingEntity? fromMap(Object? o, {Map<String, String>? newDocumentIds}) {
     return FollowingEntity.fromMap(o, newDocumentIds: newDocumentIds);
   }
 
+  /* 
+   * add an entity to the repository
+   */
   @override
   Future<FollowingEntity> addEntity(String documentID, FollowingEntity value) {
     return followingCollection
@@ -39,6 +48,9 @@ class FollowingFirestore implements FollowingRepository {
         .then((_) => value);
   }
 
+  /* 
+   * Update an entity
+   */
   @override
   Future<FollowingEntity> updateEntity(
       String documentID, FollowingEntity value) {
@@ -48,6 +60,9 @@ class FollowingFirestore implements FollowingRepository {
         .then((_) => value);
   }
 
+  /* 
+   * Add a model to the repository
+   */
   @override
   Future<FollowingModel> add(FollowingModel value) {
     return followingCollection
@@ -56,11 +71,17 @@ class FollowingFirestore implements FollowingRepository {
         .then((_) => value);
   }
 
+  /* 
+   * Delete a model
+   */
   @override
   Future<void> delete(FollowingModel value) {
     return followingCollection.doc(value.documentID).delete();
   }
 
+  /* 
+   * Update a model
+   */
   @override
   Future<FollowingModel> update(FollowingModel value) {
     return followingCollection
@@ -80,6 +101,9 @@ class FollowingFirestore implements FollowingRepository {
         appId: appId);
   }
 
+  /* 
+   * Retrieve an entity from the repository with id
+   */
   @override
   Future<FollowingEntity?> getEntity(String? id,
       {Function(Exception)? onError}) async {
@@ -98,6 +122,9 @@ class FollowingFirestore implements FollowingRepository {
     return null;
   }
 
+  /* 
+   * Retrieve an model from the repository with id
+   */
   @override
   Future<FollowingModel?> get(String? id,
       {Function(Exception)? onError}) async {
@@ -116,6 +143,9 @@ class FollowingFirestore implements FollowingRepository {
     return null;
   }
 
+  /* 
+   * Listen to the repository using a query. Retrieve models
+   */
   @override
   StreamSubscription<List<FollowingModel?>> listen(
       FollowingModelTrigger trigger,
@@ -147,6 +177,9 @@ class FollowingFirestore implements FollowingRepository {
     });
   }
 
+  /* 
+   * Listen to the repository using a query. Retrieve models and linked models
+   */
   @override
   StreamSubscription<List<FollowingModel?>> listenWithDetails(
       FollowingModelTrigger trigger,
@@ -178,6 +211,9 @@ class FollowingFirestore implements FollowingRepository {
     });
   }
 
+  /* 
+   * Listen to 1 document in the repository
+   */
   @override
   StreamSubscription<FollowingModel?> listenTo(
       String documentId, FollowingChanged changed,
@@ -197,6 +233,9 @@ class FollowingFirestore implements FollowingRepository {
     return theStream;
   }
 
+  /* 
+   * Retrieve values/models from the repository
+   */
   @override
   Stream<List<FollowingModel?>> values(
       {String? orderBy,
@@ -226,6 +265,9 @@ class FollowingFirestore implements FollowingRepository {
     return values;
   }
 
+  /* 
+   * Retrieve values/models, including linked models, from the repository
+   */
   @override
   Stream<List<FollowingModel?>> valuesWithDetails(
       {String? orderBy,
@@ -255,6 +297,9 @@ class FollowingFirestore implements FollowingRepository {
     return values;
   }
 
+  /* 
+   * Retrieve values/models from the repository
+   */
   @override
   Future<List<FollowingModel?>> valuesList(
       {String? orderBy,
@@ -285,6 +330,9 @@ class FollowingFirestore implements FollowingRepository {
     return values;
   }
 
+  /* 
+   * Retrieve values/models, including linked models, from the repository
+   */
   @override
   Future<List<FollowingModel?>> valuesListWithDetails(
       {String? orderBy,
@@ -315,9 +363,15 @@ class FollowingFirestore implements FollowingRepository {
     return values;
   }
 
+  /* 
+   * Flush the repository
+   */
   @override
   void flush() {}
 
+  /* 
+   * Delete all entries in the repository
+   */
   @override
   Future<void> deleteAll() {
     return followingCollection.get().then((snapshot) {
@@ -327,16 +381,25 @@ class FollowingFirestore implements FollowingRepository {
     });
   }
 
+  /* 
+   * Retrieve the subcollection of this repository
+   */
   @override
   dynamic getSubCollection(String documentId, String name) {
     return followingCollection.doc(documentId).collection(name);
   }
 
+  /* 
+   * Retrieve a timestamp
+   */
   @override
   String? timeStampToString(dynamic timeStamp) {
     return firestoreTimeStampToString(timeStamp);
   }
 
+  /* 
+   * change 1 a fieldvalue for 1 document  
+   */
   @override
   Future<FollowingModel?> changeValue(
       String documentId, String fieldName, num changeByThisValue) {

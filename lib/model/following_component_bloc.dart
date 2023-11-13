@@ -34,6 +34,9 @@ class FollowingComponentBloc
     });
   }
 
+  /*
+   * Construct FollowingComponentBloc
+   */
   FollowingComponentBloc({this.followingRepository})
       : super(FollowingComponentUninitialized()) {
     on<FetchFollowingComponent>((event, emit) {
@@ -44,6 +47,9 @@ class FollowingComponentBloc
     });
   }
 
+  /*
+   * Close the FollowingComponentBloc
+   */
   @override
   Future<void> close() {
     _followingSubscription?.cancel();

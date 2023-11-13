@@ -35,6 +35,9 @@ class InviteDashboardComponentBloc
     });
   }
 
+  /*
+   * Construct InviteDashboardComponentBloc
+   */
   InviteDashboardComponentBloc({this.inviteDashboardRepository})
       : super(InviteDashboardComponentUninitialized()) {
     on<FetchInviteDashboardComponent>((event, emit) {
@@ -45,6 +48,9 @@ class InviteDashboardComponentBloc
     });
   }
 
+  /*
+   * Close the InviteDashboardComponentBloc
+   */
   @override
   Future<void> close() {
     _inviteDashboardSubscription?.cancel();

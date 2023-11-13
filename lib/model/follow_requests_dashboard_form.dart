@@ -60,7 +60,7 @@ class FollowRequestsDashboardForm extends StatelessWidget {
           appId,
           formAction: formAction,
         )..add(InitialiseFollowRequestsDashboardFormEvent(value: value)),
-        child: MyFollowRequestsDashboardForm(
+        child: _MyFollowRequestsDashboardForm(
             app: app, submitAction: submitAction, formAction: formAction),
       );
     }
@@ -70,7 +70,7 @@ class FollowRequestsDashboardForm extends StatelessWidget {
           appId,
           formAction: formAction,
         )..add(InitialiseFollowRequestsDashboardFormNoLoadEvent(value: value)),
-        child: MyFollowRequestsDashboardForm(
+        child: _MyFollowRequestsDashboardForm(
             app: app, submitAction: submitAction, formAction: formAction),
       );
     } else {
@@ -89,28 +89,28 @@ class FollowRequestsDashboardForm extends StatelessWidget {
             )..add((formAction == FormAction.updateAction
                 ? InitialiseFollowRequestsDashboardFormEvent(value: value)
                 : InitialiseNewFollowRequestsDashboardFormEvent())),
-            child: MyFollowRequestsDashboardForm(
+            child: _MyFollowRequestsDashboardForm(
                 app: app, submitAction: submitAction, formAction: formAction),
           ));
     }
   }
 }
 
-class MyFollowRequestsDashboardForm extends StatefulWidget {
+class _MyFollowRequestsDashboardForm extends StatefulWidget {
   final AppModel app;
   final FormAction? formAction;
   final ActionModel? submitAction;
 
-  MyFollowRequestsDashboardForm(
+  _MyFollowRequestsDashboardForm(
       {required this.app, this.formAction, this.submitAction});
 
   @override
-  State<MyFollowRequestsDashboardForm> createState() =>
+  State<_MyFollowRequestsDashboardForm> createState() =>
       _MyFollowRequestsDashboardFormState(formAction);
 }
 
 class _MyFollowRequestsDashboardFormState
-    extends State<MyFollowRequestsDashboardForm> {
+    extends State<_MyFollowRequestsDashboardForm> {
   final FormAction? formAction;
   late FollowRequestsDashboardFormBloc _myFormBloc;
 

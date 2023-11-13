@@ -25,13 +25,22 @@ import 'package:eliud_core/tools/query/query_tools.dart';
 import 'package:eliud_core/tools/firestore/firestore_tools.dart';
 import 'package:eliud_core/tools/common_tools.dart';
 
+/* 
+ * InviteDashboardFirestore is the firestore implementation of InviteDashboardRepository
+ */
 class InviteDashboardFirestore implements InviteDashboardRepository {
+  /* 
+   * transform a map into an entity
+   */
   @override
   InviteDashboardEntity? fromMap(Object? o,
       {Map<String, String>? newDocumentIds}) {
     return InviteDashboardEntity.fromMap(o, newDocumentIds: newDocumentIds);
   }
 
+  /* 
+   * add an entity to the repository
+   */
   @override
   Future<InviteDashboardEntity> addEntity(
       String documentID, InviteDashboardEntity value) {
@@ -41,6 +50,9 @@ class InviteDashboardFirestore implements InviteDashboardRepository {
         .then((_) => value);
   }
 
+  /* 
+   * Update an entity
+   */
   @override
   Future<InviteDashboardEntity> updateEntity(
       String documentID, InviteDashboardEntity value) {
@@ -50,6 +62,9 @@ class InviteDashboardFirestore implements InviteDashboardRepository {
         .then((_) => value);
   }
 
+  /* 
+   * Add a model to the repository
+   */
   @override
   Future<InviteDashboardModel> add(InviteDashboardModel value) {
     return inviteDashboardCollection
@@ -58,11 +73,17 @@ class InviteDashboardFirestore implements InviteDashboardRepository {
         .then((_) => value);
   }
 
+  /* 
+   * Delete a model
+   */
   @override
   Future<void> delete(InviteDashboardModel value) {
     return inviteDashboardCollection.doc(value.documentID).delete();
   }
 
+  /* 
+   * Update a model
+   */
   @override
   Future<InviteDashboardModel> update(InviteDashboardModel value) {
     return inviteDashboardCollection
@@ -82,6 +103,9 @@ class InviteDashboardFirestore implements InviteDashboardRepository {
         appId: appId);
   }
 
+  /* 
+   * Retrieve an entity from the repository with id
+   */
   @override
   Future<InviteDashboardEntity?> getEntity(String? id,
       {Function(Exception)? onError}) async {
@@ -100,6 +124,9 @@ class InviteDashboardFirestore implements InviteDashboardRepository {
     return null;
   }
 
+  /* 
+   * Retrieve an model from the repository with id
+   */
   @override
   Future<InviteDashboardModel?> get(String? id,
       {Function(Exception)? onError}) async {
@@ -118,6 +145,9 @@ class InviteDashboardFirestore implements InviteDashboardRepository {
     return null;
   }
 
+  /* 
+   * Listen to the repository using a query. Retrieve models
+   */
   @override
   StreamSubscription<List<InviteDashboardModel?>> listen(
       InviteDashboardModelTrigger trigger,
@@ -149,6 +179,9 @@ class InviteDashboardFirestore implements InviteDashboardRepository {
     });
   }
 
+  /* 
+   * Listen to the repository using a query. Retrieve models and linked models
+   */
   @override
   StreamSubscription<List<InviteDashboardModel?>> listenWithDetails(
       InviteDashboardModelTrigger trigger,
@@ -180,6 +213,9 @@ class InviteDashboardFirestore implements InviteDashboardRepository {
     });
   }
 
+  /* 
+   * Listen to 1 document in the repository
+   */
   @override
   StreamSubscription<InviteDashboardModel?> listenTo(
       String documentId, InviteDashboardChanged changed,
@@ -199,6 +235,9 @@ class InviteDashboardFirestore implements InviteDashboardRepository {
     return theStream;
   }
 
+  /* 
+   * Retrieve values/models from the repository
+   */
   @override
   Stream<List<InviteDashboardModel?>> values(
       {String? orderBy,
@@ -229,6 +268,9 @@ class InviteDashboardFirestore implements InviteDashboardRepository {
     return values;
   }
 
+  /* 
+   * Retrieve values/models, including linked models, from the repository
+   */
   @override
   Stream<List<InviteDashboardModel?>> valuesWithDetails(
       {String? orderBy,
@@ -259,6 +301,9 @@ class InviteDashboardFirestore implements InviteDashboardRepository {
     return values;
   }
 
+  /* 
+   * Retrieve values/models from the repository
+   */
   @override
   Future<List<InviteDashboardModel?>> valuesList(
       {String? orderBy,
@@ -290,6 +335,9 @@ class InviteDashboardFirestore implements InviteDashboardRepository {
     return values;
   }
 
+  /* 
+   * Retrieve values/models, including linked models, from the repository
+   */
   @override
   Future<List<InviteDashboardModel?>> valuesListWithDetails(
       {String? orderBy,
@@ -321,9 +369,15 @@ class InviteDashboardFirestore implements InviteDashboardRepository {
     return values;
   }
 
+  /* 
+   * Flush the repository
+   */
   @override
   void flush() {}
 
+  /* 
+   * Delete all entries in the repository
+   */
   @override
   Future<void> deleteAll() {
     return inviteDashboardCollection.get().then((snapshot) {
@@ -333,16 +387,25 @@ class InviteDashboardFirestore implements InviteDashboardRepository {
     });
   }
 
+  /* 
+   * Retrieve the subcollection of this repository
+   */
   @override
   dynamic getSubCollection(String documentId, String name) {
     return inviteDashboardCollection.doc(documentId).collection(name);
   }
 
+  /* 
+   * Retrieve a timestamp
+   */
   @override
   String? timeStampToString(dynamic timeStamp) {
     return firestoreTimeStampToString(timeStamp);
   }
 
+  /* 
+   * change 1 a fieldvalue for 1 document  
+   */
   @override
   Future<InviteDashboardModel?> changeValue(
       String documentId, String fieldName, num changeByThisValue) {

@@ -35,6 +35,9 @@ class FollowRequestComponentBloc
     });
   }
 
+  /*
+   * Construct FollowRequestComponentBloc
+   */
   FollowRequestComponentBloc({this.followRequestRepository})
       : super(FollowRequestComponentUninitialized()) {
     on<FetchFollowRequestComponent>((event, emit) {
@@ -45,6 +48,9 @@ class FollowRequestComponentBloc
     });
   }
 
+  /*
+   * Close the FollowRequestComponentBloc
+   */
   @override
   Future<void> close() {
     _followRequestSubscription?.cancel();

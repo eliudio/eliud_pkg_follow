@@ -33,6 +33,9 @@ typedef FollowRequestsDashboardChanged = Function(
   int? privilegeLevel,
 );
 
+/* 
+ * FollowRequestsDashboardDropdownButtonWidget is the drop down widget to allow to select an instance of FollowRequestsDashboard
+ */
 class FollowRequestsDashboardDropdownButtonWidget extends StatefulWidget {
   final AppModel app;
   final int? privilegeLevel;
@@ -40,6 +43,9 @@ class FollowRequestsDashboardDropdownButtonWidget extends StatefulWidget {
   final FollowRequestsDashboardChanged? trigger;
   final bool? optional;
 
+  /* 
+   * construct a FollowRequestsDashboardDropdownButtonWidget
+   */
   FollowRequestsDashboardDropdownButtonWidget(
       {required this.app,
       this.privilegeLevel,
@@ -48,18 +54,21 @@ class FollowRequestsDashboardDropdownButtonWidget extends StatefulWidget {
       this.optional,
       super.key});
 
+  /* 
+   * create state of FollowRequestsDashboardDropdownButtonWidget
+   */
   @override
   State<StatefulWidget> createState() {
-    return FollowRequestsDashboardDropdownButtonWidgetState(value);
+    return _FollowRequestsDashboardDropdownButtonWidgetState(value);
   }
 }
 
-class FollowRequestsDashboardDropdownButtonWidgetState
+class _FollowRequestsDashboardDropdownButtonWidgetState
     extends State<FollowRequestsDashboardDropdownButtonWidget> {
   FollowRequestsDashboardListBloc? bloc;
   String? value;
 
-  FollowRequestsDashboardDropdownButtonWidgetState(this.value);
+  _FollowRequestsDashboardDropdownButtonWidgetState(this.value);
 
   @override
   void didChangeDependencies() {
@@ -73,7 +82,7 @@ class FollowRequestsDashboardDropdownButtonWidgetState
     super.dispose();
   }
 
-  List<Widget> widgets(FollowRequestsDashboardModel value) {
+  List<Widget> _widgets(FollowRequestsDashboardModel value) {
     var app = widget.app;
     var widgets = <Widget>[];
     widgets.add(value.description != null
@@ -130,7 +139,7 @@ class FollowRequestsDashboardDropdownButtonWidgetState
                   height: 100.0,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: widgets(element),
+                    children: _widgets(element),
                   ),
                 )));
           }

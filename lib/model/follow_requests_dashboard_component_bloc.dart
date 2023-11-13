@@ -37,6 +37,9 @@ class FollowRequestsDashboardComponentBloc extends Bloc<
     });
   }
 
+  /*
+   * Construct FollowRequestsDashboardComponentBloc
+   */
   FollowRequestsDashboardComponentBloc({this.followRequestsDashboardRepository})
       : super(FollowRequestsDashboardComponentUninitialized()) {
     on<FetchFollowRequestsDashboardComponent>((event, emit) {
@@ -47,6 +50,9 @@ class FollowRequestsDashboardComponentBloc extends Bloc<
     });
   }
 
+  /*
+   * Close the FollowRequestsDashboardComponentBloc
+   */
   @override
   Future<void> close() {
     _followRequestsDashboardSubscription?.cancel();

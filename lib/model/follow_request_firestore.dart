@@ -25,13 +25,22 @@ import 'package:eliud_core/tools/query/query_tools.dart';
 import 'package:eliud_core/tools/firestore/firestore_tools.dart';
 import 'package:eliud_core/tools/common_tools.dart';
 
+/* 
+ * FollowRequestFirestore is the firestore implementation of FollowRequestRepository
+ */
 class FollowRequestFirestore implements FollowRequestRepository {
+  /* 
+   * transform a map into an entity
+   */
   @override
   FollowRequestEntity? fromMap(Object? o,
       {Map<String, String>? newDocumentIds}) {
     return FollowRequestEntity.fromMap(o, newDocumentIds: newDocumentIds);
   }
 
+  /* 
+   * add an entity to the repository
+   */
   @override
   Future<FollowRequestEntity> addEntity(
       String documentID, FollowRequestEntity value) {
@@ -41,6 +50,9 @@ class FollowRequestFirestore implements FollowRequestRepository {
         .then((_) => value);
   }
 
+  /* 
+   * Update an entity
+   */
   @override
   Future<FollowRequestEntity> updateEntity(
       String documentID, FollowRequestEntity value) {
@@ -50,6 +62,9 @@ class FollowRequestFirestore implements FollowRequestRepository {
         .then((_) => value);
   }
 
+  /* 
+   * Add a model to the repository
+   */
   @override
   Future<FollowRequestModel> add(FollowRequestModel value) {
     return followRequestCollection
@@ -58,11 +73,17 @@ class FollowRequestFirestore implements FollowRequestRepository {
         .then((_) => value);
   }
 
+  /* 
+   * Delete a model
+   */
   @override
   Future<void> delete(FollowRequestModel value) {
     return followRequestCollection.doc(value.documentID).delete();
   }
 
+  /* 
+   * Update a model
+   */
   @override
   Future<FollowRequestModel> update(FollowRequestModel value) {
     return followRequestCollection
@@ -82,6 +103,9 @@ class FollowRequestFirestore implements FollowRequestRepository {
         appId: appId);
   }
 
+  /* 
+   * Retrieve an entity from the repository with id
+   */
   @override
   Future<FollowRequestEntity?> getEntity(String? id,
       {Function(Exception)? onError}) async {
@@ -100,6 +124,9 @@ class FollowRequestFirestore implements FollowRequestRepository {
     return null;
   }
 
+  /* 
+   * Retrieve an model from the repository with id
+   */
   @override
   Future<FollowRequestModel?> get(String? id,
       {Function(Exception)? onError}) async {
@@ -118,6 +145,9 @@ class FollowRequestFirestore implements FollowRequestRepository {
     return null;
   }
 
+  /* 
+   * Listen to the repository using a query. Retrieve models
+   */
   @override
   StreamSubscription<List<FollowRequestModel?>> listen(
       FollowRequestModelTrigger trigger,
@@ -149,6 +179,9 @@ class FollowRequestFirestore implements FollowRequestRepository {
     });
   }
 
+  /* 
+   * Listen to the repository using a query. Retrieve models and linked models
+   */
   @override
   StreamSubscription<List<FollowRequestModel?>> listenWithDetails(
       FollowRequestModelTrigger trigger,
@@ -180,6 +213,9 @@ class FollowRequestFirestore implements FollowRequestRepository {
     });
   }
 
+  /* 
+   * Listen to 1 document in the repository
+   */
   @override
   StreamSubscription<FollowRequestModel?> listenTo(
       String documentId, FollowRequestChanged changed,
@@ -199,6 +235,9 @@ class FollowRequestFirestore implements FollowRequestRepository {
     return theStream;
   }
 
+  /* 
+   * Retrieve values/models from the repository
+   */
   @override
   Stream<List<FollowRequestModel?>> values(
       {String? orderBy,
@@ -228,6 +267,9 @@ class FollowRequestFirestore implements FollowRequestRepository {
     return values;
   }
 
+  /* 
+   * Retrieve values/models, including linked models, from the repository
+   */
   @override
   Stream<List<FollowRequestModel?>> valuesWithDetails(
       {String? orderBy,
@@ -257,6 +299,9 @@ class FollowRequestFirestore implements FollowRequestRepository {
     return values;
   }
 
+  /* 
+   * Retrieve values/models from the repository
+   */
   @override
   Future<List<FollowRequestModel?>> valuesList(
       {String? orderBy,
@@ -287,6 +332,9 @@ class FollowRequestFirestore implements FollowRequestRepository {
     return values;
   }
 
+  /* 
+   * Retrieve values/models, including linked models, from the repository
+   */
   @override
   Future<List<FollowRequestModel?>> valuesListWithDetails(
       {String? orderBy,
@@ -317,9 +365,15 @@ class FollowRequestFirestore implements FollowRequestRepository {
     return values;
   }
 
+  /* 
+   * Flush the repository
+   */
   @override
   void flush() {}
 
+  /* 
+   * Delete all entries in the repository
+   */
   @override
   Future<void> deleteAll() {
     return followRequestCollection.get().then((snapshot) {
@@ -329,16 +383,25 @@ class FollowRequestFirestore implements FollowRequestRepository {
     });
   }
 
+  /* 
+   * Retrieve the subcollection of this repository
+   */
   @override
   dynamic getSubCollection(String documentId, String name) {
     return followRequestCollection.doc(documentId).collection(name);
   }
 
+  /* 
+   * Retrieve a timestamp
+   */
   @override
   String? timeStampToString(dynamic timeStamp) {
     return firestoreTimeStampToString(timeStamp);
   }
 
+  /* 
+   * change 1 a fieldvalue for 1 document  
+   */
   @override
   Future<FollowRequestModel?> changeValue(
       String documentId, String fieldName, num changeByThisValue) {

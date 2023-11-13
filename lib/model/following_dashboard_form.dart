@@ -60,7 +60,7 @@ class FollowingDashboardForm extends StatelessWidget {
           appId,
           formAction: formAction,
         )..add(InitialiseFollowingDashboardFormEvent(value: value)),
-        child: MyFollowingDashboardForm(
+        child: _MyFollowingDashboardForm(
             app: app, submitAction: submitAction, formAction: formAction),
       );
     }
@@ -70,7 +70,7 @@ class FollowingDashboardForm extends StatelessWidget {
           appId,
           formAction: formAction,
         )..add(InitialiseFollowingDashboardFormNoLoadEvent(value: value)),
-        child: MyFollowingDashboardForm(
+        child: _MyFollowingDashboardForm(
             app: app, submitAction: submitAction, formAction: formAction),
       );
     } else {
@@ -89,27 +89,27 @@ class FollowingDashboardForm extends StatelessWidget {
             )..add((formAction == FormAction.updateAction
                 ? InitialiseFollowingDashboardFormEvent(value: value)
                 : InitialiseNewFollowingDashboardFormEvent())),
-            child: MyFollowingDashboardForm(
+            child: _MyFollowingDashboardForm(
                 app: app, submitAction: submitAction, formAction: formAction),
           ));
     }
   }
 }
 
-class MyFollowingDashboardForm extends StatefulWidget {
+class _MyFollowingDashboardForm extends StatefulWidget {
   final AppModel app;
   final FormAction? formAction;
   final ActionModel? submitAction;
 
-  MyFollowingDashboardForm(
+  _MyFollowingDashboardForm(
       {required this.app, this.formAction, this.submitAction});
 
   @override
-  State<MyFollowingDashboardForm> createState() =>
+  State<_MyFollowingDashboardForm> createState() =>
       _MyFollowingDashboardFormState(formAction);
 }
 
-class _MyFollowingDashboardFormState extends State<MyFollowingDashboardForm> {
+class _MyFollowingDashboardFormState extends State<_MyFollowingDashboardForm> {
   final FormAction? formAction;
   late FollowingDashboardFormBloc _myFormBloc;
 

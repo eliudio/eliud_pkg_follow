@@ -60,7 +60,7 @@ class FollowingForm extends StatelessWidget {
           appId,
           formAction: formAction,
         )..add(InitialiseFollowingFormEvent(value: value)),
-        child: MyFollowingForm(
+        child: _MyFollowingForm(
             app: app, submitAction: submitAction, formAction: formAction),
       );
     }
@@ -70,7 +70,7 @@ class FollowingForm extends StatelessWidget {
           appId,
           formAction: formAction,
         )..add(InitialiseFollowingFormNoLoadEvent(value: value)),
-        child: MyFollowingForm(
+        child: _MyFollowingForm(
             app: app, submitAction: submitAction, formAction: formAction),
       );
     } else {
@@ -89,25 +89,25 @@ class FollowingForm extends StatelessWidget {
             )..add((formAction == FormAction.updateAction
                 ? InitialiseFollowingFormEvent(value: value)
                 : InitialiseNewFollowingFormEvent())),
-            child: MyFollowingForm(
+            child: _MyFollowingForm(
                 app: app, submitAction: submitAction, formAction: formAction),
           ));
     }
   }
 }
 
-class MyFollowingForm extends StatefulWidget {
+class _MyFollowingForm extends StatefulWidget {
   final AppModel app;
   final FormAction? formAction;
   final ActionModel? submitAction;
 
-  MyFollowingForm({required this.app, this.formAction, this.submitAction});
+  _MyFollowingForm({required this.app, this.formAction, this.submitAction});
 
   @override
-  State<MyFollowingForm> createState() => _MyFollowingFormState(formAction);
+  State<_MyFollowingForm> createState() => _MyFollowingFormState(formAction);
 }
 
-class _MyFollowingFormState extends State<MyFollowingForm> {
+class _MyFollowingFormState extends State<_MyFollowingForm> {
   final FormAction? formAction;
   late FollowingFormBloc _myFormBloc;
 
