@@ -1,5 +1,5 @@
-import 'package:eliud_core/model/app_model.dart';
-import 'package:eliud_core/tools/query/query_tools.dart';
+import 'package:eliud_core_model/model/app_model.dart';
+import 'package:eliud_core_model/tools/query/query_tools.dart';
 import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
 
 class FollowerHelper {

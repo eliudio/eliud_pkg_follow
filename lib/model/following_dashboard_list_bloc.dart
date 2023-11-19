@@ -19,7 +19,7 @@ import 'package:bloc/bloc.dart';
 import 'package:eliud_pkg_follow/model/following_dashboard_repository.dart';
 import 'package:eliud_pkg_follow/model/following_dashboard_list_event.dart';
 import 'package:eliud_pkg_follow/model/following_dashboard_list_state.dart';
-import 'package:eliud_core/tools/query/query_tools.dart';
+import 'package:eliud_core_model/tools/query/query_tools.dart';
 
 import 'following_dashboard_model.dart';
 

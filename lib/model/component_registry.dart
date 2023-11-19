@@ -15,7 +15,7 @@
 
 import '../model/internal_component.dart';
 import 'package:eliud_core/core/registry.dart';
-import 'package:eliud_core/tools/component/component_spec.dart';
+import 'package:eliud_core_model/tools/component/component_spec.dart';
 import 'abstract_repository_singleton.dart';
 
 import '../extensions/following_dashboard_component.dart';
@@ -36,7 +36,7 @@ class ComponentRegistry {
    * Initialise the component registry
    */
   void init() {
-    Registry.registry()!.addInternalComponents('eliud_pkg_follow', [
+    Apis.apis().addInternalComponents('eliud_pkg_follow', [
       "followings",
       "followingDashboards",
       "followRequests",
@@ -44,26 +44,26 @@ class ComponentRegistry {
       "inviteDashboards",
     ]);
 
-    Registry.registry()!.register(
+    Apis.apis().register(
         componentName: "eliud_pkg_follow_internalWidgets",
         componentConstructor: ListComponentFactory());
-    Registry.registry()!.addDropDownSupporter(
+    Apis.apis().addDropDownSupporter(
         "followingDashboards", DropdownButtonComponentFactory());
-    Registry.registry()!.register(
+    Apis.apis().register(
         componentName: "followingDashboards",
         componentConstructor: FollowingDashboardComponentConstructorDefault());
-    Registry.registry()!.addDropDownSupporter(
+    Apis.apis().addDropDownSupporter(
         "followRequestsDashboards", DropdownButtonComponentFactory());
-    Registry.registry()!.register(
+    Apis.apis().register(
         componentName: "followRequestsDashboards",
         componentConstructor:
             FollowRequestsDashboardComponentConstructorDefault());
-    Registry.registry()!.addDropDownSupporter(
+    Apis.apis().addDropDownSupporter(
         "inviteDashboards", DropdownButtonComponentFactory());
-    Registry.registry()!.register(
+    Apis.apis().register(
         componentName: "inviteDashboards",
         componentConstructor: InviteDashboardComponentConstructorDefault());
-    Registry.registry()!.addComponentSpec('eliud_pkg_follow', 'follow', [
+    Apis.apis().addComponentSpec('eliud_pkg_follow', 'follow', [
       ComponentSpec(
           'followingDashboards',
           FollowingDashboardComponentConstructorDefault(),
@@ -84,21 +84,21 @@ class ComponentRegistry {
           InviteDashboardComponentEditorConstructor(),
           ({String? appId}) => inviteDashboardRepository(appId: appId)!),
     ]);
-    Registry.registry()!.registerRetrieveRepository('eliud_pkg_follow',
+    Apis.apis().registerRetrieveRepository('eliud_pkg_follow',
         'followings', ({String? appId}) => followingRepository(appId: appId)!);
-    Registry.registry()!.registerRetrieveRepository(
+    Apis.apis().registerRetrieveRepository(
         'eliud_pkg_follow',
         'followingDashboards',
         ({String? appId}) => followingDashboardRepository(appId: appId)!);
-    Registry.registry()!.registerRetrieveRepository(
+    Apis.apis().registerRetrieveRepository(
         'eliud_pkg_follow',
         'followRequests',
         ({String? appId}) => followRequestRepository(appId: appId)!);
-    Registry.registry()!.registerRetrieveRepository(
+    Apis.apis().registerRetrieveRepository(
         'eliud_pkg_follow',
         'followRequestsDashboards',
         ({String? appId}) => followRequestsDashboardRepository(appId: appId)!);
-    Registry.registry()!.registerRetrieveRepository(
+    Apis.apis().registerRetrieveRepository(
         'eliud_pkg_follow',
         'inviteDashboards',
         ({String? appId}) => inviteDashboardRepository(appId: appId)!);
