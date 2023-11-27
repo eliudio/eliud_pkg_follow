@@ -1,6 +1,6 @@
-import 'package:eliud_core_model/model/app_model.dart';
-import 'package:eliud_core_model/tools/query/query_tools.dart';
-import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
+import 'package:eliud_core_helpers/query/query_tools.dart';
+import 'package:eliud_core_main/model/app_model.dart';
+import 'package:eliud_pkg_follow_model/model/abstract_repository_singleton.dart';
 
 class FollowerHelper {
   static String getKey(String followedId, String followerId) {

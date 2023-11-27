@@ -1,19 +1,20 @@
 import 'dart:async';
-import 'package:eliud_core/core/blocs/access/access_bloc.dart';
-import 'package:eliud_core/core/blocs/access/access_event.dart';
+import 'package:eliud_core/access/access_bloc.dart';
+import 'package:eliud_core/access/access_event.dart';
 import 'package:eliud_core/core_package.dart';
 import 'package:eliud_core/eliud.dart';
-import 'package:eliud_core/model/access_model.dart';
-import 'package:eliud_core_model/model/app_model.dart';
-import 'package:eliud_core/model/member_model.dart';
+import 'package:eliud_core_helpers/query/query_tools.dart';
+import 'package:eliud_core_main/model/component_registry.dart';
+import 'package:eliud_core_main/tools/etc/member_collection_info.dart';
+import 'package:eliud_core_model/model/access_model.dart';
+import 'package:eliud_core_main/model/app_model.dart';
+import 'package:eliud_core_main/model/member_model.dart';
 import 'package:eliud_core/package/package.dart';
-import 'package:eliud_core_model/tools/query/query_tools.dart';
 import 'package:eliud_pkg_etc/etc_package.dart';
-import 'package:eliud_pkg_follow/model/abstract_repository_singleton.dart';
+import 'package:eliud_pkg_follow_model/model/abstract_repository_singleton.dart';
+import 'package:eliud_pkg_follow_model/model/follow_request_model.dart';
+import 'package:eliud_pkg_follow_model/model/repository_singleton.dart';
 import 'package:eliud_pkg_notifications/notifications_package.dart';
-import 'model/component_registry.dart';
-import 'model/follow_request_model.dart';
-import 'model/repository_singleton.dart';
 
 import 'package:eliud_pkg_follow/follow_package_stub.dart'
     if (dart.library.io) 'follow_mobile_package.dart'
