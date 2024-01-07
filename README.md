@@ -1,13 +1,54 @@
 # eliud_pkg_follow
 
-Eliud follow package
+Eliud "follow" package. 
+This package is part of eliud technology. More information, see https://eliud.io
 
-## Dependency diagram
+---
+
+## Table of contents
+
+<!-- toc -->
+
+- [Appendix A. Dependencies](#appendix-a-dependencies)
+  * [The dependency diagram](#the-dependency-diagram)
+  * [Links](#links-)
+
+<!-- tocstop -->
+
+---
+
+## Introduction
+
+The "follow" package.
+
+---
+
+## Appendix A. Dependencies
+
+### The dependency diagram
 
 ![Dependency diagram](https://github.com/eliudio/eliud_pkg_follow/raw/main/depends.jpg)
 
-## eliud.io
+<!-- dependencies -->
 
-This package / app is part of the eliud.io project
+### Direct dependencies
+- [eliud_pkg_notifications](https://pub.dev/packages/eliud_pkg_notifications)
+- [eliud_core_main](https://pub.dev/packages/eliud_core_main)
+- [eliud_core_helpers](https://pub.dev/packages/eliud_core_helpers)
+- [eliud_core](https://pub.dev/packages/eliud_core)
+- [eliud_pkg_follow_model](https://pub.dev/packages/eliud_pkg_follow_model)
+- [eliud_pkg_etc_model](https://pub.dev/packages/eliud_pkg_etc_model)
+- [eliud_pkg_etc](https://pub.dev/packages/eliud_pkg_etc)
 
-More information, see https://eliud.io
+### Transitive dependencies
+- [eliud_pkg_notifications_model](https://pub.dev/packages/eliud_pkg_notifications_model)
+- [eliud_core_model](https://pub.dev/packages/eliud_core_model)
+- [eliud_pkg_medium](https://pub.dev/packages/eliud_pkg_medium)
+- [eliud_pkg_medium_model](https://pub.dev/packages/eliud_pkg_medium_model)
+
+### Dev dependencies
+- [eliud_generator](https://pub.dev/packages/eliud_generator)
+
+<!-- dependenciesstop -->
+
+---
